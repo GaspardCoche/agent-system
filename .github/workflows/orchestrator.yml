@@ -62,12 +62,10 @@ jobs:
               "issue_number": os.environ.get("ISSUE_NUMBER", ""),
               "pr_number":    os.environ.get("PR_NUMBER", ""),
           }
-          # Write to file to avoid output size limits
           with open("/tmp/task.json", "w") as f:
               json.dump(task, f)
-          print("task_json=" + json.dumps(task))
           PYEOF
-          echo "task_json=$(cat /tmp/task.json | tr '\n' ' ')" >> $GITHUB_OUTPUT
+          echo "task_json=$(cat /tmp/task.json)" >> $GITHUB_OUTPUT
 
   orchestrate:
     needs: gate
@@ -102,9 +100,7 @@ jobs:
             Task is in /tmp/agent_task.json.
             Decompose into a dispatch plan and write it to /tmp/dispatch_plan.json.
             If issue_number is set, post a brief planning comment on the issue.
-          max_turns: 5
-          allowed_tools: "Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations"
-          mcp_config: /tmp/mcp-config.json
+          claude_args: --max-turns 5 --allowedTools "Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations" --mcp-config /tmp/mcp-config.json
 
       - name: Read dispatch plan
         id: read_plan
@@ -184,7 +180,7 @@ jobs:
             > /tmp/mcp-config.json
           sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
 
-      - name: Run coder agent (Claude, self-correcting)
+      - name: Run coder agent (Claude)
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -194,9 +190,7 @@ jobs:
             Context from prior agents is in /tmp/agent_task.json.
             Implement the required changes. Self-correct until tests pass (max 3 cycles).
             Write results to /tmp/agent_result.json.
-          max_turns: 12
-          allowed_tools: "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes"
-          mcp_config: /tmp/mcp-config.json
+          claude_args: --max-turns 12 --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
           settings: |
             {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}"}}
 
@@ -248,20 +242,9 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Read all JSON result files:
-            Bash("find /tmp/all_results -name '*.json' -exec cat {} \; 2>/dev/null || echo 'no results'")
-
+            Run: find /tmp/all_results -name '*.json' -exec cat {} \; 2>/dev/null || echo 'no results'
             Post a concise summary comment on issue/PR #${{ github.event.issue.number || github.event.pull_request.number }}.
-
-            Format:
-            ## Agent System Results
-
-            | Agent | Status | Summary |
-            |---|---|---|
-
-            **Next steps:** [any action required, or "None"]
-          max_turns: 3
-          allowed_tools: "Bash,Read,mcp__github__add_issue_comment"
-          mcp_config: /tmp/mcp-config.json
+            Format as a markdown table with Agent / Status / Summary columns.
+          claude_args: --max-turns 3 --allowedTools "Bash,Read,mcp__github__add_issue_comment" --mcp-config /tmp/mcp-config.json
           settings: |
             {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"}}

@@ -26,9 +26,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Install Gmail deps
-        run: pip install google-auth google-auth-oauthlib google-api-python-client
+      - run: pip install google-auth google-auth-oauthlib google-api-python-client
 
       - name: Fetch emails
         id: fetch
@@ -41,7 +39,6 @@ jobs:
             --output /tmp/raw_emails.json
           COUNT=$(python3 -c "import json; print(len(json.load(open('/tmp/raw_emails.json'))))")
           echo "email_count=$COUNT" >> $GITHUB_OUTPUT
-          echo "Fetched $COUNT emails"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -59,7 +56,7 @@ jobs:
           python-version: '3.12'
       - run: pip install google-genai
 
-      - name: Scrape AI news sources
+      - name: Scrape AI news
         env:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
         run: python3 .github/scripts/ai_news_scraper.py
@@ -102,15 +99,11 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
             Read agent_prompts/email-triage.md carefully.
-
             Raw emails are in /tmp/raw_emails.json.
-            Your email address: ${{ secrets.GMAIL_USER_EMAIL }}
+            Your email: ${{ secrets.GMAIL_USER_EMAIL }}
             Internal domain: ${{ secrets.INTERNAL_EMAIL_DOMAIN || 'none' }}
-
-            Classify each email and write /tmp/email_triage.json with the full structured output.
-          max_turns: 8
-          allowed_tools: "Bash,Read,Write"
-          mcp_config: /tmp/mcp-config.json
+            Classify each email and write /tmp/email_triage.json.
+          claude_args: --max-turns 8 --allowedTools "Bash,Read,Write" --mcp-config /tmp/mcp-config.json
           settings: |
             {"env": {"AGENT_ROLE": "email-triage"}}
 
@@ -172,31 +165,23 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Load available data:
-            Bash("find /tmp/artifacts -name '*.json' | head -10")
-            Then read each file found.
+            Find and read available data:
+            Bash("find /tmp/artifacts -name '*.json' | head -10 | xargs -I{} cat {}")
 
-            Write a daily digest to /tmp/digest_body.md in this format:
-
-            ## 🔴 Ne pas louper
-            [critique emails — from, subject, 1-line summary, "💬 Draft créé dans Gmail"]
-
-            ## 🟡 Interne
-            [internal emails — bullet list]
-
-            ## 🔵 Intégrations & Alertes
-            [integration alerts grouped by service]
-
-            ## 🤖 IA — Ne pas rater
-            [ai_digest content if available: TL;DR + top tendances + à tester]
-
-            ---
-            *⚡ [N] emails traités · [N] drafts créés · $(date +%Y-%m-%d)*
-
-            Then create the GitHub issue:
+            Write a daily digest to /tmp/digest_body.md then create a GitHub issue:
             Bash("gh issue create --title '📧 Daily Digest — $(date +%Y-%m-%d)' --label 'digest' --body-file /tmp/digest_body.md --repo ${{ github.repository }}")
-          max_turns: 6
-          allowed_tools: "Bash,Read,Write"
-          mcp_config: /tmp/mcp-config.json
+
+            Digest format:
+            ## 🔴 Ne pas louper
+            [critique emails with draft note]
+            ## 🟡 Interne
+            [internal emails]
+            ## 🔵 Intégrations & Alertes
+            [alerts grouped by service]
+            ## 🤖 IA — Ne pas rater
+            [ai digest if available]
+            ---
+            *⚡ [N] emails · [N] drafts · $(date +%Y-%m-%d)*
+          claude_args: --max-turns 6 --allowedTools "Bash,Read,Write" --mcp-config /tmp/mcp-config.json
           settings: |
             {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"}}

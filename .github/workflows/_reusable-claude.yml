@@ -40,7 +40,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Node MCP servers
+      - name: Install MCP servers
         run: |
           npm install -g \
             @modelcontextprotocol/server-filesystem \
@@ -58,7 +58,7 @@ jobs:
       - name: Write task to disk
         run: printf '%s' '${{ inputs.task_json }}' > /tmp/agent_task.json
 
-      - name: Write MCP config with secrets injected
+      - name: Write MCP config with secrets
         run: |
           cat > /tmp/mcp-config.json << 'MCPEOF'
           {
@@ -106,9 +106,7 @@ jobs:
             2. Read your task: cat /tmp/agent_task.json
             3. Execute the task following your system prompt instructions.
             4. Write your results to /tmp/agent_result.json
-          max_turns: ${{ inputs.max_turns }}
-          allowed_tools: "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes,${{ inputs.allowed_tools }}"
-          mcp_config: /tmp/mcp-config.json
+          claude_args: --max-turns ${{ inputs.max_turns }} --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes,${{ inputs.allowed_tools }}" --mcp-config /tmp/mcp-config.json
           settings: |
             {
               "env": {

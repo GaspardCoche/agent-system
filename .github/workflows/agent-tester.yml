@@ -41,11 +41,8 @@ jobs:
             Read agent_prompts/tester.md.
             Task: /tmp/agent_task.json
             PR: #${{ github.event.pull_request.number }}
-
             1. Get changed files: Bash("git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD")
             2. Run the test suite.
             3. Write results to /tmp/agent_result.json.
             4. Post a summary comment on the PR.
-          max_turns: 10
-          allowed_tools: "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__get_pull_request_files"
-          mcp_config: /tmp/mcp-config.json
+          claude_args: --max-turns 10 --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__get_pull_request_files" --mcp-config /tmp/mcp-config.json
