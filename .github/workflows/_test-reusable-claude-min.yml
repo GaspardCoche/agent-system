@@ -29,3 +29,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: "Role is ${{ inputs.agent_role }}. Say hello."
           claude_args: --max-turns 2 --allowedTools "Bash"
+          settings: |
+            {
+              "env": {
+                "AGENT_ROLE": "${{ inputs.agent_role }}",
+                "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}"
+              }
+            }
