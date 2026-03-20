@@ -126,7 +126,7 @@ jobs:
     with:
       agent_role: researcher
       task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
-      max_turns: 6
+      max_turns: "6"
       allowed_tools: "mcp__firecrawl__firecrawl_scrape,mcp__playwright__playwright_navigate,mcp__playwright__playwright_get_visible_text"
     secrets: inherit
 
@@ -136,7 +136,7 @@ jobs:
     with:
       agent_role: analyzer
       task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
-      max_turns: 6
+      max_turns: "6"
       allowed_tools: ""
     secrets: inherit
 
@@ -208,7 +208,7 @@ jobs:
     with:
       agent_role: tester
       task_json: '{"task_id":"${{ github.run_id }}","role":"tester","instruction":"Run tests on recent coder changes, fix test issues, report coverage."}'
-      max_turns: 10
+      max_turns: "10"
       allowed_tools: ""
     secrets: inherit
 
