@@ -16,20 +16,10 @@ on:
         required: false
         type: string
         default: ""
-    outputs:
-      result_json:
-        description: "Agent result as JSON string"
-        value: ${{ jobs.run_agent.outputs.result_json }}
-      status:
-        description: "complete|failed|needs_retry"
-        value: ${{ jobs.run_agent.outputs.status }}
 
 jobs:
   run_agent:
     runs-on: ubuntu-latest
-    outputs:
-      result_json: ${{ steps.read_result.outputs.result_json }}
-      status: ${{ steps.read_result.outputs.status }}
     permissions:
       contents: write
       pull-requests: write
@@ -43,8 +33,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: "Role is ${{ inputs.agent_role }}. Say hello."
           claude_args: --max-turns 2 --allowedTools "Bash"
-      - name: Read agent result
-        id: read_result
-        run: |
-          echo "result_json=done" >> $GITHUB_OUTPUT
-          echo "status=complete" >> $GITHUB_OUTPUT
