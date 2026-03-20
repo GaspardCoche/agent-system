@@ -49,18 +49,16 @@ jobs:
             firecrawl-mcp \
             @modelcontextprotocol/server-memory
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Install Python deps
-        run: pip install google-genai
+      - run: pip install google-genai
 
       - name: Write task to disk
         run: printf '%s' '${{ inputs.task_json }}' > /tmp/agent_task.json
 
-      - name: Inject MCP config with secrets
+      - name: Write MCP config with secrets injected
         run: |
           cat > /tmp/mcp-config.json << 'MCPEOF'
           {
@@ -106,12 +104,11 @@ jobs:
 
             1. Read your system prompt: cat agent_prompts/${{ inputs.agent_role }}.md
             2. Read your task: cat /tmp/agent_task.json
-            3. Execute the task following the instructions in the system prompt.
+            3. Execute the task following your system prompt instructions.
             4. Write your results to /tmp/agent_result.json
-          claude_args: |
-            --max-turns ${{ inputs.max_turns }}
-            --mcp-config /tmp/mcp-config.json
-            --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes,${{ inputs.allowed_tools }}"
+          max_turns: ${{ inputs.max_turns }}
+          allowed_tools: "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes,${{ inputs.allowed_tools }}"
+          mcp_config: /tmp/mcp-config.json
           settings: |
             {
               "env": {
@@ -125,7 +122,7 @@ jobs:
         id: read_result
         run: |
           if [ -f /tmp/agent_result.json ]; then
-            RESULT=$(cat /tmp/agent_result.json | tr '\n' ' ' | tr "'" '"')
+            RESULT=$(cat /tmp/agent_result.json | tr '\n' ' ')
             STATUS=$(echo "$RESULT" | python3 -c \
               "import sys,json; d=json.loads(sys.stdin.read()); print(d.get('status','failed'))" \
               2>/dev/null || echo "failed")

@@ -1,4 +1,4 @@
-name: 🧪 Agent Tester (PR)
+name: Agent Tester (PR)
 on:
   pull_request:
     types: [opened, synchronize]
@@ -26,7 +26,7 @@ jobs:
           }
           EOF
 
-      - name: Inject MCP config
+      - name: Write MCP config
         run: |
           printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}}}}' \
             > /tmp/mcp-config.json
@@ -42,11 +42,10 @@ jobs:
             Task: /tmp/agent_task.json
             PR: #${{ github.event.pull_request.number }}
 
-            1. Get the list of changed files: Bash("git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD")
-            2. Run the test suite on changed code.
+            1. Get changed files: Bash("git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD")
+            2. Run the test suite.
             3. Write results to /tmp/agent_result.json.
             4. Post a summary comment on the PR.
-          claude_args: |
-            --max-turns 10
-            --mcp-config /tmp/mcp-config.json
-            --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__get_pull_request_files"
+          max_turns: 10
+          allowed_tools: "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__get_pull_request_files"
+          mcp_config: /tmp/mcp-config.json
