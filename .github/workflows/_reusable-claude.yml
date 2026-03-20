@@ -15,7 +15,7 @@ on:
       allowed_tools:
         required: false
         type: string
-        default: ""
+        default: "none"
     outputs:
       result_json:
         description: "Agent result as JSON string"
@@ -94,6 +94,17 @@ jobs:
           sed -i "s/GH_PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
           sed -i "s/FIRECRAWL_PLACEHOLDER/${{ secrets.FIRECRAWL_API_KEY }}/g" /tmp/mcp-config.json
 
+      - name: Build claude_args
+        run: |
+          BASE="Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes"
+          EXTRA="${{ inputs.allowed_tools }}"
+          if [[ "$EXTRA" == "none" || -z "$EXTRA" ]]; then
+            TOOLS="$BASE"
+          else
+            TOOLS="$BASE,$EXTRA"
+          fi
+          echo "CLAUDE_ARGS=--max-turns ${{ inputs.max_turns }} --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+
       - name: Run Claude agent
         uses: anthropics/claude-code-action@v1
         with:
@@ -106,7 +117,7 @@ jobs:
             2. Read your task: cat /tmp/agent_task.json
             3. Execute the task following your system prompt instructions.
             4. Write your results to /tmp/agent_result.json
-          claude_args: --max-turns ${{ inputs.max_turns }} --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes,${{ inputs.allowed_tools }}" --mcp-config /tmp/mcp-config.json
+          claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {
               "env": {

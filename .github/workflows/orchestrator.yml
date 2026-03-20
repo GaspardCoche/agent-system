@@ -137,7 +137,7 @@ jobs:
       agent_role: analyzer
       task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
       max_turns: "6"
-      allowed_tools: ""
+      allowed_tools: "none"
     secrets: inherit
 
   # ── Sequential phase ────────────────────────────────────────────────────────
@@ -209,7 +209,7 @@ jobs:
       agent_role: tester
       task_json: '{"task_id":"${{ github.run_id }}","role":"tester","instruction":"Run tests on recent coder changes, fix test issues, report coverage."}'
       max_turns: "10"
-      allowed_tools: ""
+      allowed_tools: "none"
     secrets: inherit
 
   # ── Final summary ────────────────────────────────────────────────────────────
