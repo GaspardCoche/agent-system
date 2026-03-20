@@ -8,6 +8,10 @@ on:
       task_json:
         required: true
         type: string
+      max_turns:
+        required: false
+        type: string
+        default: "8"
 
 jobs:
   run_agent:
