@@ -5,35 +5,10 @@ on:
       agent_role:
         required: true
         type: string
-      task_json:
-        required: true
-        type: string
-      max_turns:
-        required: false
-        type: string
-        default: "8"
-      allowed_tools:
-        required: false
-        type: string
-        default: ""
-    outputs:
-      result_json:
-        description: "Agent result as JSON string"
-        value: ${{ jobs.run_agent.outputs.result_json }}
-      status:
-        description: "complete|failed|needs_retry"
-        value: ${{ jobs.run_agent.outputs.status }}
 
 jobs:
   run_agent:
     runs-on: ubuntu-latest
-    outputs:
-      result_json: ${{ steps.read_result.outputs.result_json }}
-      status: ${{ steps.read_result.outputs.status }}
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
     steps:
       - uses: actions/checkout@v4
       - name: Run Claude agent
@@ -41,10 +16,5 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          prompt: "Role is ${{ inputs.agent_role }}. Say hello."
+          prompt: "Say hello."
           claude_args: --max-turns 2 --allowedTools "Bash"
-      - name: Read agent result
-        id: read_result
-        run: |
-          echo "result_json=done" >> $GITHUB_OUTPUT
-          echo "status=complete" >> $GITHUB_OUTPUT
