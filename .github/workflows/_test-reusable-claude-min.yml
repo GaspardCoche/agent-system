@@ -22,13 +22,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Build claude_args
+        run: |
+          BASE="Bash,Read,Write,Edit"
+          EXTRA="${{ inputs.allowed_tools }}"
+          if [[ "$EXTRA" == "none" || -z "$EXTRA" ]]; then
+            TOOLS="$BASE"
+          else
+            TOOLS="$BASE,$EXTRA"
+          fi
+          echo "CLAUDE_ARGS=--max-turns ${{ inputs.max_turns }} --allowedTools $TOOLS" >> $GITHUB_ENV
       - name: Run Claude agent
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: "Role is ${{ inputs.agent_role }}. Say hello."
-          claude_args: --max-turns 2 --allowedTools "Bash"
+          claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {
               "env": {
