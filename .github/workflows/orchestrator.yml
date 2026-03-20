@@ -143,7 +143,7 @@ jobs:
   # ── Sequential phase ────────────────────────────────────────────────────────
 
   run-coder:
-    needs: [run-researcher, run-analyzer]
+    needs: [orchestrate, run-researcher, run-analyzer]
     if: always() && needs.orchestrate.result == 'success'
     runs-on: ubuntu-latest
     permissions:
@@ -215,7 +215,7 @@ jobs:
   # ── Final summary ────────────────────────────────────────────────────────────
 
   aggregate:
-    needs: [run-tester]
+    needs: [orchestrate, run-tester]
     if: always() && needs.orchestrate.result == 'success'
     runs-on: ubuntu-latest
     permissions:
