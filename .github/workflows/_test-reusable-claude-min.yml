@@ -42,7 +42,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: "Role is ${{ inputs.agent_role }}. Say hello."
-          claude_args: --max-turns ${{ inputs.max_turns }} --allowedTools "Bash,${{ inputs.allowed_tools }}"
+          claude_args: --max-turns 2 --allowedTools "Bash"
       - name: Read agent result
         id: read_result
         run: |
