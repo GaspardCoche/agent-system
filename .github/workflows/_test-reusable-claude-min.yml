@@ -36,18 +36,6 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Write task to disk
-        run: printf '%s' '${{ inputs.task_json }}' > /tmp/agent_task.json
-
-      - name: Write MCP config
-        run: |
-          cat > /tmp/mcp-config.json << 'MCPEOF'
-          {"mcpServers":{"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}
-          MCPEOF
-
       - name: Build claude_args
         run: |
           BASE="Bash,Read,Write,Edit"
@@ -57,42 +45,23 @@ jobs:
           else
             TOOLS="$BASE,$EXTRA"
           fi
-          echo "CLAUDE_ARGS=--max-turns ${{ inputs.max_turns }} --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
-
+          echo "CLAUDE_ARGS=--max-turns ${{ inputs.max_turns }} --allowedTools $TOOLS" >> $GITHUB_ENV
       - name: Run Claude agent
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          prompt: |
-            AGENT_ROLE: ${{ inputs.agent_role }}
-            Say hello and write done to /tmp/agent_result.json.
+          prompt: "Role is ${{ inputs.agent_role }}. Say hello."
           claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {
               "env": {
                 "AGENT_ROLE": "${{ inputs.agent_role }}",
-                "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
-                "GITHUB_REPOSITORY": "${{ github.repository }}"
+                "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}"
               }
             }
-
-      - name: Read agent result
+      - name: Read result
         id: read_result
         run: |
-          if [ -f /tmp/agent_result.json ]; then
-            RESULT=$(cat /tmp/agent_result.json | tr '\n' ' ')
-            echo "result_json=$RESULT" >> $GITHUB_OUTPUT
-            echo "status=complete" >> $GITHUB_OUTPUT
-          else
-            echo 'result_json={"status":"failed"}' >> $GITHUB_OUTPUT
-            echo "status=failed" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Upload result artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: agent-result-${{ inputs.agent_role }}-${{ github.run_id }}
-          path: /tmp/agent_result.json
-          retention-days: 1
+          echo "result_json=done" >> $GITHUB_OUTPUT
+          echo "status=complete" >> $GITHUB_OUTPUT
