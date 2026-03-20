@@ -1,0 +1,17 @@
+name: Test Simple Reusable
+on:
+  workflow_call:
+    inputs:
+      agent_role:
+        required: true
+        type: string
+      max_turns:
+        required: false
+        type: string
+        default: "8"
+
+jobs:
+  run_agent:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Role=${{ inputs.agent_role }} turns=${{ inputs.max_turns }}"
