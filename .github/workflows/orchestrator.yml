@@ -1,0 +1,280 @@
+name: 🤖 Orchestrator
+on:
+  issues:
+    types: [labeled]           # Déclenché quand label "agent" ajouté
+  pull_request:
+    types: [opened, synchronize]
+  schedule:
+    - cron: '0 8 * * 1-5'     # 8h00 lun-ven (maintenance / check)
+  workflow_dispatch:
+    inputs:
+      task_description:
+        description: 'Task description'
+        required: true
+        type: string
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+      task_json:  ${{ steps.build.outputs.task_json }}
+    steps:
+      - name: Check trigger
+        id: check
+        run: |
+          EVENT="${{ github.event_name }}"
+          if [[ "$EVENT" == "workflow_dispatch" || "$EVENT" == "schedule" ]]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          elif [[ "$EVENT" == "issues" ]]; then
+            LABELS='${{ toJSON(github.event.issue.labels.*.name) }}'
+            if echo "$LABELS" | grep -q '"agent"'; then
+              echo "should_run=true" >> $GITHUB_OUTPUT
+            else
+              echo "should_run=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build task JSON
+        id: build
+        if: steps.check.outputs.should_run == 'true'
+        run: |
+          python3 -c "
+          import json, os
+          task = {
+            'task_id':     '${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}',
+            'event':       '${{ github.event_name }}',
+            'repository':  '${{ github.repository }}',
+            'description': '''${{ github.event.issue.body || github.event.pull_request.body || inputs.task_description || 'Scheduled maintenance' }}''',
+            'title':       '${{ github.event.issue.title || github.event.pull_request.title || 'Scheduled' }}',
+            'ref':         '${{ github.sha }}',
+            'issue_number':'${{ github.event.issue.number || \"\" }}',
+            'pr_number':   '${{ github.event.pull_request.number || \"\" }}'
+          }
+          print('task_json=' + json.dumps(task))
+          " >> $GITHUB_OUTPUT
+
+  orchestrate:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    outputs:
+      dispatch_plan: ${{ steps.read_plan.outputs.dispatch_plan }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Write task
+        run: printf '%s' '${{ needs.gate.outputs.task_json }}' > /tmp/agent_task.json
+
+      - name: Inject MCP config
+        run: |
+          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
+            > /tmp/mcp-config.json
+          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Run orchestrator (Claude)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/orchestrator.md.
+            Task is in /tmp/agent_task.json.
+            Decompose into a dispatch plan → write to /tmp/dispatch_plan.json.
+            Then post a brief planning comment to the GitHub issue (if issue_number is set).
+          claude_args: |
+            --max-turns 5
+            --mcp-config /tmp/mcp-config.json
+            --allowedTools "Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations"
+
+      - name: Read dispatch plan
+        id: read_plan
+        run: |
+          if [ -f /tmp/dispatch_plan.json ]; then
+            PLAN=$(cat /tmp/dispatch_plan.json | tr '\n' ' ')
+            echo "dispatch_plan=$PLAN" >> $GITHUB_OUTPUT
+          else
+            # Fallback: single coder agent
+            PLAN='{"task_id":"${{ github.run_id }}","agents":[{"role":"coder","input":"${{ needs.gate.outputs.task_json }}","parallel":false}]}'
+            echo "dispatch_plan=$PLAN" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dispatch-plan-${{ github.run_id }}
+          path: /tmp/dispatch_plan.json
+          retention-days: 1
+
+  # ─── Parallel phase ────────────────────────────────────────────────────────
+
+  run-researcher:
+    needs: orchestrate
+    uses: ./.github/workflows/_reusable-claude.yml
+    with:
+      agent_role: researcher
+      task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
+      max_turns: 6
+      allowed_tools: "mcp__firecrawl__firecrawl_scrape,mcp__playwright__playwright_navigate,mcp__playwright__playwright_get_visible_text"
+    secrets: inherit
+
+  run-analyzer:
+    needs: orchestrate
+    uses: ./.github/workflows/_reusable-claude.yml
+    with:
+      agent_role: analyzer
+      task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
+      max_turns: 6
+      allowed_tools: ""
+    secrets: inherit
+
+  # ─── Sequential phase (waits for parallel) ─────────────────────────────────
+
+  run-coder:
+    needs: [run-researcher, run-analyzer]
+    if: always() && needs.orchestrate.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: agent-result-*-${{ github.run_id }}
+          path: /tmp/prior_results/
+        continue-on-error: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compress context for coder
+        run: |
+          pip install google-genai -q
+          python3 .github/scripts/context_compressor.py \
+            --inputs /tmp/prior_results/ \
+            --output /tmp/agent_task.json \
+            --task '${{ needs.orchestrate.outputs.dispatch_plan }}' \
+            --max-tokens 8000
+
+      - name: Inject MCP config
+        run: |
+          printf '{"mcpServers":{"filesystem":{"command":"npx","args":["-y","@modelcontextprotocol/server-filesystem","/home/runner/work"],"env":{}},"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
+            > /tmp/mcp-config.json
+          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Run coder agent (Claude, self-correcting)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/coder.md.
+            Context from prior agents is in /tmp/agent_task.json.
+            Implement the required changes. Self-correct until tests pass (max 3 cycles).
+            Write results to /tmp/agent_result.json.
+          claude_args: |
+            --max-turns 12
+            --mcp-config /tmp/mcp-config.json
+            --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes"
+          settings: |
+            {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}"}}
+
+      - name: Read coder result
+        id: coder_result
+        run: |
+          if [ -f /tmp/agent_result.json ]; then
+            STATUS=$(python3 -c "import json; print(json.load(open('/tmp/agent_result.json')).get('status','failed'))")
+            echo "status=$STATUS" >> $GITHUB_OUTPUT
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+          fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-result-coder-${{ github.run_id }}
+          path: /tmp/agent_result.json
+          retention-days: 1
+
+  run-tester:
+    needs: run-coder
+    if: always() && needs.run-coder.result == 'success'
+    uses: ./.github/workflows/_reusable-claude.yml
+    with:
+      agent_role: tester
+      task_json: '{"task_id":"${{ github.run_id }}","role":"tester","instruction":"Run tests on recent coder changes, fix test issues, report coverage."}'
+      max_turns: 10
+      allowed_tools: ""
+    secrets: inherit
+
+  # ─── Retry si coder retourne needs_retry ───────────────────────────────────
+
+  retry-coder:
+    needs: run-coder
+    if: needs.run-coder.outputs.status == 'needs_retry'
+    uses: ./.github/workflows/_reusable-claude.yml
+    with:
+      agent_role: coder
+      task_json: ${{ needs.run-coder.outputs.result_json }}
+      max_turns: 15
+      allowed_tools: ""
+    secrets: inherit
+
+  # ─── Final summary ─────────────────────────────────────────────────────────
+
+  aggregate:
+    needs: [run-tester]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: agent-result-*-${{ github.run_id }}
+          path: /tmp/all_results/
+        continue-on-error: true
+
+      - name: Inject MCP config
+        run: |
+          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}}}}' \
+            > /tmp/mcp-config.json
+          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Post final summary (Claude)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read all JSON files in /tmp/all_results/ (use: find /tmp/all_results -name '*.json' -exec cat {} \;).
+            Post a concise summary comment on issue/PR #${{ github.event.issue.number || github.event.pull_request.number }}.
+
+            Format:
+            ## ✅ Agent System Results
+
+            | Agent | Status | Summary |
+            |---|---|---|
+            | ... | ✅/❌ | ... |
+
+            **Next steps:** [any action required]
+          claude_args: |
+            --max-turns 3
+            --mcp-config /tmp/mcp-config.json
+            --allowedTools "Bash,Read,mcp__github__add_issue_comment"
+          settings: |
+            {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"}}

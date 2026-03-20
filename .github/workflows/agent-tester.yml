@@ -1,0 +1,52 @@
+name: 🧪 Agent Tester (PR)
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Write task
+        run: |
+          cat > /tmp/agent_task.json << EOF
+          {
+            "task_id": "${{ github.event.pull_request.number }}",
+            "role": "tester",
+            "pr_number": "${{ github.event.pull_request.number }}",
+            "pr_title": "${{ github.event.pull_request.title }}",
+            "base_sha": "${{ github.event.pull_request.base.sha }}",
+            "head_sha": "${{ github.sha }}"
+          }
+          EOF
+
+      - name: Inject MCP config
+        run: |
+          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}}}}' \
+            > /tmp/mcp-config.json
+          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Run tester agent (Claude)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/tester.md.
+            Task: /tmp/agent_task.json
+            PR: #${{ github.event.pull_request.number }}
+
+            1. Get the list of changed files: Bash("git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD")
+            2. Run the test suite on changed code.
+            3. Write results to /tmp/agent_result.json.
+            4. Post a summary comment on the PR.
+          claude_args: |
+            --max-turns 10
+            --mcp-config /tmp/mcp-config.json
+            --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__get_pull_request_files"

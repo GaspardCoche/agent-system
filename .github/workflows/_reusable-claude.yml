@@ -1,0 +1,145 @@
+name: Reusable Claude Agent Base
+on:
+  workflow_call:
+    inputs:
+      agent_role:
+        required: true
+        type: string
+      task_json:
+        required: true
+        type: string
+      max_turns:
+        required: false
+        type: number
+        default: 8
+      allowed_tools:
+        required: false
+        type: string
+        default: ""
+    outputs:
+      result_json:
+        description: "Agent result as JSON string"
+        value: ${{ jobs.run_agent.outputs.result_json }}
+      status:
+        description: "complete|failed|needs_retry"
+        value: ${{ jobs.run_agent.outputs.status }}
+
+jobs:
+  run_agent:
+    runs-on: ubuntu-latest
+    outputs:
+      result_json: ${{ steps.read_result.outputs.result_json }}
+      status:      ${{ steps.read_result.outputs.status }}
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Node MCP servers
+        run: |
+          npm install -g \
+            @modelcontextprotocol/server-filesystem \
+            @modelcontextprotocol/server-github \
+            @playwright/mcp \
+            firecrawl-mcp \
+            @modelcontextprotocol/server-memory
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python deps
+        run: pip install google-genai
+
+      - name: Write task to disk
+        run: printf '%s' '${{ inputs.task_json }}' > /tmp/agent_task.json
+
+      - name: Inject MCP config with secrets
+        run: |
+          cat > /tmp/mcp-config.json << 'MCPEOF'
+          {
+            "mcpServers": {
+              "filesystem": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/runner/work"],
+                "env": {}
+              },
+              "github": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-github"],
+                "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "GH_PLACEHOLDER"}
+              },
+              "playwright": {
+                "command": "npx",
+                "args": ["-y", "@playwright/mcp@latest"],
+                "env": {}
+              },
+              "firecrawl": {
+                "command": "npx",
+                "args": ["-y", "firecrawl-mcp"],
+                "env": {"FIRECRAWL_API_KEY": "FIRECRAWL_PLACEHOLDER"}
+              },
+              "memory": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-memory"],
+                "env": {}
+              }
+            }
+          }
+          MCPEOF
+          sed -i "s/GH_PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+          sed -i "s/FIRECRAWL_PLACEHOLDER/${{ secrets.FIRECRAWL_API_KEY }}/g" /tmp/mcp-config.json
+
+      - name: Run Claude agent
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            AGENT_ROLE: ${{ inputs.agent_role }}
+
+            1. Read your system prompt: cat agent_prompts/${{ inputs.agent_role }}.md
+            2. Read your task: cat /tmp/agent_task.json
+            3. Execute the task following the instructions in the system prompt.
+            4. Write your results to /tmp/agent_result.json
+          claude_args: |
+            --max-turns ${{ inputs.max_turns }}
+            --mcp-config /tmp/mcp-config.json
+            --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes,${{ inputs.allowed_tools }}"
+          settings: |
+            {
+              "env": {
+                "AGENT_ROLE": "${{ inputs.agent_role }}",
+                "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+                "GITHUB_REPOSITORY": "${{ github.repository }}"
+              }
+            }
+
+      - name: Read agent result
+        id: read_result
+        run: |
+          if [ -f /tmp/agent_result.json ]; then
+            RESULT=$(cat /tmp/agent_result.json | tr '\n' ' ' | tr "'" '"')
+            STATUS=$(echo "$RESULT" | python3 -c \
+              "import sys,json; d=json.loads(sys.stdin.read()); print(d.get('status','failed'))" \
+              2>/dev/null || echo "failed")
+            echo "result_json=$RESULT" >> $GITHUB_OUTPUT
+            echo "status=$STATUS" >> $GITHUB_OUTPUT
+          else
+            echo 'result_json={"status":"failed","summary":"No result file written"}' >> $GITHUB_OUTPUT
+            echo "status=failed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-result-${{ inputs.agent_role }}-${{ github.run_id }}
+          path: /tmp/agent_result.json
+          retention-days: 1
