@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       result_json: ${{ steps.read_result.outputs.result_json }}
-      status:      ${{ steps.read_result.outputs.status }}
+      status: ${{ steps.read_result.outputs.status }}
     permissions:
       contents: write
       pull-requests: write
