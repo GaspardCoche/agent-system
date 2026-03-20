@@ -1,0 +1,13 @@
+name: Test Reusable Workflow
+on:
+  workflow_dispatch:
+
+jobs:
+  call-reusable:
+    uses: ./.github/workflows/_reusable-claude.yml
+    with:
+      agent_role: tester
+      task_json: '{"task_id":"test","role":"tester","instruction":"Say hello."}'
+      max_turns: 2
+      allowed_tools: ""
+    secrets: inherit
