@@ -8,22 +8,10 @@ on:
       task_json:
         required: true
         type: string
-      max_turns:
-        required: false
-        type: string
-        default: "8"
-      allowed_tools:
-        required: false
-        type: string
-        default: ""
 
 jobs:
   run_agent:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
     steps:
       - uses: actions/checkout@v4
       - name: Run Claude agent
