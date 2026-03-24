@@ -23,8 +23,13 @@
     header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
     header h1 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
     header .subtitle { color: var(--muted); font-size: 12px; margin-top: 2px; }
-    .refresh-btn { background: var(--border); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
-    .refresh-btn:hover { background: #21262d; }
+    .header-actions { display: flex; gap: 8px; align-items: center; }
+    .btn { border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit; }
+    .btn-ghost { background: var(--surface); }
+    .btn-ghost:hover { background: #21262d; }
+    .btn-primary { background: #238636; border-color: #2ea043; color: #fff; font-weight: 500; }
+    .btn-primary:hover { background: #2ea043; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
 
@@ -37,6 +42,18 @@
     .stat-card.blue .value { color: var(--blue); }
     .stat-card.yellow .value { color: var(--yellow); }
 
+    /* Agents launcher */
+    .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 28px; }
+    .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .agent-card .agent-info { display: flex; align-items: center; gap: 8px; }
+    .agent-card .agent-icon { font-size: 18px; }
+    .agent-card .agent-name { font-weight: 600; font-size: 13px; }
+    .agent-card .agent-desc { color: var(--muted); font-size: 11px; }
+    .run-btn { background: #238636; border: 1px solid #2ea043; color: #fff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; white-space: nowrap; transition: background 0.15s; }
+    .run-btn:hover { background: #2ea043; }
+    .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .run-btn.running { background: #1f6feb; border-color: #388bfd; }
+
     .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
 
     .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -46,14 +63,13 @@
     .runs-list { display: flex; flex-direction: column; gap: 8px; }
     .run-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: grid; grid-template-columns: 28px 1fr auto auto; align-items: center; gap: 12px; transition: border-color 0.15s; }
     .run-card:hover { border-color: #484f58; }
-    .run-card .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
     .status-dot.success { background: var(--green); box-shadow: 0 0 6px var(--green); }
     .status-dot.failed { background: var(--red); box-shadow: 0 0 6px var(--red); }
     .status-dot.partial { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
 
     .run-info .title { font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .run-info .meta { color: var(--muted); font-size: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
-    .run-info .meta span { display: flex; align-items: center; gap: 4px; }
 
     .agents-bar { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; min-width: 160px; }
     .agent-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
@@ -66,13 +82,25 @@
 
     .empty-state { text-align: center; padding: 64px 24px; color: var(--muted); }
     .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; }
 
     .badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 500; }
     .badge-workflow { background: rgba(88, 166, 255, 0.15); color: var(--blue); border: 1px solid rgba(88, 166, 255, 0.3); }
     .badge-event { background: rgba(188, 140, 255, 0.15); color: var(--purple); border: 1px solid rgba(188, 140, 255, 0.3); }
-
     .summary-text { color: var(--muted); font-size: 12px; max-width: 400px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 420px; max-width: 95vw; }
+    .modal h2 { font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .modal label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+    .modal input, .modal textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 8px 10px; font-size: 13px; font-family: inherit; margin-bottom: 14px; }
+    .modal textarea { resize: vertical; min-height: 80px; }
+    .modal input:focus, .modal textarea:focus { outline: none; border-color: var(--blue); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #238636; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+    .toast.error { background: #b62324; }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
@@ -81,36 +109,99 @@
       <h1>🤖 Agent System</h1>
       <div class="subtitle" id="last-updated">Chargement...</div>
     </div>
-    <button class="refresh-btn" onclick="loadData()">↻ Actualiser</button>
+    <div class="header-actions">
+      <button class="btn btn-ghost" onclick="loadData()">↻ Actualiser</button>
+    </div>
   </header>
 
   <div class="container">
-    <div class="stats-grid" id="stats-grid">
+    <div class="stats-grid">
       <div class="stat-card blue"><div class="value" id="stat-total">—</div><div class="label">Runs total</div></div>
       <div class="stat-card green"><div class="value" id="stat-success">—</div><div class="label">Succès</div></div>
       <div class="stat-card red"><div class="value" id="stat-failed">—</div><div class="label">Échecs</div></div>
       <div class="stat-card yellow"><div class="value" id="stat-partial">—</div><div class="label">Partiels</div></div>
     </div>
 
-    <div class="section-title">Runs récents</div>
-    <div class="filters" id="filters">
-      <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">Tous</button>
-      <button class="filter-btn" data-filter="orchestrator" onclick="setFilter('orchestrator', this)">Orchestrator</button>
-      <button class="filter-btn" data-filter="email-agent" onclick="setFilter('email-agent', this)">Email / Iris</button>
-      <button class="filter-btn" data-filter="sage" onclick="setFilter('sage', this)">Sage</button>
-      <button class="filter-btn" data-filter="scout" onclick="setFilter('scout', this)">Scout</button>
-      <button class="filter-btn" data-filter="nexus" onclick="setFilter('nexus', this)">Nexus</button>
-      <button class="filter-btn" data-filter="failed" onclick="setFilter('failed', this)">Échecs</button>
+    <div class="section-title" style="margin-bottom:14px">Lancer un agent</div>
+    <div class="agents-grid">
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-icon">🎯</div>
+          <div><div class="agent-name">Orchestrator</div><div class="agent-desc">Décompose & coordonne</div></div>
+        </div>
+        <button class="run-btn" onclick="openModal('orchestrator.yml', 'Orchestrator', [{id:'task_description',label:'Description de la tâche',type:'textarea',required:true}])">▶ Run</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-icon">📧</div>
+          <div><div class="agent-name">Email / Iris</div><div class="agent-desc">Digest & triage emails</div></div>
+        </div>
+        <button class="run-btn" onclick="openModal('email-agent.yml', 'Email / Iris', [{id:'hours_back',label:'Heures en arrière',type:'text',default:'24'},{id:'skip_ai_digest',label:'Skip AI news (true/false)',type:'text',default:'false'}])">▶ Run</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-icon">🧠</div>
+          <div><div class="agent-name">Sage</div><div class="agent-desc">Self-improvement hebdo</div></div>
+        </div>
+        <button class="run-btn" onclick="openModal('sage.yml', 'Sage', [{id:'force_skill_validation',label:'Force validation skills (true/false)',type:'text',default:'false'}])">▶ Run</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-icon">🔍</div>
+          <div><div class="agent-name">Scout</div><div class="agent-desc">Enrichissement web RGPD</div></div>
+        </div>
+        <button class="run-btn" onclick="openModal('scout.yml', 'Scout', [{id:'sheet_id',label:'Google Sheet ID',type:'text',required:true},{id:'sheet_tab',label:'Onglet',type:'text',default:'Prospects'},{id:'columns_to_enrich',label:'Colonnes (virgule)',type:'text',default:'description,sector,size,hq_city'},{id:'dry_run',label:'Dry run (true/false)',type:'text',default:'true'}])">▶ Run</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-icon">📊</div>
+          <div><div class="agent-name">Nexus</div><div class="agent-desc">Google Ads audit</div></div>
+        </div>
+        <button class="run-btn" onclick="openModal('nexus.yml', 'Nexus', [{id:'report_type',label:'Type de rapport',type:'text',default:'weekly_audit'},{id:'dry_run',label:'Dry run (true/false)',type:'text',default:'true'}])">▶ Run</button>
+      </div>
+      <div class="agent-card">
+        <div class="agent-info">
+          <div class="agent-icon">🚀</div>
+          <div><div class="agent-name">Ralph</div><div class="agent-desc">Routing & automatisation</div></div>
+        </div>
+        <button class="run-btn" onclick="openModal('ralph.yml', 'Ralph', [])">▶ Run</button>
+      </div>
     </div>
 
+    <div class="section-title">Runs récents</div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">Tous</button>
+      <button class="filter-btn" onclick="setFilter('orchestrator', this)">Orchestrator</button>
+      <button class="filter-btn" onclick="setFilter('email-agent', this)">Email / Iris</button>
+      <button class="filter-btn" onclick="setFilter('sage', this)">Sage</button>
+      <button class="filter-btn" onclick="setFilter('scout', this)">Scout</button>
+      <button class="filter-btn" onclick="setFilter('nexus', this)">Nexus</button>
+      <button class="filter-btn" onclick="setFilter('failed', this)">Échecs</button>
+    </div>
     <div class="runs-list" id="runs-list">
-      <div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l'instant.<br>Les résultats apparaîtront ici après le prochain workflow.</p></div>
+      <div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l'instant.<br>Lance un agent ci-dessus pour commencer.</p></div>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <h2 id="modal-title">▶ Lancer</h2>
+      <div id="modal-fields"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-primary" id="modal-confirm" onclick="triggerWorkflow()">Lancer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
 
   <script>
     let allRuns = [];
     let currentFilter = 'all';
+    let pendingWorkflow = null;
+    let pendingFields = [];
 
     async function loadData() {
       try {
@@ -137,7 +228,6 @@
         return r.workflow === currentFilter;
       });
 
-      // Stats (always on all runs)
       const total = allRuns.length;
       const success = allRuns.filter(r => r.status === 'success').length;
       const failed = allRuns.filter(r => r.status === 'failed').length;
@@ -149,7 +239,7 @@
 
       const list = document.getElementById('runs-list');
       if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l\'instant.</p></div>';
+        list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l\'instant.<br>Lance un agent ci-dessus pour commencer.</p></div>';
         return;
       }
 
@@ -184,6 +274,74 @@
     function escHtml(s) {
       return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
+
+    // Modal
+    function openModal(workflow, name, fields) {
+      pendingWorkflow = workflow;
+      pendingFields = fields;
+      document.getElementById('modal-title').textContent = '▶ Lancer ' + name;
+      const container = document.getElementById('modal-fields');
+      container.innerHTML = fields.map(f => {
+        const val = f.default || '';
+        if (f.type === 'textarea') {
+          return `<label>${f.label}${f.required ? ' *' : ''}</label><textarea id="field-${f.id}" placeholder="${val}">${val}</textarea>`;
+        }
+        return `<label>${f.label}${f.required ? ' *' : ''}</label><input id="field-${f.id}" type="text" value="${val}" placeholder="${val}">`;
+      }).join('');
+      document.getElementById('modal').classList.add('open');
+      const first = container.querySelector('input,textarea');
+      if (first) setTimeout(() => first.focus(), 50);
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+      pendingWorkflow = null;
+    }
+
+    async function triggerWorkflow() {
+      if (!pendingWorkflow) return;
+      const inputs = {};
+      for (const f of pendingFields) {
+        const el = document.getElementById('field-' + f.id);
+        const val = el ? el.value.trim() : '';
+        if (f.required && !val) { showToast('Champ requis : ' + f.label, true); return; }
+        if (val) inputs[f.id] = val;
+      }
+
+      const btn = document.getElementById('modal-confirm');
+      btn.disabled = true;
+      btn.textContent = 'Envoi...';
+
+      try {
+        const res = await fetch('/.netlify/functions/trigger', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ workflow: pendingWorkflow, inputs }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast('✅ Workflow lancé ! Résultat dans ~2 min.');
+          closeModal();
+        } else {
+          showToast('Erreur : ' + (data.error || res.status), true);
+        }
+      } catch (e) {
+        showToast('Erreur réseau', true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Lancer';
+      }
+    }
+
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (isError ? ' error' : '') + ' show';
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    // Keyboard
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
     loadData();
     setInterval(loadData, 60000);
