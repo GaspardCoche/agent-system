@@ -210,10 +210,11 @@ jobs:
 
       - name: Build claude_args
         run: |
-          echo "CLAUDE_ARGS=--max-turns 12 --allowedTools Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+          echo "CLAUDE_ARGS=--max-turns 15 --allowedTools Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run coder agent (Claude)
         uses: anthropics/claude-code-action@v1
+        continue-on-error: true
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
