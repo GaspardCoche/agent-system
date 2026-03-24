@@ -498,6 +498,11 @@
       document.getElementById('tab-' + name).classList.add('active');
       if (el) el.classList.add('active');
       else document.getElementById('tab-btn-' + name).classList.add('active');
+      // Graph tab: lazy init
+      if (name === 'graph') {
+        if (!graphData) { loadGraph(); }
+        else if (!graphSvgRoot || !graphSvgRoot._nodeSel) { setTimeout(initGraph, 50); }
+      }
     }
 
     // ─────────────── DATA LOADING ───────────────
@@ -1304,17 +1309,7 @@
         .call(graphZoom.transform, d3.zoomIdentity.translate(0,0).scale(1));
     }
 
-    // Init graph when tab is first activated
-    const _origSwitchTab = switchTab;
-    function switchTab(name, el) {
-      _origSwitchTab(name, el);
-      if (name === 'graph') {
-        if (!graphData) { loadGraph(); }
-        else if (!graphSim) { setTimeout(initGraph, 50); }
-        else if (!graphSvgRoot?._nodeSel) { setTimeout(initGraph, 50); }
-      }
-    }
-    // Also load graph data at init
+    // Load graph data at init (graph renders lazily when tab is clicked)
     loadGraph();
   </script>
 </body>
