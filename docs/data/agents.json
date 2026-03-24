@@ -1,0 +1,135 @@
+[
+  {
+    "id": "orchestrator",
+    "name": "Orchestrator",
+    "icon": "🎯",
+    "description": "Décompose n'importe quelle tâche et coordonne les agents spécialisés",
+    "workflow": "orchestrator.yml",
+    "prompt": "dispatch.md",
+    "category": "core",
+    "required_secrets": ["CLAUDE_CODE_OAUTH_TOKEN"],
+    "optional_secrets": ["GEMINI_API_KEY"],
+    "inputs": [
+      { "id": "task_description", "label": "Décris la tâche en détail", "type": "textarea", "required": true,
+        "placeholder": "Ex: Analyser les 50 derniers emails, enrichir les prospects du sheet XYZ, auditer les campagnes Google Ads..." }
+    ],
+    "setup": {
+      "url": "https://claude.ai/settings",
+      "instructions": "Lancer `claude setup-token` dans le terminal, copier le token, l'ajouter comme secret CLAUDE_CODE_OAUTH_TOKEN"
+    }
+  },
+  {
+    "id": "iris",
+    "name": "Email / Iris",
+    "icon": "📧",
+    "description": "Triage emails, rédige des drafts de réponse, génère le digest quotidien",
+    "workflow": "email-agent.yml",
+    "prompt": "iris.md",
+    "category": "communication",
+    "required_secrets": ["GMAIL_TOKEN_JSON", "GMAIL_USER_EMAIL", "CLAUDE_CODE_OAUTH_TOKEN"],
+    "optional_secrets": ["INTERNAL_EMAIL_DOMAIN", "FIRECRAWL_API_KEY"],
+    "inputs": [
+      { "id": "hours_back", "label": "Heures en arrière à traiter", "type": "text", "default": "24" },
+      { "id": "skip_ai_digest", "label": "Ignorer le digest IA (true/false)", "type": "text", "default": "false" }
+    ],
+    "setup": {
+      "url": "https://console.cloud.google.com/",
+      "instructions": "1. Créer un projet Google Cloud → activer Gmail API → créer des credentials OAuth → télécharger client_secret.json\n2. Lancer: python3 .github/scripts/gmail_auth_setup.py\n3. Copier la sortie comme secret GMAIL_TOKEN_JSON\n4. Ajouter ton email Gmail comme secret GMAIL_USER_EMAIL"
+    }
+  },
+  {
+    "id": "scout",
+    "name": "Scout",
+    "icon": "🔍",
+    "description": "Enrichissement web RGPD — scrape et enrichit un Google Sheet avec données publiques",
+    "workflow": "scout.yml",
+    "prompt": "scout.md",
+    "category": "leads",
+    "required_secrets": ["FIRECRAWL_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN"],
+    "optional_secrets": ["GOOGLE_SHEETS_TOKEN"],
+    "inputs": [
+      { "id": "sheet_id", "label": "Google Sheet ID", "type": "text", "required": true,
+        "placeholder": "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" },
+      { "id": "sheet_tab", "label": "Nom de l'onglet", "type": "text", "default": "Prospects" },
+      { "id": "columns_to_enrich", "label": "Colonnes à enrichir (virgule)", "type": "text", "default": "description,sector,size,hq_city" },
+      { "id": "dry_run", "label": "Mode preview (true = ne pas écrire)", "type": "text", "default": "true" }
+    ],
+    "setup": {
+      "url": "https://www.firecrawl.dev/",
+      "instructions": "1. Créer un compte Firecrawl → copier l'API key → ajouter comme secret FIRECRAWL_API_KEY\n2. (Optionnel) Pour Google Sheets: Google Cloud Console → activer Sheets API → créer service account → copier le JSON comme secret GOOGLE_SHEETS_TOKEN"
+    }
+  },
+  {
+    "id": "aria",
+    "name": "Aria",
+    "icon": "👤",
+    "description": "Enrichit les leads via FullEnrich et importe dans HubSpot CRM",
+    "workflow": "aria.yml",
+    "prompt": "aria.md",
+    "category": "leads",
+    "required_secrets": ["FULLENRICH_API_KEY", "HUBSPOT_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN"],
+    "optional_secrets": [],
+    "inputs": [
+      { "id": "source", "label": "Source des leads (scout/file)", "type": "text", "default": "scout" },
+      { "id": "dry_run", "label": "Mode preview (true = ne pas importer)", "type": "text", "default": "true" }
+    ],
+    "setup": {
+      "url": "https://fullenrich.com/",
+      "instructions": "1. Compte FullEnrich → Settings → API Key → ajouter comme secret FULLENRICH_API_KEY\n2. HubSpot → Settings → Integrations → Private Apps → créer app avec scope contacts → copier token comme secret HUBSPOT_API_KEY"
+    }
+  },
+  {
+    "id": "nexus",
+    "name": "Nexus",
+    "icon": "📊",
+    "description": "Audit et optimisation Google Ads — rapport hebdomadaire avec recommandations",
+    "workflow": "nexus.yml",
+    "prompt": "nexus.md",
+    "category": "marketing",
+    "required_secrets": ["GOOGLE_ADS_DEVELOPER_TOKEN", "GOOGLE_ADS_CLIENT_ID", "GOOGLE_ADS_CLIENT_SECRET", "GOOGLE_ADS_REFRESH_TOKEN", "CLAUDE_CODE_OAUTH_TOKEN"],
+    "optional_secrets": ["GOOGLE_ADS_ACCOUNT_ID", "GEMINI_API_KEY"],
+    "inputs": [
+      { "id": "report_type", "label": "Type de rapport", "type": "text", "default": "weekly_audit" },
+      { "id": "account_id", "label": "Account ID (vide = défaut)", "type": "text", "default": "" },
+      { "id": "dry_run", "label": "Mode preview (true = audit seulement)", "type": "text", "default": "true" }
+    ],
+    "setup": {
+      "url": "https://developers.google.com/google-ads/api/docs/get-started/oauth-cloud",
+      "instructions": "1. Google Ads → Tools → API Center → Developer Token\n2. Google Cloud Console → créer OAuth 2.0 credentials (Client ID + Secret)\n3. Générer un Refresh Token via OAuth2 flow\n4. Ajouter les 4 secrets: GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_REFRESH_TOKEN\n5. (Optionnel) Ajouter GOOGLE_ADS_ACCOUNT_ID (format: 123-456-7890)"
+    }
+  },
+  {
+    "id": "sage",
+    "name": "Sage",
+    "icon": "🧠",
+    "description": "Auto-amélioration hebdomadaire — analyse les rétrospectives et améliore les prompts",
+    "workflow": "sage.yml",
+    "prompt": "sage.md",
+    "category": "core",
+    "required_secrets": ["CLAUDE_CODE_OAUTH_TOKEN"],
+    "optional_secrets": ["GEMINI_API_KEY"],
+    "inputs": [
+      { "id": "force_skill_validation", "label": "Forcer validation skills (true/false)", "type": "text", "default": "false" }
+    ],
+    "setup": {
+      "url": "https://claude.ai/settings",
+      "instructions": "Uniquement CLAUDE_CODE_OAUTH_TOKEN requis (déjà configuré si Orchestrator fonctionne)"
+    }
+  },
+  {
+    "id": "ralph",
+    "name": "Ralph",
+    "icon": "🚀",
+    "description": "Moteur d'automatisation — reçoit les webhooks et route vers les agents",
+    "workflow": "ralph.yml",
+    "prompt": "ralph.md",
+    "category": "core",
+    "required_secrets": ["CLAUDE_CODE_OAUTH_TOKEN"],
+    "optional_secrets": [],
+    "inputs": [],
+    "setup": {
+      "url": "https://github.com",
+      "instructions": "Ralph se déclenche via repository_dispatch. Utilise l'URL: POST https://api.github.com/repos/OWNER/REPO/dispatches avec un Bearer token ayant le scope `repo`"
+    }
+  }
+]

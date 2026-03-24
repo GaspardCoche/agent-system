@@ -91,3 +91,48 @@ if missing or not account_id:
 **Agents concernés :** Sage (workflow de collecte)
 
 ---
+
+## 2026-03-24 — Netlify env vars : PUT vs POST
+
+**Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
+
+**Solution :** Utiliser `PUT` pour créer ou mettre à jour. `POST` = create-only, `PUT` = upsert.
+
+**API :** `PUT https://api.netlify.com/api/v1/accounts/{slug}/env/{key}` avec body `{"value": "..."}`.
+
+**Autre piège :** Le champ `"scopes"` n'est pas disponible sur le plan gratuit Netlify → retourne 403 "Upgrade your account". Ne jamais envoyer `scopes` sur le plan free.
+
+---
+
+## 2026-03-24 — Netlify : rapports non visibles depuis le dashboard
+
+**Problème :** Les rapports dans `reports/` ne sont pas accessibles depuis le dashboard Netlify car Netlify ne sert que le dossier `docs/`.
+
+**Solution :**
+1. Écrire les rapports dans `docs/reports/` (accessible par Netlify)
+2. Faire une copie miroir dans `reports/` pour la navigation git
+3. Dans `runs.json`, le champ `report_file` doit pointer vers `"reports/filename.md"` (relatif à `docs/`)
+
+**Pattern dans les workflows :** `--output-dir docs/reports --dashboard-file docs/data/runs.json`
+
+---
+
+## 2026-03-24 — generate_report.py : arguments --output-dir et --dashboard-file
+
+**Problème :** Les workflows appellent `generate_report.py` avec `--output-dir` et `--dashboard-file` mais ces arguments n'existaient pas dans le script.
+
+**Solution :** Ajouter `--output-dir` (défaut : `docs/reports`) et `--dashboard-file` (défaut : `docs/data/runs.json`) dans `parse_args()`, et utiliser `args.output_dir` / `args.dashboard_file` dans le code.
+
+**Important :** Toujours vérifier que les arguments CLI dans le script correspondent aux appels dans les workflows.
+
+---
+
+## 2026-03-24 — GitHub Actions PAT scope `workflow` requis pour workflow_dispatch
+
+**Problème :** Le PAT utilisé pour déclencher des workflows via l'API GitHub (`POST /repos/{owner}/{repo}/actions/workflows/{workflow}/dispatches`) doit avoir le scope `workflow`.
+
+**Vérification :** `curl -sI -H "Authorization: Bearer $TOKEN" https://api.github.com/user | grep x-oauth-scopes`
+
+**Solution :** Utiliser `gh auth token` pour obtenir le token OAuth de session (qui a déjà `workflow` scope si authentifié via `gh auth login --scopes workflow`).
+
+---

@@ -1,0 +1,367 @@
+{
+  "nodes": [
+    {
+      "id": "index",
+      "label": "VAULT-INDEX",
+      "type": "index",
+      "path": "INDEX.md",
+      "tags": [
+        "index",
+        "hub",
+        "system"
+      ],
+      "agents": [
+        "all"
+      ],
+      "updated": "2026-03-24",
+      "color": "#e8e84a",
+      "connections": 12
+    },
+    {
+      "id": "agents-dispatch-log",
+      "label": "Dispatch — Journal d'Orchestration",
+      "type": "agent",
+      "path": "agents/dispatch-log.md",
+      "tags": [
+        "dispatch",
+        "orchestration",
+        "routing",
+        "log"
+      ],
+      "agents": [
+        "dispatch"
+      ],
+      "updated": "2026-03-24",
+      "color": "#f85149",
+      "connections": 3
+    },
+    {
+      "id": "agents-iris-memory",
+      "label": "Iris — Mémoire & Patterns Email",
+      "type": "agent",
+      "path": "agents/iris-memory.md",
+      "tags": [
+        "iris",
+        "email",
+        "memory",
+        "gmail"
+      ],
+      "agents": [
+        "iris"
+      ],
+      "updated": "2026-03-24",
+      "color": "#f85149",
+      "connections": 3
+    },
+    {
+      "id": "agents-nexus-memory",
+      "label": "Nexus — Mémoire & Patterns",
+      "type": "agent",
+      "path": "agents/nexus-memory.md",
+      "tags": [
+        "nexus",
+        "google-ads",
+        "memory",
+        "patterns"
+      ],
+      "agents": [
+        "nexus"
+      ],
+      "updated": "2026-03-24",
+      "color": "#f85149",
+      "connections": 3
+    },
+    {
+      "id": "agents-sage-memory",
+      "label": "Sage — Mémoire & Améliorations",
+      "type": "agent",
+      "path": "agents/sage-memory.md",
+      "tags": [
+        "sage",
+        "prompts",
+        "skills",
+        "memory",
+        "improvement"
+      ],
+      "agents": [
+        "sage"
+      ],
+      "updated": "2026-03-24",
+      "color": "#f85149",
+      "connections": 3
+    },
+    {
+      "id": "agents-scout-memory",
+      "label": "Scout — Mémoire & Veille",
+      "type": "agent",
+      "path": "agents/scout-memory.md",
+      "tags": [
+        "scout",
+        "veille",
+        "firecrawl",
+        "memory",
+        "web"
+      ],
+      "agents": [
+        "scout"
+      ],
+      "updated": "2026-03-24",
+      "color": "#f85149",
+      "connections": 3
+    },
+    {
+      "id": "business-strategy",
+      "label": "Stratégie Business",
+      "type": "business",
+      "path": "business/strategy.md",
+      "tags": [
+        "strategy",
+        "gtm",
+        "growth"
+      ],
+      "agents": [],
+      "updated": "2026-03-24",
+      "color": "#58a6ff",
+      "connections": 6
+    },
+    {
+      "id": "business-vision",
+      "label": "Vision & Mission",
+      "type": "business",
+      "path": "business/vision.md",
+      "tags": [
+        "vision",
+        "mission",
+        "strategy"
+      ],
+      "agents": [],
+      "updated": "2026-03-24",
+      "color": "#58a6ff",
+      "connections": 3
+    },
+    {
+      "id": "campaigns-google-ads",
+      "label": "Google Ads — État Campagnes",
+      "type": "campaigns",
+      "path": "campaigns/google-ads.md",
+      "tags": [
+        "google-ads",
+        "nexus",
+        "marketing",
+        "roas"
+      ],
+      "agents": [
+        "nexus"
+      ],
+      "updated": "2026-03-24",
+      "color": "#ffa657",
+      "connections": 5
+    },
+    {
+      "id": "content-social-media",
+      "label": "Stratégie Contenu & Social Media",
+      "type": "content",
+      "path": "content/social-media.md",
+      "tags": [
+        "content",
+        "social-media",
+        "linkedin",
+        "twitter"
+      ],
+      "agents": [],
+      "updated": "2026-03-24",
+      "color": "#d29922",
+      "connections": 3
+    },
+    {
+      "id": "operations-daily-digest",
+      "label": "Daily Digest — Email",
+      "type": "operations",
+      "path": "operations/daily-digest.md",
+      "tags": [
+        "email",
+        "iris",
+        "digest",
+        "daily"
+      ],
+      "agents": [
+        "iris"
+      ],
+      "updated": "2026-03-24",
+      "color": "#bc8cff",
+      "connections": 4
+    },
+    {
+      "id": "operations-decisions",
+      "label": "Décisions & Architecture",
+      "type": "operations",
+      "path": "operations/decisions.md",
+      "tags": [
+        "decisions",
+        "architecture",
+        "system",
+        "dispatch",
+        "sage"
+      ],
+      "agents": [
+        "dispatch",
+        "sage"
+      ],
+      "updated": "2026-03-24",
+      "color": "#bc8cff",
+      "connections": 5
+    },
+    {
+      "id": "prospects-pipeline",
+      "label": "Pipeline Prospects",
+      "type": "prospects",
+      "path": "prospects/pipeline.md",
+      "tags": [
+        "leads",
+        "crm",
+        "scout",
+        "aria",
+        "hubspot"
+      ],
+      "agents": [
+        "scout",
+        "aria"
+      ],
+      "updated": "2026-03-24",
+      "color": "#3fb950",
+      "connections": 5
+    }
+  ],
+  "edges": [
+    {
+      "source": "index",
+      "target": "business-vision"
+    },
+    {
+      "source": "index",
+      "target": "business-strategy"
+    },
+    {
+      "source": "index",
+      "target": "prospects-pipeline"
+    },
+    {
+      "source": "index",
+      "target": "campaigns-google-ads"
+    },
+    {
+      "source": "index",
+      "target": "operations-daily-digest"
+    },
+    {
+      "source": "index",
+      "target": "operations-decisions"
+    },
+    {
+      "source": "index",
+      "target": "content-social-media"
+    },
+    {
+      "source": "index",
+      "target": "agents-nexus-memory"
+    },
+    {
+      "source": "index",
+      "target": "agents-iris-memory"
+    },
+    {
+      "source": "index",
+      "target": "agents-scout-memory"
+    },
+    {
+      "source": "index",
+      "target": "agents-sage-memory"
+    },
+    {
+      "source": "index",
+      "target": "agents-dispatch-log"
+    },
+    {
+      "source": "agents-dispatch-log",
+      "target": "operations-decisions"
+    },
+    {
+      "source": "agents-dispatch-log",
+      "target": "agents-sage-memory"
+    },
+    {
+      "source": "agents-iris-memory",
+      "target": "operations-daily-digest"
+    },
+    {
+      "source": "agents-iris-memory",
+      "target": "prospects-pipeline"
+    },
+    {
+      "source": "agents-nexus-memory",
+      "target": "campaigns-google-ads"
+    },
+    {
+      "source": "agents-nexus-memory",
+      "target": "operations-decisions"
+    },
+    {
+      "source": "agents-sage-memory",
+      "target": "operations-decisions"
+    },
+    {
+      "source": "agents-scout-memory",
+      "target": "business-strategy"
+    },
+    {
+      "source": "agents-scout-memory",
+      "target": "prospects-pipeline"
+    },
+    {
+      "source": "business-strategy",
+      "target": "business-vision"
+    },
+    {
+      "source": "business-strategy",
+      "target": "prospects-pipeline"
+    },
+    {
+      "source": "business-strategy",
+      "target": "campaigns-google-ads"
+    },
+    {
+      "source": "campaigns-google-ads",
+      "target": "operations-daily-digest"
+    },
+    {
+      "source": "content-social-media",
+      "target": "business-strategy"
+    },
+    {
+      "source": "content-social-media",
+      "target": "business-vision"
+    },
+    {
+      "source": "operations-daily-digest",
+      "target": "operations-decisions"
+    },
+    {
+      "source": "prospects-pipeline",
+      "target": "campaigns-google-ads"
+    }
+  ],
+  "generated": "2026-03-24T12:49:01.935338Z",
+  "stats": {
+    "total_nodes": 13,
+    "total_edges": 29,
+    "types": [
+      "operations",
+      "content",
+      "business",
+      "campaigns",
+      "prospects",
+      "agent",
+      "index"
+    ]
+  }
+}

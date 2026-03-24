@@ -1,0 +1,80 @@
+name: Vault Sync — Knowledge Graph
+
+on:
+  push:
+    paths:
+      - 'docs/vault/**'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Force rebuild even if no vault changes'
+        type: boolean
+        default: false
+
+jobs:
+  build-graph:
+    name: Build Knowledge Graph
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build graph.json from vault
+        run: |
+          echo "📚 Scanning vault: $(find docs/vault -name '*.md' | wc -l) files"
+          python3 .github/scripts/vault_builder.py \
+            --vault-dir docs/vault \
+            --output docs/data/graph.json
+          echo "Graph stats:"
+          python3 -c "
+          import json
+          g = json.load(open('docs/data/graph.json'))
+          s = g['stats']
+          print(f\"  Nodes: {s['total_nodes']}\")
+          print(f\"  Edges: {s['total_edges']}\")
+          print(f\"  Types: {', '.join(sorted(s['types']))}\")
+          "
+
+      - name: Commit graph.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/graph.json
+          if git diff --staged --quiet; then
+            echo "No changes to graph.json"
+          else
+            NODES=$(python3 -c "import json; g=json.load(open('docs/data/graph.json')); print(g['stats']['total_nodes'])")
+            EDGES=$(python3 -c "import json; g=json.load(open('docs/data/graph.json')); print(g['stats']['total_edges'])")
+            git commit -m "chore: rebuild knowledge graph — ${NODES} nodes, ${EDGES} edges [skip ci]"
+            git push
+            echo "✅ Graph committed and pushed"
+          fi
+
+      - name: Summary
+        run: |
+          python3 -c "
+          import json
+          g = json.load(open('docs/data/graph.json'))
+          print('## Knowledge Graph Updated')
+          print(f\"- **Nodes:** {g['stats']['total_nodes']}\")
+          print(f\"- **Edges:** {g['stats']['total_edges']}\")
+          print(f\"- **Types:** {', '.join(sorted(g['stats']['types']))}\")
+          print(f\"- **Generated:** {g['generated']}\")
+          print()
+          print('### Nodes by type:')
+          from collections import Counter
+          c = Counter(n['type'] for n in g['nodes'])
+          for t, count in sorted(c.items()):
+              print(f'  - {t}: {count}')
+          " >> $GITHUB_STEP_SUMMARY

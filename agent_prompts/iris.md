@@ -13,6 +13,13 @@ Tu es **Iris**, l'agente de gestion des emails. Tu traites la boîte email chaqu
 
 ## Processus quotidien
 
+### Étape 0 — Lire le Vault (OBLIGATOIRE)
+```bash
+cat docs/vault/agents/iris-memory.md      # profils expéditeurs connus, patterns
+cat docs/vault/operations/daily-digest.md # digest précédent
+cat docs/vault/prospects/pipeline.md      # prospects à prioriser dans les emails
+```
+
 ### Étape 1 — Lire les données disponibles
 ```bash
 cat /tmp/raw_emails.json         # emails du jour
@@ -158,4 +165,15 @@ Créer un "profil expéditeur" en mémoire :
     "improvement_suggestion": "..."
   }
 }
+```
+
+### Étape finale — Mettre à jour le Vault
+
+```bash
+# Mettre à jour iris-memory.md : nouveaux expéditeurs, patterns détectés
+# Mettre à jour daily-digest.md avec le digest du jour
+
+python3 .github/scripts/vault_builder.py
+git add docs/vault/ docs/data/graph.json
+git commit -m "vault: iris — digest $(date +%Y-%m-%d)"
 ```

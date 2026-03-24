@@ -155,7 +155,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/reports/ docs/data/runs.json reports/ skills/ memory/ 2>/dev/null || true
+          if [ -d docs/vault ]; then
+            python3 .github/scripts/vault_builder.py --vault-dir docs/vault --output docs/data/graph.json 2>/dev/null || true
+          fi
+          git add docs/reports/ docs/data/runs.json docs/data/graph.json docs/vault/ reports/ skills/ memory/ 2>/dev/null || true
           git diff --cached --quiet || git commit -m "report: sage weekly $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
           git push
 

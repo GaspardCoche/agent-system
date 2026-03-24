@@ -36,6 +36,10 @@ def parse_args():
     p.add_argument("--results-dir",   default="/tmp/all_results")
     p.add_argument("--summary",       default="")
     p.add_argument("--task-id",       default="")
+    p.add_argument("--output-dir",    default=REPORTS_DIR,
+                   help="Directory to write report markdown (default: docs/reports)")
+    p.add_argument("--dashboard-file", default=DASHBOARD_FILE,
+                   help="Path to runs.json dashboard file (default: docs/data/runs.json)")
     return p.parse_args()
 
 
@@ -161,15 +165,16 @@ def generate_markdown(args, agent_results: list[dict]) -> str:
                     lines.append(f"**🔧 MCP patterns :** `{'`, `'.join(patterns)}`")
                 lines.append("")
 
+    gh_run = f"[GitHub Actions]({repo_url})" if repo_url else "GitHub Actions"
     lines += [
         "---",
-        f"*Généré le {now.strftime('%Y-%m-%d %H:%M UTC')} · [Dashboard](https://{args.repo.split('/')[0]}.netlify.app/)*"
+        f"*Généré le {now.strftime('%Y-%m-%d %H:%M UTC')} · {gh_run}*"
     ]
     return "\n".join(lines)
 
 
 def update_dashboard(args, agent_results: list[dict], report_filename: str) -> None:
-    path = Path(DASHBOARD_FILE)
+    path = Path(args.dashboard_file)
     path.parent.mkdir(parents=True, exist_ok=True)
     try:
         runs: list = json.loads(path.read_text()) if path.exists() else []
@@ -212,8 +217,8 @@ def main():
 
     md = generate_markdown(args, agent_results)
 
-    # Write to docs/reports/ (served by Netlify)
-    docs_reports = Path(REPORTS_DIR)
+    # Write to output dir (served by Netlify when docs/reports/)
+    docs_reports = Path(args.output_dir)
     docs_reports.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc)
     slug = re.sub(r'[^a-zA-Z0-9-]', '-', args.title.lower())[:50].strip('-') if args.title else args.run_id

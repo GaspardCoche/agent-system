@@ -1,5 +1,33 @@
 # Agent System — Global Instructions
 
+## 📚 Vault-First Protocol (OBLIGATOIRE)
+
+**Avant chaque run :**
+1. Lire `docs/vault/INDEX.md` — vue d'ensemble du knowledge graph
+2. Lire le fichier mémoire agent dans `docs/vault/agents/<agent>-memory.md`
+3. Lire les fichiers vault pertinents à la tâche (ex: `vault/campaigns/google-ads.md`)
+
+**Après chaque run :**
+1. Mettre à jour `docs/vault/agents/<agent>-memory.md` avec les apprentissages
+2. Mettre à jour le fichier vault du domaine concerné
+3. Commit : `vault: update <agent> memory — <résumé bref>`
+
+**Commandes vault rapides :**
+```bash
+# Lire l'index du vault
+cat docs/vault/INDEX.md
+
+# Mettre à jour la mémoire agent
+# (éditer docs/vault/agents/<agent>-memory.md)
+
+# Rebuilder le graph après modifications vault
+python3 .github/scripts/vault_builder.py
+```
+
+**Vault = mémoire persistante entre les runs. Sans elle, chaque agent recommence à zéro.**
+
+---
+
 ## 🤖 Agent Roster
 
 | Nom | Rôle | Trigger |

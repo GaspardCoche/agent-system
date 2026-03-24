@@ -27,10 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-      contents: read
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-python@v5
         with:
@@ -128,3 +131,58 @@ jobs:
           name: agent-result-aria-${{ github.run_id }}
           path: /tmp/agent_result.json
           retention-days: 3
+
+      - name: Generate report + update dashboard
+        if: always()
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          mkdir -p /tmp/aria_results
+          cp /tmp/agent_result.json /tmp/aria_results/agent_result.json 2>/dev/null || true
+          STATUS="success"
+          python3 -c "import json,sys; d=json.load(open('/tmp/agent_result.json')); sys.exit(0 if d.get('status')=='complete' else 1)" 2>/dev/null || STATUS="failed"
+          DRY_SUFFIX=""
+          [ "${{ inputs.dry_run }}" = "true" ] && DRY_SUFFIX=" (dry run)"
+          python3 .github/scripts/generate_report.py \
+            --run-id "${{ github.run_id }}" \
+            --workflow "aria" \
+            --title "Aria — $(date +%Y-%m-%d)${DRY_SUFFIX}" \
+            --status "$STATUS" \
+            --event "${{ github.event_name }}" \
+            --repo "$REPO" \
+            --results-dir /tmp/aria_results \
+            --output-dir docs/reports \
+            --dashboard-file docs/data/runs.json
+
+      - name: Commit report and dashboard
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -d docs/vault ]; then
+            python3 .github/scripts/vault_builder.py --vault-dir docs/vault --output docs/data/graph.json 2>/dev/null || true
+          fi
+          git add docs/reports/ docs/data/runs.json docs/data/graph.json docs/vault/ 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "report: aria $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
+          git push
+
+      - name: Send Slack notification
+        if: always() && env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          RUN_URL="https://github.com/$REPO/actions/runs/$RUN_ID"
+          python3 -c "
+          import json, os
+          try:
+              d = json.load(open('/tmp/agent_result.json'))
+              status = d.get('status', 'unknown')
+              summary = d.get('summary', 'Aria run completed')[:200]
+              leads = len(d.get('findings', []))
+          except: status, summary, leads = 'unknown', 'Aria run completed', 0
+          emoji = '✅' if status == 'complete' else '❌'
+          icon = '👤'
+          print(json.dumps({'text': f'{icon} *Aria* ({status}) — {summary} · <$RUN_URL|Run #$RUN_ID>'}))
+          " | curl -s -X POST -H 'Content-type: application/json' -d @- "$SLACK_WEBHOOK_URL" || true

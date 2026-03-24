@@ -1,0 +1,172 @@
+name: Health Check — Secrets & Agents Status
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'   # Quotidien 6h UTC
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    env:
+      CLAUDE_CODE_OAUTH_TOKEN:      ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      GEMINI_API_KEY:               ${{ secrets.GEMINI_API_KEY }}
+      GMAIL_TOKEN_JSON:             ${{ secrets.GMAIL_TOKEN_JSON }}
+      GMAIL_USER_EMAIL:             ${{ secrets.GMAIL_USER_EMAIL }}
+      INTERNAL_EMAIL_DOMAIN:        ${{ secrets.INTERNAL_EMAIL_DOMAIN }}
+      FIRECRAWL_API_KEY:            ${{ secrets.FIRECRAWL_API_KEY }}
+      GOOGLE_SHEETS_TOKEN:          ${{ secrets.GOOGLE_SHEETS_TOKEN }}
+      FULLENRICH_API_KEY:           ${{ secrets.FULLENRICH_API_KEY }}
+      HUBSPOT_API_KEY:              ${{ secrets.HUBSPOT_API_KEY }}
+      GOOGLE_ADS_DEVELOPER_TOKEN:   ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+      GOOGLE_ADS_CLIENT_ID:         ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+      GOOGLE_ADS_CLIENT_SECRET:     ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+      GOOGLE_ADS_REFRESH_TOKEN:     ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+      GOOGLE_ADS_ACCOUNT_ID:        ${{ secrets.GOOGLE_ADS_ACCOUNT_ID }}
+      SLACK_WEBHOOK_URL:            ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check secrets and compute agent status
+        run: |
+          python3 << 'PYEOF'
+          import os, json
+          from datetime import datetime, timezone
+
+          def ok(key):
+              v = os.environ.get(key, "")
+              return bool(v and v not in ("***", ""))
+
+          secrets = {
+              "CLAUDE_CODE_OAUTH_TOKEN":    ok("CLAUDE_CODE_OAUTH_TOKEN"),
+              "GEMINI_API_KEY":             ok("GEMINI_API_KEY"),
+              "GMAIL_TOKEN_JSON":           ok("GMAIL_TOKEN_JSON"),
+              "GMAIL_USER_EMAIL":           ok("GMAIL_USER_EMAIL"),
+              "INTERNAL_EMAIL_DOMAIN":      ok("INTERNAL_EMAIL_DOMAIN"),
+              "FIRECRAWL_API_KEY":          ok("FIRECRAWL_API_KEY"),
+              "GOOGLE_SHEETS_TOKEN":        ok("GOOGLE_SHEETS_TOKEN"),
+              "FULLENRICH_API_KEY":         ok("FULLENRICH_API_KEY"),
+              "HUBSPOT_API_KEY":            ok("HUBSPOT_API_KEY"),
+              "GOOGLE_ADS_DEVELOPER_TOKEN": ok("GOOGLE_ADS_DEVELOPER_TOKEN"),
+              "GOOGLE_ADS_CLIENT_ID":       ok("GOOGLE_ADS_CLIENT_ID"),
+              "GOOGLE_ADS_CLIENT_SECRET":   ok("GOOGLE_ADS_CLIENT_SECRET"),
+              "GOOGLE_ADS_REFRESH_TOKEN":   ok("GOOGLE_ADS_REFRESH_TOKEN"),
+              "GOOGLE_ADS_ACCOUNT_ID":      ok("GOOGLE_ADS_ACCOUNT_ID"),
+              "SLACK_WEBHOOK_URL":          ok("SLACK_WEBHOOK_URL"),
+          }
+
+          def agent_status(required, optional=None):
+              optional = optional or []
+              missing_req = [k for k in required if not secrets.get(k)]
+              missing_opt = [k for k in optional if not secrets.get(k)]
+              if not missing_req:
+                  status = "ready" if not missing_opt else "partial"
+              elif len(missing_req) == len(required):
+                  status = "not_configured"
+              else:
+                  status = "partial"
+              return {"status": status, "missing_required": missing_req, "missing_optional": missing_opt}
+
+          agents = {
+              "orchestrator": agent_status(["CLAUDE_CODE_OAUTH_TOKEN"], ["GEMINI_API_KEY"]),
+              "sage":         agent_status(["CLAUDE_CODE_OAUTH_TOKEN"], ["GEMINI_API_KEY"]),
+              "ralph":        agent_status(["CLAUDE_CODE_OAUTH_TOKEN"]),
+              "forge":        agent_status(["CLAUDE_CODE_OAUTH_TOKEN"]),
+              "sentinel":     agent_status(["CLAUDE_CODE_OAUTH_TOKEN"]),
+              "lumen":        agent_status(["CLAUDE_CODE_OAUTH_TOKEN"], ["GEMINI_API_KEY"]),
+              "iris":         agent_status(["GMAIL_TOKEN_JSON", "GMAIL_USER_EMAIL", "CLAUDE_CODE_OAUTH_TOKEN"],
+                                           ["INTERNAL_EMAIL_DOMAIN", "FIRECRAWL_API_KEY"]),
+              "scout":        agent_status(["FIRECRAWL_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN"],
+                                           ["GOOGLE_SHEETS_TOKEN"]),
+              "aria":         agent_status(["FULLENRICH_API_KEY", "HUBSPOT_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN"]),
+              "nexus":        agent_status(["GOOGLE_ADS_DEVELOPER_TOKEN", "GOOGLE_ADS_CLIENT_ID",
+                                            "GOOGLE_ADS_CLIENT_SECRET", "GOOGLE_ADS_REFRESH_TOKEN",
+                                            "CLAUDE_CODE_OAUTH_TOKEN"],
+                                           ["GOOGLE_ADS_ACCOUNT_ID", "GEMINI_API_KEY"]),
+          }
+
+          ready = sum(1 for a in agents.values() if a["status"] == "ready")
+          partial = sum(1 for a in agents.values() if a["status"] == "partial")
+
+          health = {
+              "last_check": datetime.now(timezone.utc).isoformat(),
+              "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+              "summary": f"{ready} agents prêts, {partial} partiels",
+              "secrets": secrets,
+              "agents": agents,
+          }
+
+          os.makedirs("docs/data", exist_ok=True)
+          with open("docs/data/health.json", "w") as f:
+              json.dump(health, f, indent=2, ensure_ascii=False)
+
+          print(f"\n{'='*50}")
+          print(f"HEALTH CHECK — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
+          print(f"{'='*50}")
+          print(f"\nSecrets ({sum(secrets.values())}/{len(secrets)} configurés):")
+          for k, v in secrets.items():
+              print(f"  {'✅' if v else '❌'} {k}")
+          print(f"\nAgents ({ready}/{len(agents)} prêts):")
+          for name, info in agents.items():
+              emoji = "✅" if info["status"]=="ready" else "⚠️" if info["status"]=="partial" else "❌"
+              print(f"  {emoji} {name}: {info['status']}")
+              if info["missing_required"]:
+                  print(f"     Manquants (requis): {', '.join(info['missing_required'])}")
+          PYEOF
+
+      - name: Commit health.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/health.json
+          git diff --cached --quiet || git commit -m "chore: health check $(date +%Y-%m-%d %H:%M)"
+          git push
+
+      - name: Post alert if agents not ready
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 << 'PYEOF'
+          import json, subprocess, os
+
+          health = json.load(open("docs/data/health.json"))
+          not_ready = [(n, a) for n, a in health["agents"].items() if a["status"] == "not_configured"]
+
+          if not not_ready:
+              print("All agents configured ✅")
+              exit(0)
+
+          lines = ["## ⚠️ Health Check — Agents non configurés\n"]
+          lines.append(f"**{health['summary']}** — {health['last_check'][:10]}\n")
+          lines.append("| Agent | Secrets manquants |")
+          lines.append("|-------|------------------|")
+          for name, info in not_ready:
+              lines.append(f"| {name} | `{'`, `'.join(info['missing_required'])}` |")
+          lines.append(f"\n> Ajouter les secrets manquants dans [GitHub Settings](https://github.com/{os.environ['REPO']}/settings/secrets/actions)")
+
+          body = "\n".join(lines)
+          result = subprocess.run(
+              ["gh", "issue", "list", "--label", "health-alert", "--state", "open", "--json", "number", "--limit", "1"],
+              capture_output=True, text=True
+          )
+          existing = json.loads(result.stdout or "[]")
+          if existing:
+              issue_num = existing[0]["number"]
+              subprocess.run(["gh", "issue", "edit", str(issue_num), "--body", body])
+              print(f"Updated existing issue #{issue_num}")
+          else:
+              subprocess.run(["gh", "issue", "create",
+                  "--title", f"⚠️ Health Alert — {len(not_ready)} agent(s) non configurés",
+                  "--body", body,
+                  "--label", "health-alert"],
+                  capture_output=True)
+              print("Created new health alert issue")
+          PYEOF

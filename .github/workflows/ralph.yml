@@ -97,3 +97,70 @@ jobs:
       max_turns: "10"
       allowed_tools: "mcp__firecrawl__firecrawl_scrape,mcp__firecrawl__firecrawl_search,mcp__github__add_issue_comment,mcp__github__create_issue"
     secrets: inherit
+
+  report:
+    needs: [route, run-agent]
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download agent result
+        uses: actions/download-artifact@v4
+        with:
+          name: agent-result-${{ needs.route.outputs.target_agent }}-${{ github.run_id }}
+          path: /tmp/ralph_results/
+        continue-on-error: true
+
+      - name: Generate report + update dashboard
+        env:
+          REPO: ${{ github.repository }}
+          TARGET: ${{ needs.route.outputs.target_agent }}
+          EVENT_TYPE: ${{ github.event.action }}
+        run: |
+          mkdir -p /tmp/ralph_results
+          STATUS="${{ needs.run-agent.outputs.status }}"
+          [ -z "$STATUS" ] && STATUS="failed"
+          python3 .github/scripts/generate_report.py \
+            --run-id "${{ github.run_id }}" \
+            --workflow "ralph" \
+            --title "Ralph → ${TARGET} (${EVENT_TYPE}) $(date +%Y-%m-%d)" \
+            --status "${STATUS}" \
+            --event "repository_dispatch" \
+            --repo "$REPO" \
+            --results-dir /tmp/ralph_results \
+            --output-dir docs/reports \
+            --dashboard-file docs/data/runs.json || true
+
+      - name: Commit report and dashboard
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/reports/ docs/data/runs.json 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "report: ralph → ${{ needs.route.outputs.target_agent }} $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
+          git push
+
+      - name: Send Slack notification
+        if: env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          TARGET: ${{ needs.route.outputs.target_agent }}
+          EVENT_TYPE: ${{ github.event.action }}
+        run: |
+          RUN_URL="https://github.com/$REPO/actions/runs/$RUN_ID"
+          STATUS="${{ needs.run-agent.outputs.status }}"
+          EMOJI=$([ "$STATUS" = "complete" ] && echo "✅" || echo "❌")
+          PAYLOAD="{\"text\":\"🚀 *Ralph* routed \`${EVENT_TYPE}\` → \`${TARGET}\` (${STATUS}) · <${RUN_URL}|Run #${RUN_ID}>\"}"
+          curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL" || true
