@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-03-20",
+  "description": "Registry des skills validés et candidats. Géré par Sage chaque semaine.",
+  "skills": [
+    {
+      "name": "firecrawl_scrape",
+      "mcp_tool": "mcp__firecrawl__firecrawl_scrape",
+      "context": "url_scraping",
+      "status": "validated",
+      "usage_count": 0,
+      "created_date": "2026-03-20",
+      "validated_date": "2026-03-20",
+      "script": "skills/validated/firecrawl_scrape.py",
+      "description": "Scrape une URL avec Firecrawl, retourne le contenu en markdown",
+      "env_required": ["FIRECRAWL_API_KEY"],
+      "usage": "python3 skills/validated/firecrawl_scrape.py --url URL [--format markdown]"
+    }
+  ],
+  "validation_threshold": {
+    "min_usage_count": 3,
+    "min_weekly_uses": 3,
+    "description": "Un skill devient candidat si utilisé 3+ fois en une semaine"
+  }
+}

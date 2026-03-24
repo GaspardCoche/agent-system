@@ -15,16 +15,27 @@ jobs:
 
       - name: Write task
         run: |
-          cat > /tmp/agent_task.json << EOF
-          {
-            "task_id": "${{ github.event.pull_request.number }}",
-            "role": "tester",
-            "pr_number": "${{ github.event.pull_request.number }}",
-            "pr_title": "${{ github.event.pull_request.title }}",
-            "base_sha": "${{ github.event.pull_request.base.sha }}",
-            "head_sha": "${{ github.sha }}"
+          python3 << 'PYEOF'
+          import json, os
+          task = {
+              "task_id": os.environ.get("PR_NUMBER", ""),
+              "role": "sentinel",
+              "pr_number": os.environ.get("PR_NUMBER", ""),
+              "pr_title": os.environ.get("PR_TITLE", ""),
+              "base_sha": os.environ.get("BASE_SHA", ""),
+              "head_sha": os.environ.get("HEAD_SHA", ""),
           }
-          EOF
+          with open("/tmp/agent_task.json", "w") as f:
+              json.dump(task, f)
+          PYEOF
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.sha }}
+
+      - name: Install MCP servers
+        run: npm install -g @modelcontextprotocol/server-github
 
       - name: Write MCP config
         run: |
@@ -32,17 +43,21 @@ jobs:
             > /tmp/mcp-config.json
           sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
 
-      - name: Run tester agent (Claude)
+      - name: Build claude_args
+        run: |
+          echo "CLAUDE_ARGS=--max-turns 10 --allowedTools Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__get_pull_request_files --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+
+      - name: Run Sentinel agent (Claude)
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Read agent_prompts/tester.md.
+            Read agent_prompts/sentinel.md.
             Task: /tmp/agent_task.json
             PR: #${{ github.event.pull_request.number }}
             1. Get changed files: Bash("git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD")
             2. Run the test suite.
             3. Write results to /tmp/agent_result.json.
             4. Post a summary comment on the PR.
-          claude_args: --max-turns 10 --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__get_pull_request_files" --mcp-config /tmp/mcp-config.json
+          claude_args: ${{ env.CLAUDE_ARGS }}

@@ -1,0 +1,99 @@
+name: Ralph — Automation Engine
+on:
+  repository_dispatch:
+    types:
+      - scout-enrich
+      - aria-leads
+      - nexus-audit
+      - iris-digest
+      - forge-task
+      - sage-weekly
+      - nexus-weekly
+      - full-workflow
+
+jobs:
+  route:
+    runs-on: ubuntu-latest
+    outputs:
+      dispatch_plan: ${{ steps.build_plan.outputs.dispatch_plan }}
+      target_agent: ${{ steps.build_plan.outputs.target_agent }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log incoming event
+        run: |
+          echo "Event type: ${{ github.event.action }}"
+          echo "Source: ${{ github.event.client_payload.source }}"
+          echo "DryRun: ${{ github.event.client_payload.dry_run }}"
+
+      - name: Build dispatch plan
+        id: build_plan
+        env:
+          EVENT_TYPE: ${{ github.event.action }}
+          SOURCE: ${{ github.event.client_payload.source }}
+          DRY_RUN: ${{ github.event.client_payload.dry_run }}
+          PAYLOAD: ${{ toJSON(github.event.client_payload.data) }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          python3 << 'PYEOF'
+          import json, os
+
+          event_type = os.environ["EVENT_TYPE"]
+          source = os.environ.get("SOURCE", "unknown")
+          dry_run = os.environ.get("DRY_RUN", "false").lower() == "true"
+          run_id = os.environ["RUN_ID"]
+
+          routing = {
+              "scout-enrich": "scout",
+              "aria-leads": "aria",
+              "nexus-audit": "nexus",
+              "nexus-weekly": "nexus",
+              "iris-digest": "iris",
+              "forge-task": "forge",
+              "sage-weekly": "sage",
+              "full-workflow": "dispatch",
+          }
+
+          target = routing.get(event_type, "dispatch")
+
+          try:
+              payload_data = json.loads(os.environ.get("PAYLOAD", "{}"))
+          except Exception:
+              payload_data = {}
+
+          plan = {
+              "task_id": run_id,
+              "triggered_by": "ralph",
+              "event_type": event_type,
+              "source": source,
+              "dry_run": dry_run,
+              "objective": f"Execute {event_type} triggered by {source}",
+              "agents": [
+                  {
+                      "role": target,
+                      "input": json.dumps(payload_data),
+                      "parallel": False,
+                  }
+              ],
+          }
+
+          with open("/tmp/dispatch_plan.json", "w") as f:
+              json.dump(plan, f, indent=2)
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"dispatch_plan={json.dumps(plan)}\n")
+              f.write(f"target_agent={target}\n")
+
+          print(f"Routed {event_type} → {target} (dry_run={dry_run})")
+          PYEOF
+
+  run-agent:
+    needs: route
+    uses: ./.github/workflows/_reusable-claude.yml
+    with:
+      agent_role: ${{ needs.route.outputs.target_agent }}
+      task_json: ${{ needs.route.outputs.dispatch_plan }}
+      max_turns: "10"
+      allowed_tools: "mcp__firecrawl__firecrawl_scrape,mcp__firecrawl__firecrawl_search,mcp__github__add_issue_comment,mcp__github__create_issue"
+    secrets: inherit

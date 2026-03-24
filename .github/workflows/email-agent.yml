@@ -21,15 +21,34 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       email_count: ${{ steps.fetch.outputs.email_count }}
+      gmail_configured: ${{ steps.check.outputs.gmail_configured }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check Gmail secrets
+        id: check
+        env:
+          GMAIL_TOKEN_JSON: ${{ secrets.GMAIL_TOKEN_JSON }}
+        run: |
+          if [ -z "$GMAIL_TOKEN_JSON" ]; then
+            echo "gmail_configured=false" >> $GITHUB_OUTPUT
+            echo "⚠️  GMAIL_TOKEN_JSON not set — skipping email fetch"
+            echo "Run: python3 .github/scripts/gmail_auth_setup.py to generate the token"
+          else
+            echo "gmail_configured=true" >> $GITHUB_OUTPUT
+          fi
+
       - uses: actions/setup-python@v5
+        if: steps.check.outputs.gmail_configured == 'true'
         with:
           python-version: '3.12'
-      - run: pip install google-auth google-auth-oauthlib google-api-python-client
+
+      - run: pip install google-auth google-auth-oauthlib google-api-python-client -q
+        if: steps.check.outputs.gmail_configured == 'true'
 
       - name: Fetch emails
         id: fetch
+        if: steps.check.outputs.gmail_configured == 'true'
         env:
           GMAIL_TOKEN_JSON: ${{ secrets.GMAIL_TOKEN_JSON }}
           GMAIL_USER_EMAIL: ${{ secrets.GMAIL_USER_EMAIL }}
@@ -39,6 +58,12 @@ jobs:
             --output /tmp/raw_emails.json
           COUNT=$(python3 -c "import json; print(len(json.load(open('/tmp/raw_emails.json'))))")
           echo "email_count=$COUNT" >> $GITHUB_OUTPUT
+
+      - name: Skip — Gmail not configured
+        if: steps.check.outputs.gmail_configured == 'false'
+        run: |
+          echo '[]' > /tmp/raw_emails.json
+          echo "email_count=0" >> $GITHUB_OUTPUT
 
       - uses: actions/upload-artifact@v4
         with:
@@ -54,7 +79,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install google-genai
+      - run: pip install google-genai requests -q
 
       - name: Scrape AI news
         env:
@@ -78,6 +103,7 @@ jobs:
 
   triage-emails:
     needs: fetch-emails
+    if: needs.fetch-emails.outputs.gmail_configured == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -87,25 +113,32 @@ jobs:
           name: raw-emails-${{ github.run_id }}
           path: /tmp/
 
+      - name: Install MCP servers
+        run: npm install -g @modelcontextprotocol/server-memory
+
       - name: Write MCP config
         run: |
           printf '{"mcpServers":{"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
             > /tmp/mcp-config.json
 
-      - name: Triage emails (Claude)
+      - name: Build claude_args
+        run: |
+          echo "CLAUDE_ARGS=--max-turns 8 --allowedTools Bash,Read,Write --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+
+      - name: Triage emails (Claude / Iris)
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Read agent_prompts/email-triage.md carefully.
+            Read agent_prompts/iris.md (fallback: agent_prompts/email-triage.md).
             Raw emails are in /tmp/raw_emails.json.
             Your email: ${{ secrets.GMAIL_USER_EMAIL }}
             Internal domain: ${{ secrets.INTERNAL_EMAIL_DOMAIN || 'none' }}
             Classify each email and write /tmp/email_triage.json.
-          claude_args: --max-turns 8 --allowedTools "Bash,Read,Write" --mcp-config /tmp/mcp-config.json
+          claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
-            {"env": {"AGENT_ROLE": "email-triage"}}
+            {"env": {"AGENT_ROLE": "iris"}}
 
       - uses: actions/upload-artifact@v4
         with:
@@ -115,13 +148,14 @@ jobs:
 
   create-drafts:
     needs: triage-emails
+    if: needs.triage-emails.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install google-auth google-auth-oauthlib google-api-python-client
+      - run: pip install google-auth google-auth-oauthlib google-api-python-client -q
 
       - uses: actions/download-artifact@v4
         with:
@@ -138,8 +172,8 @@ jobs:
             --triage-file /tmp/email_triage.json
 
   post-digest:
-    needs: [triage-emails, scrape-ai-news, create-drafts]
-    if: always() && needs.triage-emails.result == 'success'
+    needs: [fetch-emails, triage-emails, scrape-ai-news, create-drafts]
+    if: always() && needs.fetch-emails.result == 'success'
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -153,11 +187,27 @@ jobs:
           path: /tmp/artifacts/
         continue-on-error: true
 
+      - name: Install MCP servers
+        run: npm install -g @modelcontextprotocol/server-github
+
       - name: Write MCP config
         run: |
           printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}}}}' \
             > /tmp/mcp-config.json
           sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Check if Gmail was configured
+        run: |
+          GMAIL_CONFIGURED="${{ needs.fetch-emails.outputs.gmail_configured }}"
+          if [ "$GMAIL_CONFIGURED" != "true" ]; then
+            echo "DIGEST_NOTE=⚠️ Gmail non configuré — digest limité aux actualités IA" >> $GITHUB_ENV
+          else
+            echo "DIGEST_NOTE=" >> $GITHUB_ENV
+          fi
+
+      - name: Build claude_args
+        run: |
+          echo "CLAUDE_ARGS=--max-turns 6 --allowedTools Bash,Read,Write --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Generate and post digest (Claude)
         uses: anthropics/claude-code-action@v1
@@ -166,22 +216,23 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
             Find and read available data:
-            Bash("find /tmp/artifacts -name '*.json' | head -10 | xargs -I{} cat {}")
+            Bash("find /tmp/artifacts -name '*.json' 2>/dev/null | head -10 | xargs -I{} sh -c 'echo \"--- {} ---\" && cat {}' 2>/dev/null || echo 'no artifacts'")
 
             Write a daily digest to /tmp/digest_body.md then create a GitHub issue:
-            Bash("gh issue create --title '📧 Daily Digest — $(date +%Y-%m-%d)' --label 'digest' --body-file /tmp/digest_body.md --repo ${{ github.repository }}")
+            Bash("gh issue create --title '📧 Daily Digest — $(date +%Y-%m-%d)' --label 'digest' --body-file /tmp/digest_body.md --repo $GITHUB_REPOSITORY")
 
             Digest format:
             ## 🔴 Ne pas louper
-            [critique emails with draft note]
+            [emails critiques avec draft note — si Gmail configuré]
             ## 🟡 Interne
-            [internal emails]
+            [emails internes]
             ## 🔵 Intégrations & Alertes
-            [alerts grouped by service]
+            [alertes groupées par service]
             ## 🤖 IA — Ne pas rater
-            [ai digest if available]
+            [ai digest si disponible]
+            ${{ env.DIGEST_NOTE }}
             ---
             *⚡ [N] emails · [N] drafts · $(date +%Y-%m-%d)*
-          claude_args: --max-turns 6 --allowedTools "Bash,Read,Write" --mcp-config /tmp/mcp-config.json
+          claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
-            {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"}}
+            {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}

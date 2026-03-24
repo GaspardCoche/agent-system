@@ -1,0 +1,130 @@
+name: Sage — Weekly Self-Improvement
+on:
+  schedule:
+    - cron: '0 9 * * 0'  # Dimanche 9h UTC
+  workflow_dispatch:
+    inputs:
+      force_skill_validation:
+        description: 'Force validation of all candidate skills'
+        required: false
+        default: 'false'
+        type: string
+
+jobs:
+  sage-weekly:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests google-genai -q
+
+      - name: Collect recent retrospectives
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 << 'PYEOF'
+          import subprocess, json, os
+          from datetime import datetime, timedelta
+
+          # Récupérer les artifacts des 7 derniers jours
+          result = subprocess.run(
+              ["gh", "api", f"repos/{os.environ.get('GITHUB_REPOSITORY','')}/actions/artifacts",
+               "--jq", ".artifacts[] | select(.name | startswith(\"agent-result\")) | .id"],
+              capture_output=True, text=True
+          )
+
+          artifact_ids = result.stdout.strip().split("\n")[:20]  # max 20
+
+          retrospectives = []
+          for artifact_id in artifact_ids:
+              if not artifact_id:
+                  continue
+              # Télécharger et parser
+              dl = subprocess.run(
+                  ["gh", "api", f"repos/{os.environ.get('GITHUB_REPOSITORY','')}/actions/artifacts/{artifact_id}/zip",
+                   "--output", f"/tmp/artifact_{artifact_id}.zip"],
+                  capture_output=True
+              )
+              # Extraire et lire le JSON
+              subprocess.run(["unzip", "-o", f"/tmp/artifact_{artifact_id}.zip",
+                              "-d", f"/tmp/artifact_{artifact_id}/"], capture_output=True)
+
+              import glob
+              for json_file in glob.glob(f"/tmp/artifact_{artifact_id}/**/*.json", recursive=True):
+                  try:
+                      data = json.load(open(json_file))
+                      if "retrospective" in data:
+                          retrospectives.append(data)
+                  except Exception:
+                      pass
+
+          json.dump(retrospectives, open("/tmp/all_retrospectives.json", "w"), indent=2)
+          print(f"Collected {len(retrospectives)} retrospectives")
+          PYEOF
+
+      - name: Write MCP config
+        run: |
+          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
+            > /tmp/mcp-config.json
+          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Write Sage task
+        run: |
+          python3 << 'PYEOF'
+          import json, os
+
+          task = {
+              "task_id": os.environ.get("GITHUB_RUN_ID", "sage-weekly"),
+              "event": "schedule",
+              "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+              "description": "Weekly self-improvement cycle: analyze retrospectives, update skills registry, improve prompts, update lessons_learned.md",
+              "title": "Sage Weekly Run",
+              "force_skill_validation": os.environ.get("FORCE_SKILL_VALIDATION", "false"),
+              "retrospectives_file": "/tmp/all_retrospectives.json"
+          }
+
+          json.dump(task, open("/tmp/agent_task.json", "w"), indent=2)
+          PYEOF
+        env:
+          FORCE_SKILL_VALIDATION: ${{ inputs.force_skill_validation || 'false' }}
+
+      - name: Run Sage agent
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/sage.md.
+            Task is in /tmp/agent_task.json.
+            Retrospectives are in /tmp/all_retrospectives.json.
+            Execute the weekly self-improvement cycle:
+            1. Analyze retrospectives and MCP patterns
+            2. Update skills/registry.json with new candidates
+            3. Update memory/lessons_learned.md with new learnings
+            4. If any skill candidate has usage_count >= 5, write and validate the skill
+            5. Create PRs for prompt improvements if needed
+            Write results to /tmp/agent_result.json
+          claude_args: --max-turns 15 --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__create_pull_request,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
+          settings: |
+            {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
+
+      - name: Upload Sage result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-result-sage-${{ github.run_id }}
+          path: /tmp/agent_result.json
+          retention-days: 7

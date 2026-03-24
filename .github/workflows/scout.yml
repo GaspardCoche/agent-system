@@ -1,0 +1,147 @@
+name: Scout — Web Intelligence RGPD
+on:
+  workflow_dispatch:
+    inputs:
+      sheet_id:
+        description: 'Google Sheet ID to enrich'
+        required: true
+        type: string
+      sheet_tab:
+        description: 'Sheet tab name'
+        required: false
+        default: 'Prospects'
+        type: string
+      columns_to_enrich:
+        description: 'Comma-separated columns to fill (e.g. description,sector,size)'
+        required: false
+        default: 'description,sector,size,hq_city'
+        type: string
+      dry_run:
+        description: 'Preview only, do not write to sheet'
+        required: false
+        default: 'true'
+        type: string
+  repository_dispatch:
+    types: [scout-enrich]
+
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests google-auth google-auth-oauthlib google-api-python-client -q
+
+      - name: Build Scout task
+        run: |
+          python3 << 'PYEOF'
+          import json, os
+
+          # Supporte workflow_dispatch et repository_dispatch
+          event_name = os.environ.get("GITHUB_EVENT_NAME", "workflow_dispatch")
+
+          if event_name == "repository_dispatch":
+              payload = json.loads(os.environ.get("CLIENT_PAYLOAD", "{}"))
+              task = {
+                  "task_id": os.environ.get("GITHUB_RUN_ID", ""),
+                  "event": "repository_dispatch",
+                  "sheet_id": payload.get("sheet_id", ""),
+                  "sheet_tab": payload.get("sheet_tab", "Prospects"),
+                  "columns_to_enrich": payload.get("columns_to_enrich", "description,sector,size"),
+                  "dry_run": payload.get("dry_run", False),
+                  "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+              }
+          else:
+              task = {
+                  "task_id": os.environ.get("GITHUB_RUN_ID", ""),
+                  "event": "workflow_dispatch",
+                  "sheet_id": os.environ.get("SHEET_ID", ""),
+                  "sheet_tab": os.environ.get("SHEET_TAB", "Prospects"),
+                  "columns_to_enrich": os.environ.get("COLUMNS_TO_ENRICH", "description,sector,size,hq_city").split(","),
+                  "dry_run": os.environ.get("DRY_RUN", "true").lower() == "true",
+                  "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+              }
+
+          json.dump(task, open("/tmp/agent_task.json", "w"), indent=2)
+          print(f"Task: sheet={task.get('sheet_id')}, dry_run={task.get('dry_run')}")
+          PYEOF
+        env:
+          SHEET_ID: ${{ inputs.sheet_id || '' }}
+          SHEET_TAB: ${{ inputs.sheet_tab || 'Prospects' }}
+          COLUMNS_TO_ENRICH: ${{ inputs.columns_to_enrich || 'description,sector,size,hq_city' }}
+          DRY_RUN: ${{ inputs.dry_run || 'true' }}
+          CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+
+      - name: Write MCP config
+        run: |
+          cat > /tmp/mcp-config.json << 'MCPEOF'
+          {
+            "mcpServers": {
+              "filesystem": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/runner/work"],
+                "env": {}
+              },
+              "github": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-github"],
+                "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "GH_PLACEHOLDER"}
+              },
+              "firecrawl": {
+                "command": "npx",
+                "args": ["-y", "firecrawl-mcp"],
+                "env": {"FIRECRAWL_API_KEY": "FIRECRAWL_PLACEHOLDER"}
+              },
+              "memory": {
+                "command": "npx",
+                "args": ["-y", "@modelcontextprotocol/server-memory"],
+                "env": {}
+              }
+            }
+          }
+          MCPEOF
+          sed -i "s/GH_PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+          sed -i "s/FIRECRAWL_PLACEHOLDER/${{ secrets.FIRECRAWL_API_KEY }}/g" /tmp/mcp-config.json
+
+      - name: Install MCP servers
+        run: |
+          npm install -g \
+            @modelcontextprotocol/server-filesystem \
+            @modelcontextprotocol/server-github \
+            firecrawl-mcp \
+            @modelcontextprotocol/server-memory
+
+      - name: Run Scout agent
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/scout.md.
+            Task is in /tmp/agent_task.json.
+            Execute the web enrichment task following Scout's RGPD rules.
+            Write results to /tmp/agent_result.json.
+          claude_args: --max-turns 12 --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__firecrawl__firecrawl_scrape,mcp__firecrawl__firecrawl_search,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
+          settings: |
+            {
+              "env": {
+                "FIRECRAWL_API_KEY": "${{ secrets.FIRECRAWL_API_KEY }}",
+                "GOOGLE_SHEETS_TOKEN": "${{ secrets.GOOGLE_SHEETS_TOKEN }}",
+                "GITHUB_REPOSITORY": "${{ github.repository }}"
+              }
+            }
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-result-scout-${{ github.run_id }}
+          path: /tmp/agent_result.json
+          retention-days: 3

@@ -1,0 +1,130 @@
+name: Aria — Lead Generation & CRM
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Data source: scout (use latest scout result) or file'
+        required: true
+        default: 'scout'
+        type: choice
+        options:
+          - scout
+          - file
+      file_path:
+        description: 'If source=file: path to contacts JSON/CSV in repo'
+        required: false
+        type: string
+      dry_run:
+        description: 'Preview only, do not write to HubSpot'
+        required: false
+        default: 'true'
+        type: string
+  repository_dispatch:
+    types: [aria-leads]
+
+jobs:
+  aria:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests -q
+
+      - name: Download Scout results (if source=scout)
+        if: ${{ inputs.source == 'scout' || github.event.action == 'aria-leads' }}
+        uses: actions/download-artifact@v4
+        with:
+          pattern: agent-result-scout-*
+          path: /tmp/scout_results/
+        continue-on-error: true
+
+      - name: Build Aria task
+        run: |
+          python3 << 'PYEOF'
+          import json, os, glob
+
+          event_name = os.environ.get("GITHUB_EVENT_NAME", "workflow_dispatch")
+
+          if event_name == "repository_dispatch":
+              payload = json.loads(os.environ.get("CLIENT_PAYLOAD", "{}"))
+              source = payload.get("source", "scout")
+              dry_run = payload.get("dry_run", False)
+              file_path = payload.get("file_path", "")
+          else:
+              source = os.environ.get("SOURCE", "scout")
+              dry_run = os.environ.get("DRY_RUN", "true").lower() == "true"
+              file_path = os.environ.get("FILE_PATH", "")
+
+          # Chercher les données Scout si source=scout
+          scout_data = None
+          if source == "scout":
+              scout_files = glob.glob("/tmp/scout_results/**/*.json", recursive=True)
+              if scout_files:
+                  scout_data = json.load(open(scout_files[0]))
+
+          task = {
+              "task_id": os.environ.get("GITHUB_RUN_ID", ""),
+              "event": event_name,
+              "source": source,
+              "file_path": file_path,
+              "dry_run": dry_run,
+              "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+              "scout_data_available": scout_data is not None,
+          }
+
+          if scout_data:
+              task["enriched_rows"] = scout_data.get("enriched_rows", [])
+
+          json.dump(task, open("/tmp/agent_task.json", "w"), indent=2)
+          print(f"Aria task: source={source}, dry_run={dry_run}, scout_rows={len(task.get('enriched_rows', []))}")
+          PYEOF
+        env:
+          SOURCE: ${{ inputs.source || 'scout' }}
+          DRY_RUN: ${{ inputs.dry_run || 'true' }}
+          FILE_PATH: ${{ inputs.file_path || '' }}
+          CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+
+      - name: Write MCP config
+        run: |
+          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
+            > /tmp/mcp-config.json
+          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Install MCP servers
+        run: npm install -g @modelcontextprotocol/server-github @modelcontextprotocol/server-memory
+
+      - name: Run Aria agent
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/aria.md.
+            Task is in /tmp/agent_task.json.
+            Execute lead enrichment and CRM import following Aria's process.
+            Respect dry_run flag — if true, only preview, do not call HubSpot API.
+            Write results to /tmp/agent_result.json.
+          claude_args: --max-turns 12 --allowedTools "Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
+          settings: |
+            {
+              "env": {
+                "FULLENRICH_API_KEY": "${{ secrets.FULLENRICH_API_KEY }}",
+                "HUBSPOT_API_KEY": "${{ secrets.HUBSPOT_API_KEY }}",
+                "GITHUB_REPOSITORY": "${{ github.repository }}"
+              }
+            }
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-result-aria-${{ github.run_id }}
+          path: /tmp/agent_result.json
+          retention-days: 3

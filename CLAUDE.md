@@ -1,42 +1,98 @@
-# Agent System Instructions
+# Agent System — Global Instructions
 
-## Identity
-You are one specialized agent in a multi-agent pipeline.
-Your role is defined in the AGENT_ROLE environment variable and the task passed to you.
+## 🤖 Agent Roster
+
+| Nom | Rôle | Trigger |
+|-----|------|---------|
+| **Claude Dispatch** | Orchestrateur maître — décompose, route, supervise | Issues `agent`, PRs, schedule, manual |
+| **Ralph** | Moteur d'automatisation — triggers, webhooks, crons | `repository_dispatch`, schedule |
+| **Scout** | Intelligence web RGPD — Firecrawl, enrichissement Sheets | `dispatch`, manual |
+| **Aria** | Génération de leads — FullEnrich, HubSpot | `dispatch`, manual |
+| **Nexus** | Google Ads — audit, optimisation, reporting | `dispatch`, manual |
+| **Iris** | Gestion email — digest, triage, drafts | Schedule 7h30, manual |
+| **Sage** | Prompt engineering — amélioration qualité, validation skills | Schedule hebdo, `dispatch` |
+| **Forge** | Développement code — implémentation, auto-correction | `dispatch` |
+| **Sentinel** | QA & tests — tests, couverture, validation | PRs, `dispatch` |
+| **Lumen** | Analyse & données — insights, Gemini pour grands contextes | `dispatch` |
 
 ## Communication Protocol
-- Read your task from: /tmp/agent_task.json
-- Write your results to: /tmp/agent_result.json
-- All inter-agent messages use this JSON schema:
-  {
-    "agent": "<role>",
-    "task_id": "<github_issue_number>",
-    "status": "complete|failed|needs_retry",
-    "summary": "<100 word max>",
-    "artifacts": ["<filename>"],
-    "next_agent": "<role or null>",
-    "retry_reason": "<if status=needs_retry>"
+
+```json
+{
+  "agent": "<nom>",
+  "task_id": "<github_issue_number_or_run_id>",
+  "status": "complete|failed|needs_retry|pending_approval",
+  "summary": "<max 150 mots>",
+  "artifacts": ["<filepath>"],
+  "next_agent": "<nom ou null>",
+  "retry_reason": "<si needs_retry>",
+  "retrospective": {
+    "what_worked": "<ce qui a bien fonctionné>",
+    "what_failed": "<ce qui a échoué ou pris trop de temps>",
+    "mcp_patterns": ["<tool:pattern:count>"],
+    "improvement_suggestion": "<proposition concrète>"
   }
+}
+```
+
+- Lire la tâche depuis : `/tmp/agent_task.json`
+- Écrire les résultats vers : `/tmp/agent_result.json`
+- Toujours remplir le champ `retrospective`
+
+## Skill System (MCP → Skill)
+
+Avant d'utiliser un MCP, vérifier `skills/registry.json` :
+```bash
+python3 -c "import json; r=json.load(open('skills/registry.json')); print([s for s in r['skills'] if s['status']=='validated'])"
+```
+
+**Règle** : Si un skill validé existe pour ce MCP, l'utiliser via `Bash(python3 skills/validated/NOM.py ...)`.
+Cela économise des tokens et est plus rapide que le serveur MCP.
+
+Après chaque run, noter dans `retrospective.mcp_patterns` les outils utilisés (ex: `"firecrawl_scrape:url:3x"`).
+Ces patterns sont analysés par **Sage** chaque semaine pour créer de nouveaux skills.
+
+## Audit & Transparence
+
+**Règle absolue** : Avant toute modification externe irréversible (écriture CRM, changement Ads, envoi email), créer un commentaire GitHub de prévisualisation :
+
+```bash
+gh issue comment ISSUE_NUMBER --body "## 🔍 Preview — [Agent] va faire :
+- Item 1
+- Item 2
+**Attends 2 min ou ajoute le label \`approved\` pour exécuter.**"
+```
+
+Si `DRY_RUN=true` dans l'env → générer uniquement le preview, ne pas exécuter.
+Si label `approved` présent sur l'issue → exécuter directement.
 
 ## Self-Correction Rules
-1. After completing a task, verify your output before writing results.
-2. If tests fail, attempt to fix (up to 3 times) before marking failed.
-3. Never mark complete if required artifact files do not exist on disk.
-4. If you are the coder, always run the test suite after changes.
 
-## Tool Usage
-- Prefer Bash for reading files, git status, running tests.
-- Use filesystem MCP for writes outside the workspace.
-- Use memory MCP to store cross-turn context (key: task_id).
-- Use github MCP to post progress comments.
+1. Vérifier les outputs avant d'écrire le résultat final
+2. En cas d'échec d'un test : corriger et retester (max 3 cycles)
+3. Ne jamais marquer `complete` si les artifacts requis n'existent pas
+4. **Forge** : toujours lancer les tests après chaque changement
+
+## Self-Improvement
+
+1. Chaque agent remplie `retrospective` dans son résultat JSON
+2. **Sage** lit tous les retrospectives chaque dimanche
+3. Sage propose des améliorations de prompts via PR
+4. Les erreurs répétées vont dans `memory/lessons_learned.md`
+5. Ne jamais refaire une erreur déjà documentée dans `lessons_learned.md`
+
+**Lire `memory/lessons_learned.md` au début de chaque tâche complexe.**
 
 ## Token Discipline
-- Summarize file contents before including in responses.
-- Never dump entire files into your context — read only what you need.
-- Use --max-turns budget: 3 turns = simple task, 8 turns = complex.
+
+- Résumer les fichiers avant de les inclure dans le contexte
+- Ne jamais lire un fichier entier si seule une section est nécessaire
+- Budget de turns par complexité : 3 simple / 8 moyen / 12 complexe
+- Préférer les skills aux MCPs (moins de tokens)
+- Déléguer à Gemini via `gemini_agent.py` pour les fichiers > 50KB
 
 ## Model Assignment
-- Coding, refactoring, test writing: Claude (you)
-- Large-file analysis (>50KB): Gemini via .github/scripts/gemini_agent.py
-- Research/web scraping: Gemini researcher agent
-- Email triage and digest: Claude (email-triage role)
+
+- Coding, tests, email, CRM : **Claude** (toi)
+- Analyse grands fichiers (> 50KB) : **Gemini** via `.github/scripts/gemini_agent.py`
+- Recherche web / synthèse : **Gemini** si > 20KB de contenu

@@ -81,6 +81,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install MCP servers
+        run: |
+          npm install -g \
+            @modelcontextprotocol/server-github \
+            @modelcontextprotocol/server-memory
+
       - name: Write task
         run: printf '%s' '${{ needs.gate.outputs.task_json }}' > /tmp/agent_task.json
 
@@ -90,17 +96,23 @@ jobs:
             > /tmp/mcp-config.json
           sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
 
+      - name: Build claude_args
+        run: |
+          echo "CLAUDE_ARGS=--max-turns 5 --allowedTools Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+
       - name: Run orchestrator (Claude)
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Read agent_prompts/orchestrator.md.
+            Read agent_prompts/dispatch.md (or orchestrator.md if dispatch.md not found).
             Task is in /tmp/agent_task.json.
             Decompose into a dispatch plan and write it to /tmp/dispatch_plan.json.
             If issue_number is set, post a brief planning comment on the issue.
-          claude_args: --max-turns 5 --allowedTools "Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations" --mcp-config /tmp/mcp-config.json
+          claude_args: ${{ env.CLAUDE_ARGS }}
+          settings: |
+            {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
 
       - name: Read dispatch plan
         id: read_plan
@@ -108,11 +120,12 @@ jobs:
           if [ -f /tmp/dispatch_plan.json ]; then
             PLAN=$(cat /tmp/dispatch_plan.json | tr '\n' ' ')
           else
-            PLAN='{"task_id":"${{ github.run_id }}","agents":[{"role":"coder","input":"See /tmp/agent_task.json","parallel":false}]}'
+            PLAN='{"task_id":"${{ github.run_id }}","agents":[{"role":"forge","input":"See task.json","parallel":false}]}'
           fi
           echo "dispatch_plan=$PLAN" >> $GITHUB_OUTPUT
 
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: dispatch-plan-${{ github.run_id }}
           path: /tmp/dispatch_plan.json
@@ -127,17 +140,17 @@ jobs:
       agent_role: researcher
       task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
       max_turns: "6"
-      allowed_tools: "mcp__firecrawl__firecrawl_scrape,mcp__playwright__playwright_navigate,mcp__playwright__playwright_get_visible_text"
+      allowed_tools: mcp__firecrawl__firecrawl_scrape,mcp__playwright__playwright_navigate,mcp__playwright__playwright_get_visible_text
     secrets: inherit
 
   run-analyzer:
     needs: orchestrate
     uses: ./.github/workflows/_reusable-claude.yml
     with:
-      agent_role: analyzer
+      agent_role: lumen
       task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
       max_turns: "6"
-      allowed_tools: "none"
+      allowed_tools: none
     secrets: inherit
 
   # ── Sequential phase ────────────────────────────────────────────────────────
@@ -174,11 +187,22 @@ jobs:
             --task '${{ needs.orchestrate.outputs.dispatch_plan }}' \
             --max-tokens 8000
 
+      - name: Install MCP servers
+        run: |
+          npm install -g \
+            @modelcontextprotocol/server-filesystem \
+            @modelcontextprotocol/server-github \
+            @modelcontextprotocol/server-memory
+
       - name: Write MCP config
         run: |
           printf '{"mcpServers":{"filesystem":{"command":"npx","args":["-y","@modelcontextprotocol/server-filesystem","/home/runner/work"],"env":{}},"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
             > /tmp/mcp-config.json
           sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Build claude_args
+        run: |
+          echo "CLAUDE_ARGS=--max-turns 12 --allowedTools Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run coder agent (Claude)
         uses: anthropics/claude-code-action@v1
@@ -186,13 +210,13 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Read agent_prompts/coder.md.
+            Read agent_prompts/forge.md (or coder.md if forge.md not found).
             Context from prior agents is in /tmp/agent_task.json.
             Implement the required changes. Self-correct until tests pass (max 3 cycles).
             Write results to /tmp/agent_result.json.
-          claude_args: --max-turns 12 --allowedTools "Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
+          claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
-            {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}"}}
+            {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -206,10 +230,10 @@ jobs:
     if: always() && needs.run-coder.result == 'success'
     uses: ./.github/workflows/_reusable-claude.yml
     with:
-      agent_role: tester
-      task_json: '{"task_id":"${{ github.run_id }}","role":"tester","instruction":"Run tests on recent coder changes, fix test issues, report coverage."}'
+      agent_role: sentinel
+      task_json: '{"task_id":"${{ github.run_id }}","role":"sentinel","instruction":"Run tests on recent coder changes, fix test issues, report coverage."}'
       max_turns: "10"
-      allowed_tools: "none"
+      allowed_tools: none
     secrets: inherit
 
   # ── Final summary ────────────────────────────────────────────────────────────
@@ -230,11 +254,18 @@ jobs:
           path: /tmp/all_results/
         continue-on-error: true
 
+      - name: Install MCP servers
+        run: npm install -g @modelcontextprotocol/server-github
+
       - name: Write MCP config
         run: |
           printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}}}}' \
             > /tmp/mcp-config.json
           sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+
+      - name: Build claude_args
+        run: |
+          echo "CLAUDE_ARGS=--max-turns 3 --allowedTools Bash,Read,mcp__github__add_issue_comment --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Post final summary (Claude)
         uses: anthropics/claude-code-action@v1
@@ -245,6 +276,6 @@ jobs:
             Run: find /tmp/all_results -name '*.json' -exec cat {} \; 2>/dev/null || echo 'no results'
             Post a concise summary comment on issue/PR #${{ github.event.issue.number || github.event.pull_request.number }}.
             Format as a markdown table with Agent / Status / Summary columns.
-          claude_args: --max-turns 3 --allowedTools "Bash,Read,mcp__github__add_issue_comment" --mcp-config /tmp/mcp-config.json
+          claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"}}
