@@ -88,7 +88,9 @@ jobs:
             @modelcontextprotocol/server-memory
 
       - name: Write task
-        run: printf '%s' '${{ needs.gate.outputs.task_json }}' > /tmp/agent_task.json
+        env:
+          TASK_JSON: ${{ needs.gate.outputs.task_json }}
+        run: printf '%s' "$TASK_JSON" > /tmp/agent_task.json
 
       - name: Write MCP config
         run: |

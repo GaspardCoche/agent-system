@@ -56,7 +56,9 @@ jobs:
       - run: pip install google-genai
 
       - name: Write task to disk
-        run: printf '%s' '${{ inputs.task_json }}' > /tmp/agent_task.json
+        env:
+          TASK_JSON: ${{ inputs.task_json }}
+        run: printf '%s' "$TASK_JSON" > /tmp/agent_task.json
 
       - name: Write MCP config with secrets
         run: |
