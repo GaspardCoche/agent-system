@@ -98,10 +98,11 @@ jobs:
 
       - name: Build claude_args
         run: |
-          echo "CLAUDE_ARGS=--max-turns 5 --allowedTools Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+          echo "CLAUDE_ARGS=--max-turns 8 --allowedTools Bash,Read,Write,mcp__github__add_issue_comment,mcp__memory__add_observations --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run orchestrator (Claude)
         uses: anthropics/claude-code-action@v1
+        continue-on-error: true
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -114,13 +115,15 @@ jobs:
           settings: |
             {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
 
-      - name: Read dispatch plan
+      - name: Verify and read dispatch plan
         id: read_plan
         run: |
           if [ -f /tmp/dispatch_plan.json ]; then
+            echo "✅ dispatch_plan.json found"
             PLAN=$(cat /tmp/dispatch_plan.json | tr '\n' ' ')
           else
-            PLAN='{"task_id":"${{ github.run_id }}","agents":[{"role":"forge","input":"See task.json","parallel":false}]}'
+            echo "⚠️  dispatch_plan.json not found — using fallback plan"
+            PLAN='{"task_id":"${{ github.run_id }}","agents":[{"role":"forge","input":"See task in context","parallel":false}]}'
           fi
           echo "dispatch_plan=$PLAN" >> $GITHUB_OUTPUT
 
@@ -269,6 +272,7 @@ jobs:
 
       - name: Post final summary (Claude)
         uses: anthropics/claude-code-action@v1
+        continue-on-error: true
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
