@@ -42,12 +42,19 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--inputs",     required=True, help="Directory of prior result JSON files")
     p.add_argument("--output",     required=True, help="Output merged task JSON path")
-    p.add_argument("--task",       required=True, help="Original task JSON string")
+    p.add_argument("--task",       help="Original task JSON string")
+    p.add_argument("--task-file",  help="Path to task JSON file (alternative to --task)")
     p.add_argument("--max-tokens", type=int, default=8000)
     args = p.parse_args()
 
+    if not args.task and not args.task_file:
+        p.error("Either --task or --task-file is required")
+
     max_chars = args.max_tokens * CHARS_PER_TOKEN
-    base_task = json.loads(args.task)
+    if args.task_file:
+        base_task = json.loads(Path(args.task_file).read_text())
+    else:
+        base_task = json.loads(args.task)
 
     # Load all prior results
     prior = {}

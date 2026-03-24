@@ -142,7 +142,7 @@ jobs:
     with:
       agent_role: researcher
       task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
-      max_turns: "6"
+      max_turns: "8"
       allowed_tools: mcp__firecrawl__firecrawl_scrape,mcp__playwright__playwright_navigate,mcp__playwright__playwright_get_visible_text
     secrets: inherit
 
@@ -152,7 +152,7 @@ jobs:
     with:
       agent_role: lumen
       task_json: ${{ needs.orchestrate.outputs.dispatch_plan }}
-      max_turns: "6"
+      max_turns: "8"
       allowed_tools: none
     secrets: inherit
 
@@ -183,11 +183,14 @@ jobs:
       - run: pip install google-genai -q
 
       - name: Compress context for coder
+        env:
+          DISPATCH_PLAN: ${{ needs.orchestrate.outputs.dispatch_plan }}
         run: |
+          echo "$DISPATCH_PLAN" > /tmp/dispatch_plan_for_coder.json
           python3 .github/scripts/context_compressor.py \
             --inputs /tmp/prior_results/ \
             --output /tmp/agent_task.json \
-            --task '${{ needs.orchestrate.outputs.dispatch_plan }}' \
+            --task-file /tmp/dispatch_plan_for_coder.json \
             --max-tokens 8000
 
       - name: Install MCP servers
@@ -246,6 +249,7 @@ jobs:
     if: always() && needs.orchestrate.result == 'success'
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       issues: write
       pull-requests: write
     steps:
