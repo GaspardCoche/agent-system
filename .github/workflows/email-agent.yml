@@ -176,16 +176,23 @@ jobs:
     if: always() && needs.fetch-emails.result == 'success'
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       issues: write
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/download-artifact@v4
         with:
           pattern: "*-${{ github.run_id }}"
           path: /tmp/artifacts/
         continue-on-error: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
       - name: Install MCP servers
         run: npm install -g @modelcontextprotocol/server-github
@@ -211,6 +218,7 @@ jobs:
 
       - name: Generate and post digest (Claude)
         uses: anthropics/claude-code-action@v1
+        continue-on-error: true
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -236,3 +244,42 @@ jobs:
           claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
+
+      - name: Generate report + update dashboard
+        env:
+          REPO: ${{ github.repository }}
+          EMAIL_COUNT: ${{ needs.fetch-emails.outputs.email_count }}
+        run: |
+          STATUS="success"
+          [ "${{ needs.triage-emails.result }}" = "failure" ] && STATUS="failed"
+          python3 .github/scripts/generate_report.py \
+            --run-id "${{ github.run_id }}" \
+            --workflow "email-agent" \
+            --title "Daily Digest $(date +%Y-%m-%d)" \
+            --status "$STATUS" \
+            --event "${{ github.event_name }}" \
+            --repo "$REPO" \
+            --results-dir /tmp/artifacts \
+            --output-dir reports \
+            --dashboard-file docs/data/runs.json \
+            --summary "$EMAIL_COUNT emails traités"
+
+      - name: Commit report and dashboard
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/ docs/data/runs.json
+          git diff --cached --quiet || git commit -m "report: email-agent $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
+          git push
+
+      - name: Send Slack notification
+        if: env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          EMAIL_COUNT: ${{ needs.fetch-emails.outputs.email_count }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          RUN_URL="https://github.com/$REPO/actions/runs/$RUN_ID"
+          PAYLOAD="{\"text\":\"📧 *Daily Digest* — ${EMAIL_COUNT} emails · <${RUN_URL}|Run #${RUN_ID}>\"}"
+          curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"

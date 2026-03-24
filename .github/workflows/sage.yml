@@ -25,6 +25,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -128,3 +129,43 @@ jobs:
           name: agent-result-sage-${{ github.run_id }}
           path: /tmp/agent_result.json
           retention-days: 7
+
+      - name: Generate report + update dashboard
+        if: always()
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          mkdir -p /tmp/sage_results
+          cp /tmp/agent_result.json /tmp/sage_results/agent_result.json 2>/dev/null || true
+          STATUS="success"
+          python3 -c "import json,sys; d=json.load(open('/tmp/agent_result.json')); sys.exit(0 if d.get('status')=='complete' else 1)" 2>/dev/null || STATUS="failed"
+          python3 .github/scripts/generate_report.py \
+            --run-id "${{ github.run_id }}" \
+            --workflow "sage" \
+            --title "Sage Weekly $(date +%Y-%m-%d)" \
+            --status "$STATUS" \
+            --event "${{ github.event_name }}" \
+            --repo "$REPO" \
+            --results-dir /tmp/sage_results \
+            --output-dir reports \
+            --dashboard-file docs/data/runs.json
+
+      - name: Commit report and dashboard
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/ docs/data/runs.json skills/ memory/ 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "report: sage weekly $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
+          git push
+
+      - name: Send Slack notification
+        if: always() && env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          RUN_URL="https://github.com/$REPO/actions/runs/$RUN_ID"
+          PAYLOAD="{\"text\":\"🧠 *Sage* — Weekly self-improvement cycle completed · <${RUN_URL}|Run #${RUN_ID}>\"}"
+          curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent System — Dashboard</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #7d8590;
+      --green: #3fb950;
+      --red: #f85149;
+      --yellow: #d29922;
+      --blue: #58a6ff;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; }
+
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    header h1 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    header .subtitle { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .refresh-btn { background: var(--border); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+    .refresh-btn:hover { background: #21262d; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+    .stat-card .value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+    .stat-card .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-card.green .value { color: var(--green); }
+    .stat-card.red .value { color: var(--red); }
+    .stat-card.blue .value { color: var(--blue); }
+    .stat-card.yellow .value { color: var(--yellow); }
+
+    .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+
+    .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 16px; cursor: pointer; font-size: 12px; transition: all 0.15s; }
+    .filter-btn.active, .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+    .runs-list { display: flex; flex-direction: column; gap: 8px; }
+    .run-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: grid; grid-template-columns: 28px 1fr auto auto; align-items: center; gap: 12px; transition: border-color 0.15s; }
+    .run-card:hover { border-color: #484f58; }
+    .run-card .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot.success { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .status-dot.failed { background: var(--red); box-shadow: 0 0 6px var(--red); }
+    .status-dot.partial { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+
+    .run-info .title { font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .run-info .meta { color: var(--muted); font-size: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .run-info .meta span { display: flex; align-items: center; gap: 4px; }
+
+    .agents-bar { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; min-width: 160px; }
+    .agent-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+    .agent-badge.ok { background: rgba(63, 185, 80, 0.15); color: var(--green); border: 1px solid rgba(63, 185, 80, 0.3); }
+    .agent-badge.fail { background: rgba(248, 81, 73, 0.15); color: var(--red); border: 1px solid rgba(248, 81, 73, 0.3); }
+    .agent-badge.skip { background: rgba(125, 133, 144, 0.15); color: var(--muted); border: 1px solid rgba(125, 133, 144, 0.3); }
+
+    .run-link { color: var(--blue); text-decoration: none; font-size: 12px; white-space: nowrap; }
+    .run-link:hover { text-decoration: underline; }
+
+    .empty-state { text-align: center; padding: 64px 24px; color: var(--muted); }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    .badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 500; }
+    .badge-workflow { background: rgba(88, 166, 255, 0.15); color: var(--blue); border: 1px solid rgba(88, 166, 255, 0.3); }
+    .badge-event { background: rgba(188, 140, 255, 0.15); color: var(--purple); border: 1px solid rgba(188, 140, 255, 0.3); }
+
+    .summary-text { color: var(--muted); font-size: 12px; max-width: 400px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>🤖 Agent System</h1>
+      <div class="subtitle" id="last-updated">Chargement...</div>
+    </div>
+    <button class="refresh-btn" onclick="loadData()">↻ Actualiser</button>
+  </header>
+
+  <div class="container">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card blue"><div class="value" id="stat-total">—</div><div class="label">Runs total</div></div>
+      <div class="stat-card green"><div class="value" id="stat-success">—</div><div class="label">Succès</div></div>
+      <div class="stat-card red"><div class="value" id="stat-failed">—</div><div class="label">Échecs</div></div>
+      <div class="stat-card yellow"><div class="value" id="stat-partial">—</div><div class="label">Partiels</div></div>
+    </div>
+
+    <div class="section-title">Runs récents</div>
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">Tous</button>
+      <button class="filter-btn" data-filter="orchestrator" onclick="setFilter('orchestrator', this)">Orchestrator</button>
+      <button class="filter-btn" data-filter="email-agent" onclick="setFilter('email-agent', this)">Email / Iris</button>
+      <button class="filter-btn" data-filter="sage" onclick="setFilter('sage', this)">Sage</button>
+      <button class="filter-btn" data-filter="scout" onclick="setFilter('scout', this)">Scout</button>
+      <button class="filter-btn" data-filter="nexus" onclick="setFilter('nexus', this)">Nexus</button>
+      <button class="filter-btn" data-filter="failed" onclick="setFilter('failed', this)">Échecs</button>
+    </div>
+
+    <div class="runs-list" id="runs-list">
+      <div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l'instant.<br>Les résultats apparaîtront ici après le prochain workflow.</p></div>
+    </div>
+  </div>
+
+  <script>
+    let allRuns = [];
+    let currentFilter = 'all';
+
+    async function loadData() {
+      try {
+        const res = await fetch('data/runs.json?t=' + Date.now());
+        allRuns = await res.json();
+        render();
+        document.getElementById('last-updated').textContent = 'Mis à jour : ' + new Date().toLocaleString('fr-FR');
+      } catch (e) {
+        document.getElementById('last-updated').textContent = 'Erreur de chargement';
+      }
+    }
+
+    function setFilter(f, el) {
+      currentFilter = f;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      render();
+    }
+
+    function render() {
+      const filtered = allRuns.filter(r => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'failed') return r.status === 'failed';
+        return r.workflow === currentFilter;
+      });
+
+      // Stats (always on all runs)
+      const total = allRuns.length;
+      const success = allRuns.filter(r => r.status === 'success').length;
+      const failed = allRuns.filter(r => r.status === 'failed').length;
+      const partial = allRuns.filter(r => r.status === 'partial').length;
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-success').textContent = success;
+      document.getElementById('stat-failed').textContent = failed;
+      document.getElementById('stat-partial').textContent = partial;
+
+      const list = document.getElementById('runs-list');
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l\'instant.</p></div>';
+        return;
+      }
+
+      list.innerHTML = filtered.slice().reverse().map(r => {
+        const statusClass = r.status === 'success' ? 'success' : r.status === 'partial' ? 'partial' : 'failed';
+        const date = new Date(r.timestamp).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+        const agentBadges = (r.agents || []).map(a => {
+          const cls = a.status === 'success' ? 'ok' : a.status === 'skipped' ? 'skip' : 'fail';
+          return `<span class="agent-badge ${cls}">${a.name}</span>`;
+        }).join('');
+        const repoUrl = r.repo ? `https://github.com/${r.repo}/actions/runs/${r.run_id}` : '#';
+        return `
+          <div class="run-card">
+            <div class="status-dot ${statusClass}"></div>
+            <div class="run-info">
+              <div class="title">
+                <span class="badge badge-workflow">${r.workflow || '—'}</span>
+                <span style="margin-left:8px">${escHtml(r.title || r.task_id || '—')}</span>
+              </div>
+              <div class="meta">
+                <span>📅 ${date}</span>
+                ${r.event ? `<span class="badge badge-event">${r.event}</span>` : ''}
+                ${r.summary ? `<span class="summary-text">${escHtml(r.summary)}</span>` : ''}
+              </div>
+            </div>
+            <div class="agents-bar">${agentBadges}</div>
+            <a class="run-link" href="${repoUrl}" target="_blank">#${r.run_id || '—'} ↗</a>
+          </div>`;
+      }).join('');
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    loadData();
+    setInterval(loadData, 60000);
+  </script>
+</body>
+</html>

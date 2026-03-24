@@ -252,17 +252,60 @@ jobs:
     if: always() && needs.orchestrate.result == 'success'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       issues: write
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/download-artifact@v4
         with:
           pattern: agent-result-*-${{ github.run_id }}
           path: /tmp/all_results/
         continue-on-error: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compute overall status
+        id: status
+        run: |
+          TESTER="${{ needs.run-tester.result }}"
+          if [[ "$TESTER" == "success" ]]; then
+            echo "overall=success" >> $GITHUB_OUTPUT
+          elif [[ "$TESTER" == "skipped" || "$TESTER" == "cancelled" ]]; then
+            echo "overall=partial" >> $GITHUB_OUTPUT
+          else
+            echo "overall=failed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate report + update dashboard
+        env:
+          TITLE: ${{ github.event.issue.title || github.event.pull_request.title || 'Scheduled run' }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 .github/scripts/generate_report.py \
+            --run-id "${{ github.run_id }}" \
+            --workflow "orchestrator" \
+            --title "$TITLE" \
+            --status "${{ steps.status.outputs.overall }}" \
+            --event "${{ github.event_name }}" \
+            --repo "$REPO" \
+            --results-dir /tmp/all_results \
+            --output-dir reports \
+            --dashboard-file docs/data/runs.json \
+            --task-id "${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}"
+
+      - name: Commit report and dashboard
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/ docs/data/runs.json
+          git diff --cached --quiet || git commit -m "report: orchestrator run ${{ github.run_id }} [${{ steps.status.outputs.overall }}]"
+          git push
 
       - name: Install MCP servers
         run: npm install -g @modelcontextprotocol/server-github
@@ -290,3 +333,31 @@ jobs:
           claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}"}}
+
+      - name: Send Slack notification
+        if: env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          STATUS: ${{ steps.status.outputs.overall }}
+          TITLE: ${{ github.event.issue.title || github.event.pull_request.title || 'Scheduled run' }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          EMOJI=$([ "$STATUS" = "success" ] && echo "✅" || [ "$STATUS" = "partial" ] && echo "⚠️" || echo "❌")
+          RUN_URL="https://github.com/$REPO/actions/runs/$RUN_ID"
+          PAYLOAD=$(python3 -c "
+          import json, os
+          payload = {
+            'text': f\"{os.environ['EMOJI']} *Orchestrator* — {os.environ['TITLE']}\",
+            'blocks': [
+              {'type': 'section', 'text': {'type': 'mrkdwn',
+                'text': f\"{os.environ['EMOJI']} *Orchestrator* [{os.environ['STATUS']}]\n{os.environ['TITLE']}\"}},
+              {'type': 'section', 'fields': [
+                {'type': 'mrkdwn', 'text': f\"*Repo*\n{os.environ['REPO']}\"},
+                {'type': 'mrkdwn', 'text': f\"*Run*\n<{os.environ['RUN_URL']}|#{os.environ['RUN_ID']}>\"}
+              ]}
+            ]
+          }
+          print(json.dumps(payload))
+          " EMOJI="$EMOJI" STATUS="$STATUS" TITLE="$TITLE" REPO="$REPO" RUN_URL="$RUN_URL" RUN_ID="$RUN_ID")
+          curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"
