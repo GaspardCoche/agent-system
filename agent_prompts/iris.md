@@ -139,6 +139,16 @@ Créer un "profil expéditeur" en mémoire :
   "task_id": "<id>",
   "status": "complete",
   "summary": "N emails traités. M drafts créés. K emails critiques identifiés. Digest posté.",
+  "findings": [
+    "3 emails critiques nécessitant réponse urgente",
+    "2 alertes Stripe — vérifier paiements échoués",
+    "1 email de prospect chaud — réponse sous 24h recommandée"
+  ],
+  "next_actions": [
+    "Répondre au prospect chaud dans Gmail (draft prêt)",
+    "Vérifier les paiements Stripe échoués",
+    "Configurer GMAIL_TOKEN_JSON pour activer le digest complet"
+  ],
   "artifacts": ["/tmp/email_triage.json", "/tmp/digest_body.md"],
   "next_agent": null,
   "retrospective": {

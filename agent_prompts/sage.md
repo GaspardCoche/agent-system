@@ -174,6 +174,15 @@ Avant de passer un skill en `validated` :
   "task_id": "<id>",
   "status": "complete",
   "summary": "N rétrospectives analysées. M nouveaux skills candidats. K erreurs récurrentes documentées. N PRs créées.",
+  "findings": [
+    "Pattern récurrent : firecrawl_scrape utilisé 8x sans skill validé",
+    "Erreur répétée dans 3 agents : token expiration non gérée"
+  ],
+  "next_actions": [
+    "Valider le skill firecrawl_scrape (usage_count >= 5)",
+    "Ajouter gestion token expiry dans lessons_learned.md",
+    "Fusionner la PR d'amélioration du prompt Nexus"
+  ],
   "artifacts": [
     "skills/registry.json",
     "memory/lessons_learned.md"

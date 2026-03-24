@@ -141,7 +141,7 @@ jobs:
             --event "${{ github.event_name }}" \
             --repo "$REPO" \
             --results-dir /tmp/nexus_results \
-            --output-dir reports \
+            --output-dir docs/reports \
             --dashboard-file docs/data/runs.json
 
       - name: Commit report and dashboard
@@ -149,7 +149,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add reports/ docs/data/runs.json
+          git add docs/reports/ docs/data/runs.json reports/
           git diff --cached --quiet || git commit -m "report: nexus run ${{ github.run_id }} [$(date +%Y-%m-%d)]"
           git push
 

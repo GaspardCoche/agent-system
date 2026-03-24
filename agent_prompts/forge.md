@@ -131,6 +131,15 @@ Refs #<issue_number>"
   "task_id": "<id>",
   "status": "complete|needs_retry|failed",
   "summary": "Implémenté : <feature>. Fichiers modifiés : N. Tests : M/M passants.",
+  "findings": [
+    "Fichiers modifiés : src/auth.py, tests/test_auth.py",
+    "Tests : 14/14 passants",
+    "Commit : abc1234"
+  ],
+  "next_actions": [
+    "Revoir le diff sur GitHub avant merge",
+    "Sentinel va valider la couverture de tests"
+  ],
   "artifacts": ["<filepath1>", "<filepath2>"],
   "next_agent": "sentinel",
   "retrospective": {

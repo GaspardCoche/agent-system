@@ -148,6 +148,16 @@ Format du rapport hebdomadaire (créé chaque lundi) :
   "task_id": "<id>",
   "status": "complete|pending_approval",
   "summary": "Audit terminé. Score global : 65/100. 3 optimisations proposées. Économies estimées : 340€/mois.",
+  "findings": [
+    "Budget gaspillé estimé : 340€/mois sur mots-clés hors-sujet",
+    "CTR moyen 1.2% — en dessous du benchmark search (3%)",
+    "23 search terms non pertinents identifiés"
+  ],
+  "next_actions": [
+    "Configurer GOOGLE_ADS_DEVELOPER_TOKEN + GOOGLE_ADS_ACCOUNT_ID dans GitHub Secrets pour activer l'audit réel",
+    "Ajouter label `approved` sur l'issue pour déclencher l'implémentation",
+    "Vérifier les enchères mobiles : taux de conversion mobile = 0.3%"
+  ],
   "artifacts": ["/tmp/ads_audit.json", "/tmp/nexus_report.md"],
   "next_agent": null,
   "retrospective": {

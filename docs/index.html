@@ -4,193 +4,238 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agent System — Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --muted: #7d8590;
-      --green: #3fb950;
-      --red: #f85149;
-      --yellow: #d29922;
-      --blue: #58a6ff;
-      --purple: #bc8cff;
+      --bg: #0d1117; --surface: #161b22; --surface2: #1c2128;
+      --border: #30363d; --border2: #21262d;
+      --text: #e6edf3; --muted: #7d8590; --muted2: #484f58;
+      --green: #3fb950; --red: #f85149; --yellow: #d29922;
+      --blue: #58a6ff; --purple: #bc8cff; --orange: #ffa657;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; display: flex; flex-direction: column; min-height: 100vh; }
 
-    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
-    header h1 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    header .subtitle { color: var(--muted); font-size: 12px; margin-top: 2px; }
-    .header-actions { display: flex; gap: 8px; align-items: center; }
-    .btn { border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit; }
-    .btn-ghost { background: var(--surface); }
-    .btn-ghost:hover { background: #21262d; }
-    .btn-primary { background: #238636; border-color: #2ea043; color: #fff; font-weight: 500; }
-    .btn-primary:hover { background: #2ea043; }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    /* HEADER */
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10; }
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo h1 { font-size: 16px; font-weight: 600; }
+    .logo .subtitle { color: var(--muted); font-size: 11px; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .btn { border: 1px solid var(--border); color: var(--text); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit; background: var(--surface2); transition: background 0.15s; }
+    .btn:hover { background: #2d333b; }
+    .btn-green { background: #1a4a1f; border-color: #2ea043; color: #3fb950; font-weight: 600; }
+    .btn-green:hover { background: #1f5c26; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    /* MAIN LAYOUT */
+    .layout { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 53px); }
+    .left-pane { width: 100%; flex-shrink: 0; overflow-y: auto; padding: 20px 24px; transition: width 0.25s; }
+    .layout.panel-open .left-pane { width: 420px; }
+    .right-pane { flex: 1; border-left: 1px solid var(--border); background: var(--surface); display: none; flex-direction: column; overflow: hidden; }
+    .layout.panel-open .right-pane { display: flex; }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
-    .stat-card .value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-    .stat-card .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-card.green .value { color: var(--green); }
-    .stat-card.red .value { color: var(--red); }
-    .stat-card.blue .value { color: var(--blue); }
-    .stat-card.yellow .value { color: var(--yellow); }
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+    .stat-card .val { font-size: 26px; font-weight: 700; margin-bottom: 2px; }
+    .stat-card .lbl { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-card.c-blue .val { color: var(--blue); }
+    .stat-card.c-green .val { color: var(--green); }
+    .stat-card.c-red .val { color: var(--red); }
+    .stat-card.c-yellow .val { color: var(--yellow); }
 
-    /* Agents launcher */
-    .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-bottom: 28px; }
-    .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-    .agent-card .agent-info { display: flex; align-items: center; gap: 8px; }
-    .agent-card .agent-icon { font-size: 18px; }
-    .agent-card .agent-name { font-weight: 600; font-size: 13px; }
-    .agent-card .agent-desc { color: var(--muted); font-size: 11px; }
-    .run-btn { background: #238636; border: 1px solid #2ea043; color: #fff; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; white-space: nowrap; transition: background 0.15s; }
-    .run-btn:hover { background: #2ea043; }
-    .run-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .run-btn.running { background: #1f6feb; border-color: #388bfd; }
+    /* AGENTS LAUNCHER */
+    .section-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 10px; }
+    .agents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-bottom: 22px; }
+    .agent-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .agent-info { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .agent-icon { font-size: 16px; flex-shrink: 0; }
+    .agent-name { font-weight: 600; font-size: 12px; white-space: nowrap; }
+    .agent-desc { color: var(--muted); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .run-btn { background: #1a4a1f; border: 1px solid #2ea043; color: #3fb950; padding: 4px 12px; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: 600; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
+    .run-btn:hover { background: #1f5c26; }
+    .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .run-btn.loading { background: #1a2d4a; border-color: #388bfd; color: #58a6ff; }
 
-    .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    /* RUNS LIST */
+    .filters { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .ftag { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 4px 12px; border-radius: 12px; cursor: pointer; font-size: 11px; transition: all 0.15s; }
+    .ftag.active, .ftag:hover { border-color: var(--blue); color: var(--blue); background: rgba(88,166,255,0.08); }
 
-    .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 16px; cursor: pointer; font-size: 12px; transition: all 0.15s; }
-    .filter-btn.active, .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .runs-list { display: flex; flex-direction: column; gap: 6px; }
+    .run-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px; cursor: pointer; transition: all 0.15s; }
+    .run-card:hover { border-color: #484f58; background: var(--surface2); }
+    .run-card.active { border-color: var(--blue); background: rgba(88,166,255,0.05); }
+    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .dot.success { background: var(--green); box-shadow: 0 0 5px var(--green); }
+    .dot.failed { background: var(--red); box-shadow: 0 0 5px var(--red); }
+    .dot.partial { background: var(--yellow); box-shadow: 0 0 5px var(--yellow); }
+    .run-body { flex: 1; min-width: 0; }
+    .run-title-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+    .run-title { font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+    .run-meta { color: var(--muted); font-size: 11px; display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+    .run-summary { color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px; }
+    .run-actions-preview { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
+    .action-chip { font-size: 10px; padding: 1px 7px; border-radius: 8px; background: rgba(255,166,87,0.12); color: var(--orange); border: 1px solid rgba(255,166,87,0.25); }
 
-    .runs-list { display: flex; flex-direction: column; gap: 8px; }
-    .run-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: grid; grid-template-columns: 28px 1fr auto auto; align-items: center; gap: 12px; transition: border-color 0.15s; }
-    .run-card:hover { border-color: #484f58; }
-    .status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .status-dot.success { background: var(--green); box-shadow: 0 0 6px var(--green); }
-    .status-dot.failed { background: var(--red); box-shadow: 0 0 6px var(--red); }
-    .status-dot.partial { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+    .badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 8px; font-weight: 500; }
+    .b-wf { background: rgba(88,166,255,.12); color: var(--blue); border: 1px solid rgba(88,166,255,.25); }
+    .b-ev { background: rgba(188,140,255,.12); color: var(--purple); border: 1px solid rgba(188,140,255,.25); }
+    .b-agent-ok { background: rgba(63,185,80,.1); color: var(--green); border: 1px solid rgba(63,185,80,.25); }
+    .b-agent-fail { background: rgba(248,81,73,.1); color: var(--red); border: 1px solid rgba(248,81,73,.25); }
+    .b-agent-skip { background: rgba(125,133,144,.1); color: var(--muted); border: 1px solid rgba(125,133,144,.2); }
 
-    .run-info .title { font-weight: 500; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .run-info .meta { color: var(--muted); font-size: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .empty { text-align: center; padding: 48px 24px; color: var(--muted); }
+    .empty .ico { font-size: 36px; margin-bottom: 10px; }
 
-    .agents-bar { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; min-width: 160px; }
-    .agent-badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
-    .agent-badge.ok { background: rgba(63, 185, 80, 0.15); color: var(--green); border: 1px solid rgba(63, 185, 80, 0.3); }
-    .agent-badge.fail { background: rgba(248, 81, 73, 0.15); color: var(--red); border: 1px solid rgba(248, 81, 73, 0.3); }
-    .agent-badge.skip { background: rgba(125, 133, 144, 0.15); color: var(--muted); border: 1px solid rgba(125, 133, 144, 0.3); }
+    /* RIGHT PANEL */
+    .panel-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .panel-title { font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .panel-title span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .panel-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .close-btn { background: none; border: 1px solid var(--border); color: var(--muted); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+    .close-btn:hover { color: var(--text); background: var(--surface2); }
+    .panel-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+    .panel-loading { display: flex; align-items: center; justify-content: center; height: 200px; color: var(--muted); font-size: 13px; }
 
-    .run-link { color: var(--blue); text-decoration: none; font-size: 12px; white-space: nowrap; }
-    .run-link:hover { text-decoration: underline; }
+    /* MARKDOWN RENDERING */
+    .md-content { line-height: 1.65; }
+    .md-content h1 { font-size: 20px; font-weight: 700; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .md-content h2 { font-size: 15px; font-weight: 600; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border2); color: var(--text); }
+    .md-content h3 { font-size: 13px; font-weight: 600; margin: 14px 0 6px; color: var(--blue); }
+    .md-content p { margin-bottom: 10px; }
+    .md-content ul, .md-content ol { padding-left: 20px; margin-bottom: 10px; }
+    .md-content li { margin-bottom: 4px; }
+    .md-content table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 12px; }
+    .md-content th { background: var(--surface2); padding: 7px 10px; text-align: left; border: 1px solid var(--border); font-weight: 600; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .md-content td { padding: 7px 10px; border: 1px solid var(--border2); vertical-align: top; }
+    .md-content tr:hover td { background: var(--surface2); }
+    .md-content code { background: var(--surface2); padding: 1px 5px; border-radius: 4px; font-size: 12px; font-family: 'SF Mono', 'Fira Code', monospace; color: var(--orange); }
+    .md-content pre { background: var(--surface2); padding: 12px 14px; border-radius: 6px; overflow-x: auto; margin-bottom: 12px; border: 1px solid var(--border); }
+    .md-content pre code { background: none; padding: 0; color: var(--text); font-size: 12px; }
+    .md-content blockquote { border-left: 3px solid var(--blue); padding: 8px 14px; margin: 10px 0; color: var(--muted); background: rgba(88,166,255,0.05); border-radius: 0 6px 6px 0; }
+    .md-content a { color: var(--blue); text-decoration: none; }
+    .md-content a:hover { text-decoration: underline; }
+    .md-content hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    /* Next actions section — highlight */
+    .md-content h2:has(+ ul li input[type=checkbox]) { color: var(--orange); }
+    .next-actions-banner { background: rgba(255,166,87,0.08); border: 1px solid rgba(255,166,87,0.25); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+    .next-actions-banner .nab-title { font-size: 12px; font-weight: 600; color: var(--orange); margin-bottom: 8px; }
+    .next-actions-banner ul { padding-left: 16px; }
+    .next-actions-banner li { color: var(--text); font-size: 12px; margin-bottom: 4px; }
 
-    .empty-state { text-align: center; padding: 64px 24px; color: var(--muted); }
-    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    /* MODAL */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 100; align-items: center; justify-content: center; }
+    .overlay.open { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; width: 440px; max-width: 95vw; box-shadow: 0 16px 48px rgba(0,0,0,0.5); }
+    .modal h2 { font-size: 15px; margin-bottom: 16px; }
+    .modal label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 500; }
+    .modal input, .modal textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 8px 10px; font-size: 13px; font-family: inherit; margin-bottom: 12px; }
+    .modal textarea { resize: vertical; min-height: 72px; }
+    .modal input:focus, .modal textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(88,166,255,0.12); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
 
-    .badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 500; }
-    .badge-workflow { background: rgba(88, 166, 255, 0.15); color: var(--blue); border: 1px solid rgba(88, 166, 255, 0.3); }
-    .badge-event { background: rgba(188, 140, 255, 0.15); color: var(--purple); border: 1px solid rgba(188, 140, 255, 0.3); }
-    .summary-text { color: var(--muted); font-size: 12px; max-width: 400px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; width: 420px; max-width: 95vw; }
-    .modal h2 { font-size: 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    .modal label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
-    .modal input, .modal textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 8px 10px; font-size: 13px; font-family: inherit; margin-bottom: 14px; }
-    .modal textarea { resize: vertical; min-height: 80px; }
-    .modal input:focus, .modal textarea:focus { outline: none; border-color: var(--blue); }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
-    .toast { position: fixed; bottom: 24px; right: 24px; background: #238636; color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-    .toast.error { background: #b62324; }
+    .toast { position: fixed; bottom: 20px; right: 20px; padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 200; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+    .toast.ok { background: #1a4a1f; color: #3fb950; border: 1px solid #2ea043; }
+    .toast.err { background: #3d1a1a; color: var(--red); border: 1px solid #6e2626; }
     .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
   <header>
-    <div>
-      <h1>🤖 Agent System</h1>
-      <div class="subtitle" id="last-updated">Chargement...</div>
+    <div class="logo">
+      <div>
+        <h1>🤖 Agent System</h1>
+        <div class="subtitle" id="last-updated">Chargement…</div>
+      </div>
     </div>
-    <div class="header-actions">
-      <button class="btn btn-ghost" onclick="loadData()">↻ Actualiser</button>
+    <div class="header-right">
+      <button class="btn" onclick="loadData()">↻ Actualiser</button>
     </div>
   </header>
 
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-card blue"><div class="value" id="stat-total">—</div><div class="label">Runs total</div></div>
-      <div class="stat-card green"><div class="value" id="stat-success">—</div><div class="label">Succès</div></div>
-      <div class="stat-card red"><div class="value" id="stat-failed">—</div><div class="label">Échecs</div></div>
-      <div class="stat-card yellow"><div class="value" id="stat-partial">—</div><div class="label">Partiels</div></div>
+  <div class="layout" id="layout">
+    <!-- LEFT: list -->
+    <div class="left-pane" id="left-pane">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card c-blue"><div class="val" id="s-total">—</div><div class="lbl">Total</div></div>
+        <div class="stat-card c-green"><div class="val" id="s-ok">—</div><div class="lbl">Succès</div></div>
+        <div class="stat-card c-red"><div class="val" id="s-fail">—</div><div class="lbl">Échecs</div></div>
+        <div class="stat-card c-yellow"><div class="val" id="s-partial">—</div><div class="lbl">Partiels</div></div>
+      </div>
+
+      <!-- Agents launcher -->
+      <div class="section-label">Lancer un agent</div>
+      <div class="agents-grid">
+        <div class="agent-card">
+          <div class="agent-info"><div class="agent-icon">🎯</div><div><div class="agent-name">Orchestrator</div><div class="agent-desc">Décompose & coordonne</div></div></div>
+          <button class="run-btn" onclick="openModal('orchestrator.yml','Orchestrator',[{id:'task_description',label:'Description de la tâche',type:'textarea',required:true}])">▶ Run</button>
+        </div>
+        <div class="agent-card">
+          <div class="agent-info"><div class="agent-icon">📧</div><div><div class="agent-name">Email / Iris</div><div class="agent-desc">Digest & triage emails</div></div></div>
+          <button class="run-btn" onclick="openModal('email-agent.yml','Email / Iris',[{id:'hours_back',label:'Heures en arrière',type:'text',default:'24'},{id:'skip_ai_digest',label:'Skip AI news',type:'text',default:'false'}])">▶ Run</button>
+        </div>
+        <div class="agent-card">
+          <div class="agent-info"><div class="agent-icon">🧠</div><div><div class="agent-name">Sage</div><div class="agent-desc">Self-improvement hebdo</div></div></div>
+          <button class="run-btn" onclick="openModal('sage.yml','Sage',[{id:'force_skill_validation',label:'Force validation skills',type:'text',default:'false'}])">▶ Run</button>
+        </div>
+        <div class="agent-card">
+          <div class="agent-info"><div class="agent-icon">🔍</div><div><div class="agent-name">Scout</div><div class="agent-desc">Enrichissement web RGPD</div></div></div>
+          <button class="run-btn" onclick="openModal('scout.yml','Scout',[{id:'sheet_id',label:'Google Sheet ID',type:'text',required:true},{id:'sheet_tab',label:'Onglet',type:'text',default:'Prospects'},{id:'columns_to_enrich',label:'Colonnes',type:'text',default:'description,sector,size,hq_city'},{id:'dry_run',label:'Dry run',type:'text',default:'true'}])">▶ Run</button>
+        </div>
+        <div class="agent-card">
+          <div class="agent-info"><div class="agent-icon">📊</div><div><div class="agent-name">Nexus</div><div class="agent-desc">Google Ads audit</div></div></div>
+          <button class="run-btn" onclick="openModal('nexus.yml','Nexus',[{id:'report_type',label:'Type de rapport',type:'text',default:'weekly_audit'},{id:'dry_run',label:'Dry run',type:'text',default:'true'}])">▶ Run</button>
+        </div>
+        <div class="agent-card">
+          <div class="agent-info"><div class="agent-icon">🚀</div><div><div class="agent-name">Ralph</div><div class="agent-desc">Routing & automatisation</div></div></div>
+          <button class="run-btn" onclick="openModal('ralph.yml','Ralph',[])">▶ Run</button>
+        </div>
+      </div>
+
+      <!-- Runs list -->
+      <div class="section-label">Runs récents</div>
+      <div class="filters">
+        <div class="ftag active" onclick="setFilter('all',this)">Tous</div>
+        <div class="ftag" onclick="setFilter('orchestrator',this)">Orchestrator</div>
+        <div class="ftag" onclick="setFilter('email-agent',this)">Email / Iris</div>
+        <div class="ftag" onclick="setFilter('sage',this)">Sage</div>
+        <div class="ftag" onclick="setFilter('scout',this)">Scout</div>
+        <div class="ftag" onclick="setFilter('nexus',this)">Nexus</div>
+        <div class="ftag" onclick="setFilter('failed',this)">Échecs</div>
+      </div>
+      <div class="runs-list" id="runs-list">
+        <div class="empty"><div class="ico">📭</div><p>Aucun run — Lance un agent ci-dessus.</p></div>
+      </div>
     </div>
 
-    <div class="section-title" style="margin-bottom:14px">Lancer un agent</div>
-    <div class="agents-grid">
-      <div class="agent-card">
-        <div class="agent-info">
-          <div class="agent-icon">🎯</div>
-          <div><div class="agent-name">Orchestrator</div><div class="agent-desc">Décompose & coordonne</div></div>
+    <!-- RIGHT: report panel -->
+    <div class="right-pane" id="right-pane">
+      <div class="panel-header">
+        <div class="panel-title"><span id="panel-title-text">Rapport</span></div>
+        <div class="panel-actions">
+          <a id="panel-gh-link" href="#" target="_blank" style="text-decoration:none">
+            <button class="btn" style="font-size:11px">GitHub ↗</button>
+          </a>
+          <button class="close-btn" onclick="closePanel()" title="Fermer">✕</button>
         </div>
-        <button class="run-btn" onclick="openModal('orchestrator.yml', 'Orchestrator', [{id:'task_description',label:'Description de la tâche',type:'textarea',required:true}])">▶ Run</button>
       </div>
-      <div class="agent-card">
-        <div class="agent-info">
-          <div class="agent-icon">📧</div>
-          <div><div class="agent-name">Email / Iris</div><div class="agent-desc">Digest & triage emails</div></div>
-        </div>
-        <button class="run-btn" onclick="openModal('email-agent.yml', 'Email / Iris', [{id:'hours_back',label:'Heures en arrière',type:'text',default:'24'},{id:'skip_ai_digest',label:'Skip AI news (true/false)',type:'text',default:'false'}])">▶ Run</button>
+      <div class="panel-body" id="panel-body">
+        <div class="panel-loading">Sélectionne un run pour voir le rapport</div>
       </div>
-      <div class="agent-card">
-        <div class="agent-info">
-          <div class="agent-icon">🧠</div>
-          <div><div class="agent-name">Sage</div><div class="agent-desc">Self-improvement hebdo</div></div>
-        </div>
-        <button class="run-btn" onclick="openModal('sage.yml', 'Sage', [{id:'force_skill_validation',label:'Force validation skills (true/false)',type:'text',default:'false'}])">▶ Run</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-info">
-          <div class="agent-icon">🔍</div>
-          <div><div class="agent-name">Scout</div><div class="agent-desc">Enrichissement web RGPD</div></div>
-        </div>
-        <button class="run-btn" onclick="openModal('scout.yml', 'Scout', [{id:'sheet_id',label:'Google Sheet ID',type:'text',required:true},{id:'sheet_tab',label:'Onglet',type:'text',default:'Prospects'},{id:'columns_to_enrich',label:'Colonnes (virgule)',type:'text',default:'description,sector,size,hq_city'},{id:'dry_run',label:'Dry run (true/false)',type:'text',default:'true'}])">▶ Run</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-info">
-          <div class="agent-icon">📊</div>
-          <div><div class="agent-name">Nexus</div><div class="agent-desc">Google Ads audit</div></div>
-        </div>
-        <button class="run-btn" onclick="openModal('nexus.yml', 'Nexus', [{id:'report_type',label:'Type de rapport',type:'text',default:'weekly_audit'},{id:'dry_run',label:'Dry run (true/false)',type:'text',default:'true'}])">▶ Run</button>
-      </div>
-      <div class="agent-card">
-        <div class="agent-info">
-          <div class="agent-icon">🚀</div>
-          <div><div class="agent-name">Ralph</div><div class="agent-desc">Routing & automatisation</div></div>
-        </div>
-        <button class="run-btn" onclick="openModal('ralph.yml', 'Ralph', [])">▶ Run</button>
-      </div>
-    </div>
-
-    <div class="section-title">Runs récents</div>
-    <div class="filters">
-      <button class="filter-btn active" onclick="setFilter('all', this)">Tous</button>
-      <button class="filter-btn" onclick="setFilter('orchestrator', this)">Orchestrator</button>
-      <button class="filter-btn" onclick="setFilter('email-agent', this)">Email / Iris</button>
-      <button class="filter-btn" onclick="setFilter('sage', this)">Sage</button>
-      <button class="filter-btn" onclick="setFilter('scout', this)">Scout</button>
-      <button class="filter-btn" onclick="setFilter('nexus', this)">Nexus</button>
-      <button class="filter-btn" onclick="setFilter('failed', this)">Échecs</button>
-    </div>
-    <div class="runs-list" id="runs-list">
-      <div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l'instant.<br>Lance un agent ci-dessus pour commencer.</p></div>
     </div>
   </div>
 
   <!-- Modal -->
-  <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
     <div class="modal">
       <h2 id="modal-title">▶ Lancer</h2>
       <div id="modal-fields"></div>
-      <div class="modal-actions">
-        <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-        <button class="btn btn-primary" id="modal-confirm" onclick="triggerWorkflow()">Lancer</button>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal()">Annuler</button>
+        <button class="btn btn-green" id="modal-ok" onclick="triggerWorkflow()">Lancer le workflow</button>
       </div>
     </div>
   </div>
@@ -200,23 +245,23 @@
   <script>
     let allRuns = [];
     let currentFilter = 'all';
-    let pendingWorkflow = null;
-    let pendingFields = [];
+    let activeRunId = null;
+    let pendingWf = null, pendingFields = [];
 
+    // ── Data ──────────────────────────────────────────────────────────────────
     async function loadData() {
       try {
-        const res = await fetch('data/runs.json?t=' + Date.now());
-        allRuns = await res.json();
+        const r = await fetch('data/runs.json?t=' + Date.now());
+        allRuns = await r.json();
         render();
-        document.getElementById('last-updated').textContent = 'Mis à jour : ' + new Date().toLocaleString('fr-FR');
-      } catch (e) {
-        document.getElementById('last-updated').textContent = 'Erreur de chargement';
-      }
+        document.getElementById('last-updated').textContent =
+          'Mis à jour : ' + new Date().toLocaleString('fr-FR');
+      } catch { document.getElementById('last-updated').textContent = 'Erreur de chargement'; }
     }
 
     function setFilter(f, el) {
       currentFilter = f;
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.ftag').forEach(b => b.classList.remove('active'));
       el.classList.add('active');
       render();
     }
@@ -227,122 +272,167 @@
         if (currentFilter === 'failed') return r.status === 'failed';
         return r.workflow === currentFilter;
       });
-
-      const total = allRuns.length;
-      const success = allRuns.filter(r => r.status === 'success').length;
-      const failed = allRuns.filter(r => r.status === 'failed').length;
-      const partial = allRuns.filter(r => r.status === 'partial').length;
-      document.getElementById('stat-total').textContent = total;
-      document.getElementById('stat-success').textContent = success;
-      document.getElementById('stat-failed').textContent = failed;
-      document.getElementById('stat-partial').textContent = partial;
+      const total = allRuns.length, ok = allRuns.filter(r => r.status==='success').length,
+            fail = allRuns.filter(r => r.status==='failed').length,
+            partial = allRuns.filter(r => r.status==='partial').length;
+      document.getElementById('s-total').textContent = total;
+      document.getElementById('s-ok').textContent = ok;
+      document.getElementById('s-fail').textContent = fail;
+      document.getElementById('s-partial').textContent = partial;
 
       const list = document.getElementById('runs-list');
-      if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Aucun run enregistré pour l\'instant.<br>Lance un agent ci-dessus pour commencer.</p></div>';
+      if (!filtered.length) {
+        list.innerHTML = '<div class="empty"><div class="ico">📭</div><p>Aucun run pour ce filtre.</p></div>';
         return;
       }
-
       list.innerHTML = filtered.slice().reverse().map(r => {
-        const statusClass = r.status === 'success' ? 'success' : r.status === 'partial' ? 'partial' : 'failed';
-        const date = new Date(r.timestamp).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
-        const agentBadges = (r.agents || []).map(a => {
-          const cls = a.status === 'success' ? 'ok' : a.status === 'skipped' ? 'skip' : 'fail';
-          return `<span class="agent-badge ${cls}">${a.name}</span>`;
+        const sc = r.status === 'success' ? 'success' : r.status === 'partial' ? 'partial' : 'failed';
+        const date = new Date(r.timestamp).toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        const agentBadges = (r.agents||[]).map(a => {
+          const c = a.status==='complete'||a.status==='success' ? 'b-agent-ok' : a.status==='skipped' ? 'b-agent-skip' : 'b-agent-fail';
+          return `<span class="badge ${c}">${a.name}</span>`;
         }).join('');
-        const repoUrl = r.repo ? `https://github.com/${r.repo}/actions/runs/${r.run_id}` : '#';
-        return `
-          <div class="run-card">
-            <div class="status-dot ${statusClass}"></div>
-            <div class="run-info">
-              <div class="title">
-                <span class="badge badge-workflow">${r.workflow || '—'}</span>
-                <span style="margin-left:8px">${escHtml(r.title || r.task_id || '—')}</span>
-              </div>
-              <div class="meta">
-                <span>📅 ${date}</span>
-                ${r.event ? `<span class="badge badge-event">${r.event}</span>` : ''}
-                ${r.summary ? `<span class="summary-text">${escHtml(r.summary)}</span>` : ''}
-              </div>
+        const actions = (r.next_actions||[]).slice(0,2).map(a =>
+          `<span class="action-chip">⚡ ${esc(a.slice(0,40))}${a.length>40?'…':''}</span>`).join('');
+        const isActive = r.run_id === activeRunId;
+        return `<div class="run-card${isActive?' active':''}" onclick="openReport('${r.run_id}', this)">
+          <div class="dot ${sc}"></div>
+          <div class="run-body">
+            <div class="run-title-row">
+              <span class="badge b-wf">${r.workflow||'—'}</span>
+              <span class="run-title">${esc(r.title||'—')}</span>
             </div>
-            <div class="agents-bar">${agentBadges}</div>
-            <a class="run-link" href="${repoUrl}" target="_blank">#${r.run_id || '—'} ↗</a>
-          </div>`;
+            <div class="run-meta">
+              <span>📅 ${date}</span>
+              ${r.event?`<span class="badge b-ev">${r.event}</span>`:''}
+              ${agentBadges}
+            </div>
+            ${r.summary?`<div class="run-summary">${esc(r.summary)}</div>`:''}
+            ${actions?`<div class="run-actions-preview">${actions}</div>`:''}
+          </div>
+        </div>`;
       }).join('');
     }
 
-    function escHtml(s) {
-      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
+    // ── Report panel ──────────────────────────────────────────────────────────
+    async function openReport(runId, el) {
+      const run = allRuns.find(r => r.run_id === runId);
+      if (!run) return;
+      activeRunId = runId;
+      document.querySelectorAll('.run-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('layout').classList.add('panel-open');
+      document.getElementById('panel-title-text').textContent = run.title || `Run #${runId}`;
+      const ghUrl = run.repo ? `https://github.com/${run.repo}/actions/runs/${runId}` : '#';
+      document.getElementById('panel-gh-link').href = ghUrl;
+      const body = document.getElementById('panel-body');
+      body.innerHTML = '<div class="panel-loading">⏳ Chargement du rapport…</div>';
 
-    // Modal
-    function openModal(workflow, name, fields) {
-      pendingWorkflow = workflow;
-      pendingFields = fields;
-      document.getElementById('modal-title').textContent = '▶ Lancer ' + name;
-      const container = document.getElementById('modal-fields');
-      container.innerHTML = fields.map(f => {
-        const val = f.default || '';
-        if (f.type === 'textarea') {
-          return `<label>${f.label}${f.required ? ' *' : ''}</label><textarea id="field-${f.id}" placeholder="${val}">${val}</textarea>`;
+      if (run.report_file) {
+        try {
+          const r = await fetch(run.report_file + '?t=' + Date.now());
+          if (!r.ok) throw new Error('not found');
+          const md = await r.text();
+          body.innerHTML = renderReport(md, run);
+        } catch {
+          body.innerHTML = renderFallback(run, ghUrl);
         }
-        return `<label>${f.label}${f.required ? ' *' : ''}</label><input id="field-${f.id}" type="text" value="${val}" placeholder="${val}">`;
-      }).join('');
-      document.getElementById('modal').classList.add('open');
-      const first = container.querySelector('input,textarea');
-      if (first) setTimeout(() => first.focus(), 50);
+      } else {
+        body.innerHTML = renderFallback(run, ghUrl);
+      }
     }
 
-    function closeModal() {
-      document.getElementById('modal').classList.remove('open');
-      pendingWorkflow = null;
+    function renderReport(mdText, run) {
+      // Extract and highlight next_actions
+      const actions = run.next_actions || [];
+      let banner = '';
+      if (actions.length) {
+        const items = actions.map(a => `<li>${esc(a)}</li>`).join('');
+        banner = `<div class="next-actions-banner"><div class="nab-title">⚡ Actions à faire</div><ul>${items}</ul></div>`;
+      }
+      const html = marked.parse(mdText);
+      return `<div class="md-content">${banner}${html}</div>`;
     }
+
+    function renderFallback(run, ghUrl) {
+      const agentRows = (run.agents||[]).map(a => {
+        const ic = (a.status==='complete'||a.status==='success') ? '✅' : a.status==='skipped' ? '⏭️' : '❌';
+        return `<tr><td>${ic} <strong>${esc(a.name)}</strong></td><td><code>${a.status}</code></td></tr>`;
+      }).join('');
+      const actions = (run.next_actions||[]);
+      return `<div class="md-content">
+        <h2>Run #${run.run_id}</h2>
+        ${run.summary ? `<blockquote>${esc(run.summary)}</blockquote>` : ''}
+        ${actions.length ? `<h2>⚡ Actions à faire</h2><ul>${actions.map(a=>`<li>${esc(a)}</li>`).join('')}</ul>` : ''}
+        ${agentRows ? `<h2>Agents</h2><table><thead><tr><th>Agent</th><th>Status</th></tr></thead><tbody>${agentRows}</tbody></table>` : ''}
+        <p><a href="${ghUrl}" target="_blank">Voir le run complet sur GitHub ↗</a></p>
+        <p style="color:var(--muted);font-size:11px;margin-top:12px">Le rapport markdown sera disponible après le prochain run (les anciens runs utilisaient l'ancien format).</p>
+      </div>`;
+    }
+
+    function closePanel() {
+      document.getElementById('layout').classList.remove('panel-open');
+      activeRunId = null;
+      document.querySelectorAll('.run-card').forEach(c => c.classList.remove('active'));
+    }
+
+    // ── Trigger workflow ───────────────────────────────────────────────────────
+    function openModal(wf, name, fields) {
+      pendingWf = wf; pendingFields = fields;
+      document.getElementById('modal-title').textContent = '▶ Lancer ' + name;
+      document.getElementById('modal-fields').innerHTML = fields.map(f => {
+        const v = f.default || '';
+        const inp = f.type === 'textarea'
+          ? `<textarea id="f-${f.id}">${v}</textarea>`
+          : `<input id="f-${f.id}" type="text" value="${v}" placeholder="${v}">`;
+        return `<label>${f.label}${f.required ? ' <span style="color:var(--red)">*</span>' : ''}</label>${inp}`;
+      }).join('');
+      document.getElementById('modal-overlay').classList.add('open');
+      const first = document.querySelector('#modal-fields input, #modal-fields textarea');
+      if (first) setTimeout(() => first.focus(), 40);
+    }
+
+    function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 
     async function triggerWorkflow() {
-      if (!pendingWorkflow) return;
+      if (!pendingWf) return;
       const inputs = {};
       for (const f of pendingFields) {
-        const el = document.getElementById('field-' + f.id);
-        const val = el ? el.value.trim() : '';
-        if (f.required && !val) { showToast('Champ requis : ' + f.label, true); return; }
-        if (val) inputs[f.id] = val;
+        const el = document.getElementById('f-' + f.id);
+        const v = el ? el.value.trim() : '';
+        if (f.required && !v) { toast('Champ requis : ' + f.label, true); return; }
+        if (v) inputs[f.id] = v;
       }
-
-      const btn = document.getElementById('modal-confirm');
-      btn.disabled = true;
-      btn.textContent = 'Envoi...';
-
+      const btn = document.getElementById('modal-ok');
+      btn.disabled = true; btn.textContent = 'Envoi…';
       try {
-        const res = await fetch('/.netlify/functions/trigger', {
+        const r = await fetch('/.netlify/functions/trigger', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ workflow: pendingWorkflow, inputs }),
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({workflow: pendingWf, inputs}),
         });
-        const data = await res.json();
-        if (data.ok) {
-          showToast('✅ Workflow lancé ! Résultat dans ~2 min.');
+        const d = await r.json();
+        if (d.ok) {
+          toast('✅ Workflow lancé — résultat dans ~2 min');
           closeModal();
+          setTimeout(loadData, 3000);
         } else {
-          showToast('Erreur : ' + (data.error || res.status), true);
+          toast('Erreur : ' + (d.error || r.status), true);
         }
-      } catch (e) {
-        showToast('Erreur réseau', true);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Lancer';
-      }
+      } catch { toast('Erreur réseau', true); }
+      finally { btn.disabled = false; btn.textContent = 'Lancer le workflow'; }
     }
 
-    function showToast(msg, isError = false) {
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function toast(msg, err=false) {
       const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.className = 'toast' + (isError ? ' error' : '') + ' show';
+      t.textContent = msg; t.className = 'toast ' + (err?'err':'ok') + ' show';
       setTimeout(() => t.classList.remove('show'), 4000);
     }
-
-    // Keyboard
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
+    document.addEventListener('keydown', e => { if (e.key==='Escape') { closeModal(); closePanel(); } });
     loadData();
     setInterval(loadData, 60000);
   </script>
