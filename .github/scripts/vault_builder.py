@@ -27,6 +27,8 @@ TYPE_COLORS = {
     "operations": "#bc8cff",
     "content":    "#d29922",
     "agent":      "#f85149",
+    "tech":       "#79c0ff",
+    "security":   "#f778ba",
 }
 
 DEFAULT_COLOR = "#8b949e"
@@ -109,8 +111,8 @@ def build_graph(vault_dir: Path = None) -> dict:
 
     # First pass: collect all nodes
     for md_file in sorted(vault_dir.rglob("*.md")):
-        # Skip .obsidian config files
-        if ".obsidian" in str(md_file):
+        # Skip .obsidian config files and templates
+        if ".obsidian" in str(md_file) or "/templates/" in str(md_file):
             continue
 
         rel = str(md_file).replace(str(vault_dir) + "/", "")

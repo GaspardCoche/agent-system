@@ -1,6 +1,6 @@
 // Netlify serverless function — proxies workflow_dispatch to GitHub API
 // Requires env var: GITHUB_PAT (token with `workflow` scope)
-// and GITHUB_REPO (e.g. "gcoche-bit/agent-system")
+// and GITHUB_REPO (e.g. "GaspardCoche/agent-system")
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -8,7 +8,7 @@ exports.handler = async (event) => {
   }
 
   const pat = process.env.GITHUB_PAT;
-  const repo = process.env.GITHUB_REPO || "gcoche-bit/agent-system";
+  const repo = process.env.GITHUB_REPO || "GaspardCoche/agent-system";
 
   if (!pat) {
     return { statusCode: 500, body: JSON.stringify({ error: "GITHUB_PAT not configured" }) };

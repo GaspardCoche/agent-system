@@ -1,2 +1,37 @@
 [build]
   publish = "docs"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Headers for all files
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cache-Control = "public, max-age=60"
+
+# Cache data files for shorter duration
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "public, max-age=30"
+
+# Netlify Functions config
+[functions]
+  directory = "netlify/functions"
+
+# SPA fallback -- all routes serve index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"]}
+
+# Ensure reports are accessible
+[[redirects]]
+  from = "/reports/*"
+  to = "/reports/:splat"
+  status = 200
