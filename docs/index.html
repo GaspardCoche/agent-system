@@ -324,6 +324,7 @@
         <div class="health-dot" id="header-health-dot"></div>
         <span id="header-health-text">—</span>
       </div>
+      <button class="btn" id="config-btn" onclick="openConfigModal()">⚙ Config</button>
       <button class="btn" onclick="loadAll()">↻ Actualiser</button>
     </div>
   </header>
@@ -946,6 +947,67 @@
 
     function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
 
+    // ─────────────── GITHUB API CONFIG ───────────────
+    const GH_REPO = 'GaspardCoche/agent-system';
+
+    function getGhPat() { return localStorage.getItem('gh_pat') || ''; }
+    function setGhPat(pat) { localStorage.setItem('gh_pat', pat); }
+
+    async function ghDispatch(workflow, inputs = {}) {
+      const pat = getGhPat();
+      if (!pat) {
+        toast('Configure ton GitHub PAT (bouton Config)', true);
+        return false;
+      }
+      const url = `https://api.github.com/repos/${GH_REPO}/actions/workflows/${workflow}/dispatches`;
+      const r = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${pat}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+        body: JSON.stringify({ ref: 'main', inputs }),
+      });
+      return r.status === 204;
+    }
+
+    function openConfigModal() {
+      const pat = getGhPat();
+      document.getElementById('modal-title').textContent = 'Configuration GitHub';
+      document.getElementById('modal-note').style.display = 'none';
+      document.getElementById('modal-fields').innerHTML = `
+        <label>GitHub Personal Access Token (scope: <code>repo</code>, <code>workflow</code>)</label>
+        <input id="f-gh-pat" type="password" value="${esc(pat)}" placeholder="ghp_xxxxxxxxxxxxx">
+        <p style="color:var(--muted);font-size:11px;margin-top:-6px;margin-bottom:10px">
+          Stocké uniquement dans le localStorage de ton navigateur. Nécessaire pour lancer les workflows.<br>
+          <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=agent-system-dashboard" target="_blank" style="color:var(--blue)">Créer un token ici</a>
+        </p>
+        <label>Repository</label>
+        <input type="text" value="${GH_REPO}" disabled style="opacity:0.6">
+      `;
+      document.getElementById('modal-ok').textContent = 'Sauvegarder';
+      document.getElementById('modal-ok').onclick = () => {
+        const v = document.getElementById('f-gh-pat').value.trim();
+        if (v) { setGhPat(v); toast('Config sauvegardée'); }
+        else { localStorage.removeItem('gh_pat'); toast('Token supprimé'); }
+        closeModal();
+        document.getElementById('modal-ok').onclick = triggerWorkflow;
+        document.getElementById('modal-ok').textContent = '▶ Lancer le workflow';
+        updateConfigIndicator();
+      };
+      document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function updateConfigIndicator() {
+      const btn = document.getElementById('config-btn');
+      if (!btn) return;
+      btn.textContent = getGhPat() ? '⚙ Connecté' : '⚙ Config';
+      btn.style.borderColor = getGhPat() ? 'rgba(63,185,80,.4)' : 'var(--border)';
+      btn.style.color = getGhPat() ? 'var(--green)' : 'var(--muted)';
+    }
+
     async function triggerWorkflow() {
       if (!pendingWf) return;
       const inputs = {};
@@ -958,34 +1020,24 @@
       const btn = document.getElementById('modal-ok');
       btn.disabled = true; btn.textContent = '⏳ Envoi…';
       try {
-        const r = await fetch('/.netlify/functions/trigger', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({workflow: pendingWf, inputs}),
-        });
-        const d = await r.json();
-        if (d.ok) {
-          toast('✅ Workflow lancé — résultat dans ~2 min');
+        const ok = await ghDispatch(pendingWf, inputs);
+        if (ok) {
+          toast('Workflow lancé — résultat dans ~2 min');
           closeModal();
           setTimeout(loadRuns, 5000);
         } else {
-          toast('Erreur : ' + (d.error || r.status), true);
+          toast('Erreur — vérifie ton PAT et les permissions', true);
         }
-      } catch { toast('Erreur réseau', true); }
+      } catch(e) { toast('Erreur réseau : ' + e.message, true); }
       finally { btn.disabled = false; btn.textContent = '▶ Lancer le workflow'; }
     }
 
     async function triggerHealthCheck(e) {
       e.preventDefault();
       try {
-        const r = await fetch('/.netlify/functions/trigger', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({workflow: 'health-check.yml', inputs: {}}),
-        });
-        const d = await r.json();
-        if (d.ok) toast('✅ Health Check lancé — résultat dans ~1 min');
-        else toast('Erreur : ' + (d.error || 'inconnue'), true);
+        const ok = await ghDispatch('health-check.yml', {});
+        if (ok) toast('Health Check lancé — résultat dans ~1 min');
+        else toast('Erreur — vérifie ton PAT', true);
       } catch { toast('Erreur réseau', true); }
     }
 
@@ -1005,6 +1057,7 @@
     // ─────────────── INIT ───────────────
     loadAll();
     setInterval(loadAll, 60000);
+    updateConfigIndicator();
 
     // ═══════════════════════════════════════════════════════════
     // ─────────────── GRAPH (D3.js v7) ───────────────────────
@@ -1025,12 +1078,14 @@
       operations: '#bc8cff',
       content:    '#d29922',
       agent:      '#f85149',
+      tech:       '#79c0ff',
+      security:   '#f778ba',
       unknown:    '#8b949e',
     };
     const TYPE_LABELS = {
       index: 'Index', business: 'Business', prospects: 'Prospects',
       campaigns: 'Campagnes', operations: 'Opérations', content: 'Contenu',
-      agent: 'Agent', unknown: 'Autre',
+      agent: 'Agent', tech: 'Technique', security: 'Sécurité', unknown: 'Autre',
     };
 
     async function loadGraph() {

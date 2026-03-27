@@ -33,10 +33,10 @@ updated: 2026-03-27
 
 ```
 Orchestration  : GitHub Actions + claude-code-action@v1
-Language       : Python 3.12 (scripts), JavaScript (Netlify functions)
+Language       : Python 3.12 (scripts)
 Dashboard      : HTML/CSS/JS statique (D3.js pour le graph)
 Knowledge      : Obsidian Vault (Markdown + YAML frontmatter)
-Deploiement    : Netlify (docs/) + GitHub Pages (vault)
+Deploiement    : GitHub Pages (docs/)
 CI/CD          : GitHub Actions (reusable workflows)
 ```
 
@@ -59,7 +59,7 @@ CI/CD          : GitHub Actions (reusable workflows)
 | Date | Erreur | Fix | Lecon |
 |------|--------|-----|-------|
 | 2026-03-20 | `startup_failure` workflows | `default: "none"` pas `""` | Jamais de default vide sur workflow_call |
-| 2026-03-24 | Rapports non visibles Netlify | Ecrire dans `docs/reports/` | Toujours penser au publish directory |
+| 2026-03-24 | Rapports non visibles | Ecrire dans `docs/reports/` | Toujours penser au publish directory |
 
 ---
 

@@ -45,7 +45,7 @@ updated: 2026-03-27
 | Composant | Cout mensuel estime | Budget max |
 |-----------|-------------------|-----------|
 | GitHub Actions minutes | 0 (free tier) | 2000 min/mois |
-| Netlify bandwidth | 0 (free tier) | 100 GB/mois |
+| GitHub Pages | 0 (free) | 100 GB/mois |
 | Firecrawl credits | 0 | 500 credits/mois |
 | Claude tokens | Inclus abo | -- |
 | Gemini tokens | 0 (free tier) | -- |

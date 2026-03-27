@@ -18,7 +18,7 @@ updated: 2026-03-27
 
 - [x] Architecture multi-agents (10 agents nommes)
 - [x] Reusable Claude workflow (`_reusable-claude.yml`)
-- [x] Dashboard Netlify (Runs / Status / Graph)
+- [x] Dashboard GitHub Pages (Runs / Status / Graph / Agents)
 - [x] Vault-Driven protocol (knowledge graph)
 - [x] Skill system (registry + 4 skills valides)
 - [x] Self-improvement loop (Sage weekly)

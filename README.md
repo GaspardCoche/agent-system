@@ -97,7 +97,7 @@ Obsidian affiche le graph interactif des connexions entre les notes (Cmd+Shift+G
 
 ## Dashboard
 
-Dashboard web deploye sur Netlify avec 4 onglets :
+Dashboard web deploye sur GitHub Pages (https://gaspardcoche.github.io/agent-system/) avec 4 onglets :
 
 - **Runs** -- Historique des runs, lancement d'agents, rapports inline
 - **Status** -- Sante des agents, secrets configures/manquants
@@ -123,7 +123,7 @@ Les skills sont geres par **Sage** qui analyse les retrospectives et propose de 
 
 - GitHub repo avec Actions activees
 - Secrets GitHub configures (voir ci-dessous)
-- Netlify site connecte au repo (publish: `docs/`)
+- GitHub Pages active sur le repo (deploy depuis `docs/`)
 
 ### Secrets GitHub requis
 
@@ -151,8 +151,8 @@ gh workflow run orchestrator.yml -f task_description="Description de la tache"
 # Agent specifique
 gh workflow run nexus.yml -f report_type=weekly_audit -f dry_run=true
 
-# Via le dashboard Netlify
-# Ouvrir le dashboard -> onglet Runs -> cliquer sur l'agent -> remplir les inputs
+# Via le dashboard GitHub Pages
+# Ouvrir https://gaspardcoche.github.io/agent-system/ -> Config (PAT) -> Run agent
 ```
 
 ### Rebuild le knowledge graph

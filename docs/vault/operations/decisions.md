@@ -33,19 +33,33 @@ updated: 2026-03-24
 
 ### 2026-03-24 — Dashboard Multi-Tab
 
-**Décision :** Dashboard Netlify avec tabs Runs / Status / Graph
+**Décision :** Dashboard GitHub Pages avec tabs Runs / Status / Graph / Agents
 
 **Pourquoi :** Vue unifiée des runs, santé des agents, et knowledge graph
 
-**URL :** https://agent-system.netlify.app (à configurer)
+**URL :** https://gaspardcoche.github.io/agent-system/
+
+---
+
+### 2026-03-27 — Migration Netlify vers GitHub Pages
+
+**Décision :** Abandonner Netlify, passer a GitHub Pages + appels GitHub API directs
+
+**Pourquoi :** Netlify trop limitant. GitHub Pages est gratuit, auto-deploye, et integre nativement au repo.
+
+**Impact :**
+- Plus de `netlify.toml` ni de `netlify/functions/`
+- Dashboard appelle l'API GitHub directement (PAT en localStorage)
+- Workflow `deploy-pages.yml` deploie automatiquement
+- Zero dependance externe
 
 ---
 
 ### 2026-03-24 — Rapports dans docs/reports/
 
-**Décision :** Les rapports agents vont dans `docs/reports/` (Netlify-accessible) et mirroring dans `reports/`
+**Décision :** Les rapports agents vont dans `docs/reports/` (accessible par GitHub Pages) et mirroring dans `reports/`
 
-**Pourquoi :** Les rapports en `reports/` n'étaient pas accessibles depuis le dashboard Netlify
+**Pourquoi :** Les rapports doivent etre accessibles depuis le dashboard
 
 ---
 

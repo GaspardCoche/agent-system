@@ -70,7 +70,7 @@ updated: 2026-03-27
 ```
 Agents actifs : Orchestrator, Iris, Scout, Aria, Nexus, Sage, Ralph, Forge, Sentinel, Lumen
 Repo GitHub   : GaspardCoche/agent-system
-Dashboard     : Netlify (onglets Runs / Status / Graph / Agents)
+Dashboard     : GitHub Pages (https://gaspardcoche.github.io/agent-system/)
 Vault         : docs/vault/ (ce repertoire)
 Obsidian      : Ouvrir docs/vault/ comme vault Obsidian
 ```

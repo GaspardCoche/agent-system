@@ -49,7 +49,7 @@ gh workflow run sage.yml \
   --repo GaspardCoche/agent-system
 ```
 
-### Via Dashboard Netlify
+### Via Dashboard GitHub Pages
 1. Ouvrir le dashboard -> onglet Runs
 2. Cliquer sur la carte de l'agent souhaite
 3. Remplir les inputs

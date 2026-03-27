@@ -34,7 +34,7 @@ updated: 2026-03-27
 |--------|-------|--------|--------|
 | GitHub Issues | `labeled: agent` | Declenche Orchestrator | Actif |
 | GitHub PRs | `opened, synchronize` | Declenche Orchestrator | Actif |
-| Netlify Function | `POST /trigger` | `workflow_dispatch` | Actif (si PAT configure) |
+| Dashboard (GitHub API) | `POST /dispatches` | `workflow_dispatch` | Actif (via PAT localStorage) |
 
 ---
 

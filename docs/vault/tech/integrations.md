@@ -88,11 +88,14 @@ updated: 2026-03-27
 
 ---
 
-## Webhooks entrants
+## Declenchement de workflows
 
-| Source | URL | Format | Destination |
-|--------|-----|--------|------------|
-| Netlify Function | `/.netlify/functions/trigger` | JSON `{workflow, inputs}` | GitHub workflow_dispatch |
+Le dashboard appelle directement l'API GitHub pour declencher les workflows :
+```
+POST https://api.github.com/repos/GaspardCoche/agent-system/actions/workflows/{workflow}/dispatches
+Authorization: Bearer <PAT>
+Body: { "ref": "main", "inputs": {...} }
+```
 
 ---
 

@@ -2,7 +2,7 @@
 title: Infrastructure & Architecture Technique
 id: tech-infrastructure
 type: tech
-tags: [infrastructure, architecture, github-actions, netlify, deployment]
+tags: [infrastructure, architecture, github-actions, github-pages, deployment]
 updated: 2026-03-27
 ---
 
@@ -72,14 +72,16 @@ updated: 2026-03-27
 | `health-check.yml` | manual | Verification secrets |
 | `vault-sync.yml` | push sur `docs/vault/**`, manual | Rebuild knowledge graph |
 
-### Netlify (Dashboard + Functions)
+### GitHub Pages (Dashboard)
 
 | Element | Role |
 |---------|------|
 | `docs/index.html` | Dashboard single-page (Runs, Status, Graph, Agents) |
 | `docs/data/*.json` | Donnees statiques (agents, runs, graph, health) |
 | `docs/reports/*.md` | Rapports agents rendus en markdown |
-| `netlify/functions/trigger.js` | Serverless function pour declencher workflows GitHub |
+| `.github/workflows/deploy-pages.yml` | Deploy automatique a chaque push sur docs/ |
+
+Le dashboard appelle l'API GitHub directement (PAT stocke en localStorage) pour declencher les workflows.
 
 ### Obsidian Vault (Knowledge)
 
@@ -128,7 +130,7 @@ Health check → health-check.yml → docs/data/health.json → Dashboard Status
 | Service | Plan | Cout |
 |---------|------|------|
 | GitHub Actions | Free (2000 min/mois) | Gratuit |
-| Netlify | Free | Gratuit |
+| GitHub Pages | Free | Gratuit |
 | Claude Code OAuth | Inclus abonnement | -- |
 | Gemini API | Free tier | Gratuit |
 | Firecrawl | Free tier (500 credits) | Gratuit |

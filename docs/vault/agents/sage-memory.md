@@ -66,10 +66,9 @@ Prochaine analyse   : Dimanche 2026-03-31
 Voir `memory/lessons_learned.md` pour la liste complète.
 
 **Résumé des erreurs critiques :**
-- Netlify env vars : utiliser PUT pas POST pour variables existantes
 - generate_report.py : toujours passer `--output-dir` et `--dashboard-file`
 - PAT GitHub : scope `workflow` obligatoire pour modifier les workflows
-- Rapports : toujours dans `docs/reports/` (Netlify-accessible)
+- Rapports : toujours dans `docs/reports/` (GitHub Pages accessible)
 
 ---
 
