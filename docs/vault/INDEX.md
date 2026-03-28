@@ -60,6 +60,7 @@ updated: 2026-03-28
 - [[operations/kpis]] -- KPIs systeme, pipeline, business & health checks
 - [[operations/agent-workflows]] -- Chaines d'agents & orchestration
 - [[operations/secrets-matrix]] -- 15 secrets GitHub, status & rotation
+- [[operations/maintenance]] -- Calendrier de maintenance (quotidien, hebdo, mensuel, trimestriel)
 
 ## Contenu
 
@@ -75,10 +76,20 @@ updated: 2026-03-28
 - [[tech/code-repository]] -- Repository lead-pipeline (structure, stubs, lookup data)
 - [[tech/mcp-servers]] -- 10 serveurs MCP & configuration agents
 - [[tech/skills-registry]] -- 4 skills valides, cycle de vie MCP → Script
+- [[tech/token-budget]] -- Budget tokens & couts par agent (~$80/mois)
 
 ## Securite
 
 - [[security/access-control]] -- Controle d'acces agents & politique de securite
+
+## Ingenierie Agents
+
+- [[agents/creation-guide]] -- Guide complet de creation d'un nouvel agent (7 etapes)
+- [[agents/prompt-engineering]] -- Patterns de prompts, anti-patterns, metriques qualite
+- [[agents/communication-protocol]] -- Protocole JSON inter-agents (task/result/retrospective)
+- [[agents/error-patterns]] -- 15 erreurs documentees, diagnostic & prevention
+- [[agents/tool-matrix]] -- Matrice des permissions outils par agent (R/W/RW)
+- [[agents/testing-patterns]] -- 4 niveaux de test, checklists de validation
 
 ## Memoire Agents
 
@@ -138,8 +149,8 @@ Lead Pipeline : hwinssinger/lead-pipeline (TypeScript, 16 stubs a remplacer)
 
 | Metrique | Valeur |
 |----------|--------|
-| Notes totales | 49 |
-| Connexions (edges) | 273 |
+| Notes totales | 57 |
+| Connexions (edges) | 360 |
 | Categories | 11 (business, leadgen, crm, prospects, campaigns, operations, content, tech, security, agents, index) |
 | Agents avec memoire | 10/10 |
 | Derniere mise a jour | 2026-03-28 |
