@@ -3,6 +3,7 @@ title: Calendrier Editorial
 id: content-editorial-calendar
 type: content
 tags: [editorial, calendar, planning, content, publishing]
+agents: [iris, scout]
 updated: 2026-03-28
 ---
 

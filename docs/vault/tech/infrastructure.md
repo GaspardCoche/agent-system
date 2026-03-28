@@ -3,7 +3,8 @@ title: Infrastructure & Architecture Technique
 id: tech-infrastructure
 type: tech
 tags: [infrastructure, architecture, github-actions, github-pages, deployment]
-updated: 2026-03-27
+agents: [forge, sentinel]
+updated: 2026-03-28
 ---
 
 # Infrastructure & Architecture Technique

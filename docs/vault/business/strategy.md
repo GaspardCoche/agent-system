@@ -3,6 +3,7 @@ title: Stratégie Business
 id: business-strategy
 type: business
 tags: [strategy, gtm, growth, crm, marketing-digital]
+agents: [all]
 updated: 2026-03-28
 ---
 

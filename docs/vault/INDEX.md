@@ -15,6 +15,12 @@ updated: 2026-03-28
 
 ---
 
+## Dashboards (Dataview)
+
+- [[dashboards/agent-dashboard]] -- Tous les agents, notes recentes, connexions, taches
+- [[dashboards/pipeline-dashboard]] -- Pipeline lead gen, CRM, decisions ouvertes
+- [[dashboards/system-health]] -- Sante systeme, couverture vault, maintenance
+
 ## Business & Strategie
 
 - [[business/vision]] -- Vision, mission, ICP, proposition de valeur EMAsphere

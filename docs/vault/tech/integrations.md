@@ -3,6 +3,7 @@ title: Integrations & APIs
 id: tech-integrations
 type: tech
 tags: [integrations, mcp, apis, tools, external-services, leadgen, phantombuster, fullenrich]
+agents: [scout, aria, forge]
 updated: 2026-03-28
 ---
 

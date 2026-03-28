@@ -3,7 +3,8 @@ title: Runbooks Operationnels
 id: operations-runbooks
 type: operations
 tags: [runbooks, procedures, troubleshooting, operations]
-updated: 2026-03-27
+agents: [all]
+updated: 2026-03-28
 ---
 
 # Runbooks Operationnels

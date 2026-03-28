@@ -15,7 +15,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#e8e84a",
-      "connections": 56
+      "connections": 59
     },
     {
       "id": "agents-aria-memory",
@@ -35,7 +35,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#f85149",
-      "connections": 14
+      "connections": 15
     },
     {
       "id": "agents-communication-protocol",
@@ -116,7 +116,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#f85149",
-      "connections": 14
+      "connections": 16
     },
     {
       "id": "agents-forge-memory",
@@ -135,7 +135,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#f85149",
-      "connections": 9
+      "connections": 10
     },
     {
       "id": "agents-iris-memory",
@@ -172,7 +172,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#f85149",
-      "connections": 10
+      "connections": 11
     },
     {
       "id": "agents-nexus-memory",
@@ -286,7 +286,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#f85149",
-      "connections": 14
+      "connections": 15
     },
     {
       "id": "agents-testing-patterns",
@@ -326,7 +326,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#f85149",
-      "connections": 11
+      "connections": 12
     },
     {
       "id": "business-icp-personas",
@@ -360,8 +360,11 @@
         "milestones",
         "planning"
       ],
-      "agents": [],
-      "updated": "2026-03-27",
+      "agents": [
+        "sage",
+        "dispatch"
+      ],
+      "updated": "2026-03-28",
       "color": "#58a6ff",
       "connections": 6
     },
@@ -377,7 +380,9 @@
         "crm",
         "marketing-digital"
       ],
-      "agents": [],
+      "agents": [
+        "all"
+      ],
       "updated": "2026-03-28",
       "color": "#58a6ff",
       "connections": 16
@@ -394,7 +399,9 @@
         "icp",
         "positioning"
       ],
-      "agents": [],
+      "agents": [
+        "all"
+      ],
       "updated": "2026-03-28",
       "color": "#58a6ff",
       "connections": 10
@@ -452,7 +459,10 @@
         "editorial",
         "guidelines"
       ],
-      "agents": [],
+      "agents": [
+        "iris",
+        "aria"
+      ],
       "updated": "2026-03-28",
       "color": "#d29922",
       "connections": 6
@@ -469,7 +479,10 @@
         "content",
         "publishing"
       ],
-      "agents": [],
+      "agents": [
+        "iris",
+        "scout"
+      ],
       "updated": "2026-03-28",
       "color": "#d29922",
       "connections": 5
@@ -485,7 +498,10 @@
         "linkedin",
         "twitter"
       ],
-      "agents": [],
+      "agents": [
+        "iris",
+        "scout"
+      ],
       "updated": "2026-03-28",
       "color": "#d29922",
       "connections": 7
@@ -528,7 +544,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#4177232",
-      "connections": 11
+      "connections": 14
     },
     {
       "id": "crm-hubspot-lifecycle",
@@ -549,7 +565,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#4177232",
-      "connections": 10
+      "connections": 11
     },
     {
       "id": "crm-hubspot-properties",
@@ -569,7 +585,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#4177232",
-      "connections": 18
+      "connections": 19
     },
     {
       "id": "crm-hubspot-workflows",
@@ -590,6 +606,65 @@
       "updated": "2026-03-28",
       "color": "#4177232",
       "connections": 15
+    },
+    {
+      "id": "dashboards-agent-dashboard",
+      "label": "Dashboard Agents",
+      "type": "dashboard",
+      "path": "dashboards/agent-dashboard.md",
+      "tags": [
+        "dashboard",
+        "agents",
+        "status",
+        "monitoring"
+      ],
+      "agents": [
+        "all"
+      ],
+      "updated": "2026-03-28",
+      "color": "#8b949e",
+      "connections": 5
+    },
+    {
+      "id": "dashboards-pipeline-dashboard",
+      "label": "Dashboard Pipeline Lead Generation",
+      "type": "dashboard",
+      "path": "dashboards/pipeline-dashboard.md",
+      "tags": [
+        "dashboard",
+        "leadgen",
+        "pipeline",
+        "crm",
+        "monitoring"
+      ],
+      "agents": [
+        "scout",
+        "aria",
+        "lumen"
+      ],
+      "updated": "2026-03-28",
+      "color": "#8b949e",
+      "connections": 6
+    },
+    {
+      "id": "dashboards-system-health",
+      "label": "Dashboard Sante Systeme",
+      "type": "dashboard",
+      "path": "dashboards/system-health.md",
+      "tags": [
+        "dashboard",
+        "health",
+        "system",
+        "secrets",
+        "maintenance"
+      ],
+      "agents": [
+        "sentinel",
+        "sage"
+      ],
+      "updated": "2026-03-28",
+      "color": "#8b949e",
+      "connections": 6
     },
     {
       "id": "leadgen-cleaning-gmt",
@@ -749,7 +824,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#2ea043",
-      "connections": 25
+      "connections": 26
     },
     {
       "id": "leadgen-sources-linkedin",
@@ -807,7 +882,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#bc8cff",
-      "connections": 17
+      "connections": 18
     },
     {
       "id": "operations-daily-digest",
@@ -860,10 +935,14 @@
         "leadgen",
         "pipeline"
       ],
-      "agents": [],
+      "agents": [
+        "lumen",
+        "sage",
+        "sentinel"
+      ],
       "updated": "2026-03-28",
       "color": "#bc8cff",
-      "connections": 22
+      "connections": 25
     },
     {
       "id": "operations-maintenance",
@@ -884,7 +963,7 @@
       ],
       "updated": "2026-03-27",
       "color": "#bc8cff",
-      "connections": 14
+      "connections": 15
     },
     {
       "id": "operations-runbooks",
@@ -897,8 +976,10 @@
         "troubleshooting",
         "operations"
       ],
-      "agents": [],
-      "updated": "2026-03-27",
+      "agents": [
+        "all"
+      ],
+      "updated": "2026-03-28",
       "color": "#bc8cff",
       "connections": 8
     },
@@ -920,7 +1001,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#bc8cff",
-      "connections": 13
+      "connections": 14
     },
     {
       "id": "prospects-pipeline",
@@ -942,7 +1023,7 @@
       ],
       "updated": "2026-03-28",
       "color": "#3fb950",
-      "connections": 15
+      "connections": 16
     },
     {
       "id": "security-access-control",
@@ -956,7 +1037,10 @@
         "permissions",
         "audit"
       ],
-      "agents": [],
+      "agents": [
+        "sentinel",
+        "sage"
+      ],
       "updated": "2026-03-28",
       "color": "#f778ba",
       "connections": 12
@@ -1014,8 +1098,11 @@
         "github-pages",
         "deployment"
       ],
-      "agents": [],
-      "updated": "2026-03-27",
+      "agents": [
+        "forge",
+        "sentinel"
+      ],
+      "updated": "2026-03-28",
       "color": "#79c0ff",
       "connections": 13
     },
@@ -1034,7 +1121,11 @@
         "phantombuster",
         "fullenrich"
       ],
-      "agents": [],
+      "agents": [
+        "scout",
+        "aria",
+        "forge"
+      ],
       "updated": "2026-03-28",
       "color": "#79c0ff",
       "connections": 15
@@ -1103,6 +1194,18 @@
     }
   ],
   "edges": [
+    {
+      "source": "index",
+      "target": "dashboards-agent-dashboard"
+    },
+    {
+      "source": "index",
+      "target": "dashboards-pipeline-dashboard"
+    },
+    {
+      "source": "index",
+      "target": "dashboards-system-health"
+    },
     {
       "source": "index",
       "target": "business-vision"
@@ -1985,6 +2088,14 @@
     },
     {
       "source": "crm-hubspot-backlog",
+      "target": "agents-aria-memory"
+    },
+    {
+      "source": "crm-hubspot-backlog",
+      "target": "agents-lumen-memory"
+    },
+    {
+      "source": "crm-hubspot-backlog",
       "target": "crm-hubspot-properties"
     },
     {
@@ -1998,6 +2109,10 @@
     {
       "source": "crm-hubspot-backlog",
       "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "crm-hubspot-backlog",
+      "target": "agents-forge-memory"
     },
     {
       "source": "crm-hubspot-backlog",
@@ -2086,6 +2201,62 @@
     {
       "source": "crm-hubspot-workflows",
       "target": "agents-ralph-memory"
+    },
+    {
+      "source": "dashboards-agent-dashboard",
+      "target": "agents-error-patterns"
+    },
+    {
+      "source": "dashboards-agent-dashboard",
+      "target": "agents-tool-matrix"
+    },
+    {
+      "source": "dashboards-agent-dashboard",
+      "target": "operations-kpis"
+    },
+    {
+      "source": "dashboards-agent-dashboard",
+      "target": "operations-agent-workflows"
+    },
+    {
+      "source": "dashboards-pipeline-dashboard",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "dashboards-pipeline-dashboard",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "dashboards-pipeline-dashboard",
+      "target": "crm-hubspot-lifecycle"
+    },
+    {
+      "source": "dashboards-pipeline-dashboard",
+      "target": "prospects-pipeline"
+    },
+    {
+      "source": "dashboards-pipeline-dashboard",
+      "target": "operations-kpis"
+    },
+    {
+      "source": "dashboards-system-health",
+      "target": "operations-maintenance"
+    },
+    {
+      "source": "dashboards-system-health",
+      "target": "operations-secrets-matrix"
+    },
+    {
+      "source": "dashboards-system-health",
+      "target": "operations-kpis"
+    },
+    {
+      "source": "dashboards-system-health",
+      "target": "agents-error-patterns"
+    },
+    {
+      "source": "dashboards-system-health",
+      "target": "agents-sentinel-memory"
     },
     {
       "source": "leadgen-cleaning-gmt",
@@ -2552,21 +2723,22 @@
       "target": "tech-mcp-servers"
     }
   ],
-  "generated": "2026-03-28T10:06:14.907776Z",
+  "generated": "2026-03-28T10:14:25.423480Z",
   "stats": {
-    "total_nodes": 57,
-    "total_edges": 362,
+    "total_nodes": 60,
+    "total_edges": 382,
     "types": [
-      "agent",
-      "tech",
-      "security",
       "business",
-      "campaigns",
+      "tech",
       "crm",
+      "dashboard",
+      "agent",
       "operations",
-      "content",
       "prospects",
+      "content",
       "leadgen",
+      "security",
+      "campaigns",
       "index"
     ]
   }

@@ -3,6 +3,7 @@ title: Securite & Controle d'Acces
 id: security-access-control
 type: security
 tags: [security, access, secrets, permissions, audit]
+agents: [sentinel, sage]
 updated: 2026-03-28
 ---
 

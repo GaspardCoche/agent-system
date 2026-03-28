@@ -3,6 +3,7 @@ title: Brand Voice & Ton Editorial
 id: content-brand-voice
 type: content
 tags: [brand, voice, tone, editorial, guidelines]
+agents: [iris, aria]
 updated: 2026-03-28
 ---
 

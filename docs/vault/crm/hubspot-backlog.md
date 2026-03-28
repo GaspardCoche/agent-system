@@ -23,7 +23,7 @@ Backlog de 16 taches pour l'optimisation du CRM HubSpot, couvrant Q1-Q4 2026. Ce
 | Taches Basse priorite | 5 |
 | Debut | Q1 2026 |
 | Fin estimee | Q4 2026 |
-| Agents responsables | [[agents/aria]] (CRM), [[agents/lumen]] (strategie) |
+| Agents responsables | [[agents/aria-memory|Aria]] (CRM), [[agents/lumen-memory|Lumen]] (strategie) |
 
 ---
 
@@ -284,7 +284,7 @@ Backlog de 16 taches pour l'optimisation du CRM HubSpot, couvrant Q1-Q4 2026. Ce
 ## Impact sur le pipeline
 
 > [!warning] Dependances critiques
-> Plusieurs taches du backlog ont un impact direct sur le pipeline de lead generation ([[leadgen/pipeline-overview]]). Coordination requise entre les agents [[agents/aria]] et [[agents/forge]].
+> Plusieurs taches du backlog ont un impact direct sur le pipeline de lead generation ([[leadgen/pipeline-overview]]). Coordination requise entre les agents [[agents/aria-memory|Aria]] et [[agents/forge-memory|Forge]].
 
 | Tache | Impact pipeline |
 |-------|----------------|

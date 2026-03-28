@@ -3,6 +3,7 @@ title: Stratégie Contenu & Social Media
 id: content-social-media
 type: content
 tags: [content, social-media, linkedin, twitter]
+agents: [iris, scout]
 updated: 2026-03-28
 ---
 

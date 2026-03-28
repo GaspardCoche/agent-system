@@ -3,6 +3,7 @@ title: KPIs & Metriques Systeme
 id: operations-kpis
 type: operations
 tags: [kpis, metrics, performance, monitoring, leadgen, pipeline]
+agents: [lumen, sage, sentinel]
 updated: 2026-03-28
 ---
 
