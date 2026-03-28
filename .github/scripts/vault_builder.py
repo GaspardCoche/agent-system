@@ -22,6 +22,8 @@ OUTPUT_FILE = Path("docs/data/graph.json")
 TYPE_COLORS = {
     "index":      "#e8e84a",
     "business":   "#58a6ff",
+    "leadgen":    "#2ea043",
+    "crm":        "#4177232",
     "prospects":  "#3fb950",
     "campaigns":  "#ffa657",
     "operations": "#bc8cff",

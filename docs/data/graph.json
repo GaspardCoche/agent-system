@@ -13,9 +13,9 @@
       "agents": [
         "all"
       ],
-      "updated": "2026-03-27",
+      "updated": "2026-03-28",
       "color": "#e8e84a",
-      "connections": 25
+      "connections": 38
     },
     {
       "id": "agents-aria-memory",
@@ -35,7 +35,7 @@
       ],
       "updated": "2026-03-27",
       "color": "#f85149",
-      "connections": 3
+      "connections": 4
     },
     {
       "id": "agents-dispatch-log",
@@ -109,7 +109,7 @@
       ],
       "updated": "2026-03-27",
       "color": "#f85149",
-      "connections": 3
+      "connections": 4
     },
     {
       "id": "agents-nexus-memory",
@@ -127,7 +127,7 @@
       ],
       "updated": "2026-03-24",
       "color": "#f85149",
-      "connections": 3
+      "connections": 4
     },
     {
       "id": "agents-ralph-memory",
@@ -184,7 +184,7 @@
       ],
       "updated": "2026-03-24",
       "color": "#f85149",
-      "connections": 4
+      "connections": 5
     },
     {
       "id": "agents-sentinel-memory",
@@ -203,7 +203,7 @@
       ],
       "updated": "2026-03-27",
       "color": "#f85149",
-      "connections": 3
+      "connections": 4
     },
     {
       "id": "business-roadmap",
@@ -219,7 +219,7 @@
       "agents": [],
       "updated": "2026-03-27",
       "color": "#58a6ff",
-      "connections": 3
+      "connections": 4
     },
     {
       "id": "business-strategy",
@@ -229,12 +229,14 @@
       "tags": [
         "strategy",
         "gtm",
-        "growth"
+        "growth",
+        "crm",
+        "marketing-digital"
       ],
       "agents": [],
-      "updated": "2026-03-24",
+      "updated": "2026-03-28",
       "color": "#58a6ff",
-      "connections": 8
+      "connections": 12
     },
     {
       "id": "business-vision",
@@ -244,30 +246,33 @@
       "tags": [
         "vision",
         "mission",
-        "strategy"
+        "strategy",
+        "icp",
+        "positioning"
       ],
       "agents": [],
-      "updated": "2026-03-24",
+      "updated": "2026-03-28",
       "color": "#58a6ff",
-      "connections": 5
+      "connections": 8
     },
     {
       "id": "campaigns-google-ads",
-      "label": "Google Ads — État Campagnes",
+      "label": "Google Ads -- Etat Campagnes",
       "type": "campaigns",
       "path": "campaigns/google-ads.md",
       "tags": [
         "google-ads",
         "nexus",
         "marketing",
-        "roas"
+        "roas",
+        "emasphere"
       ],
       "agents": [
         "nexus"
       ],
-      "updated": "2026-03-24",
+      "updated": "2026-03-28",
       "color": "#ffa657",
-      "connections": 5
+      "connections": 8
     },
     {
       "id": "content-brand-voice",
@@ -320,6 +325,223 @@
       "connections": 5
     },
     {
+      "id": "crm-hubspot-api",
+      "label": "\"HubSpot -- API & Integration\"",
+      "type": "crm",
+      "path": "crm/hubspot-api.md",
+      "tags": [
+        "crm",
+        "hubspot",
+        "api",
+        "integration",
+        "batch"
+      ],
+      "agents": [
+        "aria",
+        "forge"
+      ],
+      "updated": "2026-03-28",
+      "color": "#4177232",
+      "connections": 6
+    },
+    {
+      "id": "crm-hubspot-backlog",
+      "label": "\"HubSpot -- Backlog Management\"",
+      "type": "crm",
+      "path": "crm/hubspot-backlog.md",
+      "tags": [
+        "crm",
+        "hubspot",
+        "backlog",
+        "optimization",
+        "q2-2026"
+      ],
+      "agents": [
+        "aria",
+        "lumen"
+      ],
+      "updated": "2026-03-28",
+      "color": "#4177232",
+      "connections": 8
+    },
+    {
+      "id": "crm-hubspot-properties",
+      "label": "\"HubSpot -- Proprietes & Mapping\"",
+      "type": "crm",
+      "path": "crm/hubspot-properties.md",
+      "tags": [
+        "crm",
+        "hubspot",
+        "properties",
+        "mapping",
+        "contact",
+        "company"
+      ],
+      "agents": [
+        "aria"
+      ],
+      "updated": "2026-03-28",
+      "color": "#4177232",
+      "connections": 11
+    },
+    {
+      "id": "leadgen-cleaning-gmt",
+      "label": "\"GMT -- Google Sheet Hub de Nettoyage\"",
+      "type": "leadgen",
+      "path": "leadgen/cleaning-gmt.md",
+      "tags": [
+        "leadgen",
+        "cleaning",
+        "gmt",
+        "google-sheets",
+        "databases",
+        "lookups"
+      ],
+      "agents": [
+        "aria",
+        "forge"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 8
+    },
+    {
+      "id": "leadgen-cleaning-rules",
+      "label": "\"Regles de Nettoyage -- Contact & Company\"",
+      "type": "leadgen",
+      "path": "leadgen/cleaning-rules.md",
+      "tags": [
+        "leadgen",
+        "cleaning",
+        "rules",
+        "typescript",
+        "data-quality"
+      ],
+      "agents": [
+        "aria",
+        "forge"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 6
+    },
+    {
+      "id": "leadgen-enrichment-fullenrich",
+      "label": "\"Enrichissement -- FullEnrich\"",
+      "type": "leadgen",
+      "path": "leadgen/enrichment-fullenrich.md",
+      "tags": [
+        "leadgen",
+        "enrichment",
+        "fullenrich",
+        "api",
+        "automation"
+      ],
+      "agents": [
+        "aria"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 5
+    },
+    {
+      "id": "leadgen-enrichment-phantom",
+      "label": "\"Enrichissement -- PhantomBuster\"",
+      "type": "leadgen",
+      "path": "leadgen/enrichment-phantom.md",
+      "tags": [
+        "leadgen",
+        "enrichment",
+        "phantombuster",
+        "scraping",
+        "api"
+      ],
+      "agents": [
+        "scout"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 6
+    },
+    {
+      "id": "leadgen-monitoring",
+      "label": "\"Monitoring & Alertes Pipeline\"",
+      "type": "leadgen",
+      "path": "leadgen/monitoring.md",
+      "tags": [
+        "leadgen",
+        "monitoring",
+        "alerts",
+        "health-checks",
+        "logging"
+      ],
+      "agents": [
+        "sentinel",
+        "lumen"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 8
+    },
+    {
+      "id": "leadgen-pipeline-overview",
+      "label": "\"Pipeline Lead Generation -- Vue d'ensemble\"",
+      "type": "leadgen",
+      "path": "leadgen/pipeline-overview.md",
+      "tags": [
+        "leadgen",
+        "pipeline",
+        "overview",
+        "lead-generation",
+        "funnel"
+      ],
+      "agents": [
+        "scout",
+        "aria"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 19
+    },
+    {
+      "id": "leadgen-sources-linkedin",
+      "label": "\"Sources LinkedIn -- Sales Navigator\"",
+      "type": "leadgen",
+      "path": "leadgen/sources-linkedin.md",
+      "tags": [
+        "leadgen",
+        "sources",
+        "linkedin",
+        "sales-navigator",
+        "phantom"
+      ],
+      "agents": [
+        "scout"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 6
+    },
+    {
+      "id": "leadgen-sources-web",
+      "label": "\"Sources Web -- Alternatives LinkedIn\"",
+      "type": "leadgen",
+      "path": "leadgen/sources-web.md",
+      "tags": [
+        "leadgen",
+        "sources",
+        "web",
+        "scraping",
+        "rgpd"
+      ],
+      "agents": [
+        "scout"
+      ],
+      "updated": "2026-03-28",
+      "color": "#2ea043",
+      "connections": 5
+    },
+    {
       "id": "operations-daily-digest",
       "label": "Daily Digest — Email",
       "type": "operations",
@@ -366,12 +588,14 @@
         "kpis",
         "metrics",
         "performance",
-        "monitoring"
+        "monitoring",
+        "leadgen",
+        "pipeline"
       ],
       "agents": [],
-      "updated": "2026-03-27",
+      "updated": "2026-03-28",
       "color": "#bc8cff",
-      "connections": 3
+      "connections": 9
     },
     {
       "id": "operations-runbooks",
@@ -399,15 +623,17 @@
         "crm",
         "scout",
         "aria",
-        "hubspot"
+        "hubspot",
+        "funnel",
+        "qualification"
       ],
       "agents": [
         "scout",
         "aria"
       ],
-      "updated": "2026-03-24",
+      "updated": "2026-03-28",
       "color": "#3fb950",
-      "connections": 6
+      "connections": 13
     },
     {
       "id": "security-access-control",
@@ -424,7 +650,48 @@
       "agents": [],
       "updated": "2026-03-27",
       "color": "#f778ba",
-      "connections": 3
+      "connections": 4
+    },
+    {
+      "id": "tech-code-repository",
+      "label": "\"Code Repository -- lead-pipeline\"",
+      "type": "tech",
+      "path": "tech/code-repository.md",
+      "tags": [
+        "tech",
+        "code",
+        "typescript",
+        "repository",
+        "lead-pipeline"
+      ],
+      "agents": [
+        "forge",
+        "sentinel"
+      ],
+      "updated": "2026-03-28",
+      "color": "#79c0ff",
+      "connections": 7
+    },
+    {
+      "id": "tech-data-schemas",
+      "label": "\"Schemas de Donnees -- Zod & TypeScript\"",
+      "type": "tech",
+      "path": "tech/data-schemas.md",
+      "tags": [
+        "tech",
+        "schemas",
+        "zod",
+        "typescript",
+        "validation",
+        "data-model"
+      ],
+      "agents": [
+        "forge",
+        "sentinel"
+      ],
+      "updated": "2026-03-28",
+      "color": "#79c0ff",
+      "connections": 5
     },
     {
       "id": "tech-infrastructure",
@@ -441,7 +708,7 @@
       "agents": [],
       "updated": "2026-03-27",
       "color": "#79c0ff",
-      "connections": 6
+      "connections": 8
     },
     {
       "id": "tech-integrations",
@@ -453,12 +720,15 @@
         "mcp",
         "apis",
         "tools",
-        "external-services"
+        "external-services",
+        "leadgen",
+        "phantombuster",
+        "fullenrich"
       ],
       "agents": [],
-      "updated": "2026-03-27",
+      "updated": "2026-03-28",
       "color": "#79c0ff",
-      "connections": 3
+      "connections": 14
     }
   ],
   "edges": [
@@ -473,6 +743,50 @@
     {
       "source": "index",
       "target": "business-roadmap"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-sources-linkedin"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-sources-web"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-enrichment-phantom"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-enrichment-fullenrich"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-cleaning-rules"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-cleaning-gmt"
+    },
+    {
+      "source": "index",
+      "target": "leadgen-monitoring"
+    },
+    {
+      "source": "index",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "index",
+      "target": "crm-hubspot-api"
+    },
+    {
+      "source": "index",
+      "target": "crm-hubspot-backlog"
     },
     {
       "source": "index",
@@ -517,6 +831,14 @@
     {
       "source": "index",
       "target": "tech-integrations"
+    },
+    {
+      "source": "index",
+      "target": "tech-data-schemas"
+    },
+    {
+      "source": "index",
+      "target": "tech-code-repository"
     },
     {
       "source": "index",
@@ -655,8 +977,44 @@
       "target": "campaigns-google-ads"
     },
     {
+      "source": "business-strategy",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "business-strategy",
+      "target": "operations-kpis"
+    },
+    {
+      "source": "business-strategy",
+      "target": "crm-hubspot-backlog"
+    },
+    {
+      "source": "business-strategy",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "business-vision",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "business-vision",
+      "target": "prospects-pipeline"
+    },
+    {
+      "source": "business-vision",
+      "target": "campaigns-google-ads"
+    },
+    {
+      "source": "campaigns-google-ads",
+      "target": "operations-kpis"
+    },
+    {
       "source": "campaigns-google-ads",
       "target": "operations-daily-digest"
+    },
+    {
+      "source": "campaigns-google-ads",
+      "target": "tech-integrations"
     },
     {
       "source": "content-brand-voice",
@@ -683,6 +1041,162 @@
       "target": "business-vision"
     },
     {
+      "source": "crm-hubspot-api",
+      "target": "tech-code-repository"
+    },
+    {
+      "source": "crm-hubspot-api",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "crm-hubspot-api",
+      "target": "crm-hubspot-backlog"
+    },
+    {
+      "source": "crm-hubspot-api",
+      "target": "tech-integrations"
+    },
+    {
+      "source": "crm-hubspot-api",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "crm-hubspot-backlog",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "crm-hubspot-backlog",
+      "target": "tech-data-schemas"
+    },
+    {
+      "source": "crm-hubspot-backlog",
+      "target": "tech-integrations"
+    },
+    {
+      "source": "crm-hubspot-backlog",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "crm-hubspot-backlog",
+      "target": "business-roadmap"
+    },
+    {
+      "source": "crm-hubspot-properties",
+      "target": "tech-code-repository"
+    },
+    {
+      "source": "crm-hubspot-properties",
+      "target": "leadgen-cleaning-rules"
+    },
+    {
+      "source": "crm-hubspot-properties",
+      "target": "tech-data-schemas"
+    },
+    {
+      "source": "crm-hubspot-properties",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "leadgen-cleaning-gmt",
+      "target": "leadgen-monitoring"
+    },
+    {
+      "source": "leadgen-cleaning-gmt",
+      "target": "leadgen-sources-linkedin"
+    },
+    {
+      "source": "leadgen-cleaning-gmt",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "leadgen-cleaning-gmt",
+      "target": "leadgen-cleaning-rules"
+    },
+    {
+      "source": "leadgen-cleaning-gmt",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "leadgen-cleaning-rules",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "leadgen-cleaning-rules",
+      "target": "leadgen-enrichment-fullenrich"
+    },
+    {
+      "source": "leadgen-enrichment-fullenrich",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "leadgen-enrichment-fullenrich",
+      "target": "leadgen-enrichment-phantom"
+    },
+    {
+      "source": "leadgen-enrichment-fullenrich",
+      "target": "tech-integrations"
+    },
+    {
+      "source": "leadgen-enrichment-phantom",
+      "target": "leadgen-sources-linkedin"
+    },
+    {
+      "source": "leadgen-enrichment-phantom",
+      "target": "leadgen-sources-web"
+    },
+    {
+      "source": "leadgen-enrichment-phantom",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "leadgen-monitoring",
+      "target": "agents-sentinel-memory"
+    },
+    {
+      "source": "leadgen-monitoring",
+      "target": "agents-lumen-memory"
+    },
+    {
+      "source": "leadgen-monitoring",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "leadgen-monitoring",
+      "target": "operations-kpis"
+    },
+    {
+      "source": "leadgen-monitoring",
+      "target": "tech-infrastructure"
+    },
+    {
+      "source": "leadgen-pipeline-overview",
+      "target": "leadgen-sources-linkedin"
+    },
+    {
+      "source": "leadgen-pipeline-overview",
+      "target": "leadgen-sources-web"
+    },
+    {
+      "source": "leadgen-pipeline-overview",
+      "target": "prospects-pipeline"
+    },
+    {
+      "source": "leadgen-pipeline-overview",
+      "target": "agents-scout-memory"
+    },
+    {
+      "source": "leadgen-pipeline-overview",
+      "target": "agents-aria-memory"
+    },
+    {
+      "source": "leadgen-sources-web",
+      "target": "security-access-control"
+    },
+    {
+      "source": "leadgen-sources-web",
+      "target": "leadgen-sources-linkedin"
+    },
+    {
       "source": "operations-daily-digest",
       "target": "operations-decisions"
     },
@@ -693,6 +1207,14 @@
     {
       "source": "operations-kpis",
       "target": "tech-infrastructure"
+    },
+    {
+      "source": "operations-kpis",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "operations-kpis",
+      "target": "prospects-pipeline"
     },
     {
       "source": "operations-runbooks",
@@ -707,12 +1229,48 @@
       "target": "campaigns-google-ads"
     },
     {
+      "source": "prospects-pipeline",
+      "target": "leadgen-sources-linkedin"
+    },
+    {
+      "source": "prospects-pipeline",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "prospects-pipeline",
+      "target": "leadgen-cleaning-gmt"
+    },
+    {
+      "source": "prospects-pipeline",
+      "target": "leadgen-monitoring"
+    },
+    {
       "source": "security-access-control",
       "target": "tech-infrastructure"
     },
     {
       "source": "security-access-control",
       "target": "operations-decisions"
+    },
+    {
+      "source": "tech-code-repository",
+      "target": "tech-data-schemas"
+    },
+    {
+      "source": "tech-code-repository",
+      "target": "tech-infrastructure"
+    },
+    {
+      "source": "tech-code-repository",
+      "target": "tech-integrations"
+    },
+    {
+      "source": "tech-code-repository",
+      "target": "leadgen-pipeline-overview"
+    },
+    {
+      "source": "tech-data-schemas",
+      "target": "leadgen-cleaning-rules"
     },
     {
       "source": "tech-infrastructure",
@@ -725,22 +1283,48 @@
     {
       "source": "tech-integrations",
       "target": "operations-decisions"
+    },
+    {
+      "source": "tech-integrations",
+      "target": "leadgen-enrichment-phantom"
+    },
+    {
+      "source": "tech-integrations",
+      "target": "leadgen-cleaning-gmt"
+    },
+    {
+      "source": "tech-integrations",
+      "target": "operations-kpis"
+    },
+    {
+      "source": "tech-integrations",
+      "target": "agents-nexus-memory"
+    },
+    {
+      "source": "tech-integrations",
+      "target": "crm-hubspot-properties"
+    },
+    {
+      "source": "tech-integrations",
+      "target": "leadgen-pipeline-overview"
     }
   ],
-  "generated": "2026-03-27T15:27:16.977971Z",
+  "generated": "2026-03-28T09:09:23.026292Z",
   "stats": {
-    "total_nodes": 26,
-    "total_edges": 66,
+    "total_nodes": 39,
+    "total_edges": 144,
     "types": [
-      "campaigns",
-      "agent",
+      "index",
       "security",
       "content",
-      "tech",
-      "index",
+      "leadgen",
       "operations",
+      "campaigns",
+      "agent",
+      "tech",
       "prospects",
-      "business"
+      "business",
+      "crm"
     ]
   }
 }

@@ -4,64 +4,84 @@ id: index
 type: index
 tags: [index, hub, system]
 agents: [all]
-updated: 2026-03-27
+updated: 2026-03-28
 ---
 
-# VAULT-INDEX -- Centre de Connaissance
+# VAULT-INDEX -- Second Cerveau
 
-> Base de connaissance vivante du systeme multi-agents. **Lire ce fichier en debut de chaque session.**
-> Chaque agent enrichit ce vault apres chaque run. Le graph est visible dans le dashboard -- onglet Graph.
+> Base de connaissance vivante du systeme multi-agents et du pipeline lead generation.
+> **Lire ce fichier en debut de chaque session.** Chaque agent enrichit ce vault apres chaque run.
+> Le graph est visible dans Obsidian (Cmd+Shift+G) et dans le dashboard -- onglet Graph.
 
 ---
 
-## Business
+## Business & Strategie
 
-- [[business/vision]] -- Vision & Mission de l'entreprise
-- [[business/strategy]] -- Strategie business actuelle
-- [[business/roadmap]] -- Roadmap & priorites
+- [[business/vision]] -- Vision, mission, ICP, proposition de valeur EMAsphere
+- [[business/strategy]] -- Strategie CRM & Marketing Digital 2026
+- [[business/roadmap]] -- Roadmap 4 phases & jalons cles
 
-## Prospects & CRM
+## Lead Generation Pipeline
 
-- [[prospects/pipeline]] -- Pipeline leads actif (Scout + Aria)
+- [[leadgen/pipeline-overview]] -- Vue d'ensemble end-to-end du pipeline
+- [[leadgen/sources-linkedin]] -- Sources LinkedIn Sales Navigator
+- [[leadgen/sources-web]] -- Sources web alternatives (EasyScraper, Trendstop, Moulinette)
+- [[leadgen/enrichment-phantom]] -- Extraction PhantomBuster (API v2, rate limits)
+- [[leadgen/enrichment-fullenrich]] -- Enrichissement FullEnrich (email, phone, company)
+- [[leadgen/cleaning-rules]] -- 22 regles de nettoyage Contact & Company (P0-P3)
+- [[leadgen/cleaning-gmt]] -- GMT Google Sheet hub de nettoyage & bases de donnees
+- [[leadgen/monitoring]] -- Monitoring pipeline, alertes, health checks
+
+## CRM -- HubSpot
+
+- [[crm/hubspot-properties]] -- 36 proprietes (21 Contact + 15 Company), mapping & enums
+- [[crm/hubspot-api]] -- API integration, endpoints, rate limits, stubs
+- [[crm/hubspot-backlog]] -- 16 taches d'optimisation CRM (Q1-Q4 2026)
+
+## Prospects & Funnel
+
+- [[prospects/pipeline]] -- Funnel de qualification (Lead → MQL → SQL → Client)
 
 ## Campagnes Marketing
 
-- [[campaigns/google-ads]] -- Etat campagnes Google Ads (Nexus)
+- [[campaigns/google-ads]] -- Campagnes Google Ads EMAsphere (Customer ID: 7251903503)
 
 ## Operations
 
-- [[operations/daily-digest]] -- Digest email du jour (Iris)
+- [[operations/daily-digest]] -- Digest email quotidien (Iris)
 - [[operations/decisions]] -- Decisions d'architecture & strategiques
 - [[operations/runbooks]] -- Procedures operationnelles standard
-- [[operations/kpis]] -- Metriques et KPIs systeme
+- [[operations/kpis]] -- KPIs systeme, pipeline, business & health checks
 
 ## Contenu
 
-- [[content/social-media]] -- Strategie contenu & idees
+- [[content/social-media]] -- Strategie contenu & reseaux sociaux
 - [[content/brand-voice]] -- Brand voice & ton editorial
 - [[content/editorial-calendar]] -- Calendrier editorial
 
 ## Technique
 
-- [[tech/infrastructure]] -- Architecture & infrastructure
-- [[tech/integrations]] -- Integrations & APIs externes
+- [[tech/infrastructure]] -- Architecture multi-agents & infrastructure
+- [[tech/integrations]] -- Integrations API (MCP, PhantomBuster, FullEnrich, Sheets)
+- [[tech/data-schemas]] -- Schemas Zod & TypeScript (7 schemas de validation)
+- [[tech/code-repository]] -- Repository lead-pipeline (structure, stubs, lookup data)
 
 ## Securite
 
-- [[security/access-control]] -- Controle d'acces & politique de securite
+- [[security/access-control]] -- Controle d'acces agents & politique de securite
 
 ## Memoire Agents
 
 - [[agents/dispatch-log]] -- Dispatch : historique orchestrations
-- [[agents/nexus-memory]] -- Nexus : patterns ads, historique optimisations
+- [[agents/nexus-memory]] -- Nexus : patterns Google Ads, historique optimisations
 - [[agents/iris-memory]] -- Iris : profils expediteurs, patterns email
 - [[agents/scout-memory]] -- Scout : sources web validees, patterns scraping
-- [[agents/sage-memory]] -- Sage : ameliorations, skills candidats
-- [[agents/forge-memory]] -- Forge : patterns dev, fichiers critiques
-- [[agents/sentinel-memory]] -- Sentinel : QA, tests, couverture
+- [[agents/sage-memory]] -- Sage : ameliorations, skills candidats, prompt engineering
+- [[agents/forge-memory]] -- Forge : patterns dev, fichiers critiques, stack
+- [[agents/sentinel-memory]] -- Sentinel : QA, tests, couverture, regressions
 - [[agents/ralph-memory]] -- Ralph : automatisations, crons, webhooks
 - [[agents/lumen-memory]] -- Lumen : analyses, insights accumules
-- [[agents/aria-memory]] -- Aria : leads, enrichissement, CRM
+- [[agents/aria-memory]] -- Aria : leads, enrichissement, CRM, RGPD
 
 ---
 
@@ -70,20 +90,21 @@ updated: 2026-03-27
 ```
 Agents actifs : Orchestrator, Iris, Scout, Aria, Nexus, Sage, Ralph, Forge, Sentinel, Lumen
 Repo GitHub   : GaspardCoche/agent-system
-Dashboard     : GitHub Pages (https://gaspardcoche.github.io/agent-system/)
+Dashboard     : https://gaspardcoche.github.io/agent-system/
 Vault         : docs/vault/ (ce repertoire)
-Obsidian      : Ouvrir docs/vault/ comme vault Obsidian
+Obsidian      : Ouvrir docs/vault/ comme vault dans l'app Obsidian
+Lead Pipeline : hwinssinger/lead-pipeline (TypeScript, 16 stubs a remplacer)
 ```
 
 ## Comment utiliser ce vault
 
 | Qui | Quand | Quoi |
 |-----|-------|------|
-| **Agents** | Debut de chaque tache | Lire INDEX + fichier memoire de l'agent |
-| **Agents** | Fin de chaque run | Mettre a jour le(s) fichier(s) concerne(s) |
+| **Agents** | Debut de chaque tache | Lire INDEX + fichier memoire de l'agent + fichiers pertinents |
+| **Agents** | Fin de chaque run | Mettre a jour le(s) fichier(s) concerne(s) + retrospective |
 | **Toi** | Session de travail | Lire INDEX pour contexte complet |
-| **Toi** | Revue hebdo | Ouvrir dans Obsidian, explorer le graph |
-| **Sage** | Dimanche | Analyser vault, proposer ameliorations |
+| **Toi** | Revue hebdo | Ouvrir dans Obsidian, explorer le graph (Cmd+Shift+G) |
+| **Sage** | Dimanche | Analyser vault, proposer ameliorations de prompts et skills |
 
 ---
 
@@ -91,11 +112,11 @@ Obsidian      : Ouvrir docs/vault/ comme vault Obsidian
 
 | Agent | Dernier run | Statut |
 |-------|------------|--------|
-| Nexus | 2026-03-24 | Audit dry-run termine |
-| Sage | 2026-03-24 | Weekly run termine |
-| Iris | -- | A configurer (GMAIL_TOKEN_JSON) |
-| Scout | -- | A configurer (FIRECRAWL_API_KEY) |
-| Aria | -- | A configurer (FULLENRICH + HUBSPOT) |
+| Sage | 2026-03-27 | Weekly run termine (0 retrospectives, 4 skills valides) |
+| Nexus | 2026-03-24 | Audit dry-run termine (score 58/100) |
+| Iris | -- | En attente (GMAIL_TOKEN_JSON) |
+| Scout | -- | Operationnel (FIRECRAWL_API_KEY configure) |
+| Aria | -- | En attente (FULLENRICH + HUBSPOT) |
 | Forge | -- | Operationnel |
 | Sentinel | -- | Operationnel |
 | Ralph | -- | Operationnel |
@@ -107,10 +128,10 @@ Obsidian      : Ouvrir docs/vault/ comme vault Obsidian
 
 | Metrique | Valeur |
 |----------|--------|
-| Notes totales | 23 |
-| Categories | 7 (business, operations, campaigns, content, tech, security, agents) |
+| Notes totales | 36 |
+| Categories | 10 (business, leadgen, crm, prospects, campaigns, operations, content, tech, security, agents) |
 | Agents avec memoire | 10/10 |
-| Derniere mise a jour | 2026-03-27 |
+| Derniere mise a jour | 2026-03-28 |
 
 ---
 
