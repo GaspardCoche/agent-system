@@ -1,33 +1,91 @@
 {
-  "last_check": null,
-  "summary": "Health check pas encore lancé — run le workflow Health Check",
+  "last_check": "2026-03-28T06:42:57.862433+00:00",
+  "run_id": "23679583266",
+  "summary": "6 agents prêts, 4 partiels",
   "secrets": {
-    "CLAUDE_CODE_OAUTH_TOKEN": null,
-    "GEMINI_API_KEY": null,
-    "GMAIL_TOKEN_JSON": null,
-    "GMAIL_USER_EMAIL": null,
-    "INTERNAL_EMAIL_DOMAIN": null,
-    "FIRECRAWL_API_KEY": null,
-    "GOOGLE_SHEETS_TOKEN": null,
-    "FULLENRICH_API_KEY": null,
-    "HUBSPOT_API_KEY": null,
-    "GOOGLE_ADS_DEVELOPER_TOKEN": null,
-    "GOOGLE_ADS_CLIENT_ID": null,
-    "GOOGLE_ADS_CLIENT_SECRET": null,
-    "GOOGLE_ADS_REFRESH_TOKEN": null,
-    "GOOGLE_ADS_ACCOUNT_ID": null,
-    "SLACK_WEBHOOK_URL": null
+    "CLAUDE_CODE_OAUTH_TOKEN": true,
+    "GEMINI_API_KEY": true,
+    "GMAIL_TOKEN_JSON": false,
+    "GMAIL_USER_EMAIL": false,
+    "INTERNAL_EMAIL_DOMAIN": false,
+    "FIRECRAWL_API_KEY": true,
+    "GOOGLE_SHEETS_TOKEN": false,
+    "FULLENRICH_API_KEY": false,
+    "HUBSPOT_API_KEY": false,
+    "GOOGLE_ADS_DEVELOPER_TOKEN": false,
+    "GOOGLE_ADS_CLIENT_ID": false,
+    "GOOGLE_ADS_CLIENT_SECRET": false,
+    "GOOGLE_ADS_REFRESH_TOKEN": false,
+    "GOOGLE_ADS_ACCOUNT_ID": false,
+    "SLACK_WEBHOOK_URL": false
   },
   "agents": {
-    "orchestrator": { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "sage":         { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "ralph":        { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "forge":        { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "sentinel":     { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "lumen":        { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "iris":         { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "scout":        { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "aria":         { "status": "unknown", "missing_required": [], "missing_optional": [] },
-    "nexus":        { "status": "unknown", "missing_required": [], "missing_optional": [] }
+    "orchestrator": {
+      "status": "ready",
+      "missing_required": [],
+      "missing_optional": []
+    },
+    "sage": {
+      "status": "ready",
+      "missing_required": [],
+      "missing_optional": []
+    },
+    "ralph": {
+      "status": "ready",
+      "missing_required": [],
+      "missing_optional": []
+    },
+    "forge": {
+      "status": "ready",
+      "missing_required": [],
+      "missing_optional": []
+    },
+    "sentinel": {
+      "status": "ready",
+      "missing_required": [],
+      "missing_optional": []
+    },
+    "lumen": {
+      "status": "ready",
+      "missing_required": [],
+      "missing_optional": []
+    },
+    "iris": {
+      "status": "partial",
+      "missing_required": [
+        "GMAIL_TOKEN_JSON",
+        "GMAIL_USER_EMAIL"
+      ],
+      "missing_optional": [
+        "INTERNAL_EMAIL_DOMAIN"
+      ]
+    },
+    "scout": {
+      "status": "partial",
+      "missing_required": [],
+      "missing_optional": [
+        "GOOGLE_SHEETS_TOKEN"
+      ]
+    },
+    "aria": {
+      "status": "partial",
+      "missing_required": [
+        "FULLENRICH_API_KEY",
+        "HUBSPOT_API_KEY"
+      ],
+      "missing_optional": []
+    },
+    "nexus": {
+      "status": "partial",
+      "missing_required": [
+        "GOOGLE_ADS_DEVELOPER_TOKEN",
+        "GOOGLE_ADS_CLIENT_ID",
+        "GOOGLE_ADS_CLIENT_SECRET",
+        "GOOGLE_ADS_REFRESH_TOKEN"
+      ],
+      "missing_optional": [
+        "GOOGLE_ADS_ACCOUNT_ID"
+      ]
+    }
   }
 }
