@@ -4,12 +4,12 @@ id: agents-ralph-memory
 type: agent
 tags: [ralph, automation, webhooks, cron, memory]
 agents: [ralph]
-updated: 2026-03-27
+updated: 2026-03-28
 ---
 
 # Ralph -- Memoire & Automatisations
 
-*Lie a [[INDEX]], [[agents/dispatch-log]], [[operations/decisions]]*
+*Lie a [[INDEX]], [[agents/dispatch-log]], [[operations/decisions]], [[operations/agent-workflows]], [[operations/secrets-matrix]], [[leadgen/monitoring]]*
 
 > Ralph met a jour ce fichier apres chaque run d'automatisation.
 > **Lire pour connaitre les crons actifs et les webhooks configures.**
@@ -64,6 +64,34 @@ updated: 2026-03-27
 | Date | Erreur | Cause | Resolution |
 |------|--------|-------|-----------|
 | -- | -- | -- | -- |
+
+---
+
+## Chaine pipeline complete
+
+Voir [[operations/agent-workflows]] pour la documentation complete des chaines d'agents.
+
+Chaine leadgen : `Scout -> Aria -> Iris -> Dispatch (resume)`
+
+---
+
+## Repository dispatch events -- leadgen
+
+| Event type | Description | Agents declenches | Chaine |
+|-----------|-------------|-------------------|--------|
+| `scout-enrich` | Scout a termine l'extraction, lancer enrichissement | Aria | Scout -> Aria |
+| `aria-leads` | Aria a termine l'import CRM, leads prets pour outreach | Iris | Aria -> Iris |
+
+---
+
+## Monitoring workflow
+
+Voir [[leadgen/monitoring]] pour les metriques de sante des workflows leadgen.
+
+Verifications a effectuer :
+- Tous les secrets requis sont configures (voir [[operations/secrets-matrix]])
+- Les events `repository_dispatch` sont bien recus et traites
+- Les timeouts ne sont pas depasses
 
 ---
 

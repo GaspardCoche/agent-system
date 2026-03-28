@@ -4,12 +4,12 @@ id: agents-aria-memory
 type: agent
 tags: [aria, leads, crm, hubspot, fullenrich, memory]
 agents: [aria]
-updated: 2026-03-27
+updated: 2026-03-28
 ---
 
 # Aria -- Memoire & Leads
 
-*Lie a [[INDEX]], [[prospects/pipeline]], [[agents/scout-memory]]*
+*Lie a [[INDEX]], [[prospects/pipeline]], [[agents/scout-memory]], [[leadgen/pipeline-overview]], [[leadgen/geographic-hubs]], [[tech/data-schemas]]*
 
 > Aria met a jour ce fichier apres chaque enrichissement ou import CRM.
 > **Lire avant chaque run pour connaitre l'etat du pipeline et les doublons.**
@@ -77,6 +77,54 @@ Mode actuel      : dry_run (par defaut)
 | Date | Source | Contacts | Enrichis | Importes | Run ID |
 |------|--------|---------|---------|---------|--------|
 | -- | -- | -- | -- | -- | -- |
+
+---
+
+## Role dans le pipeline
+
+> Aria est **Stage 2-3** du pipeline leadgen : Enrichissement + Import CRM.
+> Recoit les leads bruts de [[agents/scout-memory|Scout]] (Stage 1), les enrichit et les importe dans HubSpot.
+
+---
+
+## Integration FullEnrich
+
+Voir [[leadgen/enrichment-fullenrich]] pour la configuration et les quotas.
+
+FullEnrich est utilise pour :
+- Verification et enrichissement d'emails professionnels
+- Recherche de numeros de telephone
+- Validation des profils LinkedIn
+
+---
+
+## Import HubSpot
+
+| Composant | Documentation |
+|-----------|---------------|
+| API HubSpot | [[crm/hubspot-api]] |
+| Proprietes custom | [[crm/hubspot-properties]] |
+
+---
+
+## Regles de nettoyage
+
+| Regle | Documentation |
+|-------|---------------|
+| Nettoyage general | [[leadgen/cleaning-rules]] |
+| Nettoyage GMT (noms, formats) | [[leadgen/cleaning-gmt]] |
+
+---
+
+## Lead scoring
+
+Voir [[leadgen/lead-scoring]] pour le detail des criteres et seuils.
+
+---
+
+## Routage geographique
+
+Voir [[leadgen/geographic-hubs]] pour les regles d'attribution par zone geographique (BE, FR, NL, DACH, etc.).
 
 ---
 

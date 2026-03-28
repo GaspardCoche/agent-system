@@ -20,6 +20,7 @@ updated: 2026-03-28
 - [[business/vision]] -- Vision, mission, ICP, proposition de valeur EMAsphere
 - [[business/strategy]] -- Strategie CRM & Marketing Digital 2026
 - [[business/roadmap]] -- Roadmap 4 phases & jalons cles
+- [[business/icp-personas]] -- ICP & 4 buyer personas detailles
 
 ## Lead Generation Pipeline
 
@@ -30,6 +31,8 @@ updated: 2026-03-28
 - [[leadgen/enrichment-fullenrich]] -- Enrichissement FullEnrich (email, phone, company)
 - [[leadgen/cleaning-rules]] -- 22 regles de nettoyage Contact & Company (P0-P3)
 - [[leadgen/cleaning-gmt]] -- GMT Google Sheet hub de nettoyage & bases de donnees
+- [[leadgen/lead-scoring]] -- Scoring composite 100pts (MQL>=60, SQL>=80)
+- [[leadgen/geographic-hubs]] -- 5 hubs geographiques & routing automatique
 - [[leadgen/monitoring]] -- Monitoring pipeline, alertes, health checks
 
 ## CRM -- HubSpot
@@ -37,6 +40,8 @@ updated: 2026-03-28
 - [[crm/hubspot-properties]] -- 36 proprietes (21 Contact + 15 Company), mapping & enums
 - [[crm/hubspot-api]] -- API integration, endpoints, rate limits, stubs
 - [[crm/hubspot-backlog]] -- 16 taches d'optimisation CRM (Q1-Q4 2026)
+- [[crm/hubspot-lifecycle]] -- 8 lifecycle stages & regles de transition
+- [[crm/hubspot-workflows]] -- Workflows d'attribution, lifecycle, data quality
 
 ## Prospects & Funnel
 
@@ -45,6 +50,7 @@ updated: 2026-03-28
 ## Campagnes Marketing
 
 - [[campaigns/google-ads]] -- Campagnes Google Ads EMAsphere (Customer ID: 7251903503)
+- [[campaigns/lemlist-sequences]] -- Sequences outreach Lemlist multilingues (FR/NL/EN)
 
 ## Operations
 
@@ -52,6 +58,8 @@ updated: 2026-03-28
 - [[operations/decisions]] -- Decisions d'architecture & strategiques
 - [[operations/runbooks]] -- Procedures operationnelles standard
 - [[operations/kpis]] -- KPIs systeme, pipeline, business & health checks
+- [[operations/agent-workflows]] -- Chaines d'agents & orchestration
+- [[operations/secrets-matrix]] -- 15 secrets GitHub, status & rotation
 
 ## Contenu
 
@@ -65,6 +73,8 @@ updated: 2026-03-28
 - [[tech/integrations]] -- Integrations API (MCP, PhantomBuster, FullEnrich, Sheets)
 - [[tech/data-schemas]] -- Schemas Zod & TypeScript (7 schemas de validation)
 - [[tech/code-repository]] -- Repository lead-pipeline (structure, stubs, lookup data)
+- [[tech/mcp-servers]] -- 10 serveurs MCP & configuration agents
+- [[tech/skills-registry]] -- 4 skills valides, cycle de vie MCP → Script
 
 ## Securite
 
@@ -128,8 +138,9 @@ Lead Pipeline : hwinssinger/lead-pipeline (TypeScript, 16 stubs a remplacer)
 
 | Metrique | Valeur |
 |----------|--------|
-| Notes totales | 36 |
-| Categories | 10 (business, leadgen, crm, prospects, campaigns, operations, content, tech, security, agents) |
+| Notes totales | 49 |
+| Connexions (edges) | 273 |
+| Categories | 11 (business, leadgen, crm, prospects, campaigns, operations, content, tech, security, agents, index) |
 | Agents avec memoire | 10/10 |
 | Derniere mise a jour | 2026-03-28 |
 

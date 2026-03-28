@@ -4,12 +4,12 @@ id: agents-sentinel-memory
 type: agent
 tags: [sentinel, qa, tests, coverage, memory]
 agents: [sentinel]
-updated: 2026-03-27
+updated: 2026-03-28
 ---
 
 # Sentinel -- Memoire & QA
 
-*Lie a [[INDEX]], [[agents/forge-memory]], [[operations/decisions]]*
+*Lie a [[INDEX]], [[agents/forge-memory]], [[operations/decisions]], [[tech/data-schemas]], [[leadgen/cleaning-rules]], [[tech/code-repository]]*
 
 > Sentinel met a jour ce fichier apres chaque cycle de tests.
 > **Lire pour connaitre l'etat de la qualite du systeme.**
@@ -62,6 +62,42 @@ updated: 2026-03-27
 - [ ] Dashboard charge sans erreur JS console
 - [ ] Tous les liens [[wikilink]] dans le vault resolvent
 - [ ] `agents.json` coherent avec les workflows existants
+
+---
+
+## Validation schemas pipeline
+
+Voir [[tech/data-schemas]] pour les schemas de validation des donnees du pipeline leadgen.
+
+Sentinel doit verifier la conformite des donnees a chaque etape :
+- Schema des leads bruts (sortie Scout)
+- Schema des leads enrichis (sortie FullEnrich)
+- Schema d'import HubSpot (entree Aria)
+
+---
+
+## Controles qualite donnees
+
+Voir [[leadgen/cleaning-rules]] pour les regles de nettoyage a valider.
+Voir [[leadgen/monitoring]] pour les metriques de qualite du pipeline.
+
+Controles a executer :
+- Emails professionnels uniquement (pas de @gmail, @yahoo, etc.)
+- Champs obligatoires remplis (nom, prenom, entreprise, email)
+- Format telephone international valide
+- Pas de doublons dans le batch
+
+---
+
+## Sante du pipeline
+
+Voir [[operations/kpis]] pour les KPIs de sante du pipeline leadgen.
+
+---
+
+## Tests du code repository
+
+Voir [[tech/code-repository]] (hwinssinger/lead-pipeline) pour les tests TypeScript a executer.
 
 ---
 

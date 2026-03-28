@@ -4,12 +4,12 @@ id: agents-dispatch-log
 type: agent
 tags: [dispatch, orchestration, routing, log]
 agents: [dispatch]
-updated: 2026-03-24
+updated: 2026-03-28
 ---
 
 # Dispatch — Journal d'Orchestration
 
-*Lié à [[INDEX]], [[operations/decisions]], [[agents/sage-memory]]*
+*Lie a [[INDEX]], [[operations/decisions]], [[agents/sage-memory]], [[operations/agent-workflows]], [[operations/secrets-matrix]], [[tech/skills-registry]]*
 
 > Journal de toutes les orchestrations effectuées par Dispatch.
 > **Lire pour comprendre le contexte des campagnes en cours et éviter les doublons.**
@@ -32,8 +32,9 @@ updated: 2026-03-24
 
 | Date | Task | Agents routés | Statut | Issue GitHub | Notes |
 |------|------|--------------|--------|-------------|-------|
-| 2026-03-24 | Audit Nexus dry_run | nexus | ✅ Complet | — | Premier run système |
-| — | — | — | — | — | — |
+| 2026-03-24 | Audit Nexus dry_run | nexus | Complet | -- | Premier run systeme |
+| 2026-03-27 | Sage analyse hebdo | sage | Complet | -- | 0 retrospectives, 4 skills valides |
+| -- | -- | -- | -- | -- | -- |
 
 ---
 
@@ -93,4 +94,24 @@ sentinel (tests) → sage (analyse) → forge (corrections) → sentinel (re-tes
 
 ---
 
-*Dispatch met à jour ce fichier après chaque orchestration.*
+## Documentation des chaines d'agents
+
+Voir [[operations/agent-workflows]] pour la documentation complete des chaines multi-agents.
+
+### Chaines leadgen actives
+
+| Chaine | Etapes | Trigger |
+|--------|--------|---------|
+| Lead Generation Complete | Scout -> Aria -> Iris -> Dispatch | `scout-enrich` / `aria-leads` |
+| Audit Marketing | Nexus + Scout -> Lumen -> Dispatch | Manuel |
+| Qualite Systeme | Sentinel -> Sage -> Forge -> Sentinel | Manuel / PR |
+
+---
+
+## Gestion des secrets
+
+Voir [[operations/secrets-matrix]] pour la matrice des secrets requis par agent et par workflow.
+
+---
+
+*Dispatch met a jour ce fichier apres chaque orchestration.*

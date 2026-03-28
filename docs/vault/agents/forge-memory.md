@@ -4,12 +4,12 @@ id: agents-forge-memory
 type: agent
 tags: [forge, code, development, memory, implementation]
 agents: [forge]
-updated: 2026-03-27
+updated: 2026-03-28
 ---
 
 # Forge -- Memoire & Patterns Dev
 
-*Lie a [[INDEX]], [[agents/sentinel-memory]], [[operations/decisions]]*
+*Lie a [[INDEX]], [[agents/sentinel-memory]], [[operations/decisions]], [[tech/code-repository]], [[tech/data-schemas]], [[leadgen/cleaning-rules]]*
 
 > Forge met a jour ce fichier apres chaque implementation.
 > **Lire avant chaque tache de code pour connaitre les patterns du projet.**
@@ -68,6 +68,34 @@ CI/CD          : GitHub Actions (reusable workflows)
 | Date | Tache | Fichiers modifies | Status | Run ID |
 |------|-------|------------------|--------|--------|
 | -- | -- | -- | -- | -- |
+
+---
+
+## Lead Pipeline -- Repo externe
+
+```
+Repository     : hwinssinger/lead-pipeline
+Language       : TypeScript ESM
+Status         : En cours d'implementation
+```
+
+### Stubs a remplacer (16 total)
+
+| Integration | Stubs | Fichiers concernes |
+|-------------|-------|--------------------|
+| PhantomBuster | 3 | Extraction LinkedIn, scraping profils, export listes |
+| FullEnrich | 3 | Enrichissement email, telephone, validation LinkedIn |
+| Google Sheets | 3 | Lecture source, ecriture resultats, sync bidirectionnelle |
+| HubSpot | 6 | Creation contacts, update proprietes, recherche doublons, import batch, lifecycle, associations |
+| MCP gender-detector | 1 | Detection genre a partir du prenom |
+
+Voir [[tech/code-repository]] pour les details du repo et [[tech/data-schemas]] pour les schemas de donnees.
+
+---
+
+## Skills a creer potentiellement
+
+Voir [[tech/skills-registry]] pour le registre des skills valides et candidats.
 
 ---
 

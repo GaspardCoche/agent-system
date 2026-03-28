@@ -4,12 +4,12 @@ id: agents-sage-memory
 type: agent
 tags: [sage, prompts, skills, memory, improvement]
 agents: [sage]
-updated: 2026-03-24
+updated: 2026-03-28
 ---
 
 # Sage — Mémoire & Améliorations
 
-*Lié à [[INDEX]], [[operations/decisions]], [[agents/dispatch-log]]*
+*Lie a [[INDEX]], [[operations/decisions]], [[agents/dispatch-log]], [[tech/skills-registry]], [[tech/mcp-servers]], [[operations/agent-workflows]]*
 
 > Sage est le cerveau méta-système. Il améliore les autres agents.
 > **Lire avant chaque run d'amélioration pour connaître l'état des optimisations passées.**
@@ -96,4 +96,28 @@ Voir `memory/lessons_learned.md` pour la liste complète.
 
 ---
 
-*Sage met à jour ce fichier après chaque analyse hebdomadaire.*
+## Gestion du registre de skills
+
+Voir [[tech/skills-registry]] pour le registre complet des skills valides et candidats.
+
+Sage est responsable de :
+- Analyser les `retrospective.mcp_patterns` de tous les agents
+- Identifier les patterns MCP recurrents a convertir en skills
+- Valider les skills candidats et les promouvoir en `validated`
+
+---
+
+## Patterns MCP du pipeline leadgen a surveiller
+
+| Pattern MCP | Agent source | Skill potentiel | Priorite |
+|------------|-------------|-----------------|----------|
+| `hubspot:batch_create:Nx` | Aria | `hubspot_batch_create` | Haute |
+| `phantombuster:launch:Nx` | Scout | `phantom_launch` | Haute |
+| `fullenrich:submit:Nx` | Aria | `fullenrich_submit` | Haute |
+
+Ces patterns doivent etre surveilles lors des analyses hebdomadaires.
+Des qu'un pattern depasse 3 occurrences, creer le skill correspondant.
+
+---
+
+*Sage met a jour ce fichier apres chaque analyse hebdomadaire.*

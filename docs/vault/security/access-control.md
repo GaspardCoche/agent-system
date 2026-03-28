@@ -3,7 +3,7 @@ title: Securite & Controle d'Acces
 id: security-access-control
 type: security
 tags: [security, access, secrets, permissions, audit]
-updated: 2026-03-27
+updated: 2026-03-28
 ---
 
 # Securite & Controle d'Acces
@@ -70,6 +70,61 @@ Actions soumises a approbation :
 
 ---
 
+## Conformite RGPD -- Donnees Leadgen
+
+> Ref : [[leadgen/sources-web]], [[leadgen/pipeline-overview]], [[crm/hubspot-api]]
+
+### Regles de scraping
+
+| Regle | Detail |
+|-------|--------|
+| **Verification robots.txt** | Obligatoire avant tout scraping. Si `Disallow`, ne pas scraper. |
+| **Verification ToS** | Verifier les conditions d'utilisation du site avant scraping. Pas de scraping si interdit. |
+| **Donnees publiques uniquement** | Ne scraper que des donnees accessibles publiquement (LinkedIn public, sites web entreprises) |
+| **Pas de scraping massif** | Respecter les rate limits, pas de requetes en rafale |
+| **Agent responsable** | Scout verifie la conformite avant chaque campagne de scraping |
+
+### Acces aux donnees leadgen par agent
+
+| Agent | Acces | Restrictions |
+|-------|-------|-------------|
+| **Aria** | Lecture + Ecriture CRM (HubSpot) | Seul agent autorise a ecrire dans le CRM. Toute ecriture soumise a approbation. |
+| **Lumen** | Lecture seule CRM (HubSpot) | Analyse et reporting uniquement. Aucune modification. |
+| **Scout** | Scraping web, enrichissement | Verification robots.txt/ToS obligatoire. Pas d'acces CRM direct. |
+| **Nexus** | Aucun acces leadgen | Scope limite a Google Ads |
+
+### FullEnrich -- Controle des credits
+
+| Regle | Detail |
+|-------|--------|
+| Budget cap par batch | Maximum 100 credits par batch d'enrichissement |
+| Monitoring | Suivi des credits consommes dans [[leadgen/monitoring]] |
+| Alerte seuil | Notification si > 80% du budget mensuel consomme |
+| Approbation | Batches > 50 credits necessitent le label `approved` |
+
+### PhantomBuster -- Rate limits
+
+| Regle | Detail |
+|-------|--------|
+| Enforcement | Rate limits configures au niveau de l'agent (Scout) |
+| LinkedIn scraping | Max 80 profils/jour pour eviter les restrictions LinkedIn |
+| Cooldown | Pause minimum de 5 secondes entre les requetes |
+| Slots | Respecter les limites de slots du plan PhantomBuster |
+
+### Retention des donnees personnelles (RGPD)
+
+| Type de donnee | Retention | Action a expiration |
+|----------------|-----------|---------------------|
+| Email professionnel | 12 mois apres dernier contact | Suppression ou anonymisation |
+| Telephone | 12 mois apres dernier contact | Suppression |
+| Profil LinkedIn (URL) | Illimite (donnee publique) | -- |
+| Nom / Prenom | 12 mois apres dernier contact | Anonymisation |
+| Donnees entreprise | Illimite (donnee publique) | -- |
+
+**Droit a l'oubli :** Toute demande de suppression doit etre traitee sous 30 jours. Aria supprime les donnees du CRM, Scout supprime les donnees des sources.
+
+---
+
 ## Incidents de securite
 
 | Date | Incident | Impact | Resolution |
@@ -77,5 +132,7 @@ Actions soumises a approbation :
 | -- | -- | -- | -- |
 
 ---
+
+*Lie a [[operations/secrets-matrix]], [[leadgen/sources-web]], [[crm/hubspot-api]]*
 
 *Dispatch et Sage mettent a jour ce fichier. Lire avant tout changement d'acces.*
