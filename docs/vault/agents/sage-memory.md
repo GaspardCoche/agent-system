@@ -4,7 +4,7 @@ id: agents-sage-memory
 type: agent
 tags: [sage, prompts, skills, memory, improvement]
 agents: [sage]
-updated: 2026-03-28
+updated: 2026-03-29
 ---
 
 # Sage — Mémoire & Améliorations
@@ -19,11 +19,12 @@ updated: 2026-03-28
 ## État du système
 
 ```
-Dernière analyse    : 2026-03-24
+Dernière analyse    : 2026-03-29
 Skills validés      : 4 (firecrawl_scrape, github_create_issue, gemini_analyze, slack_notify)
 Skills candidats    : 0
 Prompts améliorés   : 0
-Prochaine analyse   : Dimanche 2026-03-31
+Prochaine analyse   : Dimanche 2026-04-05
+Alerte active       : Pipeline collecte rétrospectives cassée (2 semaines consécutives)
 ```
 
 ---
@@ -74,9 +75,11 @@ Voir `memory/lessons_learned.md` pour la liste complète.
 
 ## Analyse hebdomadaire — Dernière
 
-| Semaine | Agents analysés | Patterns trouvés | Skills créés | Prompts améliorés |
-|---------|----------------|-----------------|-------------|------------------|
-| 2026-03-24 | 1 (nexus dry_run) | 0 | 0 | 0 |
+| Semaine | Agents analysés | Patterns trouvés | Skills créés | Prompts améliorés | Notes |
+|---------|----------------|-----------------|-------------|------------------|-------|
+| 2026-03-24 | 1 (nexus dry_run) | 0 | 0 | 0 | — |
+| 2026-03-27 | 0 (rétros vides) | 0 | 0 | 0 | Collecte artifacts KO |
+| 2026-03-29 | 0 (rétros vides) | 0 | 0 | 0 | Iris ran, collecte KO (2e semaine) |
 
 ---
 
@@ -92,7 +95,9 @@ Voir `memory/lessons_learned.md` pour la liste complète.
 
 | Date | Type | Résumé | Run ID |
 |------|------|--------|--------|
-| — | — | — | — |
+| 2026-03-24 | weekly | Analyse 1 rétro (Nexus), 0 skills, 0 PRs | — |
+| 2026-03-27 | weekly | 0 rétros (collecte KO), maintenance | 23653853117 |
+| 2026-03-29 | weekly | 0 rétros (Iris ran, collecte KO), alerte pipeline | 23706128370 |
 
 ---
 

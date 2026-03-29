@@ -92,6 +92,32 @@ if missing or not account_id:
 
 ---
 
+## 2026-03-29 — Iris : agent actif mais retrospective non collectée (2ème semaine consécutive)
+
+**Problème :** Iris (Email Agent) a tourné avec succès le 2026-03-28 mais aucune rétrospective n'a été capturée dans `all_retrospectives.json`. Même constat la semaine précédente (2026-03-27).
+
+**Contexte :** Le workflow `Email Agent (Daily Digest)` réussit (`conclusion: success`) mais n'uploade pas d'artifact de rétrospective, ou le collecteur en amont du workflow Sage ne récupère pas les artifacts de ces runs.
+
+**Diagnostic à effectuer :**
+1. Vérifier que le workflow Iris contient bien un step `upload-artifact` pour `/tmp/agent_result.json`
+2. Vérifier que le collecteur Sage cherche bien les artifacts de TOUS les workflows agents (pas seulement certains noms)
+3. Vérifier la rétention des artifacts (défaut GitHub : 90 jours, mais le collecteur peut avoir une fenêtre trop courte)
+
+**Solution recommandée :** Ajouter dans chaque workflow agent un step explicite :
+```yaml
+- name: Upload retrospective
+  if: always()
+  uses: actions/upload-artifact@v4
+  with:
+    name: retrospective-${{ github.run_id }}
+    path: /tmp/agent_result.json
+    retention-days: 7
+```
+
+**Agents concernés :** Iris, et potentiellement tous les agents actifs
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
