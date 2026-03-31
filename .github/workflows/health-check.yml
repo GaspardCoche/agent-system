@@ -94,14 +94,24 @@ jobs:
 
           ready = sum(1 for a in agents.values() if a["status"] == "ready")
           partial = sum(1 for a in agents.values() if a["status"] == "partial")
+          not_configured = sum(1 for a in agents.values() if a["status"] == "not_configured")
 
           health = {
               "last_check": datetime.now(timezone.utc).isoformat(),
               "run_id": os.environ.get("GITHUB_RUN_ID", ""),
-              "summary": f"{ready} agents prêts, {partial} partiels",
+              "summary": f"{ready} agents prêts, {partial} partiels, {not_configured} non configurés",
               "secrets": secrets,
               "agents": agents,
+              "warnings": [],
           }
+
+          # Flag agents with partial config that won't produce useful output
+          if not secrets.get("GMAIL_TOKEN_JSON"):
+              health["warnings"].append("Iris: Gmail non configuré — digest limité aux actualités IA")
+          if not secrets.get("GOOGLE_ADS_DEVELOPER_TOKEN"):
+              health["warnings"].append("Nexus: Google Ads non configuré — rapports en mode template uniquement")
+          if not secrets.get("FULLENRICH_API_KEY") or not secrets.get("HUBSPOT_API_KEY"):
+              health["warnings"].append("Aria: FullEnrich/HubSpot non configuré — lead gen désactivée")
 
           os.makedirs("docs/data", exist_ok=True)
           with open("docs/data/health.json", "w") as f:
@@ -139,17 +149,37 @@ jobs:
 
           health = json.load(open("docs/data/health.json"))
           not_ready = [(n, a) for n, a in health["agents"].items() if a["status"] == "not_configured"]
+          partial = [(n, a) for n, a in health["agents"].items() if a["status"] == "partial"]
+          warnings = health.get("warnings", [])
 
-          if not not_ready:
+          if not not_ready and not partial:
               print("All agents configured ✅")
               exit(0)
 
           lines = ["## ⚠️ Health Check — Agents non configurés\n"]
           lines.append(f"**{health['summary']}** — {health['last_check'][:10]}\n")
-          lines.append("| Agent | Secrets manquants |")
-          lines.append("|-------|------------------|")
-          for name, info in not_ready:
-              lines.append(f"| {name} | `{'`, `'.join(info['missing_required'])}` |")
+
+          if not_ready:
+              lines.append("### Non configurés")
+              lines.append("| Agent | Secrets manquants |")
+              lines.append("|-------|------------------|")
+              for name, info in not_ready:
+                  lines.append(f"| {name} | `{'`, `'.join(info['missing_required'])}` |")
+
+          if partial:
+              lines.append("\n### Partiels (fonctionnent en mode dégradé)")
+              lines.append("| Agent | Secrets requis manquants | Secrets optionnels manquants |")
+              lines.append("|-------|------------------------|------------------------------|")
+              for name, info in partial:
+                  req = '`, `'.join(info['missing_required']) if info['missing_required'] else '—'
+                  opt = '`, `'.join(info['missing_optional']) if info['missing_optional'] else '—'
+                  lines.append(f"| {name} | `{req}` | `{opt}` |")
+
+          if warnings:
+              lines.append("\n### Avertissements")
+              for w in warnings:
+                  lines.append(f"- {w}")
+
           lines.append(f"\n> Ajouter les secrets manquants dans [GitHub Settings](https://github.com/{os.environ['REPO']}/settings/secrets/actions)")
 
           body = "\n".join(lines)

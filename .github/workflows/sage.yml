@@ -37,43 +37,78 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python3 << 'PYEOF'
-          import subprocess, json, os
+          import subprocess, json, os, glob
           from datetime import datetime, timedelta
 
-          # Récupérer les artifacts des 7 derniers jours
+          repo = os.environ.get("GITHUB_REPOSITORY", "")
+          since = (datetime.utcnow() - timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+          # Step 1: Cross-check — list agent runs from last 7 days
+          runs_result = subprocess.run(
+              ["gh", "run", "list", "--limit", "50", "--json", "databaseId,name,status,conclusion,createdAt",
+               "--repo", repo],
+              capture_output=True, text=True
+          )
+          try:
+              all_runs = json.loads(runs_result.stdout or "[]")
+              # Filter to last 7 days, exclude health-check/vault-sync/deploy
+              skip_workflows = {"Health Check", "Vault Sync", "Deploy Dashboard to GitHub Pages", "Agent Tester (PR)"}
+              recent_agent_runs = [
+                  r for r in all_runs
+                  if r.get("createdAt", "") >= since and r.get("name", "") not in skip_workflows
+              ]
+          except Exception:
+              recent_agent_runs = []
+
+          print(f"Found {len(recent_agent_runs)} agent runs in last 7 days")
+          for r in recent_agent_runs[:10]:
+              print(f"  - {r.get('name', '?')} ({r.get('conclusion', '?')}) {r.get('createdAt', '?')[:10]}")
+
+          # Step 2: Collect artifacts with retrospectives
           result = subprocess.run(
-              ["gh", "api", f"repos/{os.environ.get('GITHUB_REPOSITORY','')}/actions/artifacts",
-               "--jq", ".artifacts[] | select(.name | startswith(\"agent-result\")) | .id"],
+              ["gh", "api", f"repos/{repo}/actions/artifacts",
+               "--jq", '.artifacts[] | select(.name | startswith("agent-result")) | select(.expired == false) | .id'],
               capture_output=True, text=True
           )
 
-          artifact_ids = result.stdout.strip().split("\n")[:20]  # max 20
+          artifact_ids = [aid for aid in result.stdout.strip().split("\n") if aid.strip()][:20]
+          print(f"Found {len(artifact_ids)} non-expired agent-result artifacts")
 
           retrospectives = []
           for artifact_id in artifact_ids:
-              if not artifact_id:
-                  continue
-              # Télécharger et parser
-              dl = subprocess.run(
-                  ["gh", "api", f"repos/{os.environ.get('GITHUB_REPOSITORY','')}/actions/artifacts/{artifact_id}/zip",
-                   "--output", f"/tmp/artifact_{artifact_id}.zip"],
-                  capture_output=True
-              )
-              # Extraire et lire le JSON
-              subprocess.run(["unzip", "-o", f"/tmp/artifact_{artifact_id}.zip",
-                              "-d", f"/tmp/artifact_{artifact_id}/"], capture_output=True)
-
-              import glob
-              for json_file in glob.glob(f"/tmp/artifact_{artifact_id}/**/*.json", recursive=True):
-                  try:
+              try:
+                  dl = subprocess.run(
+                      ["gh", "api", f"repos/{repo}/actions/artifacts/{artifact_id}/zip",
+                       "--output", f"/tmp/artifact_{artifact_id}.zip"],
+                      capture_output=True, timeout=30
+                  )
+                  subprocess.run(["unzip", "-o", f"/tmp/artifact_{artifact_id}.zip",
+                                  "-d", f"/tmp/artifact_{artifact_id}/"], capture_output=True)
+                  for json_file in glob.glob(f"/tmp/artifact_{artifact_id}/**/*.json", recursive=True):
                       data = json.load(open(json_file))
                       if "retrospective" in data:
                           retrospectives.append(data)
-                  except Exception:
-                      pass
+              except Exception as e:
+                  print(f"  Warning: failed to process artifact {artifact_id}: {e}")
 
-          json.dump(retrospectives, open("/tmp/all_retrospectives.json", "w"), indent=2)
-          print(f"Collected {len(retrospectives)} retrospectives")
+          # Step 3: Diagnostic — if runs found but no retrospectives, flag pipeline issue
+          diagnostic = {
+              "agent_runs_count": len(recent_agent_runs),
+              "artifacts_found": len(artifact_ids),
+              "retrospectives_collected": len(retrospectives),
+              "pipeline_status": "ok",
+          }
+          if recent_agent_runs and not retrospectives:
+              diagnostic["pipeline_status"] = "broken"
+              diagnostic["warning"] = "Agent runs detected but 0 retrospectives collected — artifacts may have expired or agents did not write retrospective field"
+              print(f"\n⚠️  PIPELINE ISSUE: {diagnostic['warning']}")
+          elif not recent_agent_runs:
+              diagnostic["pipeline_status"] = "idle"
+              print("\nNo agent runs this week — system idle")
+
+          output = {"retrospectives": retrospectives, "diagnostic": diagnostic}
+          json.dump(output, open("/tmp/all_retrospectives.json", "w"), indent=2)
+          print(f"\nCollected {len(retrospectives)} retrospectives (pipeline: {diagnostic['pipeline_status']})")
           PYEOF
 
       - name: Write MCP config
@@ -110,7 +145,11 @@ jobs:
           prompt: |
             Read agent_prompts/sage.md.
             Task is in /tmp/agent_task.json.
-            Retrospectives are in /tmp/all_retrospectives.json.
+            Retrospectives and diagnostics are in /tmp/all_retrospectives.json (keys: "retrospectives", "diagnostic").
+            Check diagnostic.pipeline_status first:
+            - If "broken": investigate why artifacts are missing (check retention-days, upload-artifact steps). Add findings to lessons_learned.md.
+            - If "idle": note system inactivity, still check skills and lessons.
+            - If "ok": proceed with full analysis.
             Execute the weekly self-improvement cycle:
             1. Analyze retrospectives and MCP patterns
             2. Update skills/registry.json with new candidates

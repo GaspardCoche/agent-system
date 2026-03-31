@@ -49,6 +49,7 @@ jobs:
 
       - name: Run Sentinel agent (Claude)
         uses: anthropics/claude-code-action@v1
+        continue-on-error: true
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -58,6 +59,14 @@ jobs:
             PR: #${{ github.event.pull_request.number }}
             1. Get changed files: Bash("git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD")
             2. Run the test suite.
-            3. Write results to /tmp/agent_result.json.
+            3. Write results to /tmp/agent_result.json (include a "retrospective" field).
             4. Post a summary comment on the PR.
           claude_args: ${{ env.CLAUDE_ARGS }}
+
+      - name: Upload result artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-result-sentinel-${{ github.run_id }}
+          path: /tmp/agent_result.json
+          retention-days: 7

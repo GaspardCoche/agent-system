@@ -13,6 +13,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: orchestrator-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: false
+
 jobs:
   gate:
     runs-on: ubuntu-latest
@@ -134,7 +138,7 @@ jobs:
         with:
           name: dispatch-plan-${{ github.run_id }}
           path: /tmp/dispatch_plan.json
-          retention-days: 1
+          retention-days: 7
 
   # ── Parallel phase ──────────────────────────────────────────────────────────
 
@@ -232,7 +236,7 @@ jobs:
         with:
           name: agent-result-coder-${{ github.run_id }}
           path: /tmp/agent_result.json
-          retention-days: 1
+          retention-days: 7
 
   run-tester:
     needs: run-coder
@@ -321,6 +325,7 @@ jobs:
           echo "CLAUDE_ARGS=--max-turns 3 --allowedTools Bash,Read,mcp__github__add_issue_comment --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Post final summary (Claude)
+        if: github.event.issue.number || github.event.pull_request.number
         uses: anthropics/claude-code-action@v1
         continue-on-error: true
         with:
@@ -343,21 +348,15 @@ jobs:
           REPO: ${{ github.repository }}
           RUN_ID: ${{ github.run_id }}
         run: |
-          EMOJI=$([ "$STATUS" = "success" ] && echo "✅" || [ "$STATUS" = "partial" ] && echo "⚠️" || echo "❌")
           RUN_URL="https://github.com/$REPO/actions/runs/$RUN_ID"
-          PAYLOAD=$(python3 -c "
-          import json, os
-          payload = {
-            'text': f\"{os.environ['EMOJI']} *Orchestrator* — {os.environ['TITLE']}\",
-            'blocks': [
-              {'type': 'section', 'text': {'type': 'mrkdwn',
-                'text': f\"{os.environ['EMOJI']} *Orchestrator* [{os.environ['STATUS']}]\n{os.environ['TITLE']}\"}},
-              {'type': 'section', 'fields': [
-                {'type': 'mrkdwn', 'text': f\"*Repo*\n{os.environ['REPO']}\"},
-                {'type': 'mrkdwn', 'text': f\"*Run*\n<{os.environ['RUN_URL']}|#{os.environ['RUN_ID']}>\"}
-              ]}
-            ]
-          }
-          print(json.dumps(payload))
-          " EMOJI="$EMOJI" STATUS="$STATUS" TITLE="$TITLE" REPO="$REPO" RUN_URL="$RUN_URL" RUN_ID="$RUN_ID")
-          curl -s -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"
+          python3 << 'PYEOF'
+          import json, os, subprocess
+          status = os.environ["STATUS"]
+          title = os.environ["TITLE"]
+          run_url = os.environ["RUN_URL"]
+          run_id = os.environ["RUN_ID"]
+          emoji = {"success": "✅", "partial": "⚠️"}.get(status, "❌")
+          payload = json.dumps({"text": f"{emoji} *Orchestrator* [{status}] — {title} · <{run_url}|Run #{run_id}>"})
+          subprocess.run(["curl", "-s", "-X", "POST", "-H", "Content-type: application/json",
+                          "--data", payload, os.environ["SLACK_WEBHOOK_URL"]])
+          PYEOF

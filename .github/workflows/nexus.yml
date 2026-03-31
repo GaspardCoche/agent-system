@@ -44,12 +44,42 @@ jobs:
 
       - run: pip install requests google-ads google-genai -q
 
+      - name: Pre-flight credential check
+        id: preflight
+        env:
+          GOOGLE_ADS_DEVELOPER_TOKEN: ${{ secrets.GOOGLE_ADS_DEVELOPER_TOKEN }}
+          GOOGLE_ADS_CLIENT_ID: ${{ secrets.GOOGLE_ADS_CLIENT_ID }}
+          GOOGLE_ADS_CLIENT_SECRET: ${{ secrets.GOOGLE_ADS_CLIENT_SECRET }}
+          GOOGLE_ADS_REFRESH_TOKEN: ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
+          GOOGLE_ADS_ACCOUNT_ID: ${{ secrets.GOOGLE_ADS_ACCOUNT_ID }}
+        run: |
+          python3 << 'PYEOF'
+          import os
+          required = ["GOOGLE_ADS_DEVELOPER_TOKEN", "GOOGLE_ADS_CLIENT_ID",
+                      "GOOGLE_ADS_CLIENT_SECRET", "GOOGLE_ADS_REFRESH_TOKEN"]
+          missing = [s for s in required if not os.environ.get(s)]
+          account_id = os.environ.get("GOOGLE_ADS_ACCOUNT_ID", "")
+          if missing:
+              print(f"⚠️  Missing required secrets: {', '.join(missing)}")
+              print("Nexus will run in TEMPLATE mode (no real Google Ads data)")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("credentials_ok=false\n")
+                  f.write(f"missing_secrets={','.join(missing)}\n")
+          else:
+              print(f"✅ All Google Ads credentials present (account: {account_id or 'not set'})")
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("credentials_ok=true\n")
+                  f.write("missing_secrets=\n")
+          PYEOF
+
       - name: Build Nexus task
         run: |
           python3 << 'PYEOF'
           import json, os
 
           event_name = os.environ.get("GITHUB_EVENT_NAME", "workflow_dispatch")
+          credentials_ok = os.environ.get("CREDENTIALS_OK", "false") == "true"
+          missing_secrets = os.environ.get("MISSING_SECRETS", "")
 
           if event_name == "repository_dispatch":
               payload = json.loads(os.environ.get("CLIENT_PAYLOAD", "{}"))
@@ -69,10 +99,13 @@ jobs:
               "dry_run": dry_run,
               "date_range": "last_30_days",
               "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+              "credentials_ok": credentials_ok,
+              "missing_secrets": missing_secrets,
           }
 
           json.dump(task, open("/tmp/agent_task.json", "w"), indent=2)
-          print(f"Nexus task: account={account_id}, type={report_type}, dry_run={dry_run}")
+          mode = "LIVE" if credentials_ok else "TEMPLATE (credentials missing)"
+          print(f"Nexus task: account={account_id}, type={report_type}, dry_run={dry_run}, mode={mode}")
           PYEOF
         env:
           ACCOUNT_ID: ${{ inputs.account_id || '' }}
@@ -80,6 +113,8 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run || 'true' }}
           DEFAULT_ACCOUNT_ID: ${{ secrets.GOOGLE_ADS_ACCOUNT_ID }}
           CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+          CREDENTIALS_OK: ${{ steps.preflight.outputs.credentials_ok }}
+          MISSING_SECRETS: ${{ steps.preflight.outputs.missing_secrets }}
 
       - name: Write MCP config
         run: |
@@ -99,7 +134,9 @@ jobs:
           prompt: |
             Read agent_prompts/nexus.md.
             Task is in /tmp/agent_task.json.
-            Execute the Google Ads audit and optimization cycle.
+            IMPORTANT: Check task.credentials_ok first.
+            - If false: generate a template report clearly marked as TEMPLATE MODE. List missing secrets in the report. Do NOT waste turns trying API calls that will fail.
+            - If true: execute the full Google Ads audit and optimization cycle.
             If dry_run=true, only generate the audit report and preview.
             Always post a preview comment before applying changes.
             Write results to /tmp/agent_result.json.

@@ -84,32 +84,8 @@ jobs:
 
       - name: Write MCP config
         run: |
-          cat > /tmp/mcp-config.json << 'MCPEOF'
-          {
-            "mcpServers": {
-              "filesystem": {
-                "command": "npx",
-                "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/runner/work"],
-                "env": {}
-              },
-              "github": {
-                "command": "npx",
-                "args": ["-y", "@modelcontextprotocol/server-github"],
-                "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "GH_PLACEHOLDER"}
-              },
-              "firecrawl": {
-                "command": "npx",
-                "args": ["-y", "firecrawl-mcp"],
-                "env": {"FIRECRAWL_API_KEY": "FIRECRAWL_PLACEHOLDER"}
-              },
-              "memory": {
-                "command": "npx",
-                "args": ["-y", "@modelcontextprotocol/server-memory"],
-                "env": {}
-              }
-            }
-          }
-          MCPEOF
+          printf '{"mcpServers":{"filesystem":{"command":"npx","args":["-y","@modelcontextprotocol/server-filesystem","/home/runner/work"],"env":{}},"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"GH_PLACEHOLDER"}},"firecrawl":{"command":"npx","args":["-y","firecrawl-mcp"],"env":{"FIRECRAWL_API_KEY":"FIRECRAWL_PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
+            > /tmp/mcp-config.json
           sed -i "s/GH_PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
           sed -i "s/FIRECRAWL_PLACEHOLDER/${{ secrets.FIRECRAWL_API_KEY }}/g" /tmp/mcp-config.json
 
@@ -147,7 +123,7 @@ jobs:
         with:
           name: agent-result-scout-${{ github.run_id }}
           path: /tmp/agent_result.json
-          retention-days: 3
+          retention-days: 7
 
       - name: Generate report + update dashboard
         if: always()

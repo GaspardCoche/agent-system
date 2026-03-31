@@ -130,7 +130,7 @@ jobs:
         with:
           name: agent-result-aria-${{ github.run_id }}
           path: /tmp/agent_result.json
-          retention-days: 3
+          retention-days: 7
 
       - name: Generate report + update dashboard
         if: always()

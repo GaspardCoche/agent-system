@@ -62,16 +62,7 @@ Dans le script : `if [[ "$EXTRA" == "none" || -z "$EXTRA" ]]; then ...`
 
 **Contexte :** L'agent découvre les credentials manquants en cours d'exécution (lors des appels API), ce qui consomme des turns inutilement et produit un rapport template trompeur.
 
-**Solution :** Ajouter une validation pre-flight au début de la tâche Nexus :
-```python
-required_secrets = ["GOOGLE_ADS_DEVELOPER_TOKEN", "GOOGLE_ADS_CLIENT_ID",
-                    "GOOGLE_ADS_REFRESH_TOKEN"]
-missing = [s for s in required_secrets if not os.environ.get(s)]
-if missing or not account_id:
-    result = {"status": "failed", "summary": f"Credentials manquants: {missing}"}
-    json.dump(result, open("/tmp/agent_result.json", "w"))
-    sys.exit(0)
-```
+**Solution :** Pre-flight credential check ajouté dans `nexus.yml` (step `preflight`). Le champ `task.credentials_ok` est passé à l'agent qui adapte son comportement (template vs live). **CORRIGÉ le 2026-03-31.**
 
 **Agents concernés :** Nexus (pattern applicable à tout agent dépendant de credentials externes)
 
@@ -83,10 +74,7 @@ if missing or not account_id:
 
 **Contexte :** Le collecteur d'artifacts GitHub Actions peut échouer silencieusement si les runs précédents n'ont pas uploadé d'artifacts (retention expirée, upload-artifact raté, etc.).
 
-**Solution :** Sage doit distinguer les deux cas :
-1. Vérifier si des workflows agents ont tourné cette semaine via `gh run list`
-2. Si runs trouvés mais retrospectives vides → alerter (pipeline collecte cassée)
-3. Si aucun run → confirmer l'absence d'activité
+**Solution :** Cross-check implémenté dans `sage.yml` : le collecteur utilise `gh run list` pour vérifier les runs agents de la semaine et compare avec les artifacts trouvés. Le champ `diagnostic.pipeline_status` (ok/broken/idle) est passé à l'agent. **CORRIGÉ le 2026-03-31.**
 
 **Agents concernés :** Sage (workflow de collecte)
 
@@ -96,25 +84,57 @@ if missing or not account_id:
 
 **Problème :** Iris (Email Agent) a tourné avec succès le 2026-03-28 mais aucune rétrospective n'a été capturée dans `all_retrospectives.json`. Même constat la semaine précédente (2026-03-27).
 
-**Contexte :** Le workflow `Email Agent (Daily Digest)` réussit (`conclusion: success`) mais n'uploade pas d'artifact de rétrospective, ou le collecteur en amont du workflow Sage ne récupère pas les artifacts de ces runs.
+**Cause racine identifiée :** Deux problèmes combinés :
+1. La rétention des artifacts était à **1 jour** dans la plupart des workflows. Sage tourne le **dimanche** — les artifacts de la semaine étaient déjà expirés.
+2. Le workflow `agent-tester.yml` (Sentinel sur PRs) n'avait **pas de step upload-artifact** du tout.
+3. L'Email Agent multi-jobs uploadait les artifacts intermédiaires (raw-emails, triage) à 1 jour, donc inaccessibles à Sage.
 
-**Diagnostic à effectuer :**
-1. Vérifier que le workflow Iris contient bien un step `upload-artifact` pour `/tmp/agent_result.json`
-2. Vérifier que le collecteur Sage cherche bien les artifacts de TOUS les workflows agents (pas seulement certains noms)
-3. Vérifier la rétention des artifacts (défaut GitHub : 90 jours, mais le collecteur peut avoir une fenêtre trop courte)
+**Solution appliquée (2026-03-31) :**
+- Rétention des artifacts passée à **7 jours** dans tous les workflows : `_reusable-claude.yml`, `orchestrator.yml`, `email-agent.yml`, `scout.yml`, `aria.yml`, `agent-tester.yml`
+- Step `upload-artifact` ajouté à `agent-tester.yml`
+- Collecteur Sage amélioré avec cross-check `gh run list` et filtre `expired == false`
 
-**Solution recommandée :** Ajouter dans chaque workflow agent un step explicite :
-```yaml
-- name: Upload retrospective
-  if: always()
-  uses: actions/upload-artifact@v4
-  with:
-    name: retrospective-${{ github.run_id }}
-    path: /tmp/agent_result.json
-    retention-days: 7
-```
+**Agents concernés :** Tous
 
-**Agents concernés :** Iris, et potentiellement tous les agents actifs
+---
+
+## 2026-03-31 — Orchestrator : startup_failure et schedule sans issue/PR
+
+**Problème 1 :** L'orchestrateur (cron lundi-vendredi 8h) a échoué avec `startup_failure` à son premier run. Aucun log disponible — GitHub rejette le workflow avant de créer les jobs.
+
+**Cause possible :** Combinaison complexe de YAML (Python inline dans Slack notification, heredocs, expressions imbriquées) que le validateur GitHub peut rejeter.
+
+**Solution :** Simplifié la notification Slack (Python heredoc propre au lieu de `$()` inline), ajouté un concurrency group, nettoyé le code.
+
+**Problème 2 :** L'aggregate job tentait de poster un commentaire sur `github.event.issue.number || github.event.pull_request.number` même sur un trigger `schedule` (où aucun des deux n'existe).
+
+**Solution :** Ajouté `if: github.event.issue.number || github.event.pull_request.number` sur le step "Post final summary".
+
+**Agents concernés :** Orchestrator
+
+---
+
+## 2026-03-31 — Firecrawl : 402 Payment Required sur toutes les sources
+
+**Problème :** Le secret `FIRECRAWL_API_KEY` est configuré mais l'API retourne 402 sur toutes les sources d'actualités IA (Anthropic, OpenAI, etc.).
+
+**Cause :** Compte Firecrawl ayant dépassé son quota ou sans forfait actif.
+
+**Impact :** Email Agent ne peut pas scraper les news IA — digest vide dans la section IA.
+
+**Solution appliquée :** Ajouté `continue-on-error: true` et un fallback JSON si le scraping échoue. L'agent génère quand même un digest (limité aux emails si Gmail configuré).
+
+**Action manuelle requise :** Vérifier le compte Firecrawl (billing, quota).
+
+---
+
+## 2026-03-31 — Heredocs YAML dans GitHub Actions : indentation et parsing
+
+**Problème :** Les heredocs multi-lignes (JSON MCP config) dans les blocs `run: |` créent du JSON indenté. Bien que fonctionnel en théorie (JSON ignore les espaces), cela ajoute de la complexité et peut causer des edge cases avec `sed` sur du contenu multi-ligne.
+
+**Solution :** Standardiser sur `printf '...' > file` en une ligne (JSON compact) pour les MCP configs simples. Réserver les heredocs uniquement pour le contenu réellement multi-ligne (scripts Python).
+
+**Agents concernés :** `_reusable-claude.yml`, `scout.yml` (corrigés)
 
 ---
 
