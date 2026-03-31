@@ -3,7 +3,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-minimal:
-    uses: ./.github/workflows/_test-minimal-reusable.yml
+  test-real:
+    uses: ./.github/workflows/_reusable-claude.yml
     with:
-      message: "hello world"
+      agent_role: sentinel
+      task_json: '{"task_id":"test","instruction":"Echo hello"}'
+      max_turns: "3"
+      allowed_tools: "none"
+    secrets: inherit
