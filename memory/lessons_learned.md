@@ -102,9 +102,11 @@ Dans le script : `if [[ "$EXTRA" == "none" || -z "$EXTRA" ]]; then ...`
 
 **Problème 1 :** L'orchestrateur (cron lundi-vendredi 8h) a échoué avec `startup_failure` à son premier run. Aucun log disponible — GitHub rejette le workflow avant de créer les jobs.
 
-**Cause possible :** Combinaison complexe de YAML (Python inline dans Slack notification, heredocs, expressions imbriquées) que le validateur GitHub peut rejeter.
+**Cause racine identifiée :** Le bloc `permissions:` dans `_reusable-claude.yml` (workflow_call) provoque un `startup_failure` chez TOUS les callers. **GitHub Actions ne permet pas de definir `permissions` dans un reusable workflow** — elles doivent etre declarees cote caller.
 
-**Solution :** Simplifié la notification Slack (Python heredoc propre au lieu de `$()` inline), ajouté un concurrency group, nettoyé le code.
+**Solution :** Supprime `permissions` de `_reusable-claude.yml`, ajoute `permissions: {contents: write, pull-requests: write, issues: write}` dans chaque job caller : `orchestrator.yml` (run-researcher, run-analyzer, run-tester), `ralph.yml` (run-agent). **CORRIGE le 2026-03-31 — verifie en production.**
+
+Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 **Problème 2 :** L'aggregate job tentait de poster un commentaire sur `github.event.issue.number || github.event.pull_request.number` même sur un trigger `schedule` (où aucun des deux n'existe).
 
