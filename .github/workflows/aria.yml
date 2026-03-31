@@ -96,10 +96,17 @@ jobs:
           CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
 
       - name: Write MCP config
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
-            > /tmp/mcp-config.json
-          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {
+            'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}},
+            'memory': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-memory'], 'env': {}}
+          }}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
 
       - name: Install MCP servers
         run: npm install -g @modelcontextprotocol/server-github @modelcontextprotocol/server-memory
@@ -164,6 +171,7 @@ jobs:
           fi
           git add docs/reports/ docs/data/runs.json docs/data/graph.json docs/vault/ 2>/dev/null || true
           git diff --cached --quiet || git commit -m "report: aria $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
+          git pull --rebase origin main 2>/dev/null || true
           git push
 
       - name: Send Slack notification

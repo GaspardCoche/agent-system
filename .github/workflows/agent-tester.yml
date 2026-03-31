@@ -38,10 +38,16 @@ jobs:
         run: npm install -g @modelcontextprotocol/server-github
 
       - name: Write MCP config
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}}}}' \
-            > /tmp/mcp-config.json
-          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {
+            'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}}
+          }}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
 
       - name: Build claude_args
         run: |

@@ -184,3 +184,37 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 **Solution :** Utiliser `gh auth token` pour obtenir le token OAuth de session (qui a déjà `workflow` scope si authentifié via `gh auth login --scopes workflow`).
 
 ---
+
+## 2026-03-31 — Git push race condition dans les workflows CI
+
+**Probleme :** `git push` echoue avec `non-fast-forward` quand plusieurs workflows commettent sur main en parallele (orchestrator aggregate, sage, health-check, etc.).
+
+**Cause :** Le checkout est fait en debut de job. Si un autre workflow pousse entre le checkout et le push, le repo local est en retard.
+
+**Solution :** Ajouter `git pull --rebase origin main 2>/dev/null || true` avant chaque `git push` dans tous les workflows qui commettent. **CORRIGE le 2026-03-31** dans : orchestrator, sage, nexus, email-agent, scout, aria, ralph, health-check, vault-sync.
+
+**Agents concernes :** Tous (pattern dans chaque workflow ayant un step "Commit")
+
+---
+
+## 2026-03-31 — MCP config : sed injection avec secrets
+
+**Probleme :** `sed -i "s/PLACEHOLDER/${{ secrets.TOKEN }}/g"` casse si le secret contient `/`, `&`, ou `\` (caracteres speciaux sed). Risque de fuite de secret dans les logs en cas d'erreur.
+
+**Solution :** Remplacer par Python `json.dump` avec `os.environ` :
+```yaml
+- name: Write MCP config
+  env:
+    GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
+  run: |
+    python3 -c "
+    import json, os
+    cfg = {'mcpServers': {'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}}}}
+    json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+    "
+```
+**CORRIGE le 2026-03-31** dans tous les workflows.
+
+**Agents concernes :** Tous
+
+---

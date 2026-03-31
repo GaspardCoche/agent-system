@@ -222,6 +222,7 @@ def main():
     docs_reports.mkdir(parents=True, exist_ok=True)
     now = datetime.now(timezone.utc)
     slug = re.sub(r'[^a-zA-Z0-9-]', '-', args.title.lower())[:50].strip('-') if args.title else args.run_id
+    slug = slug or "untitled"
     filename = f"{now.strftime('%Y-%m-%d')}-{args.workflow}-{slug}.md"
     report_path = docs_reports / filename
     report_path.write_text(md)

@@ -97,10 +97,17 @@ jobs:
         run: printf '%s' "$TASK_JSON" > /tmp/agent_task.json
 
       - name: Write MCP config
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
-            > /tmp/mcp-config.json
-          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {
+            'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}},
+            'memory': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-memory'], 'env': {}}
+          }}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
 
       - name: Build claude_args
         run: |
@@ -215,10 +222,18 @@ jobs:
             @modelcontextprotocol/server-memory
 
       - name: Write MCP config
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          printf '{"mcpServers":{"filesystem":{"command":"npx","args":["-y","@modelcontextprotocol/server-filesystem","/home/runner/work"],"env":{}},"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
-            > /tmp/mcp-config.json
-          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {
+            'filesystem': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-filesystem', '/home/runner/work'], 'env': {}},
+            'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}},
+            'memory': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-memory'], 'env': {}}
+          }}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
 
       - name: Build claude_args
         run: |
@@ -321,16 +336,23 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/reports/ docs/data/runs.json reports/
           git diff --cached --quiet || git commit -m "report: orchestrator run ${{ github.run_id }} [${{ steps.status.outputs.overall }}]"
+          git pull --rebase origin main 2>/dev/null || true
           git push
 
       - name: Install MCP servers
         run: npm install -g @modelcontextprotocol/server-github
 
       - name: Write MCP config
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          printf '{"mcpServers":{"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"PLACEHOLDER"}}}}' \
-            > /tmp/mcp-config.json
-          sed -i "s/PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {
+            'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}}
+          }}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
 
       - name: Build claude_args
         run: |

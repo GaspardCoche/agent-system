@@ -83,11 +83,20 @@ jobs:
           CLIENT_PAYLOAD: ${{ toJSON(github.event.client_payload) }}
 
       - name: Write MCP config
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
+          FIRECRAWL_KEY_MCP: ${{ secrets.FIRECRAWL_API_KEY }}
         run: |
-          printf '{"mcpServers":{"filesystem":{"command":"npx","args":["-y","@modelcontextprotocol/server-filesystem","/home/runner/work"],"env":{}},"github":{"command":"npx","args":["-y","@modelcontextprotocol/server-github"],"env":{"GITHUB_PERSONAL_ACCESS_TOKEN":"GH_PLACEHOLDER"}},"firecrawl":{"command":"npx","args":["-y","firecrawl-mcp"],"env":{"FIRECRAWL_API_KEY":"FIRECRAWL_PLACEHOLDER"}},"memory":{"command":"npx","args":["-y","@modelcontextprotocol/server-memory"],"env":{}}}}' \
-            > /tmp/mcp-config.json
-          sed -i "s/GH_PLACEHOLDER/${{ secrets.GITHUB_TOKEN }}/g" /tmp/mcp-config.json
-          sed -i "s/FIRECRAWL_PLACEHOLDER/${{ secrets.FIRECRAWL_API_KEY }}/g" /tmp/mcp-config.json
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {
+            'filesystem': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-filesystem', '/home/runner/work'], 'env': {}},
+            'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}},
+            'firecrawl': {'command': 'npx', 'args': ['-y', 'firecrawl-mcp'], 'env': {'FIRECRAWL_API_KEY': os.environ.get('FIRECRAWL_KEY_MCP', '')}},
+            'memory': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-memory'], 'env': {}}
+          }}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
 
       - name: Install MCP servers
         run: |
@@ -156,6 +165,7 @@ jobs:
           fi
           git add docs/reports/ docs/data/runs.json docs/data/graph.json docs/vault/ reports/
           git diff --cached --quiet || git commit -m "report: scout run ${{ github.run_id }}"
+          git pull --rebase origin main 2>/dev/null || true
           git push
 
       - name: Send Slack notification

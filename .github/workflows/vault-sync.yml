@@ -57,6 +57,7 @@ jobs:
             NODES=$(python3 -c "import json; g=json.load(open('docs/data/graph.json')); print(g['stats']['total_nodes'])")
             EDGES=$(python3 -c "import json; g=json.load(open('docs/data/graph.json')); print(g['stats']['total_edges'])")
             git commit -m "chore: rebuild knowledge graph — ${NODES} nodes, ${EDGES} edges [skip ci]"
+            git pull --rebase origin main 2>/dev/null || true
             git push
             echo "✅ Graph committed and pushed"
           fi

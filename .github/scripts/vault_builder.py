@@ -23,7 +23,7 @@ TYPE_COLORS = {
     "index":      "#e8e84a",
     "business":   "#58a6ff",
     "leadgen":    "#2ea043",
-    "crm":        "#4177232",
+    "crm":        "#417723",
     "prospects":  "#3fb950",
     "campaigns":  "#ffa657",
     "operations": "#bc8cff",
@@ -75,11 +75,7 @@ def extract_wikilinks(content: str) -> list[str]:
 
 def normalize_id(path_or_id: str) -> str:
     """Normalize a wikilink target to a node ID."""
-    # Strip .md extension
-    s = path_or_id.rstrip(".md")
-    if s.endswith(".m"):
-        s = s[:-2]
-    # Remove .md properly
+    s = path_or_id
     if s.endswith(".md"):
         s = s[:-3]
     # Convert path separators to dashes

@@ -23,7 +23,8 @@ def load_retrospectives(directory: str) -> list[dict]:
                 continue
             fpath = os.path.join(root, fname)
             try:
-                data = json.load(open(fpath))
+                with open(fpath) as fh:
+                    data = json.load(fh)
                 if isinstance(data, list):
                     for item in data:
                         if "retrospective" in item:
@@ -43,7 +44,9 @@ def analyze_patterns(retrospectives: list[dict]) -> dict[str, int]:
         for pattern in mcp_patterns:
             parts = pattern.split(":")
             if len(parts) >= 3:
-                tool, context, count_str = parts[0], parts[1], parts[2].rstrip("x")
+                tool = parts[0]
+                count_str = parts[-1].rstrip("x")
+                context = ":".join(parts[1:-1])
                 try:
                     count = int(count_str)
                 except ValueError:
@@ -56,7 +59,8 @@ def analyze_patterns(retrospectives: list[dict]) -> dict[str, int]:
 def update_registry(registry_path: str, new_candidates: dict[str, int], threshold: int = 3) -> dict:
     """Met à jour le registry avec les nouveaux candidats."""
     if os.path.exists(registry_path):
-        registry = json.load(open(registry_path))
+        with open(registry_path) as fh:
+            registry = json.load(fh)
     else:
         registry = {"version": "1.0", "skills": [], "validation_threshold": {}}
 
