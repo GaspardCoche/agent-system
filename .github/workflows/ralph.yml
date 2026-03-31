@@ -90,6 +90,10 @@ jobs:
 
   run-agent:
     needs: route
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     uses: ./.github/workflows/_reusable-claude.yml
     with:
       agent_role: ${{ needs.route.outputs.target_agent }}

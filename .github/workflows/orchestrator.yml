@@ -144,6 +144,10 @@ jobs:
 
   run-researcher:
     needs: orchestrate
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     uses: ./.github/workflows/_reusable-claude.yml
     with:
       agent_role: researcher
@@ -154,6 +158,10 @@ jobs:
 
   run-analyzer:
     needs: orchestrate
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     uses: ./.github/workflows/_reusable-claude.yml
     with:
       agent_role: lumen
@@ -241,6 +249,10 @@ jobs:
   run-tester:
     needs: run-coder
     if: always() && needs.run-coder.result == 'success'
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     uses: ./.github/workflows/_reusable-claude.yml
     with:
       agent_role: sentinel
