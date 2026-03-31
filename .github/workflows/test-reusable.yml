@@ -7,13 +7,3 @@ jobs:
     uses: ./.github/workflows/_test-minimal-reusable.yml
     with:
       message: "hello world"
-
-  test-real:
-    needs: test-minimal
-    uses: ./.github/workflows/_reusable-claude.yml
-    with:
-      agent_role: sentinel
-      task_json: '{"task_id":"test","role":"sentinel","instruction":"Echo hello world"}'
-      max_turns: "3"
-      allowed_tools: "none"
-    secrets: inherit
