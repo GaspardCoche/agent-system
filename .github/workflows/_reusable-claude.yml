@@ -20,5 +20,9 @@ on:
 jobs:
   run_agent:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     steps:
       - run: echo "Hello from ${{ inputs.agent_role }}"
