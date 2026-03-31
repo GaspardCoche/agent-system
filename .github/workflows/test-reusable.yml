@@ -3,7 +3,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-minimal:
+    uses: ./.github/workflows/_test-minimal-reusable.yml
+    with:
+      message: "hello world"
+
+  test-real:
+    needs: test-minimal
     uses: ./.github/workflows/_reusable-claude.yml
     with:
       agent_role: sentinel
