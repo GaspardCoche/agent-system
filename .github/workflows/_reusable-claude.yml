@@ -20,16 +20,5 @@ on:
 jobs:
   run_agent:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      issues: write
-
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Echo inputs
-        run: |
-          echo "agent_role=${{ inputs.agent_role }}"
-          echo "max_turns=${{ inputs.max_turns }}"
-          echo "allowed_tools=${{ inputs.allowed_tools }}"
+      - run: echo "Hello from ${{ inputs.agent_role }}"
