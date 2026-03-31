@@ -4,9 +4,14 @@ on:
 
 jobs:
   test-real:
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     uses: ./.github/workflows/_reusable-claude.yml
     with:
       agent_role: sentinel
       task_json: '{"task_id":"test","instruction":"Echo hello"}'
       max_turns: "3"
       allowed_tools: "none"
+    secrets: inherit
