@@ -19,12 +19,14 @@ updated: 2026-03-29
 ## État du système
 
 ```
-Dernière analyse    : 2026-03-29
+Dernière analyse    : 2026-04-05
 Skills validés      : 4 (firecrawl_scrape, github_create_issue, gemini_analyze, slack_notify)
 Skills candidats    : 0
 Prompts améliorés   : 0
-Prochaine analyse   : Dimanche 2026-04-05
-Alerte active       : Pipeline collecte rétrospectives cassée (2 semaines consécutives)
+Prochaine analyse   : Dimanche 2026-04-12
+Alerte active       : Pipeline collecte rétrospectives cassée (3 semaines consécutives)
+Actions requises    : (1) Ajouter upload agent-result-iris dans email-agent.yml
+                      (2) Ajouter retrospective field dans _reusable-claude.yml prompt
 ```
 
 ---
@@ -98,6 +100,7 @@ Voir `memory/lessons_learned.md` pour la liste complète.
 | 2026-03-24 | weekly | Analyse 1 rétro (Nexus), 0 skills, 0 PRs | — |
 | 2026-03-27 | weekly | 0 rétros (collecte KO), maintenance | 23653853117 |
 | 2026-03-29 | weekly | 0 rétros (Iris ran, collecte KO), alerte pipeline | 23706128370 |
+| 2026-04-05 | weekly | 0 rétros (32 runs, 3 artifacts, 0 retrospective field) — 2 root causes documentées | 23998816293 |
 
 ---
 

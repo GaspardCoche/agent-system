@@ -139,7 +139,7 @@ Lead Pipeline : hwinssinger/lead-pipeline (TypeScript, 16 stubs a remplacer)
 
 | Agent | Dernier run | Statut |
 |-------|------------|--------|
-| Sage | 2026-03-29 | Weekly run termine (0 retrospectives, alerte pipeline collecte KO 2e semaine) |
+| Sage | 2026-04-05 | Weekly run terminé (0 retrospectives, 3e semaine, root causes identifiées — fix requis email-agent.yml + reusable) |
 | Nexus | 2026-03-24 | Audit dry-run termine (score 58/100) |
 | Iris | -- | En attente (GMAIL_TOKEN_JSON) |
 | Scout | -- | Operationnel (FIRECRAWL_API_KEY configure) |
