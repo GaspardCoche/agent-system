@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-03-28
+updated: 2026-04-06
 ---
 
 # Nexus — Mémoire & Patterns
@@ -49,6 +49,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 | Mots-clés négatifs manquants | Élevé | Très fréquent | — |
 | Enchères mobile surestimées | Moyen | Fréquent | — |
 | RSA assets < 5 | Moyen | Fréquent | — |
+| Extensions incomplètes (sitelinks/callouts) | Moyen | Fréquent | — |
 
 ---
 
@@ -56,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-04-06 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (2e run consécutif) | #24025730664 |
 | 2026-03-24 | dry_run | 58/100 | Template — compte non configuré | #23487432218 |
 
 ---
@@ -78,8 +80,14 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 ## Prochains runs planifiés
 
-- [ ] Relancer après configuration GOOGLE_ADS_DEVELOPER_TOKEN
+- [ ] Configurer les 4 secrets Google Ads (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN)
+- [ ] Relancer après configuration pour obtenir un audit réel
 - [ ] Audit hebdo : chaque lundi 6h UTC (à configurer dans nexus.yml)
+
+## Note escalade
+
+> 2026-04-06 : **2e run consécutif en template mode** (2026-03-24 + 2026-04-06).
+> Suggéré : alerter via Iris si configuration non faite après 3 runs template consécutifs.
 
 ---
 
