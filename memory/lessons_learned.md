@@ -161,6 +161,26 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 ---
 
+## 2026-04-12 — Pipeline rétrospectives cassée : 4ème semaine consécutive (fixes appliqués)
+
+**Problème :** 23 runs agent détectés, 6 artifacts trouvés, **0 rétrospectives collectées**. Quatrième semaine consécutive avec `pipeline_status: broken`. Les deux causes racines identifiées le 2026-04-05 n'avaient pas encore été corrigées.
+
+**Causes racines (confirmées) :**
+
+1. **`email-agent.yml` post-digest job** : Aucun artifact `agent-result-iris-*` uploadé. Le job triage écrit `/tmp/email_triage.json` mais pas `/tmp/agent_result.json`. Le collecteur Sage filtre uniquement sur `startswith("agent-result")` → Iris complètement invisible.
+
+2. **`_reusable-claude.yml` prompt** : Le prompt ne mentionne pas explicitement le champ `retrospective`. Les agents écrivent bien `/tmp/agent_result.json` mais sans ce champ → collecteur ignore l'artifact même s'il existe.
+
+**Solutions appliquées (2026-04-12) :**
+- `email-agent.yml` : Ajout steps `Write Iris result artifact` + `Upload Iris result artifact` (retention-days: 7) dans `post-digest`. Génère `/tmp/iris_result.json` synthétique avec `retrospective` basé sur les outputs du job.
+- `_reusable-claude.yml` : Prompt mis à jour pour documenter explicitement la structure JSON requise incluant le champ `retrospective`, avec un message IMPORTANT.
+
+**Règle :** Tout workflow appelant un agent Claude (direct ou via reusable) DOIT uploader un artifact `agent-result-<agent>-<run_id>` contenant le champ `retrospective`. Sans ça, Sage est aveugle.
+
+**Agents concernés :** Iris (urgent, corrigé), tous via reusable workflow (corrigé).
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
