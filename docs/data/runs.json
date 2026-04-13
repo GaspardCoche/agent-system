@@ -592,5 +592,28 @@
       }
     ],
     "report_file": "reports/2026-04-13-nexus-nexus-weekly-audit-2026-04-13.md"
+  },
+  {
+    "run_id": "24337089640",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "24337089640",
+    "summary": "Santé système 2026-04-13 : 1 anomalie identifiée (Sage max_turns). Secrets : 15/15 présents. Artifacts fix 2026-04-12 : confirmé opérationnel. 6/10 ag",
+    "next_actions": [
+      "Augmenter max_turns Sage de 15 à 20-25 dans .github/workflows/sage.yml",
+      "Mettre à jour actions GitHub (checkout, setup-python, upload-artifact) vers versions Node.js 24 avant juin 2026",
+      "Prochain run Sage : dimanche 2026-04-19"
+    ],
+    "timestamp": "2026-04-13T10:01:09.120042+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-04-13-orchestrator-scheduled-run.md"
   }
 ]
