@@ -567,5 +567,30 @@
     "timestamp": "2026-04-13T09:19:27.223854+00:00",
     "agents": [],
     "report_file": "reports/2026-04-13-email-agent-daily-digest-2026-04-13.md"
+  },
+  {
+    "run_id": "24335871573",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-04-13",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false (3e run consécutif). Secrets manquants : GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECR",
+    "next_actions": [
+      "Configurer GOOGLE_ADS_DEVELOPER_TOKEN dans GaspardCoche/agent-system > Settings > Secrets",
+      "Configurer GOOGLE_ADS_CLIENT_ID dans GaspardCoche/agent-system > Settings > Secrets",
+      "Configurer GOOGLE_ADS_CLIENT_SECRET dans GaspardCoche/agent-system > Settings > Secrets",
+      "Configurer GOOGLE_ADS_REFRESH_TOKEN dans GaspardCoche/agent-system > Settings > Secrets",
+      "Relancer Nexus après configuration pour obtenir un audit réel"
+    ],
+    "timestamp": "2026-04-13T09:27:18.264102+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-04-13-nexus-nexus-weekly-audit-2026-04-13.md"
   }
 ]
