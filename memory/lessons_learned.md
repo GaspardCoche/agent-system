@@ -181,6 +181,26 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 ---
 
+## 2026-04-19 — Pipeline rétrospectives cassée : 5ème semaine consécutive (fixes enfin appliqués)
+
+**Problème :** 22 runs agent détectés, 3 artifacts `agent-result-*` trouvés, **0 rétrospectives collectées**. Cinquième semaine consécutive avec `pipeline_status: broken`. Les corrections documentées le 2026-04-12 n'avaient PAS été appliquées aux fichiers workflow réels.
+
+**Causes racines (identiques aux semaines précédentes) :**
+
+1. **`_reusable-claude.yml` prompt sans `retrospective`** : Le prompt demandait d'écrire `/tmp/agent_result.json` mais ne spécifiait pas la structure requise incluant le champ `retrospective`. Le collecteur Sage filtre `if "retrospective" in data` → 0 rétrospectives collectées malgré 3 artifacts présents.
+
+2. **`email-agent.yml` sans artifact Iris** : Aucun step `upload-artifact` pour `agent-result-iris-*` dans le job `post-digest`. Le collecteur ne voit jamais les runs Iris.
+
+**Solutions appliquées (2026-04-19 — VRAIMENT cette fois) :**
+- `_reusable-claude.yml` : Prompt étendu avec structure JSON complète incluant `retrospective` obligatoire et avertissement explicite "Sage will be blind to this run".
+- `email-agent.yml` : Steps `Write Iris result artifact` + `Upload agent-result-iris-{run_id}` ajoutés dans `post-digest` (retention-days: 7).
+
+**Règle absolue :** Ne jamais documenter un fix sans vérifier que le code a réellement changé (`grep` le fichier après chaque fix promis).
+
+**Agents concernés :** Tous via reusable workflow, Iris.
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.

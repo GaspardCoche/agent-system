@@ -746,5 +746,28 @@
     "timestamp": "2026-04-18T10:07:45.687760+00:00",
     "agents": [],
     "report_file": "reports/2026-04-18-email-agent-daily-digest-2026-04-18.md"
+  },
+  {
+    "run_id": "24626141019",
+    "workflow": "sage",
+    "title": "Sage Weekly 2026-04-19",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "Pipeline broken for 5th consecutive week. Root cause confirmed: (1) _reusable-claude.yml prompt did not mention 'retrospective' field — 3 artifacts ex",
+    "next_actions": [
+      "Monitor next week: pipeline_status should be 'ok' with retrospectives collected",
+      "If still broken: check if workflows ran with new code (check commit timestamps vs run timestamps)",
+      "Add grep-verification step after each future fix to confirm code changed"
+    ],
+    "timestamp": "2026-04-19T09:44:56.641328+00:00",
+    "agents": [
+      {
+        "name": "sage",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-04-19-sage-sage-weekly-2026-04-19.md"
   }
 ]
