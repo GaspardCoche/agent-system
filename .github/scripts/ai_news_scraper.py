@@ -3,38 +3,63 @@
 Scrapes AI news sources and prepares content for Gemini synthesis.
 Output: /tmp/ai_news_raw.txt
 
+Extracts og:image and article links for richer digest rendering.
+
 Requires (optional):
-  FIRECRAWL_API_KEY → better scraping quality. Falls back to basic HTTP.
+  FIRECRAWL_API_KEY -> better scraping quality. Falls back to basic HTTP.
 """
 import json
 import os
+import re
 import sys
 import time
 import urllib.request
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urljoin
 
 SOURCES = [
-    {"name": "Anthropic News",      "url": "https://www.anthropic.com/news"},
-    {"name": "OpenAI Blog",          "url": "https://openai.com/blog"},
-    {"name": "Google DeepMind Blog", "url": "https://deepmind.google/discover/blog/"},
-    {"name": "HuggingFace Blog",     "url": "https://huggingface.co/blog"},
-    {"name": "Mistral News",         "url": "https://mistral.ai/news/"},
-    {"name": "TechCrunch AI",        "url": "https://techcrunch.com/category/artificial-intelligence/"},
-    {"name": "VentureBeat AI",       "url": "https://venturebeat.com/category/ai/"},
-    {"name": "The Batch (DeepLearning.AI)", "url": "https://www.deeplearning.ai/the-batch/"},
-    {"name": "AI News",              "url": "https://artificialintelligence-news.com/"},
-    {"name": "Ars Technica AI",      "url": "https://arstechnica.com/ai/"},
+    {"name": "Anthropic News",      "url": "https://www.anthropic.com/news",          "domain": "anthropic.com"},
+    {"name": "OpenAI Blog",          "url": "https://openai.com/blog",                 "domain": "openai.com"},
+    {"name": "Google DeepMind Blog", "url": "https://deepmind.google/discover/blog/",  "domain": "deepmind.google"},
+    {"name": "HuggingFace Blog",     "url": "https://huggingface.co/blog",             "domain": "huggingface.co"},
+    {"name": "Mistral News",         "url": "https://mistral.ai/news/",                "domain": "mistral.ai"},
+    {"name": "TechCrunch AI",        "url": "https://techcrunch.com/category/artificial-intelligence/", "domain": "techcrunch.com"},
+    {"name": "VentureBeat AI",       "url": "https://venturebeat.com/category/ai/",    "domain": "venturebeat.com"},
+    {"name": "The Batch",            "url": "https://www.deeplearning.ai/the-batch/",   "domain": "deeplearning.ai"},
+    {"name": "AI News",              "url": "https://artificialintelligence-news.com/", "domain": "artificialintelligence-news.com"},
+    {"name": "Ars Technica AI",      "url": "https://arstechnica.com/ai/",             "domain": "arstechnica.com"},
 ]
 
-MAX_CHARS_PER_SOURCE = 3000   # ~750 tokens
-MAX_TOTAL_CHARS = 28000       # ~7000 tokens → Gemini Flash handles easily
+MAX_CHARS_PER_SOURCE = 4000
+MAX_TOTAL_CHARS = 35000
 
 
-def scrape_firecrawl(url: str, api_key: str) -> str:
+def extract_meta(html: str, base_url: str) -> dict:
+    meta = {}
+    og_img = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)', html)
+    if og_img:
+        meta["og_image"] = og_img.group(1)
+    og_title = re.search(r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)', html)
+    if og_title:
+        meta["og_title"] = og_title.group(1)
+
+    links = []
+    for m in re.finditer(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>([^<]{10,80})</a>', html):
+        href, text = m.group(1), m.group(2).strip()
+        if any(skip in href for skip in ["#", "javascript:", "mailto:", "/tag/", "/category/", "/author/"]):
+            continue
+        full_url = urljoin(base_url, href)
+        if any(kw in href for kw in ["/blog/", "/news/", "/article", "/post/", "/discover/", "/the-batch/"]):
+            links.append({"url": full_url, "title": text})
+    meta["article_links"] = links[:8]
+    return meta
+
+
+def scrape_firecrawl(url: str, api_key: str) -> tuple[str, dict]:
     payload = json.dumps({
         "url": url,
-        "formats": ["markdown"],
+        "formats": ["markdown", "rawHtml"],
         "onlyMainContent": True,
         "excludeTags": ["nav", "footer", "aside", "script", "style"],
         "waitFor": 1000
@@ -50,29 +75,32 @@ def scrape_firecrawl(url: str, api_key: str) -> str:
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             data = json.loads(resp.read().decode())
-            return data.get("data", {}).get("markdown", "")[:MAX_CHARS_PER_SOURCE]
+            md = data.get("data", {}).get("markdown", "")[:MAX_CHARS_PER_SOURCE]
+            html = data.get("data", {}).get("rawHtml", "")
+            meta = extract_meta(html, url) if html else {}
+            return md, meta
     except Exception as e:
-        return f"[Firecrawl error for {url}: {e}]"
+        return f"[Firecrawl error for {url}: {e}]", {}
 
 
-def scrape_basic(url: str) -> str:
-    import re
+def scrape_basic(url: str) -> tuple[str, dict]:
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"})
         with urllib.request.urlopen(req, timeout=15) as resp:
             html = resp.read().decode("utf-8", errors="replace")
+        meta = extract_meta(html, url)
         text = re.sub(r'<[^>]+>', ' ', html)
         text = re.sub(r'\s+', ' ', text).strip()
-        return text[:MAX_CHARS_PER_SOURCE]
+        return text[:MAX_CHARS_PER_SOURCE], meta
     except Exception as e:
-        return f"[Fetch error for {url}: {e}]"
+        return f"[Fetch error for {url}: {e}]", {}
 
 
-def scrape(url: str, api_key: str | None) -> str:
+def scrape(url: str, api_key: str | None) -> tuple[str, dict]:
     if api_key:
-        content = scrape_firecrawl(url, api_key)
+        content, meta = scrape_firecrawl(url, api_key)
         if not content.startswith("[Firecrawl error"):
-            return content
+            return content, meta
         print(f"    Firecrawl failed, falling back to basic HTTP", file=sys.stderr)
     return scrape_basic(url)
 
@@ -92,15 +120,25 @@ def main():
             break
 
         print(f"  [{src['name']}]...", file=sys.stderr)
-        content = scrape(src["url"], api_key)
-        section = f"\n\n## {src['name']}\nSource: {src['url']}\n\n{content}"
+        content, meta = scrape(src["url"], api_key)
+
+        meta_block = ""
+        if meta.get("og_image"):
+            meta_block += f"\nPage image: {meta['og_image']}"
+        if meta.get("article_links"):
+            meta_block += "\nRecent articles:"
+            for link in meta["article_links"][:5]:
+                meta_block += f"\n  - [{link['title']}]({link['url']})"
+
+        favicon = f"https://www.google.com/s2/favicons?domain={src['domain']}&sz=128"
+        section = f"\n\n## {src['name']}\nSource: {src['url']}\nLogo: {favicon}{meta_block}\n\n{content}"
         sections.append(section)
         total += len(section)
-        time.sleep(0.5)  # respectful rate limiting
+        time.sleep(0.5)
 
     raw = "".join(sections)
     out.write_text(raw, encoding="utf-8")
-    print(f"Scraped ~{total//4:,} tokens → {out}", file=sys.stderr)
+    print(f"Scraped ~{total//4:,} tokens -> {out}", file=sys.stderr)
 
 
 if __name__ == "__main__":
