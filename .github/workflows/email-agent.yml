@@ -81,27 +81,13 @@ jobs:
           python-version: '3.12'
       - run: pip install google-genai requests -q
 
-      - name: Check Firecrawl API
-        id: firecrawl_check
-        env:
-          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
-        run: |
-          if [ -z "$FIRECRAWL_API_KEY" ]; then
-            echo "firecrawl_ok=false" >> $GITHUB_OUTPUT
-            echo "⚠️  FIRECRAWL_API_KEY not set — skipping AI news scrape"
-          else
-            echo "firecrawl_ok=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Scrape AI news
-        if: steps.firecrawl_check.outputs.firecrawl_ok == 'true'
         continue-on-error: true
         env:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
         run: python3 .github/scripts/ai_news_scraper.py
 
       - name: Synthesize with Gemini
-        if: steps.firecrawl_check.outputs.firecrawl_ok == 'true'
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -112,7 +98,7 @@ jobs:
               --input /tmp/ai_news_raw.txt \
               --output /tmp/ai_digest.json
           else
-            echo '{"summary": "AI news scraping failed — Firecrawl returned errors (402 or timeout). Check API quota.", "sources": []}' > /tmp/ai_digest.json
+            echo '{"summary": "AI news scraping failed — no content scraped.", "sources": []}' > /tmp/ai_digest.json
             echo "⚠️  No AI news scraped — wrote fallback digest"
           fi
 
@@ -296,9 +282,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/reports/ docs/data/runs.json reports/
-          git diff --cached --quiet || git commit -m "report: email-agent $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
-          git pull --rebase origin main 2>/dev/null || true
-          git push
+          git diff --cached --quiet && exit 0
+          git commit -m "report: email-agent $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            echo "⚠️ Push attempt $i failed, retrying..."
+            git rebase --abort 2>/dev/null || true
+            sleep 3
+          done
+          echo "❌ All push attempts failed"
+          exit 1
 
       - name: Send Slack notification
         if: env.SLACK_WEBHOOK_URL != ''
