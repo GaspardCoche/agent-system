@@ -103,6 +103,12 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
+          name: ai-raw-${{ github.run_id }}
+          path: /tmp/ai_news_raw.txt
+          retention-days: 3
+
+      - uses: actions/upload-artifact@v4
+        with:
           name: ai-digest-${{ github.run_id }}
           path: /tmp/ai_digest.json
           retention-days: 7
@@ -306,6 +312,17 @@ jobs:
             sleep 3
           done
           echo "⚠️ Report commit failed — non-critical, digest was sent successfully"
+
+      - name: Close old digest issues
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue list --label digest --state open --json number,createdAt \
+            --jq '[.[] | select(.createdAt < (now - 86400*2 | strftime("%Y-%m-%dT%H:%M:%SZ")))] | .[].number' \
+            --repo ${{ github.repository }} | while read -r NUM; do
+            gh issue close "$NUM" --repo ${{ github.repository }} 2>/dev/null || true
+          done
 
       - name: Send Slack notification
         if: env.SLACK_WEBHOOK_URL != ''

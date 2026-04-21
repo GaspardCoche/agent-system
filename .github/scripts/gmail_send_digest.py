@@ -258,6 +258,49 @@ def _render_trend(trend) -> str:
             f'</td></tr>')
 
 
+def _validate_urls(digest: dict) -> dict:
+    """Remove articles with obviously fabricated URLs and validate the rest."""
+    import urllib.request as _ur
+
+    def _check(url: str) -> bool:
+        if not url or not url.startswith("http"):
+            return False
+        try:
+            req = _ur.Request(url, method="HEAD", headers={
+                "User-Agent": "Mozilla/5.0"
+            })
+            with _ur.urlopen(req, timeout=5) as resp:
+                return resp.status < 400
+        except Exception:
+            try:
+                req = _ur.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+                with _ur.urlopen(req, timeout=5) as resp:
+                    _ = resp.read(512)
+                    return resp.status < 400
+            except Exception:
+                return False
+
+    checked = set()
+
+    def _fix(article: dict) -> dict:
+        url = article.get("url", "")
+        if url in checked:
+            return article
+        if url and not _check(url):
+            print(f"  [URL 404] {url} — replacing with source page", file=sys.stderr)
+            from urllib.parse import urlparse
+            parsed = urlparse(url)
+            article["url"] = f"{parsed.scheme}://{parsed.netloc}"
+            article["_url_fallback"] = True
+        checked.add(url)
+        return article
+
+    if digest.get("top_story"):
+        digest["top_story"] = _fix(digest["top_story"])
+    digest["articles"] = [_fix(a) for a in digest.get("articles", [])]
+    return digest
+
+
 def render_digest_html(digest: dict) -> str:
     now = datetime.now()
     days_fr = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
@@ -434,6 +477,8 @@ def send_digest(service, recipient, digest_path, md_fallback=None):
     msg["subject"] = subject
 
     if digest_json and (digest_json.get("articles") or digest_json.get("top_story")):
+        print("Validating article URLs...", file=sys.stderr)
+        digest_json = _validate_urls(digest_json)
         plain = build_plain_text(digest_json)
         html = render_digest_html(digest_json)
     elif md_fallback and Path(md_fallback).exists():

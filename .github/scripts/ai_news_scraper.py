@@ -47,16 +47,19 @@ def _extract_og_image(html: str) -> str:
     return ""
 
 
-def fetch_article_image(url: str) -> str:
+def fetch_article_meta(url: str) -> dict:
     try:
         req = urllib.request.Request(url, headers={
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
         })
         with urllib.request.urlopen(req, timeout=8) as resp:
-            head = resp.read(12288).decode("utf-8", errors="replace")
-        return _extract_og_image(head)
+            head = resp.read(16384).decode("utf-8", errors="replace")
+        image = _extract_og_image(head)
+        title_m = re.search(r'<title[^>]*>([^<]+)</title>', head, re.IGNORECASE)
+        title = title_m.group(1).strip() if title_m else ""
+        return {"image": image, "valid": True, "page_title": title}
     except Exception:
-        return ""
+        return {"image": "", "valid": False, "page_title": ""}
 
 
 def extract_meta(html: str, base_url: str) -> dict:
@@ -152,10 +155,6 @@ def main():
         meta_block = ""
         if meta.get("og_image"):
             meta_block += f"\nPage image: {meta['og_image']}"
-        if meta.get("article_links"):
-            meta_block += "\nRecent articles:"
-            for link in meta["article_links"][:5]:
-                meta_block += f"\n  - [{link['title']}]({link['url']})"
 
         favicon = f"https://www.google.com/s2/favicons?domain={src['domain']}&sz=128"
         section = f"\n\n## {src['name']}\nSource: {src['url']}\nLogo: {favicon}{meta_block}\n\n{content}"
@@ -163,30 +162,37 @@ def main():
         total += len(section)
         time.sleep(0.5)
 
-    print(f"  Fetching article images ({len(all_article_links)} links)...", file=sys.stderr)
+    print(f"  Validating & fetching images for {len(all_article_links)} article links...", file=sys.stderr)
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
-        future_map = {pool.submit(fetch_article_image, l["url"]): l for l in all_article_links}
+        future_map = {pool.submit(fetch_article_meta, l["url"]): l for l in all_article_links}
         for future in concurrent.futures.as_completed(future_map):
             link = future_map[future]
             try:
-                img = future.result()
-                if img:
-                    link["image"] = img
+                meta = future.result()
+                link["valid"] = meta["valid"]
+                if meta["image"]:
+                    link["image"] = meta["image"]
+                if meta["page_title"]:
+                    link["page_title"] = meta["page_title"]
             except Exception:
-                pass
+                link["valid"] = False
 
-    images_found = sum(1 for l in all_article_links if l.get("image"))
-    print(f"  Found {images_found}/{len(all_article_links)} article images", file=sys.stderr)
+    valid_links = [l for l in all_article_links if l.get("valid")]
+    images_found = sum(1 for l in valid_links if l.get("image"))
+    invalid = len(all_article_links) - len(valid_links)
+    print(f"  {len(valid_links)} valid URLs, {invalid} rejected (404/error), {images_found} with images", file=sys.stderr)
 
-    if all_article_links:
-        img_section = "\n\n## Article Images (for digest rendering)\n"
-        for link in all_article_links:
+    if valid_links:
+        verified_section = "\n\n## VERIFIED Article Links (use ONLY these URLs in the digest)\n"
+        verified_section += "IMPORTANT: Every URL below has been verified as working (HTTP 200). Do NOT invent or modify URLs.\n"
+        for link in valid_links:
+            title = link.get("page_title") or link["title"]
+            verified_section += f"\n- [VERIFIED] [{title}]({link['url']})"
             if link.get("image"):
-                img_section += f"\n- [{link['title']}]({link['url']})"
-                img_section += f"\n  Image: {link['image']}"
-                img_section += f"\n  Source: {link['source_name']}"
-        sections.append(img_section)
-        total += len(img_section)
+                verified_section += f"\n  Image: {link['image']}"
+            verified_section += f"\n  Source: {link['source_name']}"
+        sections.append(verified_section)
+        total += len(verified_section)
 
     raw = "".join(sections)
     out.write_text(raw, encoding="utf-8")
