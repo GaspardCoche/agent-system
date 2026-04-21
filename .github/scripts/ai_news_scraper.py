@@ -8,6 +8,7 @@ Extracts og:image and article links for richer digest rendering.
 Requires (optional):
   FIRECRAWL_API_KEY -> better scraping quality. Falls back to basic HTTP.
 """
+import concurrent.futures
 import json
 import os
 import re
@@ -35,14 +36,34 @@ MAX_CHARS_PER_SOURCE = 4000
 MAX_TOTAL_CHARS = 35000
 
 
+def _extract_og_image(html: str) -> str:
+    for pattern in [
+        r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
+    ]:
+        m = re.search(pattern, html, re.IGNORECASE)
+        if m:
+            return m.group(1)
+    return ""
+
+
+def fetch_article_image(url: str) -> str:
+    try:
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+        })
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            head = resp.read(12288).decode("utf-8", errors="replace")
+        return _extract_og_image(head)
+    except Exception:
+        return ""
+
+
 def extract_meta(html: str, base_url: str) -> dict:
     meta = {}
-    og_img = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)', html)
+    og_img = _extract_og_image(html)
     if og_img:
-        meta["og_image"] = og_img.group(1)
-    og_title = re.search(r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)', html)
-    if og_title:
-        meta["og_title"] = og_title.group(1)
+        meta["og_image"] = og_img
 
     links = []
     for m in re.finditer(r'<a[^>]+href=["\']([^"\']+)["\'][^>]*>([^<]{10,80})</a>', html):
@@ -114,6 +135,8 @@ def main():
     sections = [f"# AI News — {today}\n\nScraping context for daily digest.\n"]
     total = 0
 
+    all_article_links = []
+
     for src in SOURCES:
         if total >= MAX_TOTAL_CHARS:
             print(f"Token limit reached, skipping remaining sources", file=sys.stderr)
@@ -121,6 +144,10 @@ def main():
 
         print(f"  [{src['name']}]...", file=sys.stderr)
         content, meta = scrape(src["url"], api_key)
+
+        for link in meta.get("article_links", [])[:3]:
+            link["source_name"] = src["name"]
+            all_article_links.append(link)
 
         meta_block = ""
         if meta.get("og_image"):
@@ -135,6 +162,31 @@ def main():
         sections.append(section)
         total += len(section)
         time.sleep(0.5)
+
+    print(f"  Fetching article images ({len(all_article_links)} links)...", file=sys.stderr)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+        future_map = {pool.submit(fetch_article_image, l["url"]): l for l in all_article_links}
+        for future in concurrent.futures.as_completed(future_map):
+            link = future_map[future]
+            try:
+                img = future.result()
+                if img:
+                    link["image"] = img
+            except Exception:
+                pass
+
+    images_found = sum(1 for l in all_article_links if l.get("image"))
+    print(f"  Found {images_found}/{len(all_article_links)} article images", file=sys.stderr)
+
+    if all_article_links:
+        img_section = "\n\n## Article Images (for digest rendering)\n"
+        for link in all_article_links:
+            if link.get("image"):
+                img_section += f"\n- [{link['title']}]({link['url']})"
+                img_section += f"\n  Image: {link['image']}"
+                img_section += f"\n  Source: {link['source_name']}"
+        sections.append(img_section)
+        total += len(img_section)
 
     raw = "".join(sections)
     out.write_text(raw, encoding="utf-8")

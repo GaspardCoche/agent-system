@@ -12,6 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pathlib import Path
 from html import escape
+from urllib.parse import quote
 import locale
 
 try:
@@ -79,6 +80,31 @@ def _cat_pill(cat: str) -> str:
             f'letter-spacing:0.5px;">{icon} {escape(cat)}</span>')
 
 
+VAULT_REPO = os.environ.get("GITHUB_REPOSITORY", "GaspardCoche/agent-system")
+
+
+def _vault_btn(article: dict) -> str:
+    title = article.get("title", "Article")
+    body_lines = [
+        f"source: {article.get('source', '')}",
+        f"url: {article.get('url', '')}",
+        f"category: {article.get('category', '')}",
+        f"image: {article.get('image_url', '')}",
+        f"importance: {article.get('importance', '')}",
+        f"tags: {', '.join(article.get('company_tags', []))}",
+        "---",
+        "",
+        article.get("summary", ""),
+    ]
+    encoded_title = quote(f"\U0001f4cc {title}"[:120])
+    encoded_body = quote("\n".join(body_lines))
+    url = f"https://github.com/{VAULT_REPO}/issues/new?labels=vault-save&title={encoded_title}&body={encoded_body}"
+    return (f'<a href="{url}" style="display:inline-block;margin-left:8px;background:#EEF2FF;'
+            f'color:#4F46E5;text-decoration:none;font-size:11px;font-weight:600;'
+            f'padding:4px 10px;border-radius:6px;vertical-align:middle;">'
+            f'\U0001f4cc Vault</a>')
+
+
 def _render_top_story(story: dict) -> str:
     title = escape(story.get("title", ""))
     url = story.get("url", "#")
@@ -133,6 +159,7 @@ def _render_top_story(story: dict) -> str:
           <tr><td style="padding:0 28px 20px;">
             {tags_html}
             <a href="{escape(url)}" style="display:inline-block;margin-top:12px;background:#1a1a2e;color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:10px 24px;border-radius:8px;">Lire l\'article &rarr;</a>
+            {_vault_btn(story)}
           </td></tr>
         </table>
       </td></tr>
@@ -185,6 +212,7 @@ def _render_card(article: dict) -> str:
       <tr><td style="padding:0 20px 16px;">
         {tags_html}
         <a href="{escape(url)}" style="display:inline-block;margin-top:8px;color:#3B82F6;text-decoration:none;font-size:12px;font-weight:600;">Lire &rarr;</a>
+        {_vault_btn(article)}
       </td></tr>
     </table>'''
 
@@ -207,6 +235,7 @@ def _render_compact(article: dict) -> str:
             <br/>
             <span style="font-size:11px;color:#9CA3AF;">{source} &bull; {escape(cat)}</span>
             <p style="color:#6B7280;font-size:12px;line-height:1.5;margin:4px 0 0;">{summary}</p>
+            {_vault_btn(article)}
           </td>
           <td width="60" style="text-align:right;vertical-align:top;padding-top:2px;">
             <img src="{_favicon(url)}" width="24" height="24" style="border-radius:6px;" />
