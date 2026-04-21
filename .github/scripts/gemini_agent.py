@@ -39,16 +39,24 @@ TASK_PROMPTS = {
         '"confidence":0.8,"summary":"str"}\n\nRAW RESEARCH:\n'
     ),
     "ai_digest": (
-        "You are a senior AI analyst creating a premium intelligence briefing for a B2B tech executive.\n"
-        "Your reader is a CFO/CEO who needs to understand AI trends affecting business strategy.\n\n"
+        "You are a senior AI analyst creating a premium intelligence briefing for a tech-savvy B2B executive.\n"
+        "Your reader builds with AI daily (Claude Code, MCP servers, APIs) and needs to stay ahead on:\n"
+        "- New AI models and capabilities (Claude, GPT, Gemini, open-source)\n"
+        "- Developer tools, SDKs, APIs, IDE integrations, CLI tools\n"
+        "- MCP ecosystem: new MCP servers, protocol updates, integration patterns\n"
+        "- 'Silent revolutions': under-the-radar changes that will matter in 3-6 months\n"
+        "- Claude-specific news: Claude Code updates, Claude Design, Anthropic features\n"
+        "- Open-source AI: new models, frameworks, community tools\n\n"
         "From the raw scraped content below, create a structured digest. Return ONLY valid JSON (no markdown fences).\n\n"
         "CRITICAL RULES:\n"
-        "- Extract 10-15 distinct news items (deduplicate across sources)\n"
+        "- Extract 12-18 distinct news items (deduplicate across sources)\n"
         "- The FIRST article must be the TOP STORY — the single most impactful news of the period\n"
         "- For the top story: write a 4-5 sentence detailed analysis with business implications\n"
-        "- For other articles: 2-3 sentence summaries focused on 'so what?' for business leaders\n"
+        "- For other articles: 2-3 sentence summaries focused on 'so what?' for practitioners\n"
+        "- PRIORITIZE: developer tools, MCP updates, API changes, Claude ecosystem news, open-source releases\n"
+        "- Include at least 2 articles about developer tools/SDKs/MCPs if available in the source data\n"
         "- ALL text (headline, summaries, trends, one_liner) MUST be in French\n"
-        "- SOURCE DIVERSITY: Include articles from at least 5 different sources. Maximum 3 articles from any single source.\n\n"
+        "- SOURCE DIVERSITY: Include articles from at least 6 different sources. Maximum 3 articles from any single source.\n\n"
         "URL RULES (CRITICAL — violations cause broken links):\n"
         "- Look for the 'VERIFIED Article Links' section — these URLs have been validated (HTTP 200)\n"
         "- ONLY use URLs marked as [VERIFIED] in that section. Copy them EXACTLY, character for character\n"
@@ -97,7 +105,7 @@ TASK_PROMPTS = {
         '      "description": "string — 1-2 sentence explanation in French"\n'
         "    }\n"
         "  ],\n"
-        '  "stats": {"sources_scraped": 10, "articles_extracted": 0}\n'
+        '  "stats": {"sources_scraped": 18, "articles_extracted": 0}\n'
         "}\n\n"
         "RAW SCRAPED CONTENT:\n"
     ),

@@ -52,6 +52,13 @@ SOURCE_BRAND_IMAGES = {
     "Ars Technica AI": "https://cdn.arstechnica.net/wp-content/uploads/2016/10/cropped-ars-logo-512_480.png",
     "Google AI Blog": "https://blog.google/static/blogv2/images/google-200x200.png",
     "The Batch": "https://home-wordpress.deeplearning.ai/wp-content/uploads/2024/06/homepage-preview.png",
+    "Simon Willison": "https://simonwillison.net/favicon.ico",
+    "The Decoder": "",
+    "The Verge AI": "https://cdn.vox-cdn.com/uploads/hub/sbnu_logo_minimal/441/large_The_Verge_logo.png",
+    "GitHub Blog": "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
+    "MIT Tech Review AI": "https://wp.technologyreview.com/wp-content/uploads/2023/10/MIT_TR_Logo_RGB_Master-1.png",
+    "Wired AI": "",
+    "MarkTechPost": "",
 }
 
 

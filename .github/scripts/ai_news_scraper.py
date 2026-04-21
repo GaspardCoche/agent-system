@@ -38,10 +38,27 @@ SOURCES = [
      "rss": "https://feeds.arstechnica.com/arstechnica/technology-lab"},
     {"name": "Google AI Blog",       "url": "https://blog.google/technology/ai/",      "domain": "blog.google",
      "rss": "https://blog.google/technology/ai/rss/"},
+    {"name": "Simon Willison",       "url": "https://simonwillison.net/",              "domain": "simonwillison.net",
+     "rss": "https://simonwillison.net/atom/everything/",                              "format": "atom"},
+    {"name": "The Decoder",          "url": "https://the-decoder.com/",                "domain": "the-decoder.com",
+     "rss": "https://the-decoder.com/feed/"},
+    {"name": "The Verge AI",         "url": "https://www.theverge.com/ai-artificial-intelligence",
+     "domain": "theverge.com",
+     "rss": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"},
+    {"name": "GitHub Blog",          "url": "https://github.blog/",                    "domain": "github.blog",
+     "rss": "https://github.blog/feed/"},
+    {"name": "MIT Tech Review AI",   "url": "https://www.technologyreview.com/topic/artificial-intelligence/",
+     "domain": "technologyreview.com",
+     "rss": "https://www.technologyreview.com/topic/artificial-intelligence/feed"},
+    {"name": "Wired AI",             "url": "https://www.wired.com/tag/artificial-intelligence/",
+     "domain": "wired.com",
+     "rss": "https://www.wired.com/feed/tag/ai/latest/rss"},
+    {"name": "MarkTechPost",         "url": "https://www.marktechpost.com/",           "domain": "marktechpost.com",
+     "rss": "https://www.marktechpost.com/feed/"},
 ]
 
-MAX_CHARS_PER_SOURCE = 4000
-MAX_TOTAL_CHARS = 40000
+MAX_CHARS_PER_SOURCE = 3500
+MAX_TOTAL_CHARS = 55000
 
 
 def _extract_og_image(html: str) -> str:
@@ -79,28 +96,56 @@ def fetch_article_meta(url: str) -> dict:
         return {"image": "", "valid": False, "page_title": ""}
 
 
-def parse_rss(rss_url: str, max_items: int = 5) -> list[dict]:
+ATOM_NS = "http://www.w3.org/2005/Atom"
+
+
+def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> list[dict]:
     try:
         req = urllib.request.Request(rss_url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=10) as resp:
             xml_data = resp.read().decode("utf-8", errors="replace")
         root = ET.fromstring(xml_data)
+
+        is_atom = feed_format == "atom" or root.tag == f"{{{ATOM_NS}}}feed"
+
         items = []
-        for item in root.iter("item"):
-            title_el = item.find("title")
-            link_el = item.find("link")
-            desc_el = item.find("description")
-            if title_el is not None and link_el is not None and link_el.text:
-                desc = ""
-                if desc_el is not None and desc_el.text:
-                    desc = re.sub(r'<[^>]+>', '', desc_el.text).strip()[:300]
-                items.append({
-                    "title": (title_el.text or "").strip(),
-                    "url": link_el.text.strip(),
-                    "description": desc,
-                })
-            if len(items) >= max_items:
-                break
+        if is_atom:
+            for entry in root.findall(f"{{{ATOM_NS}}}entry"):
+                title_el = entry.find(f"{{{ATOM_NS}}}title")
+                link_el = entry.find(f"{{{ATOM_NS}}}link[@rel='alternate']")
+                if link_el is None:
+                    link_el = entry.find(f"{{{ATOM_NS}}}link")
+                summary_el = entry.find(f"{{{ATOM_NS}}}summary")
+                if summary_el is None:
+                    summary_el = entry.find(f"{{{ATOM_NS}}}content")
+                href = link_el.get("href", "") if link_el is not None else ""
+                if title_el is not None and href:
+                    desc = ""
+                    if summary_el is not None and summary_el.text:
+                        desc = re.sub(r'<[^>]+>', '', summary_el.text).strip()[:300]
+                    items.append({
+                        "title": (title_el.text or "").strip(),
+                        "url": href.strip(),
+                        "description": desc,
+                    })
+                if len(items) >= max_items:
+                    break
+        else:
+            for item in root.iter("item"):
+                title_el = item.find("title")
+                link_el = item.find("link")
+                desc_el = item.find("description")
+                if title_el is not None and link_el is not None and link_el.text:
+                    desc = ""
+                    if desc_el is not None and desc_el.text:
+                        desc = re.sub(r'<[^>]+>', '', desc_el.text).strip()[:300]
+                    items.append({
+                        "title": (title_el.text or "").strip(),
+                        "url": link_el.text.strip(),
+                        "description": desc,
+                    })
+                if len(items) >= max_items:
+                    break
         return items
     except Exception as e:
         print(f"    RSS parse failed: {e}", file=sys.stderr)
@@ -169,7 +214,7 @@ def main():
 
         rss_items = []
         if src.get("rss"):
-            rss_items = parse_rss(src["rss"], max_items=5)
+            rss_items = parse_rss(src["rss"], max_items=5, feed_format=src.get("format", "rss"))
             if rss_items:
                 print(f"    RSS: {len(rss_items)} articles found", file=sys.stderr)
 
