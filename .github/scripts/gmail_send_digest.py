@@ -40,6 +40,32 @@ def get_service():
     return build("gmail", "v1", credentials=creds)
 
 
+SOURCE_BRAND_IMAGES = {
+    "Anthropic News": "https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/68309ab48369f7ad9b4a40e1_open-graph.jpg",
+    "OpenAI Blog": "https://images.ctfassets.net/kftzwdyauwt9/3KGOHkSXu53naMuSFNaiwv/cdb0e2f899f524abb71314ab20e09c9c/OAI-white-on-black.png",
+    "Google DeepMind": "https://lh3.googleusercontent.com/2B_VtVbeEdyDZbdxLCcf6hS1MrFQcdsXNFwqL_GdWaM6bZ9jPgJOSYI8HfUY-FgBOuGJTM2JUj1JBF4d02f2y_hpqA4FN1a9",
+    "HuggingFace Blog": "https://huggingface.co/front/thumbnails/v2-2.png",
+    "Mistral News": "https://cms.mistral.ai/assets/060bdeb1-fbff-419c-b2ae-b32b5e441864",
+    "TechCrunch AI": "https://techcrunch.com/wp-content/uploads/2018/04/tc-logo-2018-square-reverse2x.png",
+    "VentureBeat AI": "https://venturebeat.com/wp-content/uploads/2024/01/vb-social-share.png",
+    "AI News": "https://www.artificialintelligence-news.com/wp-content/uploads/2025/01/New-site-SEO-social-banner-1200x600-1.jpg",
+    "Ars Technica AI": "https://cdn.arstechnica.net/wp-content/uploads/2016/10/cropped-ars-logo-512_480.png",
+    "Google AI Blog": "https://blog.google/static/blogv2/images/google-200x200.png",
+    "The Batch": "https://home-wordpress.deeplearning.ai/wp-content/uploads/2024/06/homepage-preview.png",
+}
+
+
+def _resolve_image(article: dict) -> str:
+    img = article.get("image_url", "")
+    if img and "s2/favicons" not in img and "sz=" not in img.split("?")[-1:][0]:
+        return img
+    source = article.get("source", "")
+    brand = SOURCE_BRAND_IMAGES.get(source, "")
+    if brand:
+        return brand
+    return ""
+
+
 CAT_COLORS = {
     "Modeles": "#8B5CF6",
     "Outils & Plateformes": "#0EA5E9",
@@ -110,7 +136,7 @@ def _render_top_story(story: dict) -> str:
     url = story.get("url", "#")
     source = escape(story.get("source", ""))
     summary = escape(story.get("summary", ""))
-    image_url = story.get("image_url", "")
+    image_url = _resolve_image(story)
     cat = story.get("category", "")
     tags = story.get("company_tags", [])
     tags_html = " ".join(
@@ -172,7 +198,7 @@ def _render_card(article: dict) -> str:
     source = escape(article.get("source", ""))
     summary = escape(article.get("summary", ""))
     cat = article.get("category", "")
-    image_url = article.get("image_url", "")
+    image_url = _resolve_image(article)
     tags = article.get("company_tags", [])
 
     image_html = ""

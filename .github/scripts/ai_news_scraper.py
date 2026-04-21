@@ -48,10 +48,19 @@ def _extract_og_image(html: str) -> str:
     for pattern in [
         r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
         r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',
+        r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)',
+        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:image["\']',
     ]:
         m = re.search(pattern, html, re.IGNORECASE)
-        if m:
+        if m and not m.group(1).endswith(('.ico', 'favicon')):
             return m.group(1)
+    for m in re.finditer(r'<img[^>]+src=["\']([^"\']+)["\']', html, re.IGNORECASE):
+        src = m.group(1)
+        if any(skip in src.lower() for skip in ['favicon', 'icon', 'logo', 'pixel', 'tracking', '1x1', 'avatar', 'emoji']):
+            continue
+        if any(ext in src.lower() for ext in ['.jpg', '.jpeg', '.png', '.webp']):
+            if 'wp-content/uploads' in src or 'storage.googleapis' in src or 'cdn' in src or 'images' in src:
+                return src
     return ""
 
 
