@@ -3,12 +3,12 @@
 | | |
 |---|---|
 | **Workflow** | `email-agent` |
-| **Run** | [24714951019](https://github.com/GaspardCoche/agent-system/actions/runs/24714951019) |
-| **Date** | 2026-04-21 09:37 UTC |
+| **Run** | [24716393429](https://github.com/GaspardCoche/agent-system/actions/runs/24716393429) |
+| **Date** | 2026-04-21 10:10 UTC |
 | **Status** | `success` |
 | **Trigger** | `workflow_dispatch` |
 
-> 44 emails traités
+> 45 emails traités
 
 ---
-*Généré le 2026-04-21 09:37 UTC · [GitHub Actions](https://github.com/GaspardCoche/agent-system/actions/runs/24714951019)*
+*Généré le 2026-04-21 10:10 UTC · [GitHub Actions](https://github.com/GaspardCoche/agent-system/actions/runs/24716393429)*
