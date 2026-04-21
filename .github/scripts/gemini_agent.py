@@ -4,9 +4,10 @@ Gemini agent for large-context analysis tasks.
 Uses Google GenAI SDK (google-genai).
 
 Usage:
-  python3 gemini_agent.py --task analyze   --input /tmp/input.txt --output /tmp/output.json
+  python3 gemini_agent.py --task analyze    --input /tmp/input.txt --output /tmp/output.json
   python3 gemini_agent.py --task synthesize --input /tmp/raw.txt  --output /tmp/synth.json
-  python3 gemini_agent.py --task review    --input /tmp/code.txt  --output /tmp/review.json
+  python3 gemini_agent.py --task ai_digest  --input /tmp/raw.txt  --output /tmp/digest.json
+  python3 gemini_agent.py --task review     --input /tmp/code.txt --output /tmp/review.json
 """
 import argparse
 import json
@@ -26,8 +27,6 @@ def get_client():
 
 
 def select_model(token_count: int) -> str:
-    # gemini-2.5-flash : fast, free, up to ~300K tokens
-    # gemini-2.5-pro   : powerful, 1M context, free with limits
     return "gemini-2.5-pro" if token_count > 200_000 else "gemini-2.5-flash"
 
 
@@ -44,6 +43,41 @@ TASK_PROMPTS = {
         "(no markdown fences):\n"
         '{"key_findings":["str"],"sources":["str"],"recommendations":["str"],'
         '"confidence":0.8,"summary":"str"}\n\nRAW RESEARCH:\n'
+    ),
+    "ai_digest": (
+        "You are an AI news analyst creating a weekly intelligence briefing for a B2B tech executive.\n\n"
+        "From the raw scraped content below, extract the most important AI news and return ONLY valid JSON (no markdown fences).\n\n"
+        "Rules:\n"
+        "- Extract 8-15 distinct articles/announcements (skip duplicates across sources)\n"
+        "- For each article, reconstruct the most likely URL from the source domain + article slug\n"
+        "- Categorize each: Models, Tools & Platforms, Research, Business & Funding, Open Source, Regulation\n"
+        "- Rate importance: must_read (top 3-4), important, worth_noting\n"
+        "- Write summaries in French, 2-3 sentences, focusing on business impact\n"
+        "- Include a headline (French) summarizing the week's theme\n"
+        "- Include 2-3 key trends observed across sources\n"
+        "- Include a one_liner: the single most important takeaway\n\n"
+        "Return this exact JSON structure:\n"
+        "{\n"
+        '  "headline": "string — one-line theme of the week in French",\n'
+        '  "one_liner": "string — the #1 takeaway in French",\n'
+        '  "articles": [\n'
+        "    {\n"
+        '      "title": "string — original article title",\n'
+        '      "source": "string — source name (e.g. Anthropic, OpenAI, TechCrunch)",\n'
+        '      "url": "string — best guess URL for the article",\n'
+        '      "summary": "string — 2-3 sentence summary in French, business impact focus",\n'
+        '      "category": "Models | Tools & Platforms | Research | Business & Funding | Open Source | Regulation",\n'
+        '      "importance": "must_read | important | worth_noting",\n'
+        '      "company_tags": ["string — companies mentioned"]\n'
+        "    }\n"
+        "  ],\n"
+        '  "trends": ["string — 2-3 macro trends in French"],\n'
+        '  "stats": {\n'
+        '    "sources_scraped": 0,\n'
+        '    "articles_extracted": 0\n'
+        "  }\n"
+        "}\n\n"
+        "RAW SCRAPED CONTENT:\n"
     ),
     "review": (
         "Review the following code and return ONLY valid JSON (no markdown fences):\n"
@@ -62,11 +96,10 @@ def call_with_retry(client, model: str, prompt: str, max_retries: int = 3) -> st
         except Exception as e:
             err = str(e)
             if "429" in err or "RESOURCE_EXHAUSTED" in err:
-                wait = (2 ** attempt) * 30  # 30s, 60s, 120s
+                wait = (2 ** attempt) * 30
                 print(f"Rate limited. Waiting {wait}s (attempt {attempt+1}/{max_retries})...",
                       file=sys.stderr)
                 time.sleep(wait)
-                # Fallback to Flash if Pro is exhausted
                 if attempt == max_retries - 1 and model == "gemini-2.5-pro":
                     print("Falling back to gemini-2.5-flash", file=sys.stderr)
                     model = "gemini-2.5-flash"
@@ -93,7 +126,6 @@ def main():
     client = get_client()
     raw = call_with_retry(client, model, prompt)
 
-    # Parse JSON — handle cases where model adds markdown fences
     try:
         result = json.loads(raw)
     except json.JSONDecodeError:
@@ -113,7 +145,6 @@ def main():
         "source": "gemini_agent"
     }
 
-    # Token usage log (for tracking free tier limits)
     log_path = Path("/tmp/token_usage.jsonl")
     with open(log_path, "a") as f:
         f.write(json.dumps({
