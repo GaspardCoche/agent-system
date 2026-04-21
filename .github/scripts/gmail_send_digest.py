@@ -43,11 +43,11 @@ def get_service():
 SOURCE_BRAND_IMAGES = {
     "Anthropic News": "https://cdn.prod.website-files.com/67ce28cfec624e2b733f8a52/68309ab48369f7ad9b4a40e1_open-graph.jpg",
     "OpenAI Blog": "https://images.ctfassets.net/kftzwdyauwt9/3KGOHkSXu53naMuSFNaiwv/cdb0e2f899f524abb71314ab20e09c9c/OAI-white-on-black.png",
-    "Google DeepMind": "https://lh3.googleusercontent.com/2B_VtVbeEdyDZbdxLCcf6hS1MrFQcdsXNFwqL_GdWaM6bZ9jPgJOSYI8HfUY-FgBOuGJTM2JUj1JBF4d02f2y_hpqA4FN1a9",
+    "Google DeepMind": "",
     "HuggingFace Blog": "https://huggingface.co/front/thumbnails/v2-2.png",
     "Mistral News": "https://cms.mistral.ai/assets/060bdeb1-fbff-419c-b2ae-b32b5e441864",
-    "TechCrunch AI": "https://techcrunch.com/wp-content/uploads/2018/04/tc-logo-2018-square-reverse2x.png",
-    "VentureBeat AI": "https://venturebeat.com/wp-content/uploads/2024/01/vb-social-share.png",
+    "TechCrunch AI": "https://techcrunch.com/wp-content/uploads/2015/02/cropped-cropped-favicon-gradient.png",
+    "VentureBeat AI": "",
     "AI News": "https://www.artificialintelligence-news.com/wp-content/uploads/2025/01/New-site-SEO-social-banner-1200x600-1.jpg",
     "Ars Technica AI": "https://cdn.arstechnica.net/wp-content/uploads/2016/10/cropped-ars-logo-512_480.png",
     "Google AI Blog": "https://blog.google/static/blogv2/images/google-200x200.png",
@@ -201,13 +201,18 @@ def _render_card(article: dict) -> str:
     image_url = _resolve_image(article)
     tags = article.get("company_tags", [])
 
-    image_html = ""
+    color = CAT_COLORS.get(cat, "#6B7280")
     if image_url:
         image_html = (
             f'<tr><td style="padding:0;">'
             f'<a href="{escape(url)}"><img src="{escape(image_url)}" alt="" '
             f'style="width:100%;height:140px;object-fit:cover;display:block;border-radius:12px 12px 0 0;" /></a>'
             f'</td></tr>'
+        )
+    else:
+        image_html = (
+            f'<tr><td style="padding:0;height:6px;background:linear-gradient(90deg,{color},{color}88);'
+            f'border-radius:12px 12px 0 0;"></td></tr>'
         )
 
     tags_html = ""
