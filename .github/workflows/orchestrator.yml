@@ -314,6 +314,7 @@ jobs:
           fi
 
       - name: Generate report + update dashboard
+        continue-on-error: true
         env:
           TITLE: ${{ github.event.issue.title || github.event.pull_request.title || 'Scheduled run' }}
           REPO: ${{ github.repository }}
@@ -331,6 +332,7 @@ jobs:
             --task-id "${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}"
 
       - name: Commit report and dashboard
+        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -338,13 +340,12 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "report: orchestrator run ${{ github.run_id }} [${{ steps.status.outputs.overall }}]"
           for i in 1 2 3; do
-            git pull --rebase origin main && git push && exit 0
+            git pull --rebase -X theirs origin main && git push && exit 0
             echo "⚠️ Push attempt $i failed, retrying..."
             git rebase --abort 2>/dev/null || true
             sleep 3
           done
-          echo "❌ All push attempts failed"
-          exit 1
+          echo "⚠️ Report commit failed — non-critical"
 
       - name: Install MCP servers
         run: npm install -g @modelcontextprotocol/server-github
