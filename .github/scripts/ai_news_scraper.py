@@ -18,47 +18,50 @@ from datetime import datetime
 from pathlib import Path
 
 SOURCES = [
+    # Tier 1 — AI labs + developer/MCP coverage (scraped first)
     {"name": "Anthropic News",      "url": "https://www.anthropic.com/news",          "domain": "anthropic.com"},
+    {"name": "Simon Willison",       "url": "https://simonwillison.net/",              "domain": "simonwillison.net",
+     "rss": "https://simonwillison.net/atom/everything/",                              "format": "atom"},
     {"name": "OpenAI Blog",          "url": "https://openai.com/blog",                 "domain": "openai.com",
      "rss": "https://openai.com/blog/rss.xml"},
     {"name": "Google DeepMind",      "url": "https://deepmind.google/discover/blog/",  "domain": "deepmind.google",
      "rss": "https://deepmind.google/blog/rss.xml"},
     {"name": "HuggingFace Blog",     "url": "https://huggingface.co/blog",             "domain": "huggingface.co",
      "rss": "https://huggingface.co/blog/feed.xml"},
-    {"name": "Mistral News",         "url": "https://mistral.ai/news/",                "domain": "mistral.ai"},
-    {"name": "TechCrunch AI",        "url": "https://techcrunch.com/category/artificial-intelligence/",
-     "domain": "techcrunch.com",
-     "rss": "https://techcrunch.com/category/artificial-intelligence/feed/"},
-    {"name": "VentureBeat AI",       "url": "https://venturebeat.com/category/ai/",    "domain": "venturebeat.com",
-     "rss": "https://venturebeat.com/category/ai/feed/"},
-    {"name": "The Batch",            "url": "https://www.deeplearning.ai/the-batch/",   "domain": "deeplearning.ai"},
-    {"name": "AI News",              "url": "https://artificialintelligence-news.com/", "domain": "artificialintelligence-news.com",
-     "rss": "https://www.artificialintelligence-news.com/feed/"},
-    {"name": "Ars Technica AI",      "url": "https://arstechnica.com/ai/",             "domain": "arstechnica.com",
-     "rss": "https://feeds.arstechnica.com/arstechnica/technology-lab"},
-    {"name": "Google AI Blog",       "url": "https://blog.google/technology/ai/",      "domain": "blog.google",
-     "rss": "https://blog.google/technology/ai/rss/"},
-    {"name": "Simon Willison",       "url": "https://simonwillison.net/",              "domain": "simonwillison.net",
-     "rss": "https://simonwillison.net/atom/everything/",                              "format": "atom"},
-    {"name": "The Decoder",          "url": "https://the-decoder.com/",                "domain": "the-decoder.com",
-     "rss": "https://the-decoder.com/feed/"},
+    {"name": "GitHub Blog",          "url": "https://github.blog/",                    "domain": "github.blog",
+     "rss": "https://github.blog/feed/"},
+    # Tier 2 — Major tech press + AI-focused outlets
     {"name": "The Verge AI",         "url": "https://www.theverge.com/ai-artificial-intelligence",
      "domain": "theverge.com",
      "rss": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"},
-    {"name": "GitHub Blog",          "url": "https://github.blog/",                    "domain": "github.blog",
-     "rss": "https://github.blog/feed/"},
+    {"name": "TechCrunch AI",        "url": "https://techcrunch.com/category/artificial-intelligence/",
+     "domain": "techcrunch.com",
+     "rss": "https://techcrunch.com/category/artificial-intelligence/feed/"},
+    {"name": "Ars Technica AI",      "url": "https://arstechnica.com/ai/",             "domain": "arstechnica.com",
+     "rss": "https://feeds.arstechnica.com/arstechnica/technology-lab"},
+    {"name": "The Decoder",          "url": "https://the-decoder.com/",                "domain": "the-decoder.com",
+     "rss": "https://the-decoder.com/feed/"},
+    {"name": "Mistral News",         "url": "https://mistral.ai/news/",                "domain": "mistral.ai"},
+    # Tier 3 — Broader coverage
+    {"name": "VentureBeat AI",       "url": "https://venturebeat.com/category/ai/",    "domain": "venturebeat.com",
+     "rss": "https://venturebeat.com/category/ai/feed/"},
+    {"name": "AI News",              "url": "https://artificialintelligence-news.com/", "domain": "artificialintelligence-news.com",
+     "rss": "https://www.artificialintelligence-news.com/feed/"},
     {"name": "MIT Tech Review AI",   "url": "https://www.technologyreview.com/topic/artificial-intelligence/",
      "domain": "technologyreview.com",
      "rss": "https://www.technologyreview.com/topic/artificial-intelligence/feed"},
+    {"name": "Google AI Blog",       "url": "https://blog.google/technology/ai/",      "domain": "blog.google",
+     "rss": "https://blog.google/technology/ai/rss/"},
     {"name": "Wired AI",             "url": "https://www.wired.com/tag/artificial-intelligence/",
      "domain": "wired.com",
      "rss": "https://www.wired.com/feed/tag/ai/latest/rss"},
     {"name": "MarkTechPost",         "url": "https://www.marktechpost.com/",           "domain": "marktechpost.com",
      "rss": "https://www.marktechpost.com/feed/"},
+    {"name": "The Batch",            "url": "https://www.deeplearning.ai/the-batch/",   "domain": "deeplearning.ai"},
 ]
 
-MAX_CHARS_PER_SOURCE = 3500
-MAX_TOTAL_CHARS = 55000
+MAX_CHARS_PER_SOURCE = 3000
+MAX_TOTAL_CHARS = 65000
 
 
 def _extract_og_image(html: str) -> str:
