@@ -68,6 +68,15 @@ def scrape_basic(url: str) -> str:
         return f"[Fetch error for {url}: {e}]"
 
 
+def scrape(url: str, api_key: str | None) -> str:
+    if api_key:
+        content = scrape_firecrawl(url, api_key)
+        if not content.startswith("[Firecrawl error"):
+            return content
+        print(f"    Firecrawl failed, falling back to basic HTTP", file=sys.stderr)
+    return scrape_basic(url)
+
+
 def main():
     api_key = os.environ.get("FIRECRAWL_API_KEY")
     out = Path("/tmp/ai_news_raw.txt")
@@ -83,7 +92,7 @@ def main():
             break
 
         print(f"  [{src['name']}]...", file=sys.stderr)
-        content = scrape_firecrawl(src["url"], api_key) if api_key else scrape_basic(src["url"])
+        content = scrape(src["url"], api_key)
         section = f"\n\n## {src['name']}\nSource: {src['url']}\n\n{content}"
         sections.append(section)
         total += len(section)
