@@ -33,7 +33,6 @@ jobs:
           if [ -z "$GMAIL_TOKEN_JSON" ]; then
             echo "gmail_configured=false" >> $GITHUB_OUTPUT
             echo "⚠️  GMAIL_TOKEN_JSON not set — skipping email fetch"
-            echo "Run: python3 .github/scripts/gmail_auth_setup.py to generate the token"
           else
             echo "gmail_configured=true" >> $GITHUB_OUTPUT
           fi
@@ -87,18 +86,18 @@ jobs:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
         run: python3 .github/scripts/ai_news_scraper.py
 
-      - name: Synthesize with Gemini
+      - name: Synthesize with Gemini (structured digest)
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           if [ -f /tmp/ai_news_raw.txt ] && [ -s /tmp/ai_news_raw.txt ]; then
             python3 .github/scripts/gemini_agent.py \
-              --task synthesize \
+              --task ai_digest \
               --input /tmp/ai_news_raw.txt \
               --output /tmp/ai_digest.json
           else
-            echo '{"summary": "AI news scraping failed — no content scraped.", "sources": []}' > /tmp/ai_digest.json
+            echo '{"headline": "Pas de contenu scraped", "articles": [], "trends": [], "one_liner": "Scraping echoue", "stats": {"sources_scraped": 0, "articles_extracted": 0}}' > /tmp/ai_digest.json
             echo "⚠️  No AI news scraped — wrote fallback digest"
           fi
 
@@ -203,6 +202,17 @@ jobs:
 
       - run: pip install google-auth google-auth-oauthlib google-api-python-client markdown -q
 
+      - name: Prepare digest data
+        run: |
+          # Move ai_digest.json to /tmp if available in artifacts
+          find /tmp/artifacts -name 'ai_digest.json' -exec cp {} /tmp/ai_digest.json \; 2>/dev/null || true
+          if [ -f /tmp/ai_digest.json ]; then
+            echo "✅ AI digest found"
+            python3 -c "import json; d=json.load(open('/tmp/ai_digest.json')); print(f\"  {len(d.get('articles',[]))} articles, headline: {d.get('headline','?')[:80]}\")"
+          else
+            echo "⚠️  No AI digest found"
+          fi
+
       - name: Install MCP servers
         run: npm install -g @modelcontextprotocol/server-github
 
@@ -218,15 +228,6 @@ jobs:
           json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
           "
 
-      - name: Check if Gmail was configured
-        run: |
-          GMAIL_CONFIGURED="${{ needs.fetch-emails.outputs.gmail_configured }}"
-          if [ "$GMAIL_CONFIGURED" != "true" ]; then
-            echo "DIGEST_NOTE=⚠️ Gmail non configuré — digest limité aux actualités IA" >> $GITHUB_ENV
-          else
-            echo "DIGEST_NOTE=" >> $GITHUB_ENV
-          fi
-
       - name: Build claude_args
         run: |
           echo "CLAUDE_ARGS=--max-turns 6 --allowedTools Bash,Read,Write --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
@@ -238,39 +239,36 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Find and read available data:
-            Bash("find /tmp/artifacts -name '*.json' 2>/dev/null | head -10 | xargs -I{} sh -c 'echo \"--- {} ---\" && cat {}' 2>/dev/null || echo 'no artifacts'")
+            Read the AI digest and email data, then create a GitHub issue digest.
 
-            Write a daily digest to /tmp/digest_body.md then create a GitHub issue:
+            Bash("cat /tmp/ai_digest.json 2>/dev/null || echo 'no ai digest'")
+            Bash("find /tmp/artifacts -name '*.json' 2>/dev/null | head -5 | xargs -I{} sh -c 'echo \"--- {} ---\" && head -50 {}' 2>/dev/null || echo 'no artifacts'")
+
+            Write a daily digest to /tmp/digest_body.md. Use the structured AI digest JSON to create a rich markdown summary:
+            - For each article, include: title as a link, source, importance indicator, summary
+            - Group by importance: must_read first, then important, then worth_noting
+            - Include the headline and trends at the top
+            - If email triage data exists, include email sections too
+
+            Then create a GitHub issue:
             Bash("gh issue create --title '📧 Daily Digest — $(date +%Y-%m-%d)' --label 'digest' --body-file /tmp/digest_body.md --repo $GITHUB_REPOSITORY")
-
-            Digest format:
-            ## 🔴 Ne pas louper
-            [emails critiques avec draft note — si Gmail configuré]
-            ## 🟡 Interne
-            [emails internes]
-            ## 🔵 Intégrations & Alertes
-            [alertes groupées par service]
-            ## 🤖 IA — Ne pas rater
-            [ai digest si disponible]
-            ${{ env.DIGEST_NOTE }}
-            ---
-            *⚡ [N] emails · [N] drafts · $(date +%Y-%m-%d)*
           claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
 
-      - name: Send digest by email
+      - name: Send digest by email (HTML newsletter)
         if: needs.fetch-emails.outputs.gmail_configured == 'true'
         continue-on-error: true
         env:
           GMAIL_TOKEN_JSON: ${{ secrets.GMAIL_TOKEN_JSON }}
           GMAIL_USER_EMAIL: ${{ secrets.GMAIL_USER_EMAIL }}
         run: |
-          if [ -f /tmp/digest_body.md ] && [ -s /tmp/digest_body.md ]; then
-            python3 .github/scripts/gmail_send_digest.py /tmp/digest_body.md
+          if [ -f /tmp/ai_digest.json ]; then
+            python3 .github/scripts/gmail_send_digest.py /tmp/ai_digest.json /tmp/digest_body.md
+          elif [ -f /tmp/digest_body.md ]; then
+            python3 .github/scripts/gmail_send_digest.py /dev/null /tmp/digest_body.md
           else
-            echo "⚠️  No digest file found — skipping email send"
+            echo "⚠️  No digest content found — skipping email send"
           fi
 
       - name: Generate report + update dashboard
