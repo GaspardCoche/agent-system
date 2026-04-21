@@ -151,7 +151,7 @@ def _render_top_story(story: dict) -> str:
             f'<tr><td style="padding:0 0 16px 0;">'
             f'<a href="{escape(url)}" style="text-decoration:none;">'
             f'<img src="{escape(image_url)}" alt="" '
-            f'style="width:100%;max-height:280px;object-fit:cover;border-radius:12px;display:block;" />'
+            f'style="width:100%;max-height:340px;object-fit:cover;border-radius:12px;display:block;" />'
             f'</a></td></tr>'
         )
 
@@ -206,7 +206,7 @@ def _render_card(article: dict) -> str:
         image_html = (
             f'<tr><td style="padding:0;">'
             f'<a href="{escape(url)}"><img src="{escape(image_url)}" alt="" '
-            f'style="width:100%;height:140px;object-fit:cover;display:block;border-radius:12px 12px 0 0;" /></a>'
+            f'style="width:100%;height:180px;object-fit:cover;display:block;border-radius:12px 12px 0 0;" /></a>'
             f'</td></tr>'
         )
     else:
@@ -372,7 +372,7 @@ def render_digest_html(digest: dict) -> str:
 <tr><td align="center" style="padding:16px;">
 
 <!-- Main container -->
-<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+<table width="720" cellpadding="0" cellspacing="0" style="max-width:720px;width:100%;">
 
   <!-- Header -->
   <tr><td style="background:linear-gradient(135deg,#0F172A 0%,#1E293B 40%,#334155 100%);border-radius:16px 16px 0 0;padding:0;">
@@ -488,7 +488,7 @@ def render_fallback_html(md_content: str) -> str:
     except ImportError:
         html = md_content.replace("\n", "<br>")
     return f'''<!DOCTYPE html><html><head><meta charset="utf-8"></head>
-<body style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:20px;line-height:1.6;color:#333;">{html}</body></html>'''
+<body style="font-family:-apple-system,sans-serif;max-width:720px;margin:0 auto;padding:20px;line-height:1.6;color:#333;">{html}</body></html>'''
 
 
 def send_digest(service, recipient, digest_path, md_fallback=None):
