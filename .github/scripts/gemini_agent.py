@@ -2,12 +2,6 @@
 """
 Gemini agent for large-context analysis tasks.
 Uses Google GenAI SDK (google-genai).
-
-Usage:
-  python3 gemini_agent.py --task analyze    --input /tmp/input.txt --output /tmp/output.json
-  python3 gemini_agent.py --task synthesize --input /tmp/raw.txt  --output /tmp/synth.json
-  python3 gemini_agent.py --task ai_digest  --input /tmp/raw.txt  --output /tmp/digest.json
-  python3 gemini_agent.py --task review     --input /tmp/code.txt --output /tmp/review.json
 """
 import argparse
 import json
@@ -45,37 +39,63 @@ TASK_PROMPTS = {
         '"confidence":0.8,"summary":"str"}\n\nRAW RESEARCH:\n'
     ),
     "ai_digest": (
-        "You are an AI news analyst creating a weekly intelligence briefing for a B2B tech executive.\n\n"
-        "From the raw scraped content below, extract the most important AI news and return ONLY valid JSON (no markdown fences).\n\n"
-        "Rules:\n"
-        "- Extract 8-15 distinct articles/announcements (skip duplicates across sources)\n"
-        "- For each article, reconstruct the most likely URL from the source domain + article slug\n"
-        "- Categorize each: Models, Tools & Platforms, Research, Business & Funding, Open Source, Regulation\n"
-        "- Rate importance: must_read (top 3-4), important, worth_noting\n"
-        "- Write summaries in French, 2-3 sentences, focusing on business impact\n"
-        "- Include a headline (French) summarizing the week's theme\n"
-        "- Include 2-3 key trends observed across sources\n"
-        "- Include a one_liner: the single most important takeaway\n\n"
-        "Return this exact JSON structure:\n"
+        "You are a senior AI analyst creating a premium intelligence briefing for a B2B tech executive.\n"
+        "Your reader is a CFO/CEO who needs to understand AI trends affecting business strategy.\n\n"
+        "From the raw scraped content below, create a structured digest. Return ONLY valid JSON (no markdown fences).\n\n"
+        "CRITICAL RULES:\n"
+        "- Extract 10-15 distinct news items (deduplicate across sources)\n"
+        "- The FIRST article must be the TOP STORY — the single most impactful news of the period\n"
+        "- For the top story: write a 4-5 sentence detailed analysis with business implications\n"
+        "- For other articles: 2-3 sentence summaries focused on 'so what?' for business leaders\n"
+        "- ALL text (headline, summaries, trends, one_liner) MUST be in French\n"
+        "- Reconstruct article URLs from source domain + slug found in scraped content\n"
+        "- Use og:image URLs or logo URLs from the scraped data when available\n"
+        "- If a scraped section includes 'Recent articles:' links, use those exact URLs\n"
+        "- For image_url: use the page og:image if found, otherwise use the Logo URL from the source\n\n"
+        "CATEGORIES (pick the best fit):\n"
+        "  Modeles (new models, benchmarks, capabilities)\n"
+        "  Outils & Plateformes (dev tools, APIs, platforms, SDKs)\n"
+        "  Recherche (papers, breakthroughs, scientific advances)\n"
+        "  Business & Levees (funding, acquisitions, partnerships, revenue)\n"
+        "  Open Source (new OSS releases, community projects)\n"
+        "  Regulation & Ethique (laws, governance, safety, alignment)\n\n"
+        "IMPORTANCE LEVELS:\n"
+        "  must_read — game-changing, affects strategy (max 3-4)\n"
+        "  important — significant, worth understanding (4-6)\n"
+        "  worth_noting — interesting, good to know (3-5)\n\n"
+        "JSON STRUCTURE:\n"
         "{\n"
-        '  "headline": "string — one-line theme of the week in French",\n'
-        '  "one_liner": "string — the #1 takeaway in French",\n'
+        '  "date": "YYYY-MM-DD",\n'
+        '  "headline": "string — bold, punchy theme in French (like a newspaper headline)",\n'
+        '  "one_liner": "string — the #1 insight in one sentence, French",\n'
+        '  "top_story": {\n'
+        '    "title": "string — original title",\n'
+        '    "source": "string — source name",\n'
+        '    "url": "string — article URL",\n'
+        '    "image_url": "string — og:image or source logo URL",\n'
+        '    "summary": "string — 4-5 sentence deep analysis in French, business impact focus",\n'
+        '    "category": "string",\n'
+        '    "company_tags": ["string"]\n'
+        "  },\n"
         '  "articles": [\n'
         "    {\n"
-        '      "title": "string — original article title",\n'
-        '      "source": "string — source name (e.g. Anthropic, OpenAI, TechCrunch)",\n'
-        '      "url": "string — best guess URL for the article",\n'
-        '      "summary": "string — 2-3 sentence summary in French, business impact focus",\n'
-        '      "category": "Models | Tools & Platforms | Research | Business & Funding | Open Source | Regulation",\n'
+        '      "title": "string — original title",\n'
+        '      "source": "string — source name",\n'
+        '      "url": "string — article URL",\n'
+        '      "image_url": "string — og:image URL or source logo/favicon URL",\n'
+        '      "summary": "string — 2-3 sentences in French, business angle",\n'
+        '      "category": "Modeles | Outils & Plateformes | Recherche | Business & Levees | Open Source | Regulation & Ethique",\n'
         '      "importance": "must_read | important | worth_noting",\n'
-        '      "company_tags": ["string — companies mentioned"]\n'
+        '      "company_tags": ["string"]\n'
         "    }\n"
         "  ],\n"
-        '  "trends": ["string — 2-3 macro trends in French"],\n'
-        '  "stats": {\n'
-        '    "sources_scraped": 0,\n'
-        '    "articles_extracted": 0\n'
-        "  }\n"
+        '  "trends": [\n'
+        "    {\n"
+        '      "title": "string — trend name in French",\n'
+        '      "description": "string — 1-2 sentence explanation in French"\n'
+        "    }\n"
+        "  ],\n"
+        '  "stats": {"sources_scraped": 10, "articles_extracted": 0}\n'
         "}\n\n"
         "RAW SCRAPED CONTENT:\n"
     ),
