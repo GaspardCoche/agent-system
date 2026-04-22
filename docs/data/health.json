@@ -1,12 +1,12 @@
 {
-  "last_check": "2026-04-21T07:18:54.343025+00:00",
-  "run_id": "24709431813",
+  "last_check": "2026-04-22T07:17:17.508802+00:00",
+  "run_id": "24765524269",
   "summary": "6 agents prêts, 4 partiels, 0 non configurés",
   "secrets": {
     "CLAUDE_CODE_OAUTH_TOKEN": true,
     "GEMINI_API_KEY": true,
-    "GMAIL_TOKEN_JSON": false,
-    "GMAIL_USER_EMAIL": false,
+    "GMAIL_TOKEN_JSON": true,
+    "GMAIL_USER_EMAIL": true,
     "INTERNAL_EMAIL_DOMAIN": false,
     "FIRECRAWL_API_KEY": true,
     "GOOGLE_SHEETS_TOKEN": false,
@@ -52,10 +52,7 @@
     },
     "iris": {
       "status": "partial",
-      "missing_required": [
-        "GMAIL_TOKEN_JSON",
-        "GMAIL_USER_EMAIL"
-      ],
+      "missing_required": [],
       "missing_optional": [
         "INTERNAL_EMAIL_DOMAIN"
       ]
@@ -89,7 +86,6 @@
     }
   },
   "warnings": [
-    "Iris: Gmail non configuré — digest limité aux actualités IA",
     "Nexus: Google Ads non configuré — rapports en mode template uniquement",
     "Aria: FullEnrich/HubSpot non configuré — lead gen désactivée"
   ]
