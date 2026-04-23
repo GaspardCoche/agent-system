@@ -49,7 +49,11 @@ TASK_PROMPTS = {
         "- Open-source AI: new models, frameworks, community tools\n\n"
         "From the raw scraped content below, create a structured digest. Return ONLY valid JSON (no markdown fences).\n\n"
         "CRITICAL RULES:\n"
-        "- Extract 12-18 distinct news items (deduplicate across sources)\n"
+        "- The `articles` array contains the TOP 12-18 AI-focused articles for the email newsletter\n"
+        "- The `extended` array contains 8-15 ADDITIONAL articles from broader categories (Code & Dev, Google & Cloud, Tech & Business) that didn't make the main newsletter\n"
+        "- Extended articles can also include lower-priority AI articles that didn't fit in the main 12-18\n"
+        "- NEVER duplicate an article between `articles` and `extended`\n"
+        "- Extract 12-18 distinct news items for `articles` (deduplicate across sources)\n"
         "- The FIRST article must be the TOP STORY — the single most impactful news of the period\n"
         "- For the top story: write a 4-5 sentence detailed analysis with business implications\n"
         "- For other articles: 2-3 sentence summaries focused on 'so what?' for practitioners\n"
@@ -68,7 +72,10 @@ TASK_PROMPTS = {
         "  Recherche (papers, breakthroughs, scientific advances)\n"
         "  Business & Levees (funding, acquisitions, partnerships, revenue)\n"
         "  Open Source (new OSS releases, community projects)\n"
-        "  Regulation & Ethique (laws, governance, safety, alignment)\n\n"
+        "  Regulation & Ethique (laws, governance, safety, alignment)\n"
+        "  Code & Dev (new frameworks, languages, developer tools, IDE updates, GitHub features)\n"
+        "  Google & Cloud (Google products, GCP, Android, Chrome, Workspace updates)\n"
+        "  Tech & Business (big tech moves, startup news, product launches, industry shifts)\n\n"
         "IMPORTANCE LEVELS:\n"
         "  must_read — game-changing, affects strategy (max 3-4)\n"
         "  important — significant, worth understanding (4-6)\n"
@@ -96,6 +103,16 @@ TASK_PROMPTS = {
         '      "summary": "string — 2-3 sentences in French, business angle",\n'
         '      "category": "Modeles | Outils & Plateformes | Recherche | Business & Levees | Open Source | Regulation & Ethique",\n'
         '      "importance": "must_read | important | worth_noting",\n'
+        '      "company_tags": ["string"]\n'
+        "    }\n"
+        "  ],\n"
+        '  "extended": [\n'
+        "    {\n"
+        '      "title": "string",\n'
+        '      "source": "string",\n'
+        '      "url": "string",\n'
+        '      "summary": "string — 1-2 sentences in French",\n'
+        '      "category": "Code & Dev | Google & Cloud | Tech & Business | (any existing category)",\n'
         '      "company_tags": ["string"]\n'
         "    }\n"
         "  ],\n"

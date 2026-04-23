@@ -372,6 +372,13 @@ jobs:
           settings: |
             {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
 
+      - name: Generate web archive page
+        continue-on-error: true
+        run: |
+          if [ -f /tmp/ai_digest.json ]; then
+            python3 .github/scripts/digest_archive.py /tmp/ai_digest.json
+          fi
+
       - name: Send digest by email (HTML newsletter)
         if: needs.fetch-emails.outputs.gmail_configured == 'true'
         continue-on-error: true
@@ -412,7 +419,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/reports/ docs/data/runs.json reports/
+          git add docs/reports/ docs/data/runs.json docs/digest/ reports/
           git diff --cached --quiet && exit 0
           git commit -m "report: email-agent $(date +%Y-%m-%d) [run ${{ github.run_id }}]"
           for i in 1 2 3; do

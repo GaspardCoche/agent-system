@@ -69,6 +69,32 @@ SOURCES = [
     {"name": "The Batch",            "url": "https://www.deeplearning.ai/the-batch/",   "domain": "deeplearning.ai"},
     {"name": "Ahead of AI",         "url": "https://magazine.sebastianraschka.com/",  "domain": "magazine.sebastianraschka.com",
      "rss": "https://magazine.sebastianraschka.com/feed"},
+    # Tier 4 — Coding, Google, Tech
+    # Dev/Coding
+    {"name": "Hacker News",          "url": "https://news.ycombinator.com/",            "domain": "news.ycombinator.com",
+     "rss": "https://hnrss.org/best?count=10"},
+    {"name": "Dev.to",               "url": "https://dev.to/",                          "domain": "dev.to",
+     "rss": "https://dev.to/feed"},
+    {"name": "Changelog",            "url": "https://changelog.com/",                   "domain": "changelog.com",
+     "rss": "https://changelog.com/feed"},
+    {"name": "CSS-Tricks",           "url": "https://css-tricks.com/",                  "domain": "css-tricks.com",
+     "rss": "https://css-tricks.com/feed/"},
+    # Google ecosystem
+    {"name": "Google Blog",          "url": "https://blog.google/",                     "domain": "blog.google",
+     "rss": "https://blog.google/rss/"},
+    {"name": "Chrome Blog",          "url": "https://blog.chromium.org/",               "domain": "blog.chromium.org",
+     "rss": "https://blog.chromium.org/feeds/posts/default?alt=rss"},
+    {"name": "Android Developers",   "url": "https://android-developers.googleblog.com/", "domain": "android-developers.googleblog.com",
+     "rss": "https://android-developers.googleblog.com/feeds/posts/default?alt=rss"},
+    # Broader Tech
+    {"name": "The Verge",            "url": "https://www.theverge.com/tech",            "domain": "theverge.com",
+     "rss": "https://www.theverge.com/rss/index.xml"},
+    {"name": "Platformer",           "url": "https://www.platformer.news/",             "domain": "platformer.news",
+     "rss": "https://www.platformer.news/feed"},
+    {"name": "Stratechery",          "url": "https://stratechery.com/",                 "domain": "stratechery.com",
+     "rss": "https://stratechery.com/feed/"},
+    {"name": "Benedict Evans",       "url": "https://www.ben-evans.com/",               "domain": "ben-evans.com",
+     "rss": "https://www.ben-evans.com/benedictevans?format=rss"},
 ]
 
 MAX_CHARS_PER_SOURCE = 3000

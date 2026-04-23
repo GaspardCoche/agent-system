@@ -67,6 +67,18 @@ SOURCE_BRAND_IMAGES = {
     "Last Week in AI": "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https://substack-post-media.s3.amazonaws.com/public/images/last-week-ai-logo.png",
     "Interconnects": "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https://substack-post-media.s3.amazonaws.com/public/images/interconnects-logo.png",
     "Ahead of AI": "https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https://substack-post-media.s3.amazonaws.com/public/images/ahead-of-ai-logo.png",
+    # Tier 4 — Coding, Google, Tech
+    "Hacker News": "",
+    "Dev.to": "",
+    "Changelog": "",
+    "CSS-Tricks": "",
+    "Google Blog": "",
+    "Chrome Blog": "",
+    "Android Developers": "",
+    "The Verge": "",
+    "Platformer": "",
+    "Stratechery": "",
+    "Benedict Evans": "",
 }
 
 # Category → gradient for placeholder image blocks
@@ -140,6 +152,7 @@ def _cat_pill(cat: str) -> str:
 
 
 VAULT_REPO = os.environ.get("GITHUB_REPOSITORY", "GaspardCoche/agent-system")
+SITE_URL = "https://gaspardcoche.github.io/agent-system"
 
 
 def _vault_btn(article: dict) -> str:
@@ -432,6 +445,10 @@ def render_digest_html(digest: dict) -> str:
 
     n_articles = stats.get("articles_extracted", len(articles) + (1 if top_story else 0))
     n_sources = stats.get("sources_scraped", 10)
+    extended = digest.get("extended", [])
+    n_extended = len(extended)
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    archive_url = f"{SITE_URL}/digest/{today_str}.html"
 
     must_read_section = ""
     if must_reads:
@@ -524,6 +541,15 @@ def render_digest_html(digest: dict) -> str:
     {important_section}
     {compact_section}
     {trends_section}
+
+    <!-- CTA — Version complete -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:32px 0 0;">
+      <tr><td style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF);border-radius:12px;padding:28px 24px;text-align:center;">
+        <p style="font-size:14px;font-weight:700;color:#312E81;margin:0 0 6px;">+ d'articles : Code, Google, Tech</p>
+        <p style="font-size:12px;color:#6366F1;margin:0 0 16px;">Retrouvez {n_extended} articles bonus sur la version web</p>
+        <a href="{archive_url}" style="display:inline-block;background:#4F46E5;color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:12px 32px;border-radius:8px;letter-spacing:0.3px;">Voir tous les articles &rarr;</a>
+      </td></tr>
+    </table>
 
   </td></tr>
 
