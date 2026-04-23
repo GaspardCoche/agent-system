@@ -4,12 +4,6 @@ on:
   schedule:
     - cron: '0 6 * * 1'  # Lundi 08:00 heure belge (UTC+2)
   workflow_dispatch:
-    inputs:
-      full_audit:
-        description: 'Run full audit (slower, more thorough)'
-        required: false
-        default: 'false'
-        type: string
 
 jobs:
   health-check:
@@ -26,24 +20,57 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install requests -q
+      - run: pip install google-auth google-auth-oauthlib google-api-python-client markdown -q
 
-      - name: Run CRM health check
-        env:
-          HUBSPOT_PRIVATE_APP_TOKEN: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
-        run: python3 .github/scripts/crm_health_check.py
+      - name: Install MCP servers
+        run: npm install -g @anthropic-ai/mcp-hubspot
 
-      - name: Post health report as GitHub issue
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Write MCP config
         run: |
-          if [ -f /tmp/crm_health_report.md ] && [ -s /tmp/crm_health_report.md ]; then
-            gh issue create \
-              --title "🏥 CRM Health Report — $(date +%Y-%m-%d)" \
-              --label "crm,health-check" \
-              --body-file /tmp/crm_health_report.md \
-              --repo "$GITHUB_REPOSITORY"
-          fi
+          python3 -c "
+          import json
+          cfg = {'mcpServers': {
+            'hubspot': {'command': 'npx', 'args': ['-y', '@anthropic-ai/mcp-hubspot'], 'env': {}}
+          }}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
+
+      - name: Build claude_args
+        run: |
+          echo "CLAUDE_ARGS=--max-turns 12 --allowedTools Bash,Read,Write --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+
+      - name: Run CRM health check (Claude + HubSpot MCP)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/aria.md and docs/vault/crm/hubspot-backlog.md for context.
+
+            Run a weekly CRM health check. Use the HubSpot MCP tools to query the CRM and produce a report.
+
+            Checks to perform:
+            1. **Deals stagnants** : search deals NOT in closedwon/closedlost, modified more than 30 days ago. List them with name, stage, amount, last modified date.
+            2. **Contacts incomplets** : search contacts with status NEW/OPEN/IN_PROGRESS. Check which are missing email, firstname, lastname, company, or jobtitle. Report those with 2+ missing fields.
+            3. **Pipeline summary** : count open deals by stage with total value.
+            4. **Activite recente** : count contacts created in last 7 days, deals created in last 7 days, deals won in last 7 days.
+            5. **Contacts UNQUALIFIED** : count unqualified contacts, flag those older than 6 months as archivable.
+
+            Calculate a health score /100:
+            - Start at 100
+            - Subtract up to 30 for stale deal ratio
+            - Subtract up to 20 for incomplete contact ratio
+            - Subtract 5-10 for large unqualified backlog
+            - Subtract 10 if no new contacts this week
+
+            Write the full report in French to /tmp/crm_health_report.md (markdown with tables).
+            Write a JSON snapshot to /tmp/crm_health_snapshot.json with: timestamp, score, and key metrics.
+
+            Then create a GitHub issue:
+            Bash("gh issue create --title '🏥 CRM Health Report — $(date +%Y-%m-%d)' --label 'crm,health-check' --body-file /tmp/crm_health_report.md --repo $GITHUB_REPOSITORY")
+          claude_args: ${{ env.CLAUDE_ARGS }}
+          settings: |
+            {"env": {"GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
 
       - name: Send report by email
         continue-on-error: true
@@ -55,8 +82,9 @@ jobs:
             echo "Gmail not configured — skipping email"
             exit 0
           fi
-          pip install google-auth google-auth-oauthlib google-api-python-client -q
-          python3 .github/scripts/crm_health_email.py
+          if [ -f /tmp/crm_health_report.md ]; then
+            python3 .github/scripts/crm_health_email.py
+          fi
 
       - name: Commit health snapshot
         continue-on-error: true
