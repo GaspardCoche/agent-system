@@ -1,0 +1,113 @@
+name: Weekly AI Digest (Sunday Recap)
+
+on:
+  schedule:
+    - cron: '0 7 * * 0'  # Dimanche 09:00 heure belge (UTC+2)
+  workflow_dispatch:
+
+jobs:
+  weekly-recap:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install google-genai requests google-auth google-auth-oauthlib google-api-python-client markdown -q
+
+      - name: Collect week's digests from GitHub issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SINCE=$(date -u -d '7 days ago' +%Y-%m-%dT00:00:00Z 2>/dev/null || date -u -v-7d +%Y-%m-%dT00:00:00Z)
+          echo "Collecting digest issues since $SINCE"
+          gh issue list --label digest --state all --json title,body,createdAt --limit 10 \
+            --jq "[.[] | select(.createdAt >= \"$SINCE\")]" \
+            --repo "$GITHUB_REPOSITORY" > /tmp/week_issues.json
+          COUNT=$(python3 -c "import json; print(len(json.load(open('/tmp/week_issues.json'))))")
+          echo "Found $COUNT digest issues from this week"
+
+      - name: Collect week's vault-saved articles
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SINCE=$(date -u -d '7 days ago' +%Y-%m-%dT00:00:00Z 2>/dev/null || date -u -v-7d +%Y-%m-%dT00:00:00Z)
+          gh issue list --label vault-save --state all --json title,body,createdAt --limit 30 \
+            --jq "[.[] | select(.createdAt >= \"$SINCE\")]" \
+            --repo "$GITHUB_REPOSITORY" > /tmp/week_vault.json || echo "[]" > /tmp/week_vault.json
+
+      - name: Build weekly raw content
+        run: |
+          python3 -c "
+          import json
+          from pathlib import Path
+
+          issues = json.load(open('/tmp/week_issues.json'))
+          vault = json.load(open('/tmp/week_vault.json'))
+
+          parts = ['=== WEEKLY AI NEWS RECAP ===\n']
+          parts.append(f'Period: last 7 days\n')
+          parts.append(f'Daily digests found: {len(issues)}\n')
+          parts.append(f'Articles saved to vault: {len(vault)}\n\n')
+
+          for i, issue in enumerate(issues, 1):
+              parts.append(f'--- DAILY DIGEST {i} ({issue[\"createdAt\"][:10]}) ---')
+              parts.append(issue.get('body', '')[:8000])
+              parts.append('\n\n')
+
+          if vault:
+              parts.append('--- ARTICLES SAVED TO VAULT (reader highlights) ---\n')
+              for v in vault:
+                  parts.append(f'- {v.get(\"title\", \"\")}')
+                  parts.append(f'  {v.get(\"body\", \"\")[:500]}')
+                  parts.append('')
+
+          content = '\n'.join(parts)
+          Path('/tmp/weekly_raw.txt').write_text(content, encoding='utf-8')
+          print(f'Weekly raw content: {len(content)} chars')
+          "
+
+      - name: Synthesize weekly digest with Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -f /tmp/weekly_raw.txt ] && [ -s /tmp/weekly_raw.txt ]; then
+            python3 .github/scripts/gemini_agent.py \
+              --task weekly_digest \
+              --input /tmp/weekly_raw.txt \
+              --output /tmp/weekly_digest.json
+          else
+            echo '{"headline":"Pas de contenu cette semaine","sections":[],"top_3":[],"outlook":""}' > /tmp/weekly_digest.json
+            echo "No weekly content found"
+          fi
+
+      - name: Send weekly email
+        env:
+          GMAIL_TOKEN_JSON: ${{ secrets.GMAIL_TOKEN_JSON }}
+          GMAIL_USER_EMAIL: ${{ secrets.GMAIL_USER_EMAIL }}
+        run: |
+          if [ -z "$GMAIL_TOKEN_JSON" ] || [ -z "$GMAIL_USER_EMAIL" ]; then
+            echo "Gmail not configured — skipping email"
+            exit 0
+          fi
+          python3 .github/scripts/gmail_send_digest.py \
+            --weekly /tmp/weekly_digest.json
+
+      - name: Create weekly recap issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f /tmp/weekly_body.md ]; then
+            gh issue create \
+              --title "📊 Weekly AI Recap — $(date +%Y-%m-%d)" \
+              --label "digest,weekly" \
+              --body-file /tmp/weekly_body.md \
+              --repo "$GITHUB_REPOSITORY"
+          fi

@@ -115,6 +115,59 @@ TASK_PROMPTS = {
         '"suggestion":"str"}],"overall_quality":"excellent|good|fair|poor",'
         '"summary":"str","approved":true}\n\nCODE:\n'
     ),
+    "deep_dive": (
+        "You are a senior AI analyst. Write an in-depth analysis (~800-1200 words) in French.\n\n"
+        "Structure your analysis with these sections:\n"
+        "## Contexte\nWhy this matters, background, key players involved.\n\n"
+        "## Analyse detaillee\nWhat exactly happened/was announced. Technical details that matter.\n\n"
+        "## Impact business\nConcrete implications for a B2B SaaS company using AI tools daily.\n\n"
+        "## Ce que ca change pour nous\nActionable takeaways: what to test, adopt, watch, or ignore.\n\n"
+        "## Sources & liens\nRelevant links for further reading.\n\n"
+        "Write in clean markdown. Be analytical, not promotional. Focus on 'so what?' over description.\n\n"
+        "ARTICLE CONTENT:\n"
+    ),
+    "weekly_digest": (
+        "You are a senior AI analyst creating a premium WEEKLY intelligence recap in French.\n"
+        "Your reader is a tech-savvy B2B executive who reads daily AI briefings and wants a Sunday summary.\n\n"
+        "From the raw daily digests below, create a structured weekly recap. Return ONLY valid JSON (no markdown fences).\n\n"
+        "RULES:\n"
+        "- Deduplicate: if the same story appeared in multiple daily digests, merge into one entry\n"
+        "- Identify the 3 most important stories of the week (top_3)\n"
+        "- Group remaining stories by theme (sections)\n"
+        "- Write a forward-looking outlook paragraph\n"
+        "- ALL text MUST be in French\n"
+        "- Keep it concise: this is a recap, not a re-read\n\n"
+        "JSON STRUCTURE:\n"
+        "{\n"
+        '  "week_of": "YYYY-MM-DD",\n'
+        '  "headline": "string — punchy weekly theme in French",\n'
+        '  "top_3": [\n'
+        "    {\n"
+        '      "title": "string — story title",\n'
+        '      "summary": "string — 2-3 sentences, why it mattered this week",\n'
+        '      "url": "string — best source URL",\n'
+        '      "category": "string",\n'
+        '      "day": "string — which day(s) it appeared"\n'
+        "    }\n"
+        "  ],\n"
+        '  "sections": [\n'
+        "    {\n"
+        '      "theme": "string — section title in French",\n'
+        '      "articles": [\n'
+        "        {\n"
+        '          "title": "string",\n'
+        '          "summary": "string — 1 sentence",\n'
+        '          "url": "string",\n'
+        '          "source": "string"\n'
+        "        }\n"
+        "      ]\n"
+        "    }\n"
+        "  ],\n"
+        '  "outlook": "string — 2-3 sentences: what to watch next week, emerging patterns",\n'
+        '  "stats": {"daily_digests": 0, "total_articles": 0, "vault_saves": 0}\n'
+        "}\n\n"
+        "RAW WEEKLY CONTENT:\n"
+    ),
 }
 
 
@@ -144,9 +197,13 @@ def main():
     parser.add_argument("--input",  required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--model",  default=None)
+    parser.add_argument("--context-file", default=None, dest="context_file")
     args = parser.parse_args()
 
     content = Path(args.input).read_text(encoding="utf-8")
+    if args.context_file:
+        ctx = Path(args.context_file).read_text(encoding="utf-8")
+        content = f"CONTEXT:\n{ctx}\n\n{content}"
     token_estimate = len(content) // 4
     model = args.model or select_model(token_estimate)
 

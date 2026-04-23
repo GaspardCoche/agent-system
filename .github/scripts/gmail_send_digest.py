@@ -138,6 +138,27 @@ def _vault_btn(article: dict) -> str:
             f'\U0001f4cc Vault</a>')
 
 
+def _deep_dive_btn(article: dict) -> str:
+    title = article.get("title", "Article")
+    body_lines = [
+        f"source: {article.get('source', '')}",
+        f"url: {article.get('url', '')}",
+        f"category: {article.get('category', '')}",
+        "---",
+        "",
+        f"Analyse approfondie demandee pour : {title}",
+        "",
+        article.get("summary", ""),
+    ]
+    encoded_title = quote(f"\U0001f50d Deep dive : {title}"[:120])
+    encoded_body = quote("\n".join(body_lines))
+    url = f"https://github.com/{VAULT_REPO}/issues/new?labels=deep-dive&title={encoded_title}&body={encoded_body}"
+    return (f'<a href="{url}" style="display:inline-block;margin-left:8px;background:#FDF2F8;'
+            f'color:#BE185D;text-decoration:none;font-size:11px;font-weight:600;'
+            f'padding:4px 10px;border-radius:6px;vertical-align:middle;">'
+            f'\U0001f50d Brief</a>')
+
+
 def _render_top_story(story: dict) -> str:
     title = escape(story.get("title", ""))
     url = story.get("url", "#")
@@ -193,6 +214,7 @@ def _render_top_story(story: dict) -> str:
             {tags_html}
             <a href="{escape(url)}" style="display:inline-block;margin-top:12px;background:#1a1a2e;color:#fff;text-decoration:none;font-size:13px;font-weight:600;padding:10px 24px;border-radius:8px;">Lire l\'article &rarr;</a>
             {_vault_btn(story)}
+            {_deep_dive_btn(story)}
           </td></tr>
         </table>
       </td></tr>
@@ -251,6 +273,7 @@ def _render_card(article: dict) -> str:
         {tags_html}
         <a href="{escape(url)}" style="display:inline-block;margin-top:8px;color:#3B82F6;text-decoration:none;font-size:12px;font-weight:600;">Lire &rarr;</a>
         {_vault_btn(article)}
+        {_deep_dive_btn(article)}
       </td></tr>
     </table>'''
 
@@ -274,6 +297,7 @@ def _render_compact(article: dict) -> str:
             <span style="font-size:11px;color:#9CA3AF;">{source} &bull; {escape(cat)}</span>
             <p style="color:#6B7280;font-size:12px;line-height:1.5;margin:4px 0 0;">{summary}</p>
             {_vault_btn(article)}
+            {_deep_dive_btn(article)}
           </td>
           <td width="60" style="text-align:right;vertical-align:top;padding-top:2px;">
             <img src="{_favicon(url)}" width="24" height="24" style="border-radius:6px;" />
@@ -518,8 +542,7 @@ def render_fallback_html(md_content: str) -> str:
 
 
 def send_digest(service, recipient, digest_path, md_fallback=None):
-    today = datetime.now().strftime("%Y-%m-%d")
-    subject = f"\U0001f916 AI Intelligence Briefing — {today}"
+    today = datetime.now().strftime("%d/%m")
 
     digest_json = None
     if Path(digest_path).exists() and Path(digest_path).stat().st_size > 10:
@@ -527,6 +550,14 @@ def send_digest(service, recipient, digest_path, md_fallback=None):
             digest_json = json.loads(Path(digest_path).read_text(encoding="utf-8"))
         except Exception:
             pass
+
+    headline = ""
+    if digest_json:
+        headline = digest_json.get("headline", "")
+    if headline:
+        subject = f"{headline} — AI Briefing {today}"
+    else:
+        subject = f"AI Intelligence Briefing — {today}"
 
     msg = MIMEMultipart("alternative")
     msg["to"] = recipient
@@ -554,15 +585,236 @@ def send_digest(service, recipient, digest_path, md_fallback=None):
     return result
 
 
+def render_weekly_html(digest: dict) -> str:
+    now = datetime.now()
+    days_fr = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
+    months_fr = ["","janvier","fevrier","mars","avril","mai","juin","juillet","aout","septembre","octobre","novembre","decembre"]
+    date_str = f"{days_fr[now.weekday()]} {now.day} {months_fr[now.month]} {now.year}"
+
+    headline = escape(digest.get("headline", "Recap Hebdomadaire"))
+    top_3 = digest.get("top_3", [])
+    sections = digest.get("sections", [])
+    outlook = escape(digest.get("outlook", ""))
+    stats = digest.get("stats", {})
+
+    top_3_html = ""
+    for i, story in enumerate(top_3, 1):
+        medal = ["\U0001f947", "\U0001f948", "\U0001f949"][i-1] if i <= 3 else ""
+        title = escape(story.get("title", ""))
+        summary = escape(story.get("summary", ""))
+        url = story.get("url", "#")
+        cat = story.get("category", "")
+        day = escape(story.get("day", ""))
+        top_3_html += f'''
+        <tr><td style="padding:16px 0;border-bottom:1px solid #E5E7EB;">
+          <table width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td width="50" style="vertical-align:top;text-align:center;padding-top:4px;">
+              <span style="font-size:28px;">{medal}</span>
+            </td>
+            <td style="padding-left:8px;">
+              <a href="{escape(url)}" style="color:#1E293B;text-decoration:none;font-size:16px;font-weight:700;line-height:1.3;">{title}</a>
+              <br/><span style="font-size:11px;color:#9CA3AF;">{day} &bull; {escape(cat)}</span>
+              <p style="color:#4B5563;font-size:13px;line-height:1.6;margin:6px 0 0;">{summary}</p>
+            </td>
+          </tr></table>
+        </td></tr>'''
+
+    sections_html = ""
+    for section in sections:
+        theme = escape(section.get("theme", ""))
+        articles = section.get("articles", [])
+        items = ""
+        for a in articles:
+            t = escape(a.get("title", ""))
+            s = escape(a.get("summary", ""))
+            u = a.get("url", "#")
+            src = escape(a.get("source", ""))
+            items += f'''<tr><td style="padding:8px 0;border-bottom:1px solid #F3F4F6;">
+              <a href="{escape(u)}" style="color:#1E293B;text-decoration:none;font-size:13px;font-weight:600;">{t}</a>
+              <span style="font-size:11px;color:#9CA3AF;"> — {src}</span>
+              <br/><span style="font-size:12px;color:#6B7280;">{s}</span>
+            </td></tr>'''
+        sections_html += f'''
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 0;">
+          <tr><td style="padding:10px 16px;background:#F8FAFC;border-radius:8px 8px 0 0;">
+            <span style="font-size:14px;font-weight:700;color:#334155;">{theme}</span>
+          </td></tr>
+          <tr><td style="padding:4px 16px 12px;">
+            <table width="100%" cellpadding="0" cellspacing="0">{items}</table>
+          </td></tr>
+        </table>'''
+
+    return f'''<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Weekly AI Recap</title></head>
+<body style="margin:0;padding:0;background-color:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F1F5F9;">
+<tr><td align="center" style="padding:16px;">
+<table width="720" cellpadding="0" cellspacing="0" style="max-width:720px;width:100%;">
+
+  <!-- Header -->
+  <tr><td style="background:linear-gradient(145deg,#0a0a1a 0%,#0f172a 50%,#1e1b4b 100%);border-radius:16px 16px 0 0;padding:0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr><td style="height:3px;background:linear-gradient(90deg,#8B5CF6,#6366F1,#4F46E5,#6366F1,#8B5CF6);"></td></tr>
+      <tr><td style="padding:32px 32px 0;text-align:center;">
+        <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>
+          <td style="width:32px;height:1px;background:linear-gradient(90deg,transparent,#8B5CF6);"></td>
+          <td style="padding:0 14px;"><span style="font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#A78BFA;">Recap Hebdo</span></td>
+          <td style="width:32px;height:1px;background:linear-gradient(90deg,#8B5CF6,transparent);"></td>
+        </tr></table>
+      </td></tr>
+      <tr><td style="text-align:center;padding:14px 32px 0;">
+        <h1 style="color:#F8FAFC;font-size:30px;font-weight:300;margin:0;letter-spacing:2px;font-family:Georgia,'Times New Roman',serif;">Weekly AI Briefing</h1>
+      </td></tr>
+      <tr><td style="text-align:center;padding:12px 32px 0;">
+        <span style="color:#64748B;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;">{date_str}</span>
+      </td></tr>
+      <tr><td style="padding:18px 32px 30px;text-align:center;">
+        <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>
+          <td style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.25);border-radius:20px;padding:6px 18px;">
+            <span style="color:#C4B5FD;font-size:12px;font-weight:500;">{stats.get('daily_digests', 0)} digests</span>
+          </td>
+          <td style="width:10px;"></td>
+          <td style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.25);border-radius:20px;padding:6px 18px;">
+            <span style="color:#C4B5FD;font-size:12px;font-weight:500;">{stats.get('total_articles', 0)} articles</span>
+          </td>
+          <td style="width:10px;"></td>
+          <td style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.25);border-radius:20px;padding:6px 18px;">
+            <span style="color:#C4B5FD;font-size:12px;font-weight:500;">{stats.get('vault_saves', 0)} sauvegardes</span>
+          </td>
+        </tr></table>
+      </td></tr>
+    </table>
+  </td></tr>
+
+  <!-- Headline -->
+  <tr><td style="background:linear-gradient(90deg,#EDE9FE,#DDD6FE);padding:20px 28px;">
+    <p style="font-size:17px;font-weight:700;color:#1E293B;margin:0;line-height:1.4;">\U0001f4ca {headline}</p>
+  </td></tr>
+
+  <!-- Content -->
+  <tr><td style="background:#F8FAFC;padding:24px;">
+
+    <!-- Top 3 -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);overflow:hidden;">
+      <tr><td style="background:linear-gradient(90deg,#FEF3C7,#FDE68A);padding:14px 20px;">
+        <span style="font-size:13px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:2px;">\U0001f3c6 Top 3 de la semaine</span>
+      </td></tr>
+      <tr><td style="padding:8px 20px 16px;">
+        <table width="100%" cellpadding="0" cellspacing="0">{top_3_html}</table>
+      </td></tr>
+    </table>
+
+    <!-- Sections -->
+    {sections_html}
+
+    <!-- Outlook -->
+    {"<table width='100%' cellpadding='0' cellspacing='0' style='background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.04);margin:24px 0 0;overflow:hidden;'><tr><td style='background:linear-gradient(90deg,#ECFDF5,#D1FAE5);padding:14px 20px;'><span style=\"font-size:13px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:2px;\">" + chr(0x1f52e) + " Semaine prochaine</span></td></tr><tr><td style='padding:16px 20px;'><p style='color:#374151;font-size:14px;line-height:1.6;margin:0;'>" + outlook + "</p></td></tr></table>" if outlook else ""}
+
+  </td></tr>
+
+  <!-- Footer -->
+  <tr><td style="background:linear-gradient(145deg,#0a0a1a,#111827);border-radius:0 0 16px 16px;padding:0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,0.2),transparent);"></td></tr>
+      <tr><td style="padding:20px 28px;text-align:center;">
+        <p style="color:#4B5563;font-size:10px;margin:0 0 4px;letter-spacing:0.5px;">
+          Genere par <span style="color:#A78BFA;">Agent System</span> &mdash; Recap hebdomadaire
+        </p>
+        <p style="color:#374151;font-size:9px;margin:0;">Chaque dimanche matin</p>
+      </td></tr>
+    </table>
+  </td></tr>
+
+</table>
+</td></tr></table>
+</body></html>'''
+
+
+def build_weekly_plain(digest: dict) -> str:
+    lines = [f"WEEKLY AI RECAP — {datetime.now().strftime('%Y-%m-%d')}", "=" * 55, ""]
+    lines.append(digest.get("headline", ""))
+    lines.append("")
+
+    for i, story in enumerate(digest.get("top_3", []), 1):
+        lines.append(f"#{i} {story.get('title', '')}")
+        lines.append(f"   {story.get('summary', '')}")
+        lines.append(f"   {story.get('url', '')}")
+        lines.append("")
+
+    for section in digest.get("sections", []):
+        lines.append(f"\n--- {section.get('theme', '')} ---")
+        for a in section.get("articles", []):
+            lines.append(f"  - {a.get('title', '')} ({a.get('source', '')})")
+            lines.append(f"    {a.get('summary', '')}")
+
+    if digest.get("outlook"):
+        lines.append(f"\nPROCHAINE SEMAINE: {digest['outlook']}")
+    return "\n".join(lines)
+
+
+def send_weekly(service, recipient, weekly_path):
+    today = datetime.now().strftime("%d/%m")
+
+    try:
+        digest = json.loads(Path(weekly_path).read_text(encoding="utf-8"))
+    except Exception:
+        print(f"Cannot read weekly digest: {weekly_path}", file=sys.stderr)
+        return
+
+    headline = digest.get("headline", "Recap Hebdomadaire")
+    subject = f"\U0001f4ca {headline} — Weekly AI Briefing {today}"
+
+    msg = MIMEMultipart("alternative")
+    msg["to"] = recipient
+    msg["from"] = recipient
+    msg["subject"] = subject
+
+    plain = build_weekly_plain(digest)
+    html = render_weekly_html(digest)
+
+    msg.attach(MIMEText(plain, "plain", "utf-8"))
+    msg.attach(MIMEText(html, "html", "utf-8"))
+
+    raw = base64.urlsafe_b64encode(msg.as_bytes()).decode("utf-8")
+    result = service.users().messages().send(userId="me", body={"raw": raw}).execute()
+    print(f"Weekly digest sent to {recipient} (ID: {result['id']})", file=sys.stderr)
+
+    md_lines = [f"# {headline}\n"]
+    for i, s in enumerate(digest.get("top_3", []), 1):
+        md_lines.append(f"## #{i} {s.get('title', '')}")
+        md_lines.append(f"{s.get('summary', '')}\n")
+        md_lines.append(f"[Lire]({s.get('url', '')})\n")
+    for sec in digest.get("sections", []):
+        md_lines.append(f"### {sec.get('theme', '')}")
+        for a in sec.get("articles", []):
+            md_lines.append(f"- [{a.get('title', '')}]({a.get('url', '')}) — {a.get('summary', '')}")
+    if digest.get("outlook"):
+        md_lines.append(f"\n---\n**Semaine prochaine:** {digest['outlook']}")
+    Path("/tmp/weekly_body.md").write_text("\n".join(md_lines), encoding="utf-8")
+
+    return result
+
+
 def main():
-    digest_path = sys.argv[1] if len(sys.argv) > 1 else "/tmp/ai_digest.json"
-    md_fallback = sys.argv[2] if len(sys.argv) > 2 else "/tmp/digest_body.md"
+    import argparse as _ap
+    parser = _ap.ArgumentParser()
+    parser.add_argument("--weekly", default=None)
+    parser.add_argument("digest_path", nargs="?", default="/tmp/ai_digest.json")
+    parser.add_argument("md_fallback", nargs="?", default="/tmp/digest_body.md")
+    args = parser.parse_args()
+
     recipient = os.environ.get("GMAIL_USER_EMAIL")
     if not recipient:
         print("GMAIL_USER_EMAIL not set", file=sys.stderr)
         sys.exit(1)
     service = get_service()
-    send_digest(service, recipient, digest_path, md_fallback)
+
+    if args.weekly:
+        send_weekly(service, recipient, args.weekly)
+    else:
+        send_digest(service, recipient, args.digest_path, args.md_fallback)
 
 
 if __name__ == "__main__":

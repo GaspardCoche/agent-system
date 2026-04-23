@@ -1,0 +1,157 @@
+name: Deep Dive (from Digest CTA)
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  research:
+    if: contains(github.event.issue.labels.*.name, 'deep-dive')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install google-genai requests google-auth google-auth-oauthlib google-api-python-client -q
+
+      - name: Extract article info
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          python3 -c "
+          import os, json, re
+          body = os.environ.get('ISSUE_BODY', '')
+          meta = {}
+          for line in body.split('\n'):
+              if '---' in line.strip() and len(line.strip()) <= 4:
+                  break
+              if ':' in line:
+                  key, val = line.split(':', 1)
+                  meta[key.strip().lower()] = val.strip()
+          json.dump(meta, open('/tmp/deep_dive_meta.json', 'w'))
+          print(f'Article: {meta.get(\"url\", \"unknown\")}')
+          "
+
+      - name: Scrape article + related content
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: |
+          python3 -c "
+          import json, urllib.request, re, os
+          meta = json.load(open('/tmp/deep_dive_meta.json'))
+          url = meta.get('url', '')
+          if not url:
+              open('/tmp/deep_dive_content.txt', 'w').write('No URL found')
+              exit(0)
+          try:
+              api_key = os.environ.get('FIRECRAWL_API_KEY')
+              if api_key:
+                  payload = json.dumps({'url': url, 'formats': ['markdown'], 'onlyMainContent': True}).encode()
+                  req = urllib.request.Request('https://api.firecrawl.dev/v1/scrape', data=payload,
+                      headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'})
+                  with urllib.request.urlopen(req, timeout=30) as resp:
+                      data = json.loads(resp.read().decode())
+                      content = data.get('data', {}).get('markdown', '')[:15000]
+              else:
+                  req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                  with urllib.request.urlopen(req, timeout=15) as resp:
+                      html = resp.read().decode('utf-8', errors='replace')
+                  content = re.sub(r'<[^>]+>', ' ', html)
+                  content = re.sub(r'\s+', ' ', content).strip()[:15000]
+          except Exception as e:
+              content = f'Scrape failed: {e}'
+          open('/tmp/deep_dive_content.txt', 'w').write(content)
+          print(f'Scraped {len(content)} chars')
+          "
+
+      - name: Generate deep dive with Gemini
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python3 .github/scripts/gemini_agent.py \
+            --task deep_dive \
+            --input /tmp/deep_dive_content.txt \
+            --output /tmp/deep_dive_analysis.md \
+            --context-file /tmp/deep_dive_meta.json
+
+      - name: Post analysis as comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          if [ -f /tmp/deep_dive_analysis.md ] && [ -s /tmp/deep_dive_analysis.md ]; then
+            gh issue comment "$ISSUE_NUMBER" \
+              --body-file /tmp/deep_dive_analysis.md \
+              --repo "${{ github.repository }}"
+          else
+            gh issue comment "$ISSUE_NUMBER" \
+              --body "Analyse impossible — contenu insuffisant." \
+              --repo "${{ github.repository }}"
+          fi
+
+      - name: Send deep dive by email
+        continue-on-error: true
+        env:
+          GMAIL_TOKEN_JSON: ${{ secrets.GMAIL_TOKEN_JSON }}
+          GMAIL_USER_EMAIL: ${{ secrets.GMAIL_USER_EMAIL }}
+        run: |
+          if [ -z "$GMAIL_TOKEN_JSON" ] || [ -z "$GMAIL_USER_EMAIL" ]; then
+            echo "Gmail not configured — skipping email"
+            exit 0
+          fi
+          python3 -c "
+          import json, os, base64, sys
+          from email.mime.multipart import MIMEMultipart
+          from email.mime.text import MIMEText
+          from pathlib import Path
+          from google.oauth2.credentials import Credentials
+          from google.auth.transport.requests import Request
+          from googleapiclient.discovery import build
+
+          token = json.loads(os.environ['GMAIL_TOKEN_JSON'])
+          creds = Credentials(token=token.get('token'), refresh_token=token['refresh_token'],
+              token_uri='https://oauth2.googleapis.com/token',
+              client_id=token['client_id'], client_secret=token['client_secret'])
+          if creds.expired and creds.refresh_token:
+              creds.refresh(Request())
+          service = build('gmail', 'v1', credentials=creds)
+
+          meta = json.load(open('/tmp/deep_dive_meta.json'))
+          title = meta.get('url', 'Article').split('/')[-1].replace('-', ' ').title()
+          body = Path('/tmp/deep_dive_analysis.md').read_text()
+          recipient = os.environ['GMAIL_USER_EMAIL']
+
+          msg = MIMEMultipart('alternative')
+          msg['to'] = recipient
+          msg['from'] = recipient
+          msg['subject'] = f'Deep Dive : {title[:80]}'
+          msg.attach(MIMEText(body, 'plain', 'utf-8'))
+
+          try:
+              import markdown
+              html = markdown.markdown(body, extensions=['tables', 'fenced_code'])
+              html_full = f'<html><body style=\"font-family:-apple-system,sans-serif;max-width:720px;margin:0 auto;padding:20px;line-height:1.6;\">{html}</body></html>'
+              msg.attach(MIMEText(html_full, 'html', 'utf-8'))
+          except ImportError:
+              pass
+
+          raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
+          service.users().messages().send(userId='me', body={'raw': raw}).execute()
+          print(f'Deep dive sent to {recipient}')
+          "
+
+      - name: Close issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue close "$ISSUE_NUMBER" \
+            --comment "Analyse approfondie envoyee par email et postee ci-dessus." \
+            --repo "${{ github.repository }}"
