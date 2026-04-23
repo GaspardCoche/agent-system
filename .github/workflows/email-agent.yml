@@ -233,6 +233,102 @@ jobs:
             echo "⚠️  No AI digest found"
           fi
 
+      - name: Auto-save must_read articles to vault
+        run: |
+          python3 - << 'PYEOF'
+          import json, re, sys, textwrap
+          from datetime import datetime
+          from pathlib import Path
+
+          digest_path = Path("/tmp/ai_digest.json")
+          if not digest_path.exists():
+              print("No ai_digest.json found — skipping vault save")
+              sys.exit(0)
+
+          digest = json.loads(digest_path.read_text(encoding="utf-8"))
+          date = datetime.now().strftime("%Y-%m-%d")
+          vault_dir = Path("docs/vault/ai-news")
+          vault_dir.mkdir(parents=True, exist_ok=True)
+
+          # Collect must_read articles + top_story
+          to_save = []
+          top = digest.get("top_story")
+          if top and top.get("title"):
+              entry = dict(top)
+              entry.setdefault("importance", "must_read")
+              entry["_is_top_story"] = True
+              to_save.append(entry)
+
+          for art in digest.get("articles", []):
+              if art.get("importance") == "must_read":
+                  # Avoid duplicating the top_story
+                  if top and art.get("url") == top.get("url"):
+                      continue
+                  to_save.append(art)
+
+          if not to_save:
+              print("No must_read articles found — nothing to save")
+              sys.exit(0)
+
+          saved = 0
+          for art in to_save:
+              title = art.get("title", "Article").strip()
+              source = art.get("source", "")
+              url = art.get("url", "")
+              category = art.get("category", "")
+              importance = art.get("importance", "must_read")
+              image_url = art.get("image_url", "")
+              summary = art.get("summary", "")
+              tags = art.get("company_tags", [])
+
+              slug = re.sub(r'[^a-z0-9]+', '-', title.lower())[:60].strip('-')
+              note_path = vault_dir / f"{date}-{slug}.md"
+              if note_path.exists():
+                  print(f"  SKIP (exists): {note_path}")
+                  continue
+
+              tags_fmt = ", ".join(f'"{t}"' for t in tags)
+              image_block = f"\n![{title}]({image_url})\n" if image_url else ""
+              is_top = art.get("_is_top_story", False)
+              importance_label = f"{importance} (top story)" if is_top else importance
+
+              note = textwrap.dedent(f"""\
+              ---
+              title: "{title}"
+              source: "{source}"
+              url: "{url}"
+              category: "{category}"
+              importance: "{importance_label}"
+              date: {date}
+              tags: [{tags_fmt}]
+              ---
+
+              # {title}
+              {image_block}
+              **Source:** [{source}]({url}) | **Categorie:** {category} | **Importance:** {importance_label}
+
+              {summary}
+
+              ---
+              *Sauvegarde depuis AI Intelligence Briefing du {date}*
+              """)
+              note_path.write_text(note, encoding="utf-8")
+              print(f"  SAVED: {note_path}")
+              saved += 1
+
+          print(f"Total: {saved} must_read article(s) saved to vault")
+          PYEOF
+
+      - name: Commit vault must_read articles
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/vault/ai-news/
+          git diff --cached --quiet && echo "No new vault articles" && exit 0
+          git commit -m "vault: auto-save must_read articles from digest $(date +%Y-%m-%d)"
+          git pull --rebase -X theirs origin main && git push || true
+
       - name: Install MCP servers
         run: npm install -g @modelcontextprotocol/server-github
 

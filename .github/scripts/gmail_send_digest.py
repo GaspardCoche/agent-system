@@ -59,6 +59,11 @@ SOURCE_BRAND_IMAGES = {
     "MIT Tech Review AI": "https://wp.technologyreview.com/wp-content/uploads/2023/10/MIT_TR_Logo_RGB_Master-1.png",
     "Wired AI": "",
     "MarkTechPost": "",
+    "Latent Space": "",
+    "AI Snake Oil": "",
+    "Last Week in AI": "",
+    "Interconnects": "",
+    "Ahead of AI": "",
 }
 
 

@@ -31,6 +31,8 @@ SOURCES = [
      "rss": "https://huggingface.co/blog/feed.xml"},
     {"name": "GitHub Blog",          "url": "https://github.blog/",                    "domain": "github.blog",
      "rss": "https://github.blog/feed/"},
+    {"name": "Latent Space",        "url": "https://www.latent.space/",               "domain": "latent.space",
+     "rss": "https://www.latent.space/feed"},
     # Tier 2 — Major tech press + AI-focused outlets
     {"name": "The Verge AI",         "url": "https://www.theverge.com/ai-artificial-intelligence",
      "domain": "theverge.com",
@@ -43,6 +45,12 @@ SOURCES = [
     {"name": "The Decoder",          "url": "https://the-decoder.com/",                "domain": "the-decoder.com",
      "rss": "https://the-decoder.com/feed/"},
     {"name": "Mistral News",         "url": "https://mistral.ai/news/",                "domain": "mistral.ai"},
+    {"name": "AI Snake Oil",        "url": "https://www.aisnakeoil.com/",             "domain": "aisnakeoil.com",
+     "rss": "https://www.aisnakeoil.com/feed"},
+    {"name": "Last Week in AI",     "url": "https://lastweekin.ai/",                  "domain": "lastweekin.ai",
+     "rss": "https://lastweekin.ai/feed"},
+    {"name": "Interconnects",       "url": "https://www.interconnects.ai/",           "domain": "interconnects.ai",
+     "rss": "https://www.interconnects.ai/feed"},
     # Tier 3 — Broader coverage
     {"name": "VentureBeat AI",       "url": "https://venturebeat.com/category/ai/",    "domain": "venturebeat.com",
      "rss": "https://venturebeat.com/category/ai/feed/"},
@@ -59,6 +67,8 @@ SOURCES = [
     {"name": "MarkTechPost",         "url": "https://www.marktechpost.com/",           "domain": "marktechpost.com",
      "rss": "https://www.marktechpost.com/feed/"},
     {"name": "The Batch",            "url": "https://www.deeplearning.ai/the-batch/",   "domain": "deeplearning.ai"},
+    {"name": "Ahead of AI",         "url": "https://magazine.sebastianraschka.com/",  "domain": "magazine.sebastianraschka.com",
+     "rss": "https://magazine.sebastianraschka.com/feed"},
 ]
 
 MAX_CHARS_PER_SOURCE = 3000
@@ -153,7 +163,8 @@ def fetch_article_meta(url: str) -> dict:
 ATOM_NS = "http://www.w3.org/2005/Atom"
 
 
-def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> list[dict]:
+def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> tuple[list[dict], int, int]:
+    """Returns (items, total_entries_seen, stale_count)."""
     try:
         req = urllib.request.Request(rss_url, headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=10) as resp:
@@ -163,6 +174,8 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
         is_atom = feed_format == "atom" or root.tag == f"{{{ATOM_NS}}}feed"
 
         items = []
+        total_entries = 0
+        stale_count = 0
         if is_atom:
             for entry in root.findall(f"{{{ATOM_NS}}}entry"):
                 title_el = entry.find(f"{{{ATOM_NS}}}title")
@@ -177,8 +190,10 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
                     updated_el = entry.find(f"{{{ATOM_NS}}}published")
                 href = link_el.get("href", "") if link_el is not None else ""
                 if title_el is not None and href:
+                    total_entries += 1
                     pub_date = _parse_date(updated_el.text if updated_el is not None else "")
                     if not _is_fresh(pub_date):
+                        stale_count += 1
                         continue
                     desc = ""
                     if summary_el is not None and summary_el.text:
@@ -198,8 +213,10 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
                 desc_el = item.find("description")
                 pub_el = item.find("pubDate")
                 if title_el is not None and link_el is not None and link_el.text:
+                    total_entries += 1
                     pub_date = _parse_date(pub_el.text if pub_el is not None else "")
                     if not _is_fresh(pub_date):
+                        stale_count += 1
                         continue
                     desc = ""
                     if desc_el is not None and desc_el.text:
@@ -212,10 +229,10 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
                     })
                 if len(items) >= max_items:
                     break
-        return items
+        return items, total_entries, stale_count
     except Exception as e:
         print(f"    RSS parse failed: {e}", file=sys.stderr)
-        return []
+        return [], 0, 0
 
 
 def scrape_page(url: str, api_key: str | None) -> str:
@@ -273,6 +290,9 @@ def main():
     total = 0
     all_rss_articles = []
     skipped_seen = 0
+    total_rss_found = 0
+    total_filtered_stale = 0
+    sources_scraped = 0
 
     for src in SOURCES:
         if total >= MAX_TOTAL_CHARS:
@@ -281,10 +301,13 @@ def main():
 
         print(f"  [{src['name']}]...", file=sys.stderr)
         favicon = f"https://www.google.com/s2/favicons?domain={src['domain']}&sz=128"
+        sources_scraped += 1
 
         rss_items = []
         if src.get("rss"):
-            rss_items = parse_rss(src["rss"], max_items=8, feed_format=src.get("format", "rss"))
+            rss_items, feed_total, feed_stale = parse_rss(src["rss"], max_items=8, feed_format=src.get("format", "rss"))
+            total_rss_found += feed_total
+            total_filtered_stale += feed_stale
             if rss_items:
                 print(f"    RSS: {len(rss_items)} fresh articles found", file=sys.stderr)
 
@@ -365,6 +388,26 @@ def main():
     raw = "".join(sections)
     out.write_text(raw, encoding="utf-8")
     print(f"Scraped ~{total // 4:,} tokens -> {out}", file=sys.stderr)
+
+    # Write quality metrics
+    articles_published = len(valid) if valid else 0
+    fresh_after_filter = total_rss_found - total_filtered_stale
+    freshness_rate = round(fresh_after_filter / total_rss_found, 2) if total_rss_found > 0 else 0.0
+    dedup_rate = round(skipped_seen / fresh_after_filter, 2) if fresh_after_filter > 0 else 0.0
+    metrics = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "sources_scraped": sources_scraped,
+        "total_rss_articles_found": total_rss_found,
+        "filtered_stale": total_filtered_stale,
+        "filtered_dedup": skipped_seen,
+        "articles_published": articles_published,
+        "freshness_rate": freshness_rate,
+        "dedup_rate": dedup_rate,
+        "content_chars": total,
+    }
+    metrics_path = Path("/tmp/scraper_metrics.json")
+    metrics_path.write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+    print(f"  Metrics written to {metrics_path}", file=sys.stderr)
 
 
 if __name__ == "__main__":
