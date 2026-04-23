@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;Ère des Agents Autonomes et des Modèles Open Source Efficaces — AI Briefing 2026-04-23</title>
+  <meta name="description" content="Les dernières innovations en matière d&#x27;agents d&#x27;IA pour l&#x27;entreprise et de modèles open source performants redéfinissent l&#x27;automatisation et l&#x27;efficacité du développement.">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #F8FAFC; color: #0F172A; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    .header { background: #0F172A; color: #F8FAFC; padding: 48px 24px 40px; text-align: center; }
+    .header::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, #6366F1, #8B5CF6, #A78BFA, #6366F1); margin: -48px -24px 32px; }
+    .header .label { font-size: 11px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #818CF8; }
+    .header h1 { font-size: 36px; font-weight: 300; letter-spacing: 3px; font-family: Georgia, 'Times New Roman', serif; margin: 12px 0; }
+    .header .date { color: #64748B; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+    .header .stats { margin-top: 20px; display: flex; justify-content: center; gap: 8px; }
+    .header .pill { background: rgba(99,102,241,0.12); border-radius: 20px; padding: 5px 16px; color: #A5B4FC; font-size: 11px; font-weight: 600; }
+
+    .headline-bar { background: #fff; padding: 28px 24px; border-bottom: 1px solid #E2E8F0; max-width: 1200px; margin: 0 auto; }
+    .headline-bar h2 { font-size: 22px; font-weight: 800; font-family: Georgia, serif; color: #0F172A; margin-bottom: 6px; }
+    .headline-bar p { color: #64748B; font-size: 15px; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .section { margin: 40px 0; }
+    .section-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: var(--accent, #334155); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent, #E2E8F0); display: inline-block; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+
+    .card, .card-large { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: box-shadow 0.2s, transform 0.2s; }
+    .card:hover, .card-large:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-2px); }
+    .card-large { grid-column: 1 / -1; }
+    .card-img { width: 100%; object-fit: cover; display: block; }
+    .card-placeholder { display: flex; align-items: center; justify-content: center; }
+    .card-body { padding: 20px; }
+    .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .cat-pill { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.8px; text-transform: uppercase; background: color-mix(in srgb, var(--cat-color) 10%, transparent); color: var(--cat-color); }
+    .badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-red { background: #FEF2F2; color: #DC2626; }
+    .badge-amber { background: #FFFBEB; color: #D97706; }
+    .card-body h3 { font-size: 18px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
+    .card-large .card-body h3 { font-size: 24px; font-family: Georgia, serif; }
+    .card-body h3 a { color: #0F172A; text-decoration: none; }
+    .card-body h3 a:hover { color: #4F46E5; }
+    .source { font-size: 12px; color: #94A3B8; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .source img { border-radius: 3px; }
+    .card-body p { font-size: 14px; color: #475569; line-height: 1.65; }
+    .card-tags { margin-top: 12px; display: flex; gap: 4px; flex-wrap: wrap; }
+    .tag { font-size: 10px; color: #6366F1; background: #EEF2FF; padding: 2px 8px; border-radius: 8px; font-weight: 500; }
+
+    .trends-section { background: #fff; border-radius: 12px; padding: 24px; margin: 40px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .trends-section h2 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: #059669; margin-bottom: 16px; }
+    .trend { padding: 14px 0; border-bottom: 1px solid #F1F5F9; }
+    .trend:last-child { border: none; }
+    .trend strong { display: block; font-size: 15px; color: #0F172A; margin-bottom: 4px; }
+    .trend span { font-size: 13px; color: #64748B; }
+
+    .extended-label { margin: 48px 0 8px; text-align: center; }
+    .extended-label span { background: #F8FAFC; padding: 0 20px; font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 3px; position: relative; }
+    .extended-label::before { content: ''; display: block; height: 1px; background: #E2E8F0; position: relative; top: 10px; }
+
+    .footer { background: #0F172A; padding: 32px 24px; text-align: center; margin-top: 48px; }
+    .footer p { color: #475569; font-size: 12px; }
+    .footer a { color: #818CF8; text-decoration: none; }
+
+    .back-link { display: inline-block; margin: 24px 0; font-size: 13px; color: #6366F1; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+      .header h1 { font-size: 28px; }
+      .headline-bar h2 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="label">Intelligence</div>
+  <h1>AI Briefing</h1>
+  <div class="date">2026-04-23</div>
+  <div class="stats">
+    <span class="pill">3 articles</span>
+    <span class="pill">18 sources</span>
+    
+  </div>
+</div>
+
+<div class="headline-bar">
+  <h2>L&#x27;Ère des Agents Autonomes et des Modèles Open Source Efficaces</h2>
+  <p>Les dernières innovations en matière d&#x27;agents d&#x27;IA pour l&#x27;entreprise et de modèles open source performants redéfinissent l&#x27;automatisation et l&#x27;efficacité du développement.</p>
+  <a href="https://gaspardcoche.github.io/agent-system/digest/" class="back-link">&larr; Tous les digests</a>
+</div>
+
+<div class="container">
+
+  <section class='section'>
+    <article class="card-large">
+      <a href="https://openai.com/blog"><img src="https://www.google.com/s2/favicons?domain=openai.com&amp;sz=128" alt="" class="card-img" style="height:240px;" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--cat-color:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          
+        </div>
+        <h3><a href="https://openai.com/blog">Introducing workspace agents in ChatGPT</a></h3>
+        <div class="source"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" /> OpenAI Blog</div>
+        <p>OpenAI a lancé les agents d&#x27;espace de travail dans ChatGPT, des outils propulsés par Codex conçus pour automatiser les flux de travail complexes en entreprise. Cette innovation permet aux équipes d&#x27;intégrer des capacités d&#x27;IA avancées pour des tâches répétitives ou multi-étapes, offrant une opportunité majeure de mise à l&#x27;échelle des opérations à travers diverses applications cloud. Pour les cadres et développeurs, cela signifie la possibilité de créer des solutions d&#x27;agent plus sophistiquées, d&#x27;optimiser la productivité et de libérer des ressources humaines pour des activités à plus forte valeur ajoutée. L&#x27;adoption de ces agents pourrait transformer la gestion des projets et des opérations quotidiennes.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">ChatGPT</span><span class="tag">Codex</span></div>
+      </div>
+    </article></section>
+
+  
+
+  <section class='section'><h2 class='section-title' style='--accent:#D97706;'>Important</h2><div class='grid'>
+    <article class="card">
+      <a href="https://simonwillison.net/"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&amp;sz=128" alt="" class="card-img" style="height:180px;" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--cat-color:#7C3AED;">🧠 Modeles</span>
+          <span class="badge badge-amber">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/">Qwen3.6-27B: Flagship-Level Coding in a 27B Dense Model</a></h3>
+        <div class="source"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" /> Simon Willison</div>
+        <p>Qwen a lancé son modèle 3.6-27B, revendiquant des performances de codage agentique de niveau &#x27;flagship&#x27; tout en étant significativement plus léger (55.6 Go) que ses prédécesseurs. Cette avancée est cruciale pour le développement d&#x27;applications d&#x27;IA locales et l&#x27;optimisation des coûts d&#x27;infrastructure, offrant une alternative puissante et accessible aux modèles propriétaires plus lourds.</p>
+        <div class="card-tags"><span class="tag">Qwen</span><span class="tag">Alibaba</span></div>
+      </div>
+    </article></div></section>
+
+  <section class='section'><h2 class='section-title' style='--accent:#94A3B8;'>En bref</h2><div class='grid'>
+    <article class="card">
+      <a href="https://huggingface.co/blog"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&amp;sz=128" alt="" class="card-img" style="height:180px;" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--cat-color:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          
+        </div>
+        <h3><a href="https://huggingface.co/blog">mlinter: a linter for Transformers modeling files</a></h3>
+        <div class="source"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" /> HuggingFace Blog</div>
+        <p>HuggingFace a introduit &#x27;mlinter&#x27;, un outil de linting dédié aux fichiers de modélisation des Transformers. Cet outil vise à standardiser et à améliorer la qualité du code dans les projets d&#x27;apprentissage automatique, ce qui est essentiel pour les équipes de développement souhaitant maintenir des bases de code propres, robustes et faciles à gérer.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">Transformers</span></div>
+      </div>
+    </article></div></section>
+
+  <div class='trends-section'><h2>Tendances</h2><div class="trend"><strong>Montée en puissance des agents d&#x27;IA</strong><span>Les entreprises investissent dans des agents d&#x27;IA capables d&#x27;automatiser des flux de travail complexes, signalant une évolution vers des systèmes plus autonomes et intégrés.</span></div><div class="trend"><strong>Modèles Open Source performants et légers</strong><span>La recherche se concentre sur le développement de modèles open source offrant des capacités de pointe avec des exigences en ressources réduites, facilitant leur déploiement local et leur accessibilité.</span></div><div class="trend"><strong>Outils de développement spécialisés pour l&#x27;IA</strong><span>L&#x27;écosystème des outils de développement s&#x27;enrichit de solutions ciblées pour la qualité du code et la gestion des projets ML, essentielles pour la robustesse et la maintenabilité des applications d&#x27;IA.</span></div></div>
+
+  
+
+</div>
+
+<div class="footer">
+  <p>Genere par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude</p>
+  <p style="margin-top:4px;color:#334155;font-size:11px;">Chaque matin a 7h30 &bull; 18 sources scannees</p>
+</div>
+
+</body>
+</html>
