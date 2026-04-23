@@ -14,7 +14,8 @@ import sys
 import time
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 SOURCES = [
@@ -62,6 +63,56 @@ SOURCES = [
 
 MAX_CHARS_PER_SOURCE = 3000
 MAX_TOTAL_CHARS = 65000
+MAX_AGE_HOURS = 36
+SEEN_URLS_PATH = Path("docs/vault/ai-news/seen_urls.json")
+
+
+def _parse_date(date_str: str | None) -> datetime | None:
+    if not date_str:
+        return None
+    for fmt in [
+        "%a, %d %b %Y %H:%M:%S %z",
+        "%a, %d %b %Y %H:%M:%S %Z",
+        "%Y-%m-%dT%H:%M:%S%z",
+        "%Y-%m-%dT%H:%M:%SZ",
+        "%Y-%m-%d %H:%M:%S",
+    ]:
+        try:
+            dt = datetime.strptime(date_str.strip(), fmt)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt
+        except ValueError:
+            continue
+    try:
+        return parsedate_to_datetime(date_str)
+    except Exception:
+        return None
+
+
+def _is_fresh(pub_date: datetime | None, max_hours: int = MAX_AGE_HOURS) -> bool:
+    if pub_date is None:
+        return True
+    now = datetime.now(timezone.utc)
+    return (now - pub_date) < timedelta(hours=max_hours)
+
+
+def load_seen_urls() -> dict:
+    if SEEN_URLS_PATH.exists():
+        try:
+            data = json.loads(SEEN_URLS_PATH.read_text(encoding="utf-8"))
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=7)).isoformat()
+            return {url: ts for url, ts in data.items() if ts > cutoff}
+        except Exception:
+            return {}
+    return {}
+
+
+def save_seen_urls(seen: dict) -> None:
+    SEEN_URLS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    SEEN_URLS_PATH.write_text(
+        json.dumps(seen, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
 
 
 def _extract_og_image(html: str) -> str:
@@ -121,8 +172,14 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
                 summary_el = entry.find(f"{{{ATOM_NS}}}summary")
                 if summary_el is None:
                     summary_el = entry.find(f"{{{ATOM_NS}}}content")
+                updated_el = entry.find(f"{{{ATOM_NS}}}updated")
+                if updated_el is None:
+                    updated_el = entry.find(f"{{{ATOM_NS}}}published")
                 href = link_el.get("href", "") if link_el is not None else ""
                 if title_el is not None and href:
+                    pub_date = _parse_date(updated_el.text if updated_el is not None else "")
+                    if not _is_fresh(pub_date):
+                        continue
                     desc = ""
                     if summary_el is not None and summary_el.text:
                         desc = re.sub(r'<[^>]+>', '', summary_el.text).strip()[:300]
@@ -130,6 +187,7 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
                         "title": (title_el.text or "").strip(),
                         "url": href.strip(),
                         "description": desc,
+                        "pub_date": pub_date.isoformat() if pub_date else "",
                     })
                 if len(items) >= max_items:
                     break
@@ -138,7 +196,11 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
                 title_el = item.find("title")
                 link_el = item.find("link")
                 desc_el = item.find("description")
+                pub_el = item.find("pubDate")
                 if title_el is not None and link_el is not None and link_el.text:
+                    pub_date = _parse_date(pub_el.text if pub_el is not None else "")
+                    if not _is_fresh(pub_date):
+                        continue
                     desc = ""
                     if desc_el is not None and desc_el.text:
                         desc = re.sub(r'<[^>]+>', '', desc_el.text).strip()[:300]
@@ -146,6 +208,7 @@ def parse_rss(rss_url: str, max_items: int = 5, feed_format: str = "rss") -> lis
                         "title": (title_el.text or "").strip(),
                         "url": link_el.text.strip(),
                         "description": desc,
+                        "pub_date": pub_date.isoformat() if pub_date else "",
                     })
                 if len(items) >= max_items:
                     break
@@ -202,10 +265,14 @@ def main():
     out = Path("/tmp/ai_news_raw.txt")
     today = datetime.now().strftime("%Y-%m-%d")
 
+    seen = load_seen_urls()
+    print(f"Loaded {len(seen)} previously seen URLs", file=sys.stderr)
+
     print(f"Scraping {len(SOURCES)} AI sources ({today})...", file=sys.stderr)
-    sections = [f"# AI News — {today}\n\nScraping context for daily digest.\n"]
+    sections = [f"# AI News — {today}\n\nScraping context for daily digest.\nToday's date: {today}. Only include articles from the last 36 hours.\n"]
     total = 0
     all_rss_articles = []
+    skipped_seen = 0
 
     for src in SOURCES:
         if total >= MAX_TOTAL_CHARS:
@@ -217,16 +284,21 @@ def main():
 
         rss_items = []
         if src.get("rss"):
-            rss_items = parse_rss(src["rss"], max_items=5, feed_format=src.get("format", "rss"))
+            rss_items = parse_rss(src["rss"], max_items=8, feed_format=src.get("format", "rss"))
             if rss_items:
-                print(f"    RSS: {len(rss_items)} articles found", file=sys.stderr)
+                print(f"    RSS: {len(rss_items)} fresh articles found", file=sys.stderr)
 
         rss_block = ""
         if rss_items:
             rss_block = "\nArticles from RSS feed (URLs are canonical):"
             for item in rss_items:
+                if item["url"] in seen:
+                    skipped_seen += 1
+                    continue
                 rss_block += f"\n  - {item['title']}"
                 rss_block += f"\n    URL: {item['url']}"
+                if item.get("pub_date"):
+                    rss_block += f"\n    Published: {item['pub_date']}"
                 if item.get("description"):
                     rss_block += f"\n    Summary: {item['description']}"
                 all_rss_articles.append({
@@ -234,6 +306,7 @@ def main():
                     "url": item["url"],
                     "source_name": src["name"],
                     "description": item.get("description", ""),
+                    "pub_date": item.get("pub_date", ""),
                 })
 
         content = scrape_page(src["url"], api_key)
@@ -261,16 +334,20 @@ def main():
     images = sum(1 for a in valid if a.get("image"))
     invalid = len(all_rss_articles) - len(valid)
     print(f"  {len(valid)} valid, {invalid} rejected, {images} with images", file=sys.stderr)
+    print(f"  {skipped_seen} skipped (already in previous digests)", file=sys.stderr)
 
     if valid:
         verified = "\n\n## VERIFIED Article Links (use ONLY these URLs in the digest)\n"
         verified += "CRITICAL: Every URL below has been validated (HTTP 200). ONLY use these exact URLs.\n"
-        verified += "DO NOT construct, modify, or guess any URL. Copy them character-for-character.\n\n"
+        verified += "DO NOT construct, modify, or guess any URL. Copy them character-for-character.\n"
+        verified += f"Today is {today}. Only include articles published in the last 36 hours.\n\n"
         for a in valid:
             title = a.get("page_title") or a["title"]
             verified += f"- [VERIFIED] {title}\n"
             verified += f"  URL: {a['url']}\n"
             verified += f"  Source: {a['source_name']}\n"
+            if a.get("pub_date"):
+                verified += f"  Published: {a['pub_date']}\n"
             if a.get("image"):
                 verified += f"  Image: {a['image']}\n"
             if a.get("description"):
@@ -278,6 +355,12 @@ def main():
             verified += "\n"
         sections.append(verified)
         total += len(verified)
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    for a in valid:
+        seen[a["url"]] = now_iso
+    save_seen_urls(seen)
+    print(f"  Saved {len(seen)} URLs to seen_urls.json", file=sys.stderr)
 
     raw = "".join(sections)
     out.write_text(raw, encoding="utf-8")

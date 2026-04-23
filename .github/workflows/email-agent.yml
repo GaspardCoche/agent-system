@@ -73,8 +73,12 @@ jobs:
   scrape-ai-news:
     runs-on: ubuntu-latest
     if: ${{ inputs.skip_ai_digest != 'true' }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -85,6 +89,16 @@ jobs:
         env:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
         run: python3 .github/scripts/ai_news_scraper.py
+
+      - name: Commit seen_urls.json
+        continue-on-error: true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/vault/ai-news/seen_urls.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: update seen_urls.json"
+          git pull --rebase -X theirs origin main && git push || true
 
       - name: Synthesize with Gemini (structured digest)
         continue-on-error: true
