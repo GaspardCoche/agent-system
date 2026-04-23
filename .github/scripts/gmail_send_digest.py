@@ -89,6 +89,9 @@ CAT_GRADIENTS = {
     "Business & Levees": "linear-gradient(135deg,#D97706,#F59E0B)",
     "Open Source": "linear-gradient(135deg,#4F46E5,#7C3AED)",
     "Regulation & Ethique": "linear-gradient(135deg,#DC2626,#EF4444)",
+    "Code & Dev": "linear-gradient(135deg,#EA580C,#F97316)",
+    "Google & Cloud": "linear-gradient(135deg,#0891B2,#06B6D4)",
+    "Tech & Business": "linear-gradient(135deg,#7C3AED,#6D28D9)",
     "Models": "linear-gradient(135deg,#7C3AED,#4F46E5)",
     "Tools & Platforms": "linear-gradient(135deg,#0284C7,#06B6D4)",
     "Research": "linear-gradient(135deg,#059669,#10B981)",
@@ -99,6 +102,8 @@ CAT_COLORS = {
     "Modeles": "#7C3AED", "Outils & Plateformes": "#0284C7",
     "Recherche": "#059669", "Business & Levees": "#D97706",
     "Open Source": "#4F46E5", "Regulation & Ethique": "#DC2626",
+    "Code & Dev": "#EA580C", "Google & Cloud": "#0891B2",
+    "Tech & Business": "#6D28D9",
     "Models": "#7C3AED", "Tools & Platforms": "#0284C7",
     "Research": "#059669", "Business & Funding": "#D97706",
 }
@@ -398,6 +403,7 @@ def _validate_urls(digest: dict) -> dict:
     if digest.get("top_story"):
         digest["top_story"] = _fix(digest["top_story"])
     digest["articles"] = [_fix(a) for a in digest.get("articles", [])]
+    digest["extended"] = [_fix(a) for a in digest.get("extended", [])]
     return digest
 
 
@@ -480,6 +486,34 @@ def render_digest_html(digest: dict) -> str:
             f'</td></tr></table>'
         )
 
+    extended_section = ""
+    if extended:
+        ext_by_cat: dict[str, list] = {}
+        for a in extended:
+            c = a.get("category", "Autre")
+            ext_by_cat.setdefault(c, []).append(a)
+
+        ext_cat_blocks = ""
+        for cat, items in ext_by_cat.items():
+            color = CAT_COLORS.get(cat, "#6B7280")
+            cat_rows = "".join(_render_compact(a) for a in items)
+            ext_cat_blocks += (
+                f'<tr><td style="padding:12px 22px 4px;background:#FAFBFC;border-top:1px solid #F1F5F9;">'
+                f'<span style="font-size:10px;font-weight:800;color:{color};text-transform:uppercase;'
+                f'letter-spacing:1.5px;">{escape(cat)}</span>'
+                f'</td></tr>'
+                f'<tr><td style="padding:0 22px 8px;">'
+                f'<table width="100%" cellpadding="0" cellspacing="0">{cat_rows}</table>'
+                f'</td></tr>'
+            )
+
+        extended_section = (
+            _section_header(f"Bonus — Code, Google & Tech (+{n_extended})", "#6366F1", "#818CF8")
+            + f'<table width="100%" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:10px;'
+            f'overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04);">'
+            f'{ext_cat_blocks}</table>'
+        )
+
     return f'''<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -541,13 +575,12 @@ def render_digest_html(digest: dict) -> str:
     {important_section}
     {compact_section}
     {trends_section}
+    {extended_section}
 
-    <!-- CTA — Version complete -->
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin:32px 0 0;">
-      <tr><td style="background:linear-gradient(135deg,#EEF2FF,#E0E7FF);border-radius:12px;padding:28px 24px;text-align:center;">
-        <p style="font-size:14px;font-weight:700;color:#312E81;margin:0 0 6px;">+ d'articles : Code, Google, Tech</p>
-        <p style="font-size:12px;color:#6366F1;margin:0 0 16px;">Retrouvez {n_extended} articles bonus sur la version web</p>
-        <a href="{archive_url}" style="display:inline-block;background:#4F46E5;color:#fff;text-decoration:none;font-size:13px;font-weight:700;padding:12px 32px;border-radius:8px;letter-spacing:0.3px;">Voir tous les articles &rarr;</a>
+    <!-- Archive link -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0;">
+      <tr><td style="text-align:center;padding:16px;">
+        <a href="{archive_url}" style="color:#6366F1;font-size:12px;font-weight:600;text-decoration:none;letter-spacing:0.3px;">Voir cette edition sur le web &rarr;</a>
       </td></tr>
     </table>
 
@@ -608,6 +641,14 @@ def build_plain_text(digest: dict) -> str:
                 lines.append(f"  - {t.get('title', '')}: {t.get('description', '')}")
             else:
                 lines.append(f"  - {t}")
+
+    if digest.get("extended"):
+        lines.append("\n--- BONUS ---")
+        for a in digest["extended"]:
+            lines.append(f"  [{a.get('category', '')}] {a.get('title', '')}")
+            lines.append(f"    {a.get('source', '')} — {a.get('summary', '')}")
+            lines.append(f"    {a.get('url', '')}")
+            lines.append("")
     return "\n".join(lines)
 
 
