@@ -3,154 +3,741 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L&#x27;Ère des Agents Autonomes et des Modèles Open Source Efficaces — AI Briefing 2026-04-23</title>
-  <meta name="description" content="Les dernières innovations en matière d&#x27;agents d&#x27;IA pour l&#x27;entreprise et de modèles open source performants redéfinissent l&#x27;automatisation et l&#x27;efficacité du développement.">
+  <title>L&#x27;IA Infiltre le Quotidien et le Code : Agents Autonomes, Modèles Open Source et Optimisation d&#x27;Infrastructure en Vedette — AI Briefing 2026-04-23</title>
+  <meta name="description" content="L&#x27;actualité récente révèle une poussée majeure de l&#x27;IA vers l&#x27;autonomie et l&#x27;intégration profonde dans les outils de travail, le tout soutenu par des avancées significatives en open source et une infrastructure optimisée.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #F8FAFC; color: #0F172A; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
 
-    .header { background: #0F172A; color: #F8FAFC; padding: 48px 24px 40px; text-align: center; }
-    .header::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, #6366F1, #8B5CF6, #A78BFA, #6366F1); margin: -48px -24px 32px; }
-    .header .label { font-size: 11px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #818CF8; }
-    .header h1 { font-size: 36px; font-weight: 300; letter-spacing: 3px; font-family: Georgia, 'Times New Roman', serif; margin: 12px 0; }
-    .header .date { color: #64748B; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
-    .header .stats { margin-top: 20px; display: flex; justify-content: center; gap: 8px; }
-    .header .pill { background: rgba(99,102,241,0.12); border-radius: 20px; padding: 5px 16px; color: #A5B4FC; font-size: 11px; font-weight: 600; }
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-    .headline-bar { background: #fff; padding: 28px 24px; border-bottom: 1px solid #E2E8F0; max-width: 1200px; margin: 0 auto; }
-    .headline-bar h2 { font-size: 22px; font-weight: 800; font-family: Georgia, serif; color: #0F172A; margin-bottom: 6px; }
-    .headline-bar p { color: #64748B; font-size: 15px; }
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
 
-    .section { margin: 40px 0; }
-    .section-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: var(--accent, #334155); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent, #E2E8F0); display: inline-block; }
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
 
-    .card, .card-large { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: box-shadow 0.2s, transform 0.2s; }
-    .card:hover, .card-large:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.1); transform: translateY(-2px); }
-    .card-large { grid-column: 1 / -1; }
-    .card-img { width: 100%; object-fit: cover; display: block; }
-    .card-placeholder { display: flex; align-items: center; justify-content: center; }
-    .card-body { padding: 20px; }
-    .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-    .cat-pill { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.8px; text-transform: uppercase; background: color-mix(in srgb, var(--cat-color) 10%, transparent); color: var(--cat-color); }
-    .badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .badge-red { background: #FEF2F2; color: #DC2626; }
-    .badge-amber { background: #FFFBEB; color: #D97706; }
-    .card-body h3 { font-size: 18px; font-weight: 700; line-height: 1.3; margin-bottom: 8px; }
-    .card-large .card-body h3 { font-size: 24px; font-family: Georgia, serif; }
-    .card-body h3 a { color: #0F172A; text-decoration: none; }
-    .card-body h3 a:hover { color: #4F46E5; }
-    .source { font-size: 12px; color: #94A3B8; display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-    .source img { border-radius: 3px; }
-    .card-body p { font-size: 14px; color: #475569; line-height: 1.65; }
-    .card-tags { margin-top: 12px; display: flex; gap: 4px; flex-wrap: wrap; }
-    .tag { font-size: 10px; color: #6366F1; background: #EEF2FF; padding: 2px 8px; border-radius: 8px; font-weight: 500; }
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
 
-    .trends-section { background: #fff; border-radius: 12px; padding: 24px; margin: 40px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-    .trends-section h2 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: #059669; margin-bottom: 16px; }
-    .trend { padding: 14px 0; border-bottom: 1px solid #F1F5F9; }
-    .trend:last-child { border: none; }
-    .trend strong { display: block; font-size: 15px; color: #0F172A; margin-bottom: 4px; }
-    .trend span { font-size: 13px; color: #64748B; }
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
 
-    .extended-label { margin: 48px 0 8px; text-align: center; }
-    .extended-label span { background: #F8FAFC; padding: 0 20px; font-size: 12px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: 3px; position: relative; }
-    .extended-label::before { content: ''; display: block; height: 1px; background: #E2E8F0; position: relative; top: 10px; }
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
 
-    .footer { background: #0F172A; padding: 32px 24px; text-align: center; margin-top: 48px; }
-    .footer p { color: #475569; font-size: 12px; }
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
     .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
 
-    .back-link { display: inline-block; margin: 24px 0; font-size: 13px; color: #6366F1; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-
-    @media (max-width: 640px) {
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
       .grid { grid-template-columns: 1fr; }
-      .header h1 { font-size: 28px; }
-      .headline-bar h2 { font-size: 18px; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
     }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="label">Intelligence</div>
-  <h1>AI Briefing</h1>
-  <div class="date">2026-04-23</div>
-  <div class="stats">
-    <span class="pill">3 articles</span>
-    <span class="pill">18 sources</span>
-    
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Jeudi 23 avril 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">14 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+2 bonus</span>
+    </div>
   </div>
 </div>
 
 <div class="headline-bar">
-  <h2>L&#x27;Ère des Agents Autonomes et des Modèles Open Source Efficaces</h2>
-  <p>Les dernières innovations en matière d&#x27;agents d&#x27;IA pour l&#x27;entreprise et de modèles open source performants redéfinissent l&#x27;automatisation et l&#x27;efficacité du développement.</p>
-  <a href="https://gaspardcoche.github.io/agent-system/digest/" class="back-link">&larr; Tous les digests</a>
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA Infiltre le Quotidien et le Code : Agents Autonomes, Modèles Open Source et Optimisation d&#x27;Infrastructure en Vedette</h2>
+      <p>L&#x27;actualité récente révèle une poussée majeure de l&#x27;IA vers l&#x27;autonomie et l&#x27;intégration profonde dans les outils de travail, le tout soutenu par des avancées significatives en open source et une infrastructure optimisée.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
 </div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+2)</a>
+  </div>
+</nav>
 
 <div class="container">
 
-  <section class='section'>
-    <article class="card-large">
-      <a href="https://openai.com/blog"><img src="https://www.google.com/s2/favicons?domain=openai.com&amp;sz=128" alt="" class="card-img" style="height:240px;" loading="lazy" /></a>
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/openai-says-its-new-chatgpt-for-clinicians-outperforms-doctors-on-clinical-tasks-even-when-they-have-unlimited-time-and-web-access/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/chatgpt_health.png" alt="" class="card-img" loading="lazy" /></a>
       <div class="card-body">
         <div class="card-meta">
-          <span class="cat-pill" style="--cat-color:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
           
         </div>
-        <h3><a href="https://openai.com/blog">Introducing workspace agents in ChatGPT</a></h3>
-        <div class="source"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" /> OpenAI Blog</div>
-        <p>OpenAI a lancé les agents d&#x27;espace de travail dans ChatGPT, des outils propulsés par Codex conçus pour automatiser les flux de travail complexes en entreprise. Cette innovation permet aux équipes d&#x27;intégrer des capacités d&#x27;IA avancées pour des tâches répétitives ou multi-étapes, offrant une opportunité majeure de mise à l&#x27;échelle des opérations à travers diverses applications cloud. Pour les cadres et développeurs, cela signifie la possibilité de créer des solutions d&#x27;agent plus sophistiquées, d&#x27;optimiser la productivité et de libérer des ressources humaines pour des activités à plus forte valeur ajoutée. L&#x27;adoption de ces agents pourrait transformer la gestion des projets et des opérations quotidiennes.</p>
-        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">ChatGPT</span><span class="tag">Codex</span></div>
+        <h3><a href="https://the-decoder.com/openai-says-its-new-chatgpt-for-clinicians-outperforms-doctors-on-clinical-tasks-even-when-they-have-unlimited-time-and-web-access/">OpenAI says its new ChatGPT for Clinicians outperforms doctors on clinical tasks even when they have unlimited time and web access</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI lance ChatGPT for Clinicians, affirmant que son nouveau modèle GPT-5.4 surpasse les médecins humains dans les tâches cliniques, même lorsque ces derniers disposent de temps illimité et d&#x27;un accès à internet. Cette annonce marque une étape critique, non seulement pour l&#x27;application directe de l&#x27;IA dans des domaines hautement réglementés comme la santé, mais aussi pour les implications éthiques et professionnelles. Pour les dirigeants B2B, cela souligne le potentiel perturbateur de l&#x27;IA générative dans les industries de services à forte intensité de connaissances, obligeant à repenser les flux de travail et la formation des employés. Cela ouvre également la voie à de nouveaux partenariats et à des investissements massifs dans des solutions d&#x27;IA spécialisées, tout en soulevant des questions essentielles sur la validation, la sécurité des données et la responsabilité en cas d&#x27;erreur.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Healthcare</span></div>
+        <a href="https://the-decoder.com/openai-says-its-new-chatgpt-for-clinicians-outperforms-doctors-on-clinical-tasks-even-when-they-have-unlimited-time-and-web-access/" class="read-link">Lire l'article &rarr;</a>
       </div>
-    </article></section>
+    </article></div></section>
 
-  
-
-  <section class='section'><h2 class='section-title' style='--accent:#D97706;'>Important</h2><div class='grid'>
-    <article class="card">
-      <a href="https://simonwillison.net/"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&amp;sz=128" alt="" class="card-img" style="height:180px;" loading="lazy" /></a>
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
       <div class="card-body">
         <div class="card-meta">
-          <span class="cat-pill" style="--cat-color:#7C3AED;">🧠 Modeles</span>
-          <span class="badge badge-amber">Important</span>
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://openai.com/index/introducing-workspace-agents-in-chatgpt">Introducing workspace agents in ChatGPT</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI déploie des agents d&#x27;espace de travail au sein de ChatGPT, permettant d&#x27;automatiser des flux complexes et de scaler le travail à travers divers outils de manière sécurisée. Cette fonctionnalité transforme ChatGPT en un assistant encore plus puissant pour les équipes d&#x27;entreprise, réduisant la charge de travail manuel et intégrant l&#x27;IA directement dans les opérations quotidiennes.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://openai.com/index/introducing-workspace-agents-in-chatgpt" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
         </div>
         <h3><a href="https://simonwillison.net/">Qwen3.6-27B: Flagship-Level Coding in a 27B Dense Model</a></h3>
-        <div class="source"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" /> Simon Willison</div>
-        <p>Qwen a lancé son modèle 3.6-27B, revendiquant des performances de codage agentique de niveau &#x27;flagship&#x27; tout en étant significativement plus léger (55.6 Go) que ses prédécesseurs. Cette avancée est cruciale pour le développement d&#x27;applications d&#x27;IA locales et l&#x27;optimisation des coûts d&#x27;infrastructure, offrant une alternative puissante et accessible aux modèles propriétaires plus lourds.</p>
-        <div class="card-tags"><span class="tag">Qwen</span><span class="tag">Alibaba</span></div>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Qwen présente son nouveau modèle open source Qwen3.6-27B, qui offre des performances de codage de niveau &quot;flagship&quot; avec une taille de 27 milliards de paramètres. Ce développement est crucial pour l&#x27;adoption de l&#x27;IA open source, permettant aux entreprises de déployer des capacités de codage avancées localement avec des ressources réduites.</p>
+        <div class="card-tags"><span class="tag">Qwen</span></div>
+        <a href="https://simonwillison.net/" class="read-link">Lire l'article &rarr;</a>
       </div>
     </article></div></section>
 
-  <section class='section'><h2 class='section-title' style='--accent:#94A3B8;'>En bref</h2><div class='grid'>
-    <article class="card">
-      <a href="https://huggingface.co/blog"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&amp;sz=128" alt="" class="card-img" style="height:180px;" loading="lazy" /></a>
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
       <div class="card-body">
         <div class="card-meta">
-          <span class="cat-pill" style="--cat-color:#0284C7;">⚙️ Outils &amp; Plateformes</span>
-          
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
         </div>
-        <h3><a href="https://huggingface.co/blog">mlinter: a linter for Transformers modeling files</a></h3>
-        <div class="source"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" /> HuggingFace Blog</div>
-        <p>HuggingFace a introduit &#x27;mlinter&#x27;, un outil de linting dédié aux fichiers de modélisation des Transformers. Cet outil vise à standardiser et à améliorer la qualité du code dans les projets d&#x27;apprentissage automatique, ce qui est essentiel pour les équipes de développement souhaitant maintenir des bases de code propres, robustes et faciles à gérer.</p>
-        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">Transformers</span></div>
+        <h3><a href="https://openai.com/blog/speeding-up-agentic-workflows-with-websockets-in-the-responses-api">Speeding up agentic workflows with WebSockets in the Responses API</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI améliore les workflows agentiques grâce aux WebSockets dans son API de réponses, permettant une communication plus rapide et plus efficace. Pour les développeurs, cela signifie des agents AI plus réactifs et des intégrations plus fluides, essentiels pour les applications nécessitant des interactions en temps réel et une faible latence.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">API</span></div>
+        <a href="https://openai.com/blog/speeding-up-agentic-workflows-with-websockets-in-the-responses-api" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/news/917328/microsoft-agent-mode-vibe-working-office-word-excel-powerpoint" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2025/09/excelagentmode.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C3.477724691513%2C100%2C93.044550616974&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/news/917328/microsoft-agent-mode-vibe-working-office-word-excel-powerpoint">Microsoft launches ‘vibe working’ in Word, Excel, and PowerPoint</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Microsoft déploie un nouveau &#x27;Mode Agent&#x27; (appelé &#x27;vibe working&#x27;) au sein de ses applications Office comme Word, Excel et PowerPoint, offrant une version plus puissante de l&#x27;expérience Copilot. Cette intégration approfondie des agents IA vise à transformer la productivité des entreprises en automatisant davantage de tâches complexes directement dans les outils quotidiens.</p>
+        <div class="card-tags"><span class="tag">Microsoft</span><span class="tag">Copilot</span></div>
+        <a href="https://www.theverge.com/news/917328/microsoft-agent-mode-vibe-working-office-word-excel-powerpoint" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.artificialintelligence-news.com/news/nvidia-and-google-infrastructure-cuts-ai-inference-costs/" class="card-img-link"><img src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/04/google-cloud-nvidia-ai-inference-infrastructure-agentic-data-sovereignty-governance-physical-robotics.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.artificialintelligence-news.com/news/nvidia-and-google-infrastructure-cuts-ai-inference-costs/">NVIDIA and Google infrastructure cuts AI inference costs</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="14" height="14" />
+          <span>AI News</span>
+        </div>
+        <p class="summary">NVIDIA et Google s&#x27;associent pour réduire considérablement les coûts d&#x27;inférence AI à l&#x27;échelle grâce à de nouvelles instances bare-metal A5X et des systèmes NVIDIA Vera Rubin NVL72. Cette collaboration entre leaders de l&#x27;hardware et du cloud est cruciale pour l&#x27;adoption massive de l&#x27;IA en entreprise, rendant les déploiements d&#x27;IA à grande échelle plus économiquement viables.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span><span class="tag">Google</span><span class="tag">MCP</span></div>
+        <a href="https://www.artificialintelligence-news.com/news/nvidia-and-google-infrastructure-cuts-ai-inference-costs/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog">DenseOn with the LateOn: Open State-of-the-Art Single and Multi-Vector Models</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Hugging Face met en avant &#x27;DenseOn&#x27; et &#x27;LateOn&#x27;, des modèles open source de pointe, offrant des capacités de vectorisation unique et multi-vectorielle. Ces modèles sont importants pour la recherche et le développement en NLP, permettant aux entreprises de construire des systèmes de récupération d&#x27;informations et de RAG plus sophistiqués.</p>
+        <div class="card-tags"><span class="tag">Hugging Face</span></div>
+        <a href="https://huggingface.co/blog" class="read-link">Lire l'article &rarr;</a>
       </div>
     </article></div></section>
 
-  <div class='trends-section'><h2>Tendances</h2><div class="trend"><strong>Montée en puissance des agents d&#x27;IA</strong><span>Les entreprises investissent dans des agents d&#x27;IA capables d&#x27;automatiser des flux de travail complexes, signalant une évolution vers des systèmes plus autonomes et intégrés.</span></div><div class="trend"><strong>Modèles Open Source performants et légers</strong><span>La recherche se concentre sur le développement de modèles open source offrant des capacités de pointe avec des exigences en ressources réduites, facilitant leur déploiement local et leur accessibilité.</span></div><div class="trend"><strong>Outils de développement spécialisés pour l&#x27;IA</strong><span>L&#x27;écosystème des outils de développement s&#x27;enrichit de solutions ciblées pour la qualité du code et la gestion des projets ML, essentielles pour la robustesse et la maintenabilité des applications d&#x27;IA.</span></div></div>
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.artificialintelligence-news.com/news/sony-ai-robot-table-tennis-humanoid-robot-beijing-race/" class="card-img-link"><img src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/04/Sony-AI-robot-beats-players-as-humanoid-robot-wins-Beijing-race-scaled-e1776908412195.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.artificialintelligence-news.com/news/sony-ai-robot-table-tennis-humanoid-robot-beijing-race/">Sony AI robot beats players as humanoid robot wins Beijing race</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="14" height="14" />
+          <span>AI News</span>
+        </div>
+        <p class="summary">Un robot de tennis de table autonome développé par Sony AI a battu des joueurs humains de haut niveau, marquant une avancée dans l&#x27;IA physique et la robotique. Cela démontre des capacités de perception et d&#x27;action en temps réel qui pourraient avoir des applications significatives au-delà du sport, comme dans la fabrication ou la logistique.</p>
+        <div class="card-tags"><span class="tag">Sony</span><span class="tag">Robotics</span></div>
+        <a href="https://www.artificialintelligence-news.com/news/sony-ai-robot-table-tennis-humanoid-robot-beijing-race/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog">mlinter: a linter for Transformers modeling files</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Hugging Face présente &#x27;mlinter&#x27;, un linter pour les fichiers de modélisation Transformers, visant à améliorer la qualité et la cohérence du code. Cet outil open source est essentiel pour les équipes de développement AI, car il facilite la maintenance et la collaboration sur des projets de modèles complexes.</p>
+        <div class="card-tags"><span class="tag">Hugging Face</span></div>
+        <a href="https://huggingface.co/blog" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog">Save the traces! 🐳</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Un article de Hugging Face encourage la sauvegarde des &#x27;traces&#x27; dans les workflows ML, soulignant l&#x27;importance pour le débogage et l&#x27;optimisation des modèles. Cette pratique est fondamentale pour la robustesse et la traçabilité des systèmes d&#x27;IA en production, un aspect souvent négligé mais essentiel pour les entreprises.</p>
+        <div class="card-tags"><span class="tag">Hugging Face</span></div>
+        <a href="https://huggingface.co/blog" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/04/23/beehiiv-rolls-out-new-creator-tools-including-webinars-and-customizable-paywalls/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2018/06/GettyImages-155283357.jpg?resize=1200,808" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/04/23/beehiiv-rolls-out-new-creator-tools-including-webinars-and-customizable-paywalls/">Beehiiv rolls out new creator tools, including webinars and customizable paywalls</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Beehiiv élargit son offre de plateforme de newsletter avec de nouveaux outils pour les créateurs, dont des webinaires et des paywalls personnalisables. Bien que non directement AI, cette évolution reflète une tendance plus large des plateformes à autonomiser les créateurs avec des outils sophistiqués, souvent enrichis par l&#x27;IA pour la personnalisation et l&#x27;engagement.</p>
+        <div class="card-tags"><span class="tag">Beehiiv</span></div>
+        <a href="https://techcrunch.com/2026/04/23/beehiiv-rolls-out-new-creator-tools-including-webinars-and-customizable-paywalls/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#DC262618,#DC262608);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://openai.com/blog">Introducing OpenAI Privacy Filter</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI dévoile un &quot;Privacy Filter&quot; pour ses modèles, visant à renforcer la protection des données et la confidentialité. Cette initiative est cruciale pour l&#x27;adoption de l&#x27;IA en entreprise, répondant aux préoccupations croissantes concernant la sécurité et la conformité réglementaire des informations traitées par les systèmes d&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Privacy</span></div>
+        <a href="https://openai.com/blog" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
 
-  
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;IA devient Agentive et Intégrée</strong><p>Les modèles d&#x27;IA évoluent rapidement vers des agents autonomes capables d&#x27;automatiser des flux de travail complexes et de s&#x27;intégrer directement dans les outils logiciels d&#x27;entreprise (Microsoft Office, ChatGPT Workspace Agents), transformant la productivité et la manière de collaborer.</p></div><div class="trend-item"><strong>Démocratisation des Modèles Open Source</strong><p>De nouveaux modèles open source, comme Qwen3.6-27B et les outils de Hugging Face, continuent d&#x27;offrir des performances de pointe dans des formats plus accessibles, réduisant les barrières à l&#x27;entrée pour l&#x27;innovation et le déploiement d&#x27;IA en local.</p></div><div class="trend-item"><strong>Optimisation de l&#x27;Inférence AI pour l&#x27;Entreprise</strong><p>La collaboration entre les géants de l&#x27;infrastructure (NVIDIA, Google) vise à réduire les coûts d&#x27;inférence AI à grande échelle, rendant l&#x27;adoption de l&#x27;IA plus viable économiquement pour des déploiements massifs et complexes en milieu professionnel.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 2 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/blog" class="ext-title">Introducing ChatGPT Images 2.0</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">OpenAI lance ChatGPT Images 2.0, une mise à jour de ses capacités de génération d&#x27;images, qui promet des créations visuelles plus sophistiquées et réalistes.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/blog" class="ext-title">Scaling Codex to enterprises worldwide</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">OpenAI étend la disponibilité de son modèle Codex aux entreprises du monde entier, facilitant l&#x27;intégration de capacités de génération de code et d&#x27;automatisation pour les développeurs et les équipes techniques.</p>
+      </div>
+    </div>
+        </div>
 
 </div>
 
 <div class="footer">
-  <p>Genere par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude</p>
-  <p style="margin-top:4px;color:#334155;font-size:11px;">Chaque matin a 7h30 &bull; 18 sources scannees</p>
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
 </div>
 
 </body>

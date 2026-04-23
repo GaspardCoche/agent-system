@@ -4,38 +4,170 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Briefing — Archives</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #F8FAFC; color: #0F172A; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
-    .header { background: #0F172A; color: #F8FAFC; padding: 48px 24px; text-align: center; }
-    .header::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, #6366F1, #8B5CF6, #A78BFA, #6366F1); margin: -48px -24px 32px; }
-    .header .label { font-size: 11px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #818CF8; }
-    .header h1 { font-size: 32px; font-weight: 300; letter-spacing: 3px; font-family: Georgia, serif; margin: 12px 0 8px; }
-    .header p { color: #64748B; font-size: 13px; }
-    .container { max-width: 720px; margin: 0 auto; padding: 32px 24px; }
-    .digest-row { display: flex; align-items: center; padding: 18px 20px; background: #fff; border-radius: 10px; margin-bottom: 8px; text-decoration: none; color: #0F172A; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: box-shadow 0.2s, transform 0.15s; gap: 16px; }
-    .digest-row:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-1px); }
-    .digest-date { font-size: 13px; color: #6366F1; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 90px; }
-    .digest-headline { flex: 1; font-size: 15px; font-weight: 600; }
-    .digest-count { font-size: 11px; color: #94A3B8; white-space: nowrap; }
-    .footer { text-align: center; padding: 32px; color: #94A3B8; font-size: 12px; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 38px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero p {
+      color: #64748B;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .digest-row {
+      display: flex;
+      align-items: center;
+      padding: 20px 24px;
+      background: var(--surface);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s, transform 0.15s, border-color 0.2s;
+      gap: 20px;
+    }
+    .digest-row:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+      border-color: rgba(79,70,229,0.2);
+    }
+    .row-date {
+      min-width: 120px;
+      flex-shrink: 0;
+    }
+    .row-day {
+      display: block;
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .row-day-fr {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .row-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .row-headline {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .row-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: block;
+    }
+    .row-arrow {
+      color: var(--text-muted);
+      font-size: 16px;
+      transition: transform 0.2s, color 0.2s;
+    }
+    .digest-row:hover .row-arrow {
+      transform: translateX(4px);
+      color: var(--accent);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 32px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
     .footer a { color: #818CF8; text-decoration: none; }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 28px; }
+      .digest-row { flex-wrap: wrap; gap: 8px; padding: 16px; }
+      .row-date { min-width: auto; }
+    }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="label">Archives</div>
-  <h1>AI Briefing</h1>
-  <p>Tous les digests quotidiens</p>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Archives</div>
+    <h1>AI Briefing</h1>
+    <p>Tous les digests quotidiens</p>
+  </div>
 </div>
 
 <div class="container">
   
         <a href="2026-04-23.html" class="digest-row">
-          <span class="digest-date">2026-04-23</span>
-          <span class="digest-headline">L&#x27;Ère des Agents Autonomes et des Modèles Open Source Efficaces</span>
-          <span class="digest-count">3 articles</span>
+          <div class="row-date">
+            <span class="row-day">2026-04-23</span>
+            <span class="row-day-fr">Jeudi 23 avril 2026</span>
+          </div>
+          <div class="row-content">
+            <span class="row-headline">L&#x27;IA Infiltre le Quotidien et le Code : Agents Autonomes, Modèles Open Source et Optimisation d&#x27;Infrastructure en Vedette</span>
+            <span class="row-count">14 articles</span>
+          </div>
+          <span class="row-arrow">&rarr;</span>
         </a>
 </div>
 
