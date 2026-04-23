@@ -382,27 +382,43 @@ def render_digest_html(digest: dict) -> str:
 <table width="720" cellpadding="0" cellspacing="0" style="max-width:720px;width:100%;">
 
   <!-- Header -->
-  <tr><td style="background:linear-gradient(135deg,#0F172A 0%,#1E293B 40%,#334155 100%);border-radius:16px 16px 0 0;padding:0;">
+  <tr><td style="background:linear-gradient(145deg,#0a0a1a 0%,#111827 50%,#1a1a3e 100%);border-radius:16px 16px 0 0;padding:0;position:relative;">
     <table width="100%" cellpadding="0" cellspacing="0">
-      <tr><td style="padding:36px 32px 12px;text-align:center;">
-        <span style="font-size:40px;">\U0001f916</span>
+      <!-- Accent line top -->
+      <tr><td style="padding:0;">
+        <table width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td style="height:3px;background:linear-gradient(90deg,#6366F1,#8B5CF6,#A78BFA,#C4B5FD,#8B5CF6,#6366F1);"></td>
+        </tr></table>
       </td></tr>
-      <tr><td style="text-align:center;padding:0 32px;">
-        <h1 style="color:#F8FAFC;font-size:26px;font-weight:800;margin:0;letter-spacing:-0.5px;">AI Intelligence Briefing</h1>
+      <!-- Top spacer with subtle branding -->
+      <tr><td style="padding:32px 32px 0;text-align:center;">
+        <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>
+          <td style="width:32px;height:1px;background:linear-gradient(90deg,transparent,#4F46E5);"></td>
+          <td style="padding:0 14px;">
+            <span style="font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:#818CF8;">Intelligence</span>
+          </td>
+          <td style="width:32px;height:1px;background:linear-gradient(90deg,#4F46E5,transparent);"></td>
+        </tr></table>
       </td></tr>
-      <tr><td style="text-align:center;padding:8px 32px 12px;">
-        <span style="color:#94A3B8;font-size:13px;">{date_str}</span>
+      <!-- Main title -->
+      <tr><td style="text-align:center;padding:14px 32px 0;">
+        <h1 style="color:#F8FAFC;font-size:32px;font-weight:300;margin:0;letter-spacing:2px;font-family:Georgia,'Times New Roman',serif;">AI Briefing</h1>
       </td></tr>
-      <tr><td style="padding:0 32px 28px;text-align:center;">
-        <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
-          <tr>
-            <td style="background:rgba(255,255,255,0.1);border-radius:20px;padding:6px 16px;">
-              <span style="color:#CBD5E1;font-size:12px;">{n_articles} articles</span>
-              <span style="color:#475569;padding:0 6px;">&bull;</span>
-              <span style="color:#CBD5E1;font-size:12px;">{n_sources} sources</span>
-            </td>
-          </tr>
-        </table>
+      <!-- Date -->
+      <tr><td style="text-align:center;padding:12px 32px 0;">
+        <span style="color:#64748B;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;">{date_str}</span>
+      </td></tr>
+      <!-- Stats pills -->
+      <tr><td style="padding:18px 32px 30px;text-align:center;">
+        <table cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr>
+          <td style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);border-radius:20px;padding:6px 18px;">
+            <span style="color:#A5B4FC;font-size:12px;font-weight:500;">{n_articles} articles</span>
+          </td>
+          <td style="width:10px;"></td>
+          <td style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.25);border-radius:20px;padding:6px 18px;">
+            <span style="color:#A5B4FC;font-size:12px;font-weight:500;">{n_sources} sources</span>
+          </td>
+        </tr></table>
       </td></tr>
     </table>
   </td></tr>
@@ -434,13 +450,16 @@ def render_digest_html(digest: dict) -> str:
   </td></tr>
 
   <!-- Footer -->
-  <tr><td style="background:#1E293B;border-radius:0 0 16px 16px;padding:24px 28px;text-align:center;">
-    <p style="color:#64748B;font-size:11px;margin:0 0 4px;">
-      Genere automatiquement par <span style="color:#94A3B8;">Agent System</span>
-    </p>
-    <p style="color:#475569;font-size:10px;margin:0;">
-      \u26a1 Gemini + Claude &bull; Chaque matin a 9h30
-    </p>
+  <tr><td style="background:linear-gradient(145deg,#0a0a1a,#111827);border-radius:0 0 16px 16px;padding:0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+      <tr><td style="height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,0.2),transparent);"></td></tr>
+      <tr><td style="padding:20px 28px;text-align:center;">
+        <p style="color:#4B5563;font-size:10px;margin:0 0 4px;letter-spacing:0.5px;">
+          Genere par <span style="color:#818CF8;">Agent System</span> &mdash; Gemini + Claude
+        </p>
+        <p style="color:#374151;font-size:9px;margin:0;">Chaque matin a 7h30</p>
+      </td></tr>
+    </table>
   </td></tr>
 
 </table>
