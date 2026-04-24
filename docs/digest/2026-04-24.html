@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;IA à l&#x27;offensive : GPT-5.5 et la course aux agents autonomes redéfinissent le paysage — AI Briefing 2026-04-24</title>
+  <meta name="description" content="Entre les lancements de modèles phares comme GPT-5.5 et DeepSeek V4, et l&#x27;expansion des capacités agentiques de Claude, le marché de l&#x27;IA accélère vers des applications plus autonomes et intégrées, tout en intensifiant la concurrence sur les coûts et la sécurité.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Vendredi 24 avril 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">33 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+15 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA à l&#x27;offensive : GPT-5.5 et la course aux agents autonomes redéfinissent le paysage</h2>
+      <p>Entre les lancements de modèles phares comme GPT-5.5 et DeepSeek V4, et l&#x27;expansion des capacités agentiques de Claude, le marché de l&#x27;IA accélère vers des applications plus autonomes et intégrées, tout en intensifiant la concurrence sur les coûts et la sécurité.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+15)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/openai-unveils-gpt-5-5-claims-a-new-class-of-intelligence-at-double-the-api-price/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/gpt-55_title.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/openai-unveils-gpt-5-5-claims-a-new-class-of-intelligence-at-double-the-api-price/">OpenAI dévoile GPT-5.5, annonçant une &quot;nouvelle classe d&#x27;intelligence&quot; à un prix API doublé</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI a lancé GPT-5.5, présenté comme un modèle agentique doté d&#x27;une &quot;nouvelle classe d&#x27;intelligence&quot;, capable d&#x27;exécuter des tâches complexes de manière autonome en jonglant avec divers outils. Cette avancée positionne OpenAI comme un acteur majeur dans la course aux &quot;super applications&quot; pilotées par l&#x27;IA, transformant la manière dont les entreprises peuvent automatiser leurs flux de travail. Pour les exécutifs, cela signifie un potentiel accru d&#x27;optimisation des processus métier et de création de valeur par l&#x27;IA, mais aussi la nécessité d&#x27;évaluer le coût API doublé et l&#x27;intégration de ces capacités agentiques dans leurs systèmes existants. Le modèle promet des performances améliorées en codage, recherche et analyse de données, des domaines cruciaux pour la productivité B2B.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">GPT</span></div>
+        <a href="https://the-decoder.com/openai-unveils-gpt-5-5-claims-a-new-class-of-intelligence-at-double-the-api-price/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://simonwillison.net/2026/Apr/24/deepseek-v4/#atom-everything" class="card-img-link"><img src="https://static.simonwillison.net/static/2026/deepseek-v4-card.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Apr/24/deepseek-v4/#atom-everything">DeepSeek V4 — quasi à la pointe, pour une fraction du prix</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">DeepSeek a lancé ses modèles V4-Pro et V4-Flash, offrant des capacités proches des modèles de pointe avec une fenêtre de contexte d&#x27;un million de tokens et une architecture Mixture of Experts. Leur prix nettement inférieur à celui d&#x27;OpenAI, Google et Anthropic en fait une option stratégique pour les entreprises cherchant à optimiser leurs coûts d&#x27;inférence et d&#x27;entraînement tout en maintenant des performances élevées.</p>
+        <div class="card-tags"><span class="tag">DeepSeek</span><span class="tag">LLMs</span></div>
+        <a href="https://simonwillison.net/2026/Apr/24/deepseek-v4/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.latent.space/p/ainews-gpt-55-and-openai-codex-superapp" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!0uGP!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2f9f5845-e1e6-497a-9bed-f6457169247c_2048x684.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.latent.space/p/ainews-gpt-55-and-openai-codex-superapp">OpenAI Codex : Vers une Super-Application pilotée par l&#x27;IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">OpenAI pousse son initiative Codex vers la vision d&#x27;une &quot;super-application&quot; d&#x27;IA, où GPT-5.5 sert de moteur pour orchestrer des flux de travail complexes et interagir avec un large éventail d&#x27;outils. Cette orientation vers des capacités agentiques renforcées pourrait simplifier l&#x27;intégration de l&#x27;IA dans les processus d&#x27;entreprise, offrant une automatisation plus poussée et des solutions personnalisées avec moins d&#x27;effort de développement.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Codex</span><span class="tag">GPT</span></div>
+        <a href="https://www.latent.space/p/ainews-gpt-55-and-openai-codex-superapp" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>7 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/917871/anthropic-claude-personal-app-connectors" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/anthropic-claude-personal-apps.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/917871/anthropic-claude-personal-app-connectors">Claude se connecte directement à vos applications personnelles comme Spotify et Uber Eats</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Anthropic étend la capacité de Claude à interagir directement avec une gamme d&#x27;applications personnelles telles que Spotify, Uber Eats et TurboTax, en plus de ses intégrations professionnelles. Cette expansion renforce le positionnement de Claude en tant qu&#x27;assistant IA polyvalent, facilitant l&#x27;automatisation des tâches quotidiennes et renforçant son potentiel d&#x27;intégration dans des écosystèmes plus larges.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/917871/anthropic-claude-personal-app-connectors" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Apr/24/recent-claude-code-quality-reports/#atom-everything">Mise à jour sur les rapports récents de qualité de Claude Code</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Des problèmes réels ont été identifiés dans le harnais de Claude Code, expliquant les plaintes des utilisateurs concernant la baisse de qualité des résultats, plutôt qu&#x27;une défaillance des modèles sous-jacents. Pour les développeurs, cette clarification est cruciale, car elle indique que les problèmes étaient liés à l&#x27;implémentation et non au modèle lui-même, suggérant que des correctifs peuvent rapidement restaurer la fiabilité pour les tâches de codage.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude Code</span></div>
+        <a href="https://simonwillison.net/2026/Apr/24/recent-claude-code-quality-reports/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/googles-open-source-design-md-gives-ai-agents-a-prompt-ready-blueprint-for-brand-consistent-design/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/stitch_beta.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/googles-open-source-design-md-gives-ai-agents-a-prompt-ready-blueprint-for-brand-consistent-design/">Google open-source DESIGN.md : Un plan pour les agents IA et le design cohérent</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Google a rendu open-source son format DESIGN.md, un blueprint de prompt conçu pour enseigner aux agents IA comment adhérer aux règles de marque et générer des designs cohérents. Cet outil est une aubaine pour les entreprises cherchant à industrialiser la production de contenu visuel par IA, garantissant que les créations automatiques respectent l&#x27;identité visuelle et les directives de marque.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">AI Agents</span><span class="tag">Design</span></div>
+        <a href="https://the-decoder.com/googles-open-source-design-md-gives-ai-agents-a-prompt-ready-blueprint-for-brand-consistent-design/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/openai-unveils-gpt-5-5-claims-a-new-class-of-intelligence-at-double-the-api-price/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/microsoft_chatgpt.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/openai-unveils-gpt-5-5-claims-a-new-class-of-intelligence-at-double-the-api-price/">Le programme Trusted Access d&#x27;OpenAI offre à Microsoft ses modèles les plus performants pour la cyberdéfense</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI et Microsoft unissent leurs forces à travers le programme Trusted Access, donnant à Microsoft un accès privilégié aux modèles d&#x27;IA les plus performants d&#x27;OpenAI pour la cyberdéfense. Cette alliance stratégique vise à utiliser l&#x27;IA pour renforcer la sécurité contre les menaces grandissantes, marquant une étape importante dans l&#x27;application de l&#x27;IA aux défis de cybersécurité à grande échelle.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Microsoft</span><span class="tag">Cybersecurity</span></div>
+        <a href="https://the-decoder.com/openai-unveils-gpt-5-5-claims-a-new-class-of-intelligence-at-double-the-api-price/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/917644/anthropic-claude-mythos-breach-humiliation" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23318433/akrales_220309_4977_0182.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.55366983107&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/917644/anthropic-claude-mythos-breach-humiliation">La brèche de Mythos d&#x27;Anthropic a été humiliante</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Le déploiement très contrôlé de Claude Mythos par Anthropic a été marqué par une fuite gênante, le modèle s&#x27;étant retrouvé entre de mauvaises mains malgré sa réputation de capacité en cybersécurité. Cet incident souligne les défis majeurs liés à la sécurité et à la gouvernance des modèles d&#x27;IA avancés, même pour les laboratoires les plus prudents, et met en lumière les risques inhérents au déploiement de technologies puissantes.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Mythos</span><span class="tag">Cybersecurity</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/917644/anthropic-claude-mythos-breach-humiliation" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.artificialintelligence-news.com/news/the-billion-dollar-startup-with-a-different-idea-for-ai-ami-labs-yann-lecun/" class="card-img-link"><img src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/04/ami-labs-hero.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.artificialintelligence-news.com/news/the-billion-dollar-startup-with-a-different-idea-for-ai-ami-labs-yann-lecun/">La startup d&#x27;un milliard de dollars de Yann LeCun avec une idée différente de l&#x27;IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="14" height="14" />
+          <span>AI News</span>
+        </div>
+        <p class="summary">AMI Labs, la startup de Yann LeCun, a levé un milliard de dollars avec seulement 12 employés, pariant sur une approche de l&#x27;IA fondamentalement différente des grands modèles de langage actuels. Cet investissement massif signale la confiance des investisseurs dans des voies de recherche alternatives, potentiellement pour débloquer de nouvelles générations de systèmes d&#x27;IA qui pourraient résoudre les limitations des architectures dominantes actuelles.</p>
+        <div class="card-tags"><span class="tag">AMI Labs</span><span class="tag">Yann LeCun</span><span class="tag">Recherche IA</span></div>
+        <a href="https://www.artificialintelligence-news.com/news/the-billion-dollar-startup-with-a-different-idea-for-ai-ami-labs-yann-lecun/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/917380/ai-monetization-anthropic-openai-token-economics-revenue" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/vincentkilbride-theverge-ai-monetisation.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/917380/ai-monetization-anthropic-openai-token-economics-revenue">Vous êtes sur le point de ressentir la pression financière de l&#x27;IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Cet article met en lumière la pression croissante sur la monétisation de l&#x27;IA, avec des entreprises comme Anthropic et OpenAI qui ajustent leurs modèles tarifaires et restreignent l&#x27;utilisation, notamment des agents viraux. Les cadres doivent se préparer à des coûts d&#x27;utilisation de l&#x27;IA potentiellement plus élevés et à une planification budgétaire rigoureuse pour les projets dépendants des grands modèles.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">OpenAI</span><span class="tag">Économie des tokens</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/917380/ai-monetization-anthropic-openai-token-economics-revenue" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>7 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.anthropic.com/news">Anthropic et NEC collaborent pour former la plus grande main-d&#x27;œuvre d&#x27;ingénieurs IA au Japon</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic News</span>
+        </div>
+        <p class="summary">Anthropic s&#x27;associe à NEC pour développer la plus vaste équipe d&#x27;ingénieurs IA du Japon, une initiative stratégique visant à accélérer l&#x27;adoption et le développement de l&#x27;IA dans la région. Cette collaboration souligne l&#x27;importance des partenariats internationaux pour renforcer les compétences en IA et adapter les technologies de pointe aux marchés locaux.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">NEC</span><span class="tag">Japon</span></div>
+        <a href="https://www.anthropic.com/news" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Apr/24/honker/#atom-everything">Honker : La sémantique NOTIFY/LISTEN de Postgres pour SQLite en Rust</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Le projet Honker propose une extension SQLite en Rust qui reproduit la sémantique de NOTIFY/LISTEN de PostgreSQL, offrant une solution élégante pour les systèmes de messagerie et de files d&#x27;attente basés sur SQLite. Cette innovation est particulièrement pertinente pour les développeurs cherchant des architectures légères et performantes pour la communication inter-processus ou les tâches asynchrones.</p>
+        <div class="card-tags"><span class="tag">SQLite</span><span class="tag">Rust</span><span class="tag">PostgreSQL</span></div>
+        <a href="https://simonwillison.net/2026/Apr/24/honker/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/transformersjs-chrome-extension" class="card-img-link"><img src="https://huggingface.co/blog/assets/transformersjs-chrome-extension/thumbnail.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/transformersjs-chrome-extension">Comment utiliser Transformers.js dans une extension Chrome</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">HuggingFace a publié un guide expliquant comment intégrer Transformers.js dans les extensions Chrome, permettant l&#x27;exécution de modèles d&#x27;IA directement dans le navigateur. Cette capacité ouvre la porte à des applications IA client-side innovantes, réduisant la latence et les coûts liés aux API cloud pour des tâches comme l&#x27;analyse de texte ou la classification d&#x27;images.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">Transformers.js</span><span class="tag">Chrome</span></div>
+        <a href="https://huggingface.co/blog/transformersjs-chrome-extension" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/04/23/era-computer-raises-11m-to-build-a-software-platform-for-ai-gadgets/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/04/IMG_2200.jpeg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/04/23/era-computer-raises-11m-to-build-a-software-platform-for-ai-gadgets/">Era lève 11 M$ pour une plateforme logicielle dédiée aux gadgets IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Era a levé 11 millions de dollars pour développer une plateforme logicielle destinée aux futurs gadgets IA, anticipant une diversification des facteurs de forme (lunettes, bagues, pendentifs). Ce financement positionne Era pour capitaliser sur la convergence croissante entre l&#x27;IA et le hardware, offrant des opportunités pour les entreprises de créer des expériences utilisateur innovantes et contextualisées.</p>
+        <div class="card-tags"><span class="tag">Era</span><span class="tag">Hardware AI</span></div>
+        <a href="https://techcrunch.com/2026/04/23/era-computer-raises-11m-to-build-a-software-platform-for-ai-gadgets/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/04/23/ai-galaxy-hunters-are-adding-to-the-global-gpu-crunch/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/04/z14-galaxy.jpg?resize=1200,500" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/04/23/ai-galaxy-hunters-are-adding-to-the-global-gpu-crunch/">Les &quot;chasseurs de galaxies&quot; IA contribuent à la pénurie mondiale de GPU</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Des astronomes utilisent de plus en plus les GPU pour analyser de vastes ensembles de données afin de découvrir des galaxies, exacerbant la pénurie mondiale de ces processeurs essentiels pour l&#x27;IA. Cette demande inattendue ajoute une pression supplémentaire sur la chaîne d&#x27;approvisionnement des GPU, ce qui pourrait avoir des répercussions sur les coûts et la disponibilité pour les entreprises développant des solutions IA.</p>
+        <div class="card-tags"><span class="tag">GPU</span><span class="tag">NVIDIA</span></div>
+        <a href="https://techcrunch.com/2026/04/23/ai-galaxy-hunters-are-adding-to-the-global-gpu-crunch/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://simonwillison.net/2026/Apr/23/liteparse-for-the-web/#atom-everything" class="card-img-link"><img src="https://static.simonwillison.net/static/2026/liteparse-web-card.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Apr/23/liteparse-for-the-web/#atom-everything">Extraire du texte PDF dans le navigateur avec LiteParse pour le web</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">LiteParse pour le web permet désormais l&#x27;extraction de texte à partir de PDF directement dans le navigateur, en s&#x27;appuyant sur les bibliothèques de LlamaIndex. Cette capacité représente un outil précieux pour les développeurs qui intègrent le traitement de documents dans des applications web, offrant une solution efficace et décentralisée pour l&#x27;analyse et la manipulation de contenu PDF.</p>
+        <div class="card-tags"><span class="tag">LlamaIndex</span><span class="tag">LiteParse</span><span class="tag">PDF</span></div>
+        <a href="https://simonwillison.net/2026/Apr/23/liteparse-for-the-web/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://arstechnica.com/security/2026/04/now-even-ransomware-is-using-post-quantum-cryptography/" class="card-img-link"><img src="https://cdn.arstechnica.net/wp-content/uploads/2025/07/GettyImages-1952157610-1152x648-1753386930.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://arstechnica.com/security/2026/04/now-even-ransomware-is-using-post-quantum-cryptography/">Pour la première fois, une famille de ransomwares est confirmée comme étant post-quantique</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=arstechnica.com&sz=32" width="14" height="14" />
+          <span>Ars Technica AI</span>
+        </div>
+        <p class="summary">Un nouveau ransomware utilise la cryptographie post-quantique (PQC), marquant une première dans le paysage des cybermenaces, même si l&#x27;avantage pratique immédiat est limité. Cette évolution signale une transition future où les défenses actuelles pourraient devenir obsolètes, incitant les entreprises à anticiper et à préparer leurs infrastructures à l&#x27;ère post-quantique pour protéger leurs données.</p>
+        <div class="card-tags"><span class="tag">Cybersécurité</span><span class="tag">Cryptographie Post-Quantique</span></div>
+        <a href="https://arstechnica.com/security/2026/04/now-even-ransomware-is-using-post-quantum-cryptography/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Montée en puissance de l&#x27;IA Agentique</strong><p>Les modèles d&#x27;IA deviennent de plus en plus autonomes, capables d&#x27;interagir avec des outils et des applications pour accomplir des tâches complexes sans intervention humaine constante, signalant un futur où l&#x27;automatisation intégrée sera la norme.</p></div><div class="trend-item"><strong>Guerre des Prix et Performance des Modèles Ouverts</strong><p>Des acteurs comme DeepSeek proposent des modèles compétitifs, quasi à la pointe de la technologie, à des coûts largement inférieurs, exerçant une pression sur les prix des modèles de pointe et démocratisant l&#x27;accès à l&#x27;IA avancée.</p></div><div class="trend-item"><strong>Accent sur la Sécurité et la Conformité</strong><p>Les incidents de sécurité liés aux modèles avancés, les initiatives de cyberdéfense basées sur l&#x27;IA et les outils de filtrage de données personnelles soulignent une prise de conscience croissante des enjeux de confiance, de protection des données et de régulation du secteur.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 15 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#4F46E5;">🌐 Open Source</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#4F46E5;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/openai-releases-open-source-model-that-strips-personal-data-from-text/" class="ext-title">OpenAI lance un modèle open-source pour filtrer les données personnelles du texte</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">OpenAI a lancé Privacy Filter, un modèle open-source pour détecter et masquer les données personnelles dans le texte, renforçant la conformité et la protection des informations sensibles pour les développeurs.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/claude-survey-new-capabilities-beat-speed-as-top-ai-benefit-but-creatives-feel-left-behind/" class="ext-title">Sondage Claude : les nouvelles capacités priment sur la vitesse, mais les créatifs se sentent délaissés</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Un sondage auprès de 81 000 utilisateurs de Claude révèle que les nouvelles capacités sont plus appréciées que la vitesse, bien que les professionnels de la création se sentent à la fois limités et menacés par l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/04/23/bret-taylors-sierra-buys-yc-backed-ai-startup-fragment/" class="ext-title">Sierra de Bret Taylor acquiert la startup d&#x27;IA Fragment, soutenue par YC</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Sierra, la startup d&#x27;agents de service client IA fondée par Bret Taylor, a acquis Fragment, une startup française soutenue par YC, signalant une consolidation dans le secteur des agents IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://www.artificialintelligence-news.com/news/how-ai-models-use-real-time-cryptocurrency-data-to-interpret-market-behaviour/" class="ext-title">Comment les modèles d&#x27;IA utilisent les données de cryptomonnaie en temps réel pour interpréter le comportement du marché</a>
+        <span class="ext-source">AI News</span>
+        <p class="ext-summary">Les systèmes d&#x27;IA utilisent de plus en plus les données cryptographiques en temps réel pour analyser le comportement du marché, transformant les flux de données en insights financiers dynamiques.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/Apr/24/milliseconds/#atom-everything" class="ext-title">Tool: Millisecond Converter</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Un outil simple a été créé pour convertir les durées de prompt en millisecondes en secondes et minutes, facilitant l&#x27;analyse des performances des LLM pour les développeurs.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/academy/top-10-use-cases-codex-for-work" class="ext-title">Les 10 meilleures utilisations de Codex au travail</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">OpenAI propose 10 cas d&#x27;usage pratiques de Codex pour automatiser les tâches, créer des livrables et générer des résultats concrets à travers divers outils et flux de travail.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/academy/codex-plugins-and-skills" class="ext-title">Plugins et compétences</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">Apprenez à utiliser les plugins et compétences de Codex pour connecter des outils, accéder aux données et suivre des flux de travail répétables afin d&#x27;automatiser les tâches et d&#x27;améliorer les résultats.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/Apr/24/serving-the-for-you-feed/#atom-everything" class="ext-title">Serving the For You feed</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Bluesky permet aux utilisateurs de créer et de gérer leurs propres flux de recommandation, offrant des algorithmes personnalisés pour la découverte de contenu.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/917690/meta-is-laying-off-10-percent-of-its-staff" class="ext-title">Meta licencie 10 % de son personnel</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Meta prévoit de licencier environ 10% de ses employés en mai, soit environ 8 000 personnes, et de fermer 6 000 postes ouverts, signalant une restructuration majeure.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/podcast/917029/software-brain-ai-backlash-databases-automation" class="ext-title">ATTENTION AU CERVEAU LOGICIEL</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Un concept de &quot;cerveau logiciel&quot; est exploré, décrivant une vision du monde où l&#x27;automatisation par l&#x27;IA restructure profondément les interactions logicielles et les flux de travail.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/04/23/meet-noscroll-an-ai-bot-that-does-your-doomscrolling-for-you/" class="ext-title">Rencontrez Noscroll, un bot IA qui fait votre &#x27;doomscrolling&#x27; à votre place</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Noscroll est un bot IA conçu pour lire l&#x27;internet et résumer le contenu, offrant une solution pour combattre la &quot;doomscrolling&quot; et améliorer l&#x27;efficacité de la veille informationnelle.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/04/23/another-customer-of-troubled-startup-delve-suffered-a-big-security-incident/" class="ext-title">Un autre client de la startup en difficulté Delve a subi un incident de sécurité majeur</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Une startup de certification de conformité, Delve, est impliquée dans un incident de sécurité majeur affectant un client, Context AI, soulignant les risques de la chaîne d&#x27;approvisionnement logicielle.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.latent.space/p/unsupervised-learning-2026" class="ext-title">AIE Europe Debrief + Agent Labs Thesis: Unsupervised Learning x Latent Space Crossover Special (2026)</a>
+        <span class="ext-source">Latent Space</span>
+        <p class="ext-summary">Cet épisode débriefe l&#x27;AIE Europe et explore la thèse des laboratoires d&#x27;agents sur l&#x27;apprentissage non supervisé, offrant des perspectives sur les avancées de la recherche IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/trump-science-advisor-says-chinese-actors-are-copying-american-ai-at-massive-scale/" class="ext-title">Un conseiller scientifique de Trump affirme que des acteurs chinois copient l&#x27;IA américaine à grande échelle</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Un conseiller scientifique américain affirme que des acteurs chinois copient massivement l&#x27;IA américaine, poussant l&#x27;administration à envisager des mesures de rétorsion face à cette menace stratégique.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/researchers-warn-us-politics-is-repeating-its-chatgpt-mistake-with-world-models/" class="ext-title">Des chercheurs alertent sur le fait que la politique américaine répète l&#x27;erreur de ChatGPT avec les modèles mondiaux</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Des chercheurs alertent sur le fait que les décideurs américains sous-estiment l&#x27;impact des &quot;modèles mondiaux&quot; en IA, alors que la Chine progresse rapidement dans la robotique, potentiellement répétant des erreurs de politique passées.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
