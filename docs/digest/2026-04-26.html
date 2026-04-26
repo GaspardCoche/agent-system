@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;IA Accélère: Investissements Massifs, Agents Autonomes et Outils Dev Révolutionnaires — AI Briefing 2026-04-26</title>
+  <meta name="description" content="Alors que Google investit des milliards dans Anthropic, les agents IA gagnent en autonomie, redessinant les outils de développement et le marché du travail.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Dimanche 26 avril 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">23 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+11 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA Accélère: Investissements Massifs, Agents Autonomes et Outils Dev Révolutionnaires</h2>
+      <p>Alors que Google investit des milliards dans Anthropic, les agents IA gagnent en autonomie, redessinant les outils de développement et le marché du travail.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+11)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/google-pours-up-to-40-billion-into-chatgpt-rival-anthropic/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/google_anthropic.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/google-pours-up-to-40-billion-into-chatgpt-rival-anthropic/">Google pours up to $40 billion into ChatGPT rival Anthropic</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Cet investissement colossal de Google, pouvant atteindre 40 milliards de dollars, dans Anthropic – le créateur de Claude – redéfinit le paysage concurrentiel de l&#x27;IA. Combiné aux 25 milliards d&#x27;Amazon, il positionne Anthropic comme un acteur majeur et bien financé face à OpenAI. Pour les exécutifs, cela signifie une intensification de la course à l&#x27;innovation, avec potentiellement des offres de modèles plus agressives et une diversification des options pour les modèles fondation. Attendez-vous à voir Claude renforcer sa présence dans l&#x27;écosystème Google Cloud et rivaliser plus directement avec les capacités de GPT, influençant les choix stratégiques d&#x27;intégration d&#x27;IA pour les entreprises.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Anthropic</span><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/google-pours-up-to-40-billion-into-chatgpt-rival-anthropic/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.marktechpost.com/2026/04/24/meet-gitnexus-an-open-source-mcp-native-knowledge-graph-engine-that-gives-claude-code-and-cursor-full-codebase-structural-awareness/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-17-1024x731.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/04/24/meet-gitnexus-an-open-source-mcp-native-knowledge-graph-engine-that-gives-claude-code-and-cursor-full-codebase-structural-awareness/">Meet GitNexus: An Open-Source MCP-Native Knowledge Graph Engine That Gives Claude Code and Cursor Full Codebase Structural Awareness</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">GitNexus est un moteur de graphe de connaissances open source, natif pour les serveurs MCP, qui permet à des outils comme Claude Code d&#x27;acquérir une compréhension structurelle complète des bases de code. Cela résout un défi majeur pour les développeurs utilisant l&#x27;IA, en améliorant la précision et la pertinence des modifications de code suggérées par les assistants IA.</p>
+        <div class="card-tags"><span class="tag">Claude</span><span class="tag">GitNexus</span><span class="tag">MCP</span></div>
+        <a href="https://www.marktechpost.com/2026/04/24/meet-gitnexus-an-open-source-mcp-native-knowledge-graph-engine-that-gives-claude-code-and-cursor-full-codebase-structural-awareness/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/us-programmer-job-growth-nearly-halved-since-chatgpt-launched-fed-study-finds/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/AI-Coding-Jobs-LLM-Nano-Banana-Pro-scaled.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/us-programmer-job-growth-nearly-halved-since-chatgpt-launched-fed-study-finds/">US programmer job growth nearly halved since ChatGPT launched, Fed study finds</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Une étude de la Réserve fédérale révèle que la croissance de l&#x27;emploi des programmeurs aux États-Unis a presque diminué de moitié depuis le lancement de ChatGPT. Cela signale une transformation profonde du marché du travail induite par l&#x27;IA générative, nécessitant des stratégies d&#x27;adaptation pour les entreprises et les professionnels du développement logiciel.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/us-programmer-job-growth-nearly-halved-since-chatgpt-launched-fed-study-finds/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <a href="https://techcrunch.com/2026/04/25/anthropic-created-a-test-marketplace-for-agent-on-agent-commerce/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2023/08/GettyImages-88622588.jpg?resize=1200,870" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/04/25/anthropic-created-a-test-marketplace-for-agent-on-agent-commerce/">Anthropic created a test marketplace for agent-on-agent commerce</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Anthropic a mené une expérience où des agents IA ont négocié et conclu de véritables transactions sur un marché interne, démontrant des capacités avancées d&#x27;autonomie et de prise de décision. Cette avancée souligne l&#x27;importance croissante des agents IA pour automatiser des processus commerciaux complexes, ouvrant la voie à de nouvelles applications dans la gestion des approvisionnements ou le commerce.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://techcrunch.com/2026/04/25/anthropic-created-a-test-marketplace-for-agent-on-agent-commerce/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#7C3AED18,#7C3AED08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Apr/25/romain-huet/#atom-everything">Quoting Romain Huet</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Romain Huet d&#x27;OpenAI a confirmé l&#x27;unification des modèles Codex et principaux avec GPT-5.4, et des gains significatifs de GPT-5.5 en codage agentique et utilisation informatique. Cette évolution renforce la capacité des modèles OpenAI à gérer des tâches de développement complexes de manière autonome, impactant directement la productivité et les méthodes de travail des développeurs.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://simonwillison.net/2026/Apr/25/romain-huet/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/04/25/why-cohere-is-merging-with-aleph-alpha/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2024/08/GettyImages-1757707025.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/04/25/why-cohere-is-merging-with-aleph-alpha/">Why Cohere is merging with Aleph Alpha</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">La fusion entre la startup canadienne Cohere et l&#x27;allemande Aleph Alpha, avec le soutien du groupe Schwarz (Lidl), vise à créer une alternative souveraine aux géants américains de l&#x27;IA. Cette consolidation du marché européen et canadien de l&#x27;IA pourrait offrir des solutions plus localisées et une meilleure maîtrise des données pour les entreprises, renforçant leur positionnement stratégique.</p>
+        <div class="card-tags"><span class="tag">Cohere</span><span class="tag">Aleph Alpha</span><span class="tag">Schwarz Group</span></div>
+        <a href="https://techcrunch.com/2026/04/25/why-cohere-is-merging-with-aleph-alpha/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/the-uae-wants-half-its-government-run-by-autonomous-ai-agents-within-two-years/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/vae_agentic_ai-1200x670.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/the-uae-wants-half-its-government-run-by-autonomous-ai-agents-within-two-years/">The UAE wants half its government run by autonomous AI agents within two years</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Les Émirats arabes unis prévoient de confier la moitié de leurs opérations gouvernementales à des systèmes d&#x27;IA autonomes d&#x27;ici deux ans. Cette ambition audacieuse illustre une vision futuriste de la gouvernance, mais pose également des questions importantes sur l&#x27;éthique, la sécurité et la fiabilité des systèmes IA dans des rôles critiques.</p>
+        <div class="card-tags"><span class="tag">UAE Government</span></div>
+        <a href="https://the-decoder.com/the-uae-wants-half-its-government-run-by-autonomous-ai-agents-within-two-years/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.marktechpost.com/2026/04/25/a-coding-implementation-on-kvcached-for-elastic-kv-cache-memory-bursty-llm-serving-and-multi-model-gpu-sharing/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/04/blog-1-18-1024x731.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/04/25/a-coding-implementation-on-kvcached-for-elastic-kv-cache-memory-bursty-llm-serving-and-multi-model-gpu-sharing/">A Coding Implementation on kvcached for Elastic KV Cache Memory, Bursty LLM Serving, and Multi-Model GPU Sharing</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">Ce tutoriel explore `kvcached`, une implémentation dynamique de la mémoire cache KV sur vLLM, essentielle pour optimiser l&#x27;utilisation de la mémoire GPU des grands modèles de langage. Les développeurs peuvent y apprendre à gérer plus efficacement les charges de travail LLM fluctuantes et à partager les GPU entre plusieurs modèles.</p>
+        <div class="card-tags"><span class="tag">vLLM</span><span class="tag">MCP</span></div>
+        <a href="https://www.marktechpost.com/2026/04/25/a-coding-implementation-on-kvcached-for-elastic-kv-cache-memory-bursty-llm-serving-and-multi-model-gpu-sharing/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.marktechpost.com/2026/04/25/xai-launches-grok-voice-think-fast-1-0-topping-%cf%84-voice-bench-at-67-3-outperforming-gemini-gpt-realtime-and-more/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/04/blog-73.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/04/25/xai-launches-grok-voice-think-fast-1-0-topping-%cf%84-voice-bench-at-67-3-outperforming-gemini-gpt-realtime-and-more/">xAI Launches grok-voice-think-fast-1.0: Topping τ-voice Bench at 67.3%, Outperforming Gemini, GPT Realtime, and More</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">xAI a lancé Grok-voice-think-fast-1.0, un nouveau modèle vocal qui surpasse les performances de Gemini et GPT Realtime sur des benchmarks vocaux spécifiques. Cette avancée indique une concurrence accrue dans les capacités d&#x27;IA vocale, cruciale pour les applications client, de vente au détail et de télécommunications.</p>
+        <div class="card-tags"><span class="tag">xAI</span><span class="tag">Gemini</span><span class="tag">OpenAI</span></div>
+        <a href="https://www.marktechpost.com/2026/04/25/xai-launches-grok-voice-think-fast-1-0-topping-%cf%84-voice-bench-at-67-3-outperforming-gemini-gpt-realtime-and-more/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>3 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.wired.com/story/security-news-this-week-discord-sleuths-gained-unauthorized-access-to-anthropics-mythos/" class="card-img-link"><img src="https://media.wired.com/photos/69ebf499d9b235ed1b8f0693/191:100/w_1280,c_limit/Security-News-This-Week-Discord-Group-Reportedly-Guessed-Its-Way-Into-Anthropic-Mythos-Security.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/security-news-this-week-discord-sleuths-gained-unauthorized-access-to-anthropics-mythos/">Discord Sleuths Gained Unauthorized Access to Anthropic’s Mythos</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">Des utilisateurs de Discord ont réussi à accéder de manière non autorisée à Mythos, un produit d&#x27;Anthropic, en exploitant des vulnérabilités. Cet incident met en lumière les risques de sécurité persistants dans le déploiement de nouvelles technologies IA, et l&#x27;importance de audits rigoureux.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://www.wired.com/story/security-news-this-week-discord-sleuths-gained-unauthorized-access-to-anthropics-mythos/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/04/25/openai-ceo-apologizes-to-tumbler-ridge-community/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2194585161.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/04/25/openai-ceo-apologizes-to-tumbler-ridge-community/">OpenAI CEO apologizes to Tumbler Ridge community</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le PDG d&#x27;OpenAI, Sam Altman, a présenté ses excuses à la communauté de Tumbler Ridge après l&#x27;échec de l&#x27;entreprise à alerter les forces de l&#x27;ordre concernant un incident. Cet événement souligne la pression croissante sur les entreprises d&#x27;IA pour assumer leur responsabilité sociale et éthique face aux impacts réels de leurs technologies.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://techcrunch.com/2026/04/25/openai-ceo-apologizes-to-tumbler-ridge-community/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://simonwillison.net/2026/Apr/25/why-are-you-like-this/#atom-everything" class="card-img-link"><img src="https://static.simonwillison.net/static/2026/why-are-you-like-this.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Apr/25/why-are-you-like-this/#atom-everything">WHY ARE YOU LIKE THIS</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Cet article met en lumière les comportements inattendus et parfois humoristiques des modèles de génération d&#x27;images comme ChatGPT Images 2.0, qui peuvent ajouter des éléments non sollicités aux prompts. Pour les développeurs, cela rappelle l&#x27;importance de comprendre les &#x27;effets secondaires&#x27; des modèles génératifs et d&#x27;affiner les techniques de prompt engineering.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://simonwillison.net/2026/Apr/25/why-are-you-like-this/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;essor des Agents IA Autonomes</strong><p>Plusieurs articles mettent en évidence le développement et l&#x27;adoption d&#x27;agents IA capables de prendre des décisions et d&#x27;effectuer des transactions complexes, du commerce aux opérations gouvernementales.</p></div><div class="trend-item"><strong>Optimisation des Infrastructures et Outils Développeur pour l&#x27;IA</strong><p>Des innovations dans les outils comme GitNexus et kvcached montrent un focus sur l&#x27;amélioration de la gestion des bases de code et l&#x27;optimisation des performances des LLM, crucial pour les infrastructures MCP.</p></div><div class="trend-item"><strong>La Course aux Modèles Spécialisés et Efficaces</strong><p>Les lancements de modèles comme Qwen3.6-27B et Grok-voice-think-fast-1.0 soulignent une tendance vers des modèles plus petits, plus spécialisés et plus performants pour des tâches spécifiques, souvent open source.</p></div><div class="trend-item"><strong>Impact de l&#x27;IA sur le Marché du Travail et la Gouvernance</strong><p>Les études sur la croissance de l&#x27;emploi des programmeurs et les ambitions des ÉAU illustrent les répercussions socio-économiques et politiques profondes de l&#x27;IA, nécessitant une adaptation stratégique.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 11 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/04/25/maines-governor-vetoes-data-center-moratorium/" class="ext-title">Maine’s governor vetoes data center moratorium</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">La gouverneure du Maine a opposé son veto à un moratoire sur les nouveaux centres de données, une décision qui a des implications pour l&#x27;infrastructure de calcul nécessaire à l&#x27;expansion de l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/04/25/why-tokyo-is-the-most-important-tech-destination-of-2026/" class="ext-title">Why Tokyo is the most important tech destination of 2026</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Tokyo est présentée comme une destination technologique clé en 2026, avec un accent sur quatre domaines technologiques définis par SusHi Tech Tokyo 2026, incluant l&#x27;IA et la robotique.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/04/25/apple-under-ternus-what-comes-next-for-the-tech-giants-hardware-strategy/" class="ext-title">Apple under Ternus: what comes next for the tech giant’s hardware strategy</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">John Ternus, nouveau PDG d&#x27;Apple, signale un retour au matériel au centre de la stratégie de l&#x27;entreprise, potentiellement avec des implications pour l&#x27;intégration de l&#x27;IA dans les appareils.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/04/25/google-deepmind-introduces-vision-banana-an-instruction-tuned-image-generator-that-beats-sam-3-on-segmentation-and-depth-anything-v3-on-metric-depth-estimation/" class="ext-title">Google DeepMind Introduces Vision Banana: An Instruction-Tuned Image Generator That Beats SAM 3 on Segmentation and Depth Anything V3 on Metric Depth Estimation</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">Google DeepMind a dévoilé Vision Banana, un générateur d&#x27;images ajusté par instruction qui surpasse les modèles existants en segmentation et estimation de profondeur, marquant un progrès dans l&#x27;IA visuelle.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/qwen3-6-27b-beats-much-larger-predecessor-on-most-coding-benchmarks/" class="ext-title">Qwen3.6-27B beats much larger predecessor on most coding benchmarks</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Alibaba a lancé Qwen3.6-27B, un modèle open source de 27 milliards de paramètres qui surpasse son prédécesseur de 15 fois sa taille sur la plupart des benchmarks de codage, soulignant l&#x27;efficacité des architectures plus compactes.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/04/25/rag-without-vectors-how-pageindex-retrieves-by-reasoning/" class="ext-title">RAG Without Vectors: How PageIndex Retrieves by Reasoning</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">PageIndex propose une nouvelle approche du RAG sans vecteurs, se basant sur le raisonnement pour une récupération plus pertinente des informations, allant au-delà de la simple similarité vectorielle.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/04/24/a-coding-implementation-on-microsofts-openmementos-with-trace-structure-analysis-context-compression-and-fine-tuning-data-preparation/" class="ext-title">A Coding Implementation on Microsoft’s OpenMementos with Trace Structure Analysis, Context Compression, and Fine-Tuning Data Preparation</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">Ce tutoriel pratique sur OpenMementos de Microsoft explore l&#x27;analyse de traces de raisonnement pour la compression de contexte et la préparation de données de fine-tuning, essentiel pour l&#x27;entraînement de LLM.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/anthropic-says-stronger-ai-models-cut-better-deals-and-the-losers-dont-even-notice/" class="ext-title">Anthropic says stronger AI models cut better deals, and the losers don&#x27;t even notice</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Anthropic a découvert que des modèles d&#x27;IA plus puissants obtiennent de meilleurs accords dans les négociations, avec des implications économiques potentielles si l&#x27;IA gère des transactions réelles, soulevant des questions sur l&#x27;équité et la transparence.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.wired.com/story/ace-the-robot-wants-to-become-the-world-table-tennis-champion/" class="ext-title">Ace the Ping-Pong Robot Can Whup Your Ass</a>
+        <span class="ext-source">Wired AI</span>
+        <p class="ext-summary">Ace, un robot de ping-pong, démontre des capacités impressionnantes à lire la trajectoire de la balle et à y répondre, mettant en avant les progrès de l&#x27;IA en robotique et la coordination œil-main.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/04/25/a-coding-tutorial-on-datashader-on-rendering-massive-datasets-with-high-performance-python-visual-analytics/" class="ext-title">A Coding Tutorial on Datashader on Rendering Massive Datasets with High-Performance Python Visual Analytics</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">Ce tutoriel présente Datashader, une bibliothèque Python pour la visualisation haute performance de jeux de données massifs, un outil clé pour l&#x27;analyse visuelle des données d&#x27;IA qui submergent les outils classiques.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/04/24/a-coding-implementation-on-deepgram-python-sdk-for-transcription-text-to-speech-async-audio-processing-and-text-intelligence/" class="ext-title">A Coding Implementation on Deepgram Python SDK for Transcription, Text-to-Speech, Async Audio Processing, and Text Intelligence</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">Un tutoriel pratique sur l&#x27;utilisation du SDK Python de Deepgram pour des capacités avancées d&#x27;IA vocale, couvrant la transcription, la synthèse vocale et le traitement audio asynchrone pour des applications intelligentes.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
