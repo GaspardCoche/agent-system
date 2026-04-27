@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-04-20
+updated: 2026-04-27
 ---
 
 # Nexus — Mémoire & Patterns
@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-04-27 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (5e run consécutif) — BLOCAGE 34 jours | #24988758298 |
 | 2026-04-20 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (4e run consécutif) — ESCALADE CRITIQUE | #24659071566 |
 | 2026-04-13 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (3e run consécutif) — ESCALADE Iris déclenchée | #24335871573 |
 | 2026-04-06 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (2e run consécutif) | #24025730664 |
@@ -88,10 +89,11 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 ## Note escalade CRITIQUE
 
-> 2026-04-20 : **4e run consécutif en template mode** (2026-03-24, 2026-04-06, 2026-04-13, 2026-04-20).
-> Nexus bloqué depuis **27 jours**. 0 audit réel exécuté.
-> Action prioritaire : Créer une issue GitHub dédiée `needs-config` avec checklist OAuth2.
-> Considérer de bloquer nexus.yml après 5 runs template pour éviter les runs inutiles.
+> 2026-04-27 : **5e run consécutif en template mode** (2026-03-24, 2026-04-06, 2026-04-13, 2026-04-20, 2026-04-27).
+> Nexus bloqué depuis **34 jours**. 0 audit réel exécuté.
+> ⛔ SEUIL ATTEINT : Recommandation de suspendre nexus.yml immédiatement.
+> Action prioritaire : Créer une issue GitHub `needs-config: Google Ads OAuth2` avec checklist.
+> Modifier nexus.yml pour skip + créer issue auto si credentials_ok=false.
 
 ---
 
