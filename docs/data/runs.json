@@ -1247,5 +1247,32 @@
     "timestamp": "2026-04-28T07:48:45.747977+00:00",
     "agents": [],
     "report_file": "reports/2026-04-28-email-agent-daily-digest-2026-04-28.md"
+  },
+  {
+    "run_id": "25046952798",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "25046952798",
+    "summary": "Monday maintenance executed: deleted 4 stale reports (pre-2026-03-29) that the researcher had reported but not committed, updated forge vault memory.  · Monday maintenance completed: 4 old reports cleaned (pre-2026-03-29), vault structure verified in",
+    "next_actions": [
+      "Priority 1 — Configure GOOGLE_ADS_DEVELOPER_TOKEN + GOOGLE_ADS_ACCOUNT_ID to unblock Nexus weekly audits",
+      "Priority 2 — Investigate vault-save push failure (2026-04-21): check GitHub token permissions",
+      "Priority 3 — Configure GMAIL credentials to restore Iris email digest pipeline"
+    ],
+    "timestamp": "2026-04-28T10:20:15.859340+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-04-28-orchestrator-scheduled-run.md"
   }
 ]
