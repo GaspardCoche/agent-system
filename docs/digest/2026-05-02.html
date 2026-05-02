@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;IA entre dans une nouvelle ère de monétisation agressive et d&#x27;outils développeur avancés, tandis que l&#x27;éthique reste un champ de bataille — AI Briefing 2026-05-02</title>
+  <meta name="description" content="Alors que les géants de l&#x27;IA cherchent de nouvelles voies de revenus, notamment par la publicité, les avancées se concentrent sur l&#x27;amélioration des capacités des modèles et des outils pour agents, tout en soulevant des questions éthiques persistantes.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Samedi 2 mai 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">16 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+4 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA entre dans une nouvelle ère de monétisation agressive et d&#x27;outils développeur avancés, tandis que l&#x27;éthique reste un champ de bataille</h2>
+      <p>Alors que les géants de l&#x27;IA cherchent de nouvelles voies de revenus, notamment par la publicité, les avancées se concentrent sur l&#x27;amélioration des capacités des modèles et des outils pour agents, tout en soulevant des questions éthiques persistantes.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+4)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/chatgpt-now-tracks-users-for-ads-by-default-as-openai-looks-for-new-revenue/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/openai_chatgpt.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/chatgpt-now-tracks-users-for-ads-by-default-as-openai-looks-for-new-revenue/">ChatGPT now tracks users for ads by default as OpenAI looks for new revenue</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI a activé par défaut le suivi des utilisateurs de ChatGPT gratuit à des fins publicitaires dans les pays où les publicités sont diffusées. Cette décision marque un tournant stratégique majeur pour l&#x27;entreprise, signalant une diversification de ses sources de revenus au-delà des abonnements payants. Pour les dirigeants B2B, cela indique une pression croissante pour monétiser l&#x27;IA grand public et potentiellement l&#x27;arrivée de modèles similaires pour les services d&#x27;IA d&#x27;entreprise. Cela soulève également des questions importantes sur la protection de la vie privée et la conformité réglementaire (GDPR, CCPA) que les entreprises devront surveiller attentivement si leurs propres applications d&#x27;IA adoptent des stratégies similaires.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">ChatGPT</span></div>
+        <a href="https://the-decoder.com/chatgpt-now-tracks-users-for-ads-by-default-as-openai-looks-for-new-revenue/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>1 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.marktechpost.com/2026/05/01/a-coding-guide-on-llm-post-training-with-trl-from-supervised-fine-tuning-to-dpo-and-grpo-reasoning/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/05/blog-1-1024x731.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/05/01/a-coding-guide-on-llm-post-training-with-trl-from-supervised-fine-tuning-to-dpo-and-grpo-reasoning/">A Coding Guide on LLM Post Training with TRL from Supervised Fine Tuning to DPO and GRPO Reasoning</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">Ce guide de codage approfondit le post-entraînement des grands modèles de langage (LLM) en utilisant la bibliothèque TRL, couvrant des techniques clés comme le fine-tuning supervisé, le DPO et le raisonnement GRPO. Il offre une feuille de route pratique pour les développeurs cherchant à optimiser les performances de leurs LLM pour des tâches spécifiques et à les rendre plus sûrs et alignés.</p>
+        <div class="card-tags"><span class="tag">LLM</span><span class="tag">TRL</span><span class="tag">Fine-tuning</span></div>
+        <a href="https://www.marktechpost.com/2026/05/01/a-coding-guide-on-llm-post-training-with-trl-from-supervised-fine-tuning-to-dpo-and-grpo-reasoning/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/meta-acquires-assured-robot-intelligence-to-accelerate-humanoid-robot-push/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/meta_humanoid_robot.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/meta-acquires-assured-robot-intelligence-to-accelerate-humanoid-robot-push/">Meta acquires Assured Robot Intelligence to accelerate humanoid robot push</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Meta a acquis la startup d&#x27;IA robotique Assured Robot Intelligence pour accélérer ses efforts dans le domaine des robots humanoïdes. Cette acquisition vise à créer une plateforme ouverte pour l&#x27;industrie, à l&#x27;image d&#x27;Android pour les smartphones, signalant une orientation stratégique majeure vers l&#x27;incarnation physique de l&#x27;IA et l&#x27;automatisation avancée.</p>
+        <div class="card-tags"><span class="tag">Meta</span><span class="tag">Assured Robot Intelligence</span><span class="tag">Robotique</span></div>
+        <a href="https://the-decoder.com/meta-acquires-assured-robot-intelligence-to-accelerate-humanoid-robot-push/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/xai-drops-grok-4-3-with-steep-price-cuts-and-an-imagine-agent-mode-for-creative-projects/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/grok_xai_logo.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/xai-drops-grok-4-3-with-steep-price-cuts-and-an-imagine-agent-mode-for-creative-projects/">xAI drops Grok 4.3 with steep price cuts and an Imagine agent mode for creative projects</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">xAI a lancé Grok 4.3, introduisant des réductions de prix significatives et un mode agent &#x27;Imagine&#x27; pour les projets créatifs. Ce modèle, bien qu&#x27;encore derrière les leaders, démontre une focalisation sur l&#x27;accessibilité économique et l&#x27;amélioration des capacités d&#x27;utilisation d&#x27;outils, ce qui pourrait stimuler l&#x27;adoption et la compétition sur le marché des modèles d&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">xAI</span><span class="tag">Grok</span></div>
+        <a href="https://the-decoder.com/xai-drops-grok-4-3-with-steep-price-cuts-and-an-imagine-agent-mode-for-creative-projects/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/xais-new-custom-voices-feature-turns-a-minute-of-speech-into-a-usable-voice-clone/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/xai_gro_clone_voice.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/xais-new-custom-voices-feature-turns-a-minute-of-speech-into-a-usable-voice-clone/">xAI&#x27;s new Custom Voices feature turns a minute of speech into a usable voice clone</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">xAI lance sa fonctionnalité &#x27;Custom Voices&#x27;, permettant aux développeurs de cloner des voix utilisables pour des applications d&#x27;IA en une minute seulement. Intégrée aux API Grok Speech-to-Text et Text-to-Speech, cette nouveauté ouvre des perspectives pour des expériences utilisateur personnalisées et des interfaces vocales innovantes, avec des implications pour le service client et la création de contenu.</p>
+        <div class="card-tags"><span class="tag">xAI</span><span class="tag">Grok</span><span class="tag">API</span></div>
+        <a href="https://the-decoder.com/xais-new-custom-voices-feature-turns-a-minute-of-speech-into-a-usable-voice-clone/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.marktechpost.com/2026/05/01/a-new-nvidia-research-shows-speculative-decoding-in-nemo-rl-achieves-1-8x-rollout-generation-speedup-at-8b-and-projects-2-5x-end-to-end-speedup-at-235b/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/05/blog-4.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/05/01/a-new-nvidia-research-shows-speculative-decoding-in-nemo-rl-achieves-1-8x-rollout-generation-speedup-at-8b-and-projects-2-5x-end-to-end-speedup-at-235b/">A New NVIDIA Research Shows Speculative Decoding in NeMo RL Achieves 1.8× Rollout Generation Speedup at 8B and Projects 2.5× End-to-End Speedup at 235B</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">Une nouvelle étude de NVIDIA révèle que le décodage spéculatif dans NeMo RL, avec un backend vLLM, accélère la génération de rollouts de 1,8x pour les modèles 8B et projette une accélération de 2,5x pour les modèles 235B. Cette avancée est cruciale pour l&#x27;efficacité de l&#x27;entraînement des LLM, réduisant considérablement les temps et les coûts de calcul pour les applications de production et la recherche.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span><span class="tag">NeMo</span><span class="tag">vLLM</span></div>
+        <a href="https://www.marktechpost.com/2026/05/01/a-new-nvidia-research-shows-speculative-decoding-in-nemo-rl-achieves-1-8x-rollout-generation-speedup-at-8b-and-projects-2-5x-end-to-end-speedup-at-235b/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.marktechpost.com/2026/05/01/meta-introduces-autodata-an-agentic-framework-that-turns-ai-models-into-autonomous-data-scientists-for-high-quality-training-data-creation/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/05/blog-2.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/05/01/meta-introduces-autodata-an-agentic-framework-that-turns-ai-models-into-autonomous-data-scientists-for-high-quality-training-data-creation/">Meta Introduces Autodata: An Agentic Framework That Turns AI Models into Autonomous Data Scientists for High-Quality Training Data Creation</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">Meta a dévoilé Autodata, un framework agentique qui transforme les modèles d&#x27;IA en scientifiques des données autonomes, capables de créer des données d&#x27;entraînement de haute qualité. Cette innovation promet de rationaliser le processus de développement des modèles d&#x27;IA en automatisant la curation des données, réduisant ainsi les efforts manuels et améliorant la performance des modèles.</p>
+        <div class="card-tags"><span class="tag">Meta</span><span class="tag">Autodata</span><span class="tag">Agents d&#x27;IA</span></div>
+        <a href="https://www.marktechpost.com/2026/05/01/meta-introduces-autodata-an-agentic-framework-that-turns-ai-models-into-autonomous-data-scientists-for-high-quality-training-data-creation/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.wired.com/story/super-pac-backed-by-openai-and-palantir-is-paying-tiktok-influencers-to-fear-monger-about-china/" class="card-img-link"><img src="https://media.wired.com/photos/69f14b40d98ff026bfabf317/191:100/w_1280,c_limit/Made-In-China-Super-PAC-Backed-By-OpenAI-Palantir-Paying-TikTok-Influencers-Business.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/super-pac-backed-by-openai-and-palantir-is-paying-tiktok-influencers-to-fear-monger-about-china/">A Dark-Money Campaign Is Paying Influencers to Frame Chinese AI as a Threat</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">Une campagne financée par des acteurs majeurs comme OpenAI et Palantir utilise des influenceurs pour présenter l&#x27;IA chinoise comme une menace, en promouvant l&#x27;IA américaine. Cette tactique de &#x27;dark money&#x27; révèle l&#x27;intensité de la guerre narrative autour de la suprématie de l&#x27;IA et soulève des questions sur l&#x27;éthique de l&#x27;information dans le secteur.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Palantir</span><span class="tag">Géopolitique</span></div>
+        <a href="https://www.wired.com/story/super-pac-backed-by-openai-and-palantir-is-paying-tiktok-influencers-to-fear-monger-about-china/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.marktechpost.com/2026/05/02/a-coding-implementation-to-parsing-analyzing-visualizing-and-fine-tuning-agent-reasoning-traces-using-the-lambda-hermes-agent-reasoning-traces-dataset/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/05/blog-5.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/05/02/a-coding-implementation-to-parsing-analyzing-visualizing-and-fine-tuning-agent-reasoning-traces-using-the-lambda-hermes-agent-reasoning-traces-dataset/">A Coding Implementation to Parsing, Analyzing, Visualizing, and Fine-Tuning Agent Reasoning Traces Using the lambda/hermes-agent-reasoning-traces Dataset</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">Ce tutoriel de codage montre comment analyser, visualiser et affiner les traces de raisonnement des agents IA à l&#x27;aide du dataset lambda/hermes-agent-reasoning-traces. Comprendre le comportement interne des agents est essentiel pour améliorer leur fiabilité, leur explicabilité et leurs performances dans des environnements complexes, ce qui est crucial pour le déploiement d&#x27;agents autonomes en entreprise.</p>
+        <div class="card-tags"><span class="tag">Agents d&#x27;IA</span><span class="tag">Développement</span><span class="tag">Debugging</span></div>
+        <a href="https://www.marktechpost.com/2026/05/02/a-coding-implementation-to-parsing-analyzing-visualizing-and-fine-tuning-agent-reasoning-traces-using-the-lambda-hermes-agent-reasoning-traces-dataset/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.wired.com/story/security-news-this-week-disneyland-now-uses-face-recognition-on-visitors/" class="card-img-link"><img src="https://media.wired.com/photos/69f53066ed110137695d66cd/191:100/w_1280,c_limit/security_disney_getty.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/security-news-this-week-disneyland-now-uses-face-recognition-on-visitors/">Disneyland Now Uses Face Recognition on Visitors</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">Disneyland a commencé à utiliser la reconnaissance faciale sur ses visiteurs, un déploiement significatif de cette technologie dans un espace public de loisirs. Parallèlement, la NSA teste Mythos Preview d&#x27;Anthropic pour détecter les vulnérabilités, soulignant l&#x27;intégration croissante de l&#x27;IA dans la surveillance et la sécurité nationale, avec des implications complexes pour la vie privée et la cybersécurité.</p>
+        <div class="card-tags"><span class="tag">Disney</span><span class="tag">Anthropic</span><span class="tag">NSA</span></div>
+        <a href="https://www.wired.com/story/security-news-this-week-disneyland-now-uses-face-recognition-on-visitors/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/May/1/inaturalist-sightings/">Tool iNaturalist Sightings</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison a créé un outil Python CLI et une interface web pour agréger et visualiser ses observations iNaturalist, entièrement développé sur son téléphone en utilisant Claude Code. Cet exemple met en lumière la puissance des LLM comme Claude Code pour le prototypage rapide et le développement d&#x27;outils personnalisés, même pour des développeurs non experts en web.</p>
+        <div class="card-tags"><span class="tag">Claude Code</span><span class="tag">Développement</span><span class="tag">CLI</span></div>
+        <a href="https://simonwillison.net/2026/May/1/inaturalist-sightings/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.latent.space/p/ainews-ai-engineer-worlds-fair-autoresearch" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!admO!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6045585a-7095-4a04-bbef-7f29cbc35fe5_1938x1276.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.latent.space/p/ainews-ai-engineer-worlds-fair-autoresearch">[AINews] AI Engineer World&#x27;s Fair — Autoresearch, Memory, World Models, Tokenmaxxing, Agentic Commerce, and Vertical AI Call for Speakers</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">La AI Engineer World&#x27;s Fair lance son appel à conférenciers, couvrant des sujets clés comme l&#x27;auto-recherche, la mémoire, les modèles de monde, l&#x27;agentic commerce et l&#x27;IA verticale. C&#x27;est un indicateur des domaines de recherche et de développement les plus actifs et des tendances qui façonneront l&#x27;ingénierie de l&#x27;IA dans les mois à venir, particulièrement pertinent pour les développeurs et les architectes de systèmes IA.</p>
+        <div class="card-tags"><span class="tag">Conférence IA</span><span class="tag">Tendances</span></div>
+        <a href="https://www.latent.space/p/ainews-ai-engineer-worlds-fair-autoresearch" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Monétisation de l&#x27;IA et défis éthiques</strong><p>L&#x27;industrie de l&#x27;IA explore activement de nouvelles stratégies de monétisation, comme le suivi publicitaire de ChatGPT, tandis que les déploiements de reconnaissance faciale et les campagnes d&#x27;influence soulèvent des questions complexes sur la vie privée et la désinformation.</p></div><div class="trend-item"><strong>Optimisation des Modèles et Outils pour Développeurs</strong><p>Les efforts se concentrent sur l&#x27;amélioration des performances des LLM, avec des recherches sur le décodage spéculatif (NVIDIA) et des frameworks agentiques pour la création de données (Meta Autodata), ainsi que des guides de post-entraînement et l&#x27;utilisation de Claude Code pour le développement rapide.</p></div><div class="trend-item"><strong>L&#x27;Ère des Agents Autonomes et la Robotique</strong><p>Meta investit dans la robotique humanoïde et xAI intègre des modes agents dans ses modèles, signalant une tendance vers des systèmes d&#x27;IA plus autonomes et incarnés. L&#x27;analyse des traces de raisonnement des agents devient essentielle pour leur développement fiable.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 4 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/even-the-latest-ai-models-make-three-systematic-reasoning-errors-arc-agi-3-analysis-shows/" class="ext-title">Even the latest AI models make three systematic reasoning errors, ARC-AGI-3 analysis shows</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Une analyse du benchmark ARC-AGI-3 révèle que même les modèles d&#x27;IA de pointe comme GPT-5.5 et Opus 4.7 commettent trois erreurs de raisonnement systématiques, ce qui les empêche de résoudre des tâches basiques pour les humains. Cela souligne les limites fondamentales actuelles des LLM en matière de raisonnement abstrait.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/05/01/a-coding-implementation-of-end-to-end-brain-decoding-from-meg-signals-using-neuralset-and-deep-learning-for-predicting-linguistic-features/" class="ext-title">A Coding Implementation of End-to-End Brain Decoding from MEG Signals Using NeuralSet and Deep Learning for Predicting Linguistic Features</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">Ce tutoriel de codage explore le décodage de caractéristiques linguistiques directement à partir des signaux cérébraux (MEG) grâce à NeuralSet et au deep learning. Il démontre une pipeline neuro-IA complète pour transformer l&#x27;activité neurale brute en prédictions significatives, comme l&#x27;estimation de la longueur des mots, ouvrant des voies pour les interfaces cerveau-ordinateur.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/nvidia-ceo-jensen-huang-calls-out-tech-leaders-god-complex-over-reckless-ai-job-loss-predictions/" class="ext-title">Nvidia CEO Jensen Huang calls out tech leaders&#x27; &quot;god complex&quot; over reckless AI job loss predictions</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Jensen Huang, PDG de Nvidia, critique vivement les leaders technologiques pour leurs prévisions alarmistes concernant les pertes d&#x27;emplois dues à l&#x27;IA, qu&#x27;il qualifie de &#x27;complexe de Dieu&#x27;. Il affirme que cette rhétorique décourage les jeunes et nuit à la société, plaidant pour une vision plus nuancée de l&#x27;impact de l&#x27;IA sur l&#x27;emploi.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/elon-musk-calls-himself-a-fool-for-giving-openai-38-million-that-became-an-800-billion-company/" class="ext-title">Elon Musk calls himself a fool for giving OpenAI $38 million that became an $800 billion company</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Elon Musk a déclaré en cour qu&#x27;il s&#x27;estimait &#x27;fou&#x27; d&#x27;avoir investi 38 millions de dollars dans OpenAI, une entreprise désormais évaluée à 800 milliards de dollars. Ce témoignage offre un aperçu des tensions passées et actuelles entre Musk et OpenAI, tout en confirmant que xAI utilise les modèles d&#x27;OpenAI pour son propre entraînement.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
