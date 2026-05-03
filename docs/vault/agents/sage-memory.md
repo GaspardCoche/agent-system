@@ -19,14 +19,13 @@ updated: 2026-03-29
 ## État du système
 
 ```
-Dernière analyse    : 2026-04-05
+Dernière analyse    : 2026-05-03
 Skills validés      : 4 (firecrawl_scrape, github_create_issue, gemini_analyze, slack_notify)
 Skills candidats    : 0
 Prompts améliorés   : 0
-Prochaine analyse   : Dimanche 2026-04-12
-Alerte active       : Pipeline collecte rétrospectives cassée (3 semaines consécutives)
-Actions requises    : (1) Ajouter upload agent-result-iris dans email-agent.yml
-                      (2) Ajouter retrospective field dans _reusable-claude.yml prompt
+Prochaine analyse   : Dimanche 2026-05-10
+Alerte active       : AUCUNE — fixes appliqués et vérifiés le 2026-05-03
+Actions requises    : Vérifier la semaine prochaine que les rétrospectives sont collectées
 ```
 
 ---
