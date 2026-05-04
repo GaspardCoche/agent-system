@@ -1399,5 +1399,29 @@
     "timestamp": "2026-05-04T08:08:36.961486+00:00",
     "agents": [],
     "report_file": "reports/2026-05-04-email-agent-daily-digest-2026-05-04.md"
+  },
+  {
+    "run_id": "25312980397",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-05-04",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "⚠️ TEMPLATE MODE — 6e run consécutif sans credentials (bloqué depuis 41 jours). Score estimé : 58/100. 5 optimisations proposées mais non applicables ",
+    "next_actions": [
+      "URGENT : Configurer les 4 secrets Google Ads dans GitHub → Settings → Secrets and variables → Actions",
+      "Relancer Nexus avec dry_run=true après configuration pour obtenir un audit réel",
+      "Modifier nexus.yml : auto-créer une issue GitHub `needs-config: Google Ads OAuth2` si credentials_ok=false",
+      "Envisager la suspension de nexus.yml jusqu'à configuration (6 runs à vide = coût inutile)"
+    ],
+    "timestamp": "2026-05-04T10:06:23.941072+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-05-04-nexus-nexus-weekly-audit-2026-05-04.md"
   }
 ]
