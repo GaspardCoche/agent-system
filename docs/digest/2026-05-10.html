@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;IA Démontre des Capacités de Recherche de Niveau Doctorat et Transforme les Outils de Développement — AI Briefing 2026-05-10</title>
+  <meta name="description" content="Les agents IA progressent rapidement, prouvant leur capacité à mener des recherches complexes et à s&#x27;intégrer profondément dans les workflows de développement et d&#x27;entreprise.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Dimanche 10 mai 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">14 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+4 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA Démontre des Capacités de Recherche de Niveau Doctorat et Transforme les Outils de Développement</h2>
+      <p>Les agents IA progressent rapidement, prouvant leur capacité à mener des recherches complexes et à s&#x27;intégrer profondément dans les workflows de développement et d&#x27;entreprise.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+4)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/fields-medalist-says-chatgpt-5-5-pro-delivered-phd-level-math-research-in-under-two-hours-with-zero-human-help/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/ai_and_math.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/fields-medalist-says-chatgpt-5-5-pro-delivered-phd-level-math-research-in-under-two-hours-with-zero-human-help/">Fields Medalist says ChatGPT 5.5 Pro delivered &quot;PhD-level&quot; math research in under two hours with zero human help</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Un médaillé Fields a révélé que ChatGPT 5.5 Pro a résolu des problèmes mathématiques de niveau doctorat en moins de deux heures, sans intervention humaine. Le modèle a notamment amélioré une borne exponentielle en une borne polynomiale, démontrant une capacité de raisonnement inédite. Cette avancée suggère que les LLM peuvent désormais contribuer de manière originale et significative à la recherche scientifique, redéfinissant le rôle de l&#x27;IA dans les domaines académiques et de R&amp;D. Pour les exécutifs B2B, cela ouvre des perspectives pour l&#x27;automatisation de la recherche complexe, l&#x27;accélération de l&#x27;innovation et la résolution de problèmes analytiques qui nécessitaient auparavant des experts humains de haut niveau.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">ChatGPT</span></div>
+        <a href="https://the-decoder.com/fields-medalist-says-chatgpt-5-5-pro-delivered-phd-level-math-research-in-under-two-hours-with-zero-human-help/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.marktechpost.com/2026/05/09/nvidia-ai-just-released-cuda-oxide-an-experimental-rust-to-cuda-compiler-backend-that-compiles-simt-gpu-kernels-directly-to-ptx/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-4-1024x731.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/05/09/nvidia-ai-just-released-cuda-oxide-an-experimental-rust-to-cuda-compiler-backend-that-compiles-simt-gpu-kernels-directly-to-ptx/">NVIDIA AI Just Released cuda-oxide: An Experimental Rust-to-CUDA Compiler Backend that Compiles SIMT GPU Kernels Directly to PTX</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">NVIDIA a lancé `cuda-oxide`, un backend de compilateur expérimental Rust-to-CUDA, permettant de compiler directement les noyaux GPU SIMT écrits en Rust en PTX. Cela représente une avancée majeure pour les développeurs cherchant à créer des applications d&#x27;IA haute performance avec la sécurité et la modernité de Rust, optimisant ainsi l&#x27;exploitation des GPU NVIDIA.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span></div>
+        <a href="https://www.marktechpost.com/2026/05/09/nvidia-ai-just-released-cuda-oxide-an-experimental-rust-to-cuda-compiler-backend-that-compiles-simt-gpu-kernels-directly-to-ptx/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.marktechpost.com/2026/05/08/openai-adds-chrome-extension-to-codex-letting-its-ai-agent-access-linkedin-salesforce-gmail-and-internal-tools-via-signed-in-sessions/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-2.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/05/08/openai-adds-chrome-extension-to-codex-letting-its-ai-agent-access-linkedin-salesforce-gmail-and-internal-tools-via-signed-in-sessions/">OpenAI Adds Chrome Extension to Codex, Letting Its AI Agent Access LinkedIn, Salesforce, Gmail, and Internal Tools via Signed-In Sessions</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">OpenAI a doté son agent de codage Codex d&#x27;une extension Chrome, lui permettant d&#x27;interagir directement avec des applications web comme LinkedIn, Salesforce et Gmail via des sessions connectées. Cette capacité transforme Codex en un agent capable d&#x27;automatiser des flux de travail complexes directement dans le navigateur, ouvrant la voie à des automatisations d&#x27;entreprise plus profondes et à des assistants personnalisés.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Codex</span></div>
+        <a href="https://www.marktechpost.com/2026/05/08/openai-adds-chrome-extension-to-codex-letting-its-ai-agent-access-linkedin-salesforce-gmail-and-internal-tools-via-signed-in-sessions/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <a href="https://techcrunch.com/2026/05/09/nvidia-has-already-committed-40b-to-equity-ai-deals-this-year/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/03/GettyImages-2266475966.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/09/nvidia-has-already-committed-40b-to-equity-ai-deals-this-year/">Nvidia has already committed $40B to equity AI deals this year</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Nvidia a déjà engagé 40 milliards de dollars dans des accords d&#x27;investissement en capital-risque dans l&#x27;écosystème de l&#x27;IA cette année. Cela souligne l&#x27;influence croissante de Nvidia non seulement en tant que fournisseur de matériel, mais aussi en tant qu&#x27;acteur stratégique majeur modelant l&#x27;avenir du secteur par des investissements directs dans les startups prometteuses.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span></div>
+        <a href="https://techcrunch.com/2026/05/09/nvidia-has-already-committed-40b-to-equity-ai-deals-this-year/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/broadcom-reportedly-won-t-build-openais-custom-chip-unless-microsoft-buys-40-percent-of-them/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/openai_chatgpt.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/broadcom-reportedly-won-t-build-openais-custom-chip-unless-microsoft-buys-40-percent-of-them/">Broadcom reportedly won&#x27;t build OpenAI&#x27;s custom chip unless Microsoft buys 40 percent of them</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Le projet de puce IA personnalisée d&#x27;OpenAI avec Broadcom serait en péril, Broadcom refusant la production sans un engagement de Microsoft d&#x27;acheter 40 % des puces. Cela met en lumière les défis financiers et les dépendances stratégiques complexes dans le développement de matériel IA de pointe, et les négociations intenses entre les géants de la technologie.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Broadcom</span><span class="tag">Microsoft</span></div>
+        <a href="https://the-decoder.com/broadcom-reportedly-won-t-build-openais-custom-chip-unless-microsoft-buys-40-percent-of-them/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/googles-preferred-sources-feature-is-a-free-pass-for-more-garbage-in-search/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/google_web_dystopia-1.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/googles-preferred-sources-feature-is-a-free-pass-for-more-garbage-in-search/">Google&#x27;s &quot;Preferred Sources&quot; feature is a free pass for more garbage in search</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">La fonctionnalité &quot;Sources préférées&quot; de Google, censée favoriser le journalisme de qualité, est critiquée pour transférer la responsabilité de la curation aux utilisateurs. Cette approche permet à Google de justifier sa stratégie de sidelining du web ouvert au profit de son propre contenu IA, soulevant des préoccupations quant à la qualité et la neutralité des résultats de recherche.</p>
+        <div class="card-tags"><span class="tag">Google</span></div>
+        <a href="https://the-decoder.com/googles-preferred-sources-feature-is-a-free-pass-for-more-garbage-in-search/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.marktechpost.com/2026/05/08/meet-github-spec-kit-an-open-source-toolkit-for-spec-driven-development-with-ai-coding-agents/" class="card-img-link"><img src="https://www.marktechpost.com/wp-content/uploads/2026/05/blog11-1-1-1024x731.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.marktechpost.com/2026/05/08/meet-github-spec-kit-an-open-source-toolkit-for-spec-driven-development-with-ai-coding-agents/">Meet GitHub Spec-Kit: An Open Source Toolkit for Spec-Driven Development with AI Coding Agents</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.marktechpost.com&sz=32" width="14" height="14" />
+          <span>MarkTechPost</span>
+        </div>
+        <p class="summary">GitHub a introduit Spec-Kit, un toolkit open source pour le développement guidé par spécifications avec les agents de codage IA. Cet outil vise à surmonter les limites du &quot;vibe-coding&quot; en permettant aux développeurs de définir des spécifications structurées, garantissant ainsi que le code généré par l&#x27;IA correspond précisément à l&#x27;intention, une révolution pour la qualité et la fiabilité du code assisté par IA.</p>
+        <div class="card-tags"><span class="tag">GitHub</span><span class="tag">Claude Code</span><span class="tag">GitHub Copilot</span></div>
+        <a href="https://www.marktechpost.com/2026/05/08/meet-github-spec-kit-an-open-source-toolkit-for-spec-driven-development-with-ai-coding-agents/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>3 articles</span></div><div class='grid'><article class="card">
+      <a href="https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper" class="card-img-link"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper">OncoAgent: A Dual-Tier Multi-Agent Framework for Privacy-Preserving Oncology Clinical Decision Support</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">OncoAgent est un framework multi-agent à deux niveaux conçu pour le support de décision clinique en oncologie, avec une forte emphase sur la protection de la vie privée. Ce modèle démontre le potentiel de l&#x27;IA pour des applications médicales sensibles, en garantissant la confidentialité des données patients tout en offrant des analyses pertinentes.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">AMD</span></div>
+        <a href="https://huggingface.co/blog/lablab-ai-amd-developer-hackathon/oncoagent-official-paper" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/09/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-ai-generated-eb728837-4a65-4ce4-b814-abd0c140d20c.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/09/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms/">So you&#x27;ve heard these AI terms and nodded along; let&#x27;s fix that</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Cet article propose un glossaire essentiel des termes et du jargon liés à l&#x27;IA. Il est crucial pour les professionnels souhaitant comprendre le paysage en évolution rapide de l&#x27;IA et communiquer efficacement avec les équipes techniques et les partenaires.</p>
+        
+        <a href="https://techcrunch.com/2026/05/09/artificial-intelligence-definition-glossary-hallucinations-guide-to-common-ai-terms/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.wired.com/story/security-news-this-week-hackable-robot-lawnmower-unlocks-a-new-nightmare/" class="card-img-link"><img src="https://media.wired.com/photos/69fe6f189caafa670d32bc82/191:100/w_1280,c_limit/security_mower_GettyImages-1454488331.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/security-news-this-week-hackable-robot-lawnmower-unlocks-a-new-nightmare/">Hackable Robot Lawn Mower Unlocks a New Nightmare</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">La découverte qu&#x27;une tondeuse robot est piratable met en évidence les risques de sécurité croissants des appareils IoT dotés d&#x27;IA. Cela souligne la nécessité d&#x27;une attention accrue à la cybersécurité dans le développement de tout produit connecté, y compris les équipements grand public.</p>
+        <div class="card-tags"><span class="tag">IoT</span><span class="tag">Security</span></div>
+        <a href="https://www.wired.com/story/security-news-this-week-hackable-robot-lawnmower-unlocks-a-new-nightmare/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;IA agentique au cœur des workflows de développement</strong><p>L&#x27;intégration d&#x27;agents IA via des extensions de navigateur (Codex) et des toolkits open source (GitHub Spec-Kit) marque une évolution vers des workflows de développement plus automatisés et guidés par des spécifications, promettant une amélioration de la qualité logicielle et de l&#x27;efficacité.</p></div><div class="trend-item"><strong>Optimisation et flexibilité des modèles</strong><p>Les innovations comme Star Elastic de NVIDIA, qui consolide plusieurs modèles de tailles différentes en un seul checkpoint, et le développement de frameworks spécialisés comme OncoAgent, reflètent une tendance vers des modèles plus agiles, efficaces en ressources et adaptés à des applications spécifiques.</p></div><div class="trend-item"><strong>Enjeux stratégiques et éthiques de l&#x27;infrastructure IA</strong><p>Les difficultés d&#x27;approvisionnement en puces personnalisées d&#x27;OpenAI et les controverses sur la curation de contenu par l&#x27;IA de Google soulignent les défis croissants en matière de chaînes d&#x27;approvisionnement et de gouvernance éthique de l&#x27;information dans l&#x27;écosystème de l&#x27;intelligence artificielle.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 4 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/05/09/nvidia-ai-releases-star-elastic-one-checkpoint-that-contains-30b-23b-and-12b-reasoning-models-with-zero-shot-slicing/" class="ext-title">NVIDIA AI Releases Star Elastic: One Checkpoint that Contains 30B, 23B, and 12B Reasoning Models with Zero-Shot Slicing</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">NVIDIA a dévoilé Star Elastic, une méthode post-entraînement qui intègre plusieurs modèles de raisonnement imbriqués (30B, 23B, 12B paramètres) au sein d&#x27;un unique checkpoint. Cette innovation simplifie le déploiement et l&#x27;optimisation des ressources pour les inférences à diverses échelles.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/05/08/9-best-ai-tools-for-spec-driven-development-in-2026-kiro-bmad-gsd-and-more-compare/" class="ext-title">9 Best AI Tools for Spec-Driven Development in 2026: Kiro, BMAD, GSD, and More Compare</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">Cette revue compare les meilleurs outils IA pour le développement guidé par spécifications en 2026, offrant un aperçu des solutions pour une ingénierie logicielle plus structurée et fiable avec des agents de codage.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/05/09/a-coding-implementation-to-recover-hidden-malware-iocs-with-flare-floss-beyond-classic-strings-analysis/" class="ext-title">A Coding Implementation to Recover Hidden Malware IOCs with FLARE-FLOSS Beyond Classic Strings Analysis</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">Ce tutoriel explore l&#x27;utilisation de FLARE-FLOSS pour récupérer des indicateurs de compromission (IOC) de logiciels malveillants cachés, allant au-delà de l&#x27;analyse classique des chaînes de caractères pour améliorer la détection des menaces.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.marktechpost.com/2026/05/08/how-to-build-a-single-cell-rna-seq-analysis-pipeline-with-scanpy-for-pbmc-clustering-annotation-and-trajectory-discovery/" class="ext-title">How to Build a Single-Cell RNA-seq Analysis Pipeline with Scanpy for PBMC Clustering, Annotation, and Trajectory Discovery</a>
+        <span class="ext-source">MarkTechPost</span>
+        <p class="ext-summary">L&#x27;article détaille la construction d&#x27;un pipeline d&#x27;analyse RNA-seq unicellulaire avancé avec Scanpy, illustrant l&#x27;application de l&#x27;IA dans la bio-informatique pour le clustering, l&#x27;annotation et la découverte de trajectoires cellulaires.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
