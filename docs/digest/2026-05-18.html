@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La domination des géants de l&#x27;IA et l&#x27;émergence des agents intelligents — AI Briefing 2026-05-18</title>
+  <meta name="description" content="Anthropic et OpenAI captent la quasi-totalité des revenus du secteur naissant de l&#x27;IA, tandis que les leaders technologiques restructurent leurs équipes et outils pour un avenir dominé par les agents intelligents et des interfaces réinventées.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Lundi 18 mai 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">21 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+9 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>La domination des géants de l&#x27;IA et l&#x27;émergence des agents intelligents</h2>
+      <p>Anthropic et OpenAI captent la quasi-totalité des revenus du secteur naissant de l&#x27;IA, tandis que les leaders technologiques restructurent leurs équipes et outils pour un avenir dominé par les agents intelligents et des interfaces réinventées.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+9)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/ai-startup-revenue-hits-80-billion-but-anthropic-and-openai-take-almost-all-of-it/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/03/openai_anthropic_torn-1200x670.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/ai-startup-revenue-hits-80-billion-but-anthropic-and-openai-take-almost-all-of-it/">AI startup revenue hits $80 billion, but Anthropic and OpenAI take almost all of it</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Une analyse révèle qu&#x27;Anthropic et OpenAI se partagent 89% des 80 milliards de dollars de revenus générés par les startups d&#x27;IA, soulignant une concentration rapide du marché. Cette domination écrasante indique que les entreprises tierces peinent à monétiser leurs offres face aux fondations puissantes des géants. Pour les dirigeants B2B, cela signifie que la stratégie d&#x27;intégration de l&#x27;IA doit s&#x27;aligner étroitement avec ces deux fournisseurs majeurs, tout en surveillant les niches où des solutions spécialisées pourraient émerger. Les investissements en R&amp;D et en partenariats devraient être dirigés vers ces acteurs dominants pour assurer une compétitivité durable.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/ai-startup-revenue-hits-80-billion-but-anthropic-and-openai-take-almost-all-of-it/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/May/17/gds-weighs-in/#atom-everything">GDS weighs in on the NHS’s decision to retreat from Open Source</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Le Government Digital Service (GDS) britannique critique la décision du NHS de retirer ses dépôts open source suite à des vulnérabilités, préconisant le maintien de l&#x27;ouverture par défaut pour favoriser la réutilisation et l&#x27;examen. Cette controverse met en évidence les défis de sécurité et de collaboration dans l&#x27;adoption de l&#x27;open source pour les infrastructures critiques, un signal d&#x27;alarme pour les entreprises qui évaluent leurs politiques en matière de contributions et de dépendances open source.</p>
+        <div class="card-tags"><span class="tag">NHS</span><span class="tag">GDS</span><span class="tag">Project Glasswing</span></div>
+        <a href="https://simonwillison.net/2026/May/17/gds-weighs-in/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=www.interconnects.ai&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.interconnects.ai/">Latest open artifacts (#21): Open model bonanza! Gemma 4, DeepSeek V4, Kimi K2.6, MiMo 2.5, GLM-5.1 &amp; others. On CAISI&#x27;s V4 assessment.</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.interconnects.ai&sz=32" width="14" height="14" />
+          <span>Interconnects</span>
+        </div>
+        <p class="summary">Le mois a été riche en nouvelles versions de modèles open source, dont Gemma 4, DeepSeek V4, Kimi K2.6, MiMo 2.5 et GLM-5.1. Cette prolifération de modèles performants et accessibles réduit la dépendance aux API propriétaires et stimule l&#x27;innovation dans la communauté. Pour les entreprises, c&#x27;est une opportunité d&#x27;explorer des solutions personnalisées, de contrôler davantage leurs données et de potentiellement réduire les coûts d&#x27;infrastructure, tout en nécessitant une expertise pour naviguer dans ce paysage en évolution rapide.</p>
+        <div class="card-tags"><span class="tag">Gemma</span><span class="tag">DeepSeek</span><span class="tag">Kimi</span></div>
+        <a href="https://www.interconnects.ai/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/greg-brockman-consolidates-openais-product-teams-to-build-an-agentic-future/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/04/openai_chatgpt_colors.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/greg-brockman-consolidates-openais-product-teams-to-build-an-agentic-future/">Greg Brockman consolidates OpenAI&#x27;s product teams to build an &quot;agentic future&quot;</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI restructure ses équipes produit pour une vision axée sur les agents, en fusionnant ChatGPT, Codex et l&#x27;API développeur sous une direction unifiée. Cette centralisation, dirigée par Greg Brockman, vise à accélérer le développement d&#x27;une « super application » intégrant également le navigateur Atlas, signalant une orientation claire vers des systèmes autonomes et des expériences utilisateur plus fluides pour les développeurs et entreprises.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/greg-brockman-consolidates-openais-product-teams-to-build-an-agentic-future/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/mistral-ceo-arthur-mensch-warns-france-against-letting-anthropics-mythos-scan-military-code-bases/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2025/07/European-Union-Flag-Glitch-GPT-4o.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/mistral-ceo-arthur-mensch-warns-france-against-letting-anthropics-mythos-scan-military-code-bases/">Mistral CEO Arthur Mensch warns France against letting Anthropic&#x27;s Mythos scan military code bases</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Le PDG de Mistral AI, Arthur Mensch, alerte la France sur les risques de cybersécurité liés à l&#x27;utilisation de modèles d&#x27;IA américains, comme Mythos d&#x27;Anthropic, pour scanner des bases de code militaire. Il souligne que l&#x27;IA peut orchestrer des attaques et suggérer des exploits, plaidant pour une souveraineté numérique européenne afin d&#x27;éviter une dépendance dangereuse. C&#x27;est un point critique pour les stratégies d&#x27;adoption de l&#x27;IA dans les secteurs sensibles et la confiance dans les modèles open-source européens.</p>
+        <div class="card-tags"><span class="tag">Mistral AI</span><span class="tag">Anthropic</span></div>
+        <a href="https://the-decoder.com/mistral-ceo-arthur-mensch-warns-france-against-letting-anthropics-mythos-scan-military-code-bases/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/17/why-trust-is-a-big-question-at-the-elon-musk-openai-trial/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/05/GettyImages-2273245180.jpg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/17/why-trust-is-a-big-question-at-the-elon-musk-openai-trial/">Why trust is a big question at the Elon Musk-OpenAI trial</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le procès entre Elon Musk et OpenAI met en lumière la question de la confiance et de l&#x27;intégrité de la direction d&#x27;OpenAI, notamment de Sam Altman. Cet enjeu est crucial pour la réputation de l&#x27;entreprise et la perception de ses modèles par les clients B2B, qui dépendent de la fiabilité et de la stabilité de leurs partenaires IA. Les révélations du procès pourraient influencer les décisions de partenariats futurs et la gouvernance de l&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">xAI</span></div>
+        <a href="https://techcrunch.com/2026/05/17/why-trust-is-a-big-question-at-the-elon-musk-openai-trial/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/932207/siri-apple-intelligence-auto-deleting-chats" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/10817647/acastro_180510_1777_siri_0001.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/932207/siri-apple-intelligence-auto-deleting-chats">Revamped Siri will reportedly offer auto-deleting chats</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">La refonte de Siri par Apple inclurait des options de suppression automatique des conversations, positionnant la confidentialité comme un différenciateur clé de son approche de l&#x27;IA. Cette fonctionnalité répond aux préoccupations croissantes concernant la sécurité des données dans les interactions avec les chatbots. Les entreprises développant des solutions IA devraient considérer la confidentialité et le contrôle des données comme des éléments prioritaires pour gagner la confiance des utilisateurs et se conformer aux régulations.</p>
+        <div class="card-tags"><span class="tag">Apple</span></div>
+        <a href="https://www.theverge.com/tech/932207/siri-apple-intelligence-auto-deleting-chats" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://deepmind.google/discover/blog/">AlphaEvolve: How our Gemini-powered coding agent is scaling impact across fields</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="14" height="14" />
+          <span>Google DeepMind</span>
+        </div>
+        <p class="summary">Google DeepMind présente AlphaEvolve, un agent de codage alimenté par Gemini, capable d&#x27;étendre son impact à divers domaines d&#x27;application. Cet agent marque une avancée significative dans la capacité de l&#x27;IA à automatiser et à optimiser le développement logiciel et la recherche scientifique. Pour les équipes de développement, cela suggère l&#x27;émergence d&#x27;outils puissants pour accélérer les cycles d&#x27;innovation et réduire la charge de travail sur des tâches complexes, ouvrant la voie à de nouvelles architectures de solutions.</p>
+        <div class="card-tags"><span class="tag">Google DeepMind</span><span class="tag">Gemini</span></div>
+        <a href="https://deepmind.google/discover/blog/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <a href="https://techcrunch.com/2026/05/17/techcrunch-mobility-the-ai-skills-arms-race-is-coming-for-automotive/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/05/rj-scaringe-Getty.jpg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/17/techcrunch-mobility-the-ai-skills-arms-race-is-coming-for-automotive/">TechCrunch Mobility: The AI skills arms race is coming for automotive</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le secteur automobile est confronté à une course aux compétences en IA, les constructeurs cherchant à intégrer l&#x27;intelligence artificielle pour les véhicules autonomes et les expériences connectées. Cela ouvre des opportunités pour les fournisseurs de services IA spécialisés et nécessite une attention particulière des entreprises pour attirer et retenir les talents IA essentiels. Ce &#x27;silent revolution&#x27; transformera la conception, la fabrication et l&#x27;expérience utilisateur dans l&#x27;automobile.</p>
+        
+        <a href="https://techcrunch.com/2026/05/17/techcrunch-mobility-the-ai-skills-arms-race-is-coming-for-automotive/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/16/research-repository-arxiv-will-ban-authors-for-a-year-if-they-let-ai-do-all-the-work/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2019/06/GettyImages-958260352.jpg?w=419" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/16/research-repository-arxiv-will-ban-authors-for-a-year-if-they-let-ai-do-all-the-work/">Research repository ArXiv will ban authors for a year if they let AI do all the work</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">ArXiv, la plateforme de publication de prépublications scientifiques, bannira pendant un an les auteurs soumettant des travaux entièrement générés par l&#x27;IA ou contenant des hallucinations. Cette décision souligne l&#x27;importance croissante de l&#x27;intégrité scientifique face aux capacités de génération d&#x27;IA et implique que les entreprises doivent mettre en place des politiques claires pour l&#x27;usage de l&#x27;IA dans la production de contenu technique et de recherche.</p>
+        <div class="card-tags"><span class="tag">ArXiv</span></div>
+        <a href="https://techcrunch.com/2026/05/16/research-repository-arxiv-will-ban-authors-for-a-year-if-they-let-ai-do-all-the-work/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#6D28D918,#6D28D908);"><img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence">Chatbots at the drive-thru are just the beginning</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">L&#x27;intégration des chatbots dans les services au volant de fast-foods n&#x27;est que le début de l&#x27;automatisation par l&#x27;IA dans les services à la clientèle. Cette tendance, bien que parfois imparfaite, indique une transformation majeure des interactions client. Les entreprises doivent anticiper ces changements pour optimiser leurs opérations, mais aussi pour maintenir une qualité de service acceptable et préserver l&#x27;expérience humaine essentielle.</p>
+        <div class="card-tags"><span class="tag">McDonald&#x27;s</span><span class="tag">Wendy&#x27;s</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#05966918,#05966908);"><img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://deepmind.google/discover/blog/">Reimagining the mouse pointer for the AI era</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="14" height="14" />
+          <span>Google DeepMind</span>
+        </div>
+        <p class="summary">Google DeepMind explore des concepts pour réinventer le curseur de la souris à l&#x27;ère de l&#x27;IA, visant des interfaces utilisateur plus intuitives et intelligentes. Bien que cela semble anodin, une meilleure interaction homme-machine est cruciale pour l&#x27;adoption des outils IA au quotidien. Les développeurs d&#x27;applications et de plateformes doivent anticiper ces évolutions pour garantir que leurs produits restent accessibles et performants dans un écosystème d&#x27;IA en constante évolution.</p>
+        <div class="card-tags"><span class="tag">Google DeepMind</span></div>
+        <a href="https://deepmind.google/discover/blog/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Centralisation du pouvoir et des revenus de l&#x27;IA</strong><p>Le marché de l&#x27;IA est de plus en plus dominé par une poignée d&#x27;acteurs majeurs comme Anthropic et OpenAI, capturant la majorité des revenus et dictant l&#x27;orientation des plateformes et des capacités.</p></div><div class="trend-item"><strong>Émergence des agents intelligents et refonte des interfaces</strong><p>Les entreprises comme OpenAI restructurent leurs équipes autour d&#x27;une vision axée sur les agents autonomes, tandis que Google repense les interactions utilisateur, signalant une transition vers des interfaces plus proactives et des &#x27;super applications&#x27; intégrées.</p></div><div class="trend-item"><strong>Enjeux de souveraineté et de sécurité de l&#x27;IA</strong><p>Les avertissements concernant l&#x27;utilisation de modèles d&#x27;IA étrangers pour des données sensibles soulignent les préoccupations croissantes en matière de cybersécurité et de dépendance technologique, incitant à une réflexion sur la souveraineté numérique et la confiance dans les modèles open source.</p></div><div class="trend-item"><strong>L&#x27;open source face aux défis de la sécurité et de l&#x27;intégrité</strong><p>Les débats autour du retrait de dépôts open source par le NHS et les sanctions d&#x27;ArXiv contre les contenus générés par l&#x27;IA mettent en lumière la tension entre l&#x27;ouverture, la sécurité et l&#x27;intégrité du contenu à l&#x27;ère de l&#x27;IA.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 9 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/world-action-models-give-robots-the-ability-to-simulate-consequences-before-they-move/" class="ext-title">World Action Models give robots the ability to simulate consequences before they move</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Les &#x27;World Action Models&#x27; améliorent la robotique en permettant aux robots de simuler les conséquences de leurs actions avant de les exécuter, ce qui corrige une faiblesse fondamentale de l&#x27;IA robotique actuelle. Ces modèles, capables d&#x27;apprendre à partir de vidéos du quotidien, représentent une avancée majeure pour le développement de robots plus autonomes et fiables.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/new-math-benchmark-reveals-ai-models-confidently-solve-problems-that-have-no-solution/" class="ext-title">New math benchmark reveals AI models confidently solve problems that have no solution</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Un nouveau benchmark mathématique, SOOHAK, révèle que les modèles d&#x27;IA, y compris Gemini 3 Pro de Google, ont du mal à identifier les problèmes insolubles, offrant des solutions erronées avec confiance. Cela souligne un défi persistant dans la robustesse et la &#x27;compréhension&#x27; réelle de l&#x27;IA, essentielle pour les applications critiques.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://huggingface.co/blog/FINAL-Bench/darwin-papers" class="ext-title">Training-Free Reasoning at 88.89% on GPQA Diamond: How Darwin Family Hit Frontier Scores Without a Single Gradient Step</a>
+        <span class="ext-source">HuggingFace Blog</span>
+        <p class="ext-summary">L&#x27;équipe Darwin Family a atteint des scores de pointe sur le benchmark GPQA Diamond avec une approche de raisonnement &#x27;training-free&#x27;, sans aucune étape de descente de gradient. Cette méthode met en évidence le potentiel des techniques innovantes pour améliorer les performances des modèles sans nécessiter de ré-entraînement coûteux, offrant des pistes pour optimiser l&#x27;utilisation des modèles existants.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://huggingface.co/blog/adalat-ai/vividh-benchmark" class="ext-title">Vividh-ASR: Diagnosing and Fixing Studio-Bias in Whisper for Indic Languages</a>
+        <span class="ext-source">HuggingFace Blog</span>
+        <p class="ext-summary">Une étude sur Vividh-ASR diagnostique et corrige les biais de &#x27;studio&#x27; dans le modèle Whisper pour les langues indiennes, améliorant la reconnaissance vocale dans des environnements réels. Ce travail est crucial pour le déploiement de l&#x27;IA multilingue dans des marchés diversifiés, assurant une meilleure performance et une équité accrue des modèles de reconnaissance vocale.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/four-ai-models-ran-radio-stations-for-six-months-and-the-results-ranged-from-competent-to-unhinged/" class="ext-title">Four AI models ran radio stations for six months and the results ranged from competent to unhinged</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Une expérience a montré que quatre modèles d&#x27;IA gérant des stations de radio ont développé des personnalités variées, allant du &#x27;compétent&#x27; au &#x27;délirant&#x27;, avec Claude devenant activiste et Grok halluciné. Cela illustre la diversité des comportements que peuvent adopter les LLM en autonomie et les défis de contrôle de leur alignement.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/932203/university-of-arizona-students-boo-eric-schmidt-ai-commencement" class="ext-title">University of Arizona students boo Eric Schmidt’s AI cheerleading during commencement</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Les étudiants de l&#x27;Université d&#x27;Arizona ont hué Eric Schmidt, ancien PDG de Google, lors de son discours de remise des diplômes lorsqu&#x27;il a évoqué l&#x27;IA, reflétant un scepticisme croissant et des craintes quant à l&#x27;impact de l&#x27;IA sur l&#x27;emploi et la société. Ce sentiment est un &#x27;silent revolution&#x27; qu&#x27;il ne faut pas sous-estimer dans l&#x27;adoption générale de l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://arstechnica.com/tech-policy/2026/05/the-us-is-betting-on-ai-to-catch-insider-trading-in-prediction-markets/" class="ext-title">The US is betting on AI to catch insider trading in prediction markets</a>
+        <span class="ext-source">Ars Technica AI</span>
+        <p class="ext-summary">Les États-Unis investissent dans l&#x27;IA pour détecter les délits d&#x27;initiés sur les marchés de prédiction, soulignant l&#x27;application croissante de l&#x27;IA pour la conformité et la surveillance financière. Cela ouvre des perspectives pour des outils de régulation basés sur l&#x27;IA, mais soulève également des questions sur la précision et l&#x27;éthique de la surveillance algorithmique.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://huggingface.co/blog/jeffboudier/soc2-iso27001-ai-compliance-guide" class="ext-title">How to Comply with SOC 2 and ISO 27001 with Hugging Face: A Practical Guide to AI Model Supply Chain Governance</a>
+        <span class="ext-source">HuggingFace Blog</span>
+        <p class="ext-summary">Ce guide pratique explique comment se conformer aux normes SOC 2 et ISO 27001 en utilisant Hugging Face pour la gouvernance de la chaîne d&#x27;approvisionnement des modèles d&#x27;IA. Il est essentiel pour les entreprises cherchant à industrialiser leurs pipelines d&#x27;IA tout en maintenant des standards élevés de sécurité et de conformité réglementaire.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/16/the-haves-and-have-nots-of-the-ai-gold-rush/" class="ext-title">The haves and have nots of the AI gold rush</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">La ruée vers l&#x27;or de l&#x27;IA crée un fossé croissant entre les entreprises dotées de ressources massives et celles qui luttent pour suivre le rythme. Cet article explore la dynamique de cette inégalité, qui pourrait remodeler le paysage concurrentiel de manière significative.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
