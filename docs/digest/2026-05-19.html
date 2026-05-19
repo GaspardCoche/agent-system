@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;Écosystème IA en Ébullition : Entre Dév. Outils, Performances de Modèles et Enjeux Régulatoires — AI Briefing 2026-05-19</title>
+  <meta name="description" content="L&#x27;acquisition stratégique de Stainless par Anthropic et l&#x27;essor des modèles de codage rentables redéfinissent le paysage des outils IA, tandis que la saga judiciaire Musk-OpenAI met en lumière les tensions sur la gouvernance et l&#x27;orientation des géants de l&#x27;IA.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Mardi 19 mai 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">25 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+11 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;Écosystème IA en Ébullition : Entre Dév. Outils, Performances de Modèles et Enjeux Régulatoires</h2>
+      <p>L&#x27;acquisition stratégique de Stainless par Anthropic et l&#x27;essor des modèles de codage rentables redéfinissent le paysage des outils IA, tandis que la saga judiciaire Musk-OpenAI met en lumière les tensions sur la gouvernance et l&#x27;orientation des géants de l&#x27;IA.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+11)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/elon-musk-loses-his-134-billion-lawsuit-against-openai-after-jury-deliberates-for-just-two-hours/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2024/12/openai_lawsuit_justice-2.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/elon-musk-loses-his-134-billion-lawsuit-against-openai-after-jury-deliberates-for-just-two-hours/">Elon Musk loses his $134 billion lawsuit against OpenAI after jury deliberates for just two hours</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">La plainte d&#x27;Elon Musk contre OpenAI, réclamant 134 milliards de dollars pour rupture de contrat suite à la transition de l&#x27;entreprise vers un modèle à but lucratif, a été rejetée par un jury après seulement deux heures de délibération. Le juge a rapidement validé le verdict, soulignant que Musk avait lui-même proposé une structure à but lucratif s&#x27;il en conservait le contrôle. Cette décision renforce la position d&#x27;OpenAI et de son modèle hybride, tout en clôturant une saga juridique très médiatisée qui soulevait des questions fondamentales sur la gouvernance et la mission des entreprises leaders en IA. Pour les dirigeants, cela souligne l&#x27;importance de la clarté des accords fondateurs et des implications financières des changements de modèle d&#x27;affaires dans l&#x27;écosystème de l&#x27;IA, potentiellement ouvrant la voie à une consolidation ou à de nouvelles définitions des partenariats stratégiques dans le secteur.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Elon Musk</span><span class="tag">Microsoft</span></div>
+        <a href="https://the-decoder.com/elon-musk-loses-his-134-billion-lawsuit-against-openai-after-jury-deliberates-for-just-two-hours/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://techcrunch.com/2026/05/18/anthropic-has-acquired-the-dev-tools-startup-used-by-openai-google-and-cloudflare/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2252871842.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/18/anthropic-has-acquired-the-dev-tools-startup-used-by-openai-google-and-cloudflare/">Anthropic has acquired the dev tools startup used by OpenAI, Google, and Cloudflare</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Anthropic a acquis Stainless, une startup spécialisée dans l&#x27;automatisation de la création et maintenance de SDKs. Cette acquisition stratégique permet à Anthropic d&#x27;améliorer l&#x27;intégration de Claude pour les développeurs utilisant des APIs, renforçant ainsi son écosystème d&#x27;outils et sa compétitivité face à OpenAI et Google, essentiels pour les exécutifs B2B.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Stainless</span><span class="tag">OpenAI</span></div>
+        <a href="https://techcrunch.com/2026/05/18/anthropic-has-acquired-the-dev-tools-startup-used-by-openai-google-and-cloudflare/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/cursors-composer-2-5-matches-opus-4-7-and-gpt-5-5-benchmarks-at-a-fraction-of-the-cost/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2024/08/cursor_AI_logo.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/cursors-composer-2-5-matches-opus-4-7-and-gpt-5-5-benchmarks-at-a-fraction-of-the-cost/">Cursor&#x27;s Composer 2.5 matches Opus 4.7 and GPT-5.5 benchmarks at a fraction of the cost</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Cursor a lancé Composer 2.5, un modèle d&#x27;IA de codage basé sur Kimi K2.5, affichant des performances comparables à celles d&#x27;Opus 4.7 et GPT-5.5 sur les benchmarks, mais à un coût nettement inférieur. Cette innovation suggère une démocratisation de l&#x27;IA de codage de pointe, rendant les capacités de haut niveau plus accessibles pour les développeurs et les entreprises soucieuses de leur budget.</p>
+        <div class="card-tags"><span class="tag">Cursor</span><span class="tag">Anthropic</span><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/cursors-composer-2-5-matches-opus-4-7-and-gpt-5-5-benchmarks-at-a-fraction-of-the-cost/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://openai.com/index/dell-codex-enterprise-partnership">OpenAI and Dell partner to bring Codex to hybrid and on-premise enterprise environments</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI s&#x27;associe à Dell pour déployer Codex dans des environnements d&#x27;entreprise hybrides et sur site. Cette collaboration vise à permettre aux entreprises d&#x27;intégrer des agents de codage IA de manière sécurisée dans leurs infrastructures existantes, répondant aux besoins de confidentialité et de personnalisation des grandes organisations.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Dell</span></div>
+        <a href="https://openai.com/index/dell-codex-enterprise-partnership" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/18/sandboxaq-brings-its-drug-discovery-models-to-claude-no-phd-in-computing-required/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2017/12/gettyimages-5339511481.jpg?w=640" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/18/sandboxaq-brings-its-drug-discovery-models-to-claude-no-phd-in-computing-required/">SandboxAQ brings its drug discovery models to Claude — no PhD in computing required</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">SandboxAQ intègre ses modèles de découverte de médicaments à Claude, rendant la bio-ingénierie assistée par IA accessible sans expertise en calcul avancée. Cette initiative ouvre de nouvelles perspectives pour l&#x27;innovation pharmaceutique, permettant aux chercheurs d&#x27;exploiter la puissance de l&#x27;IA pour accélérer le développement de nouvelles thérapies.</p>
+        <div class="card-tags"><span class="tag">SandboxAQ</span><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://techcrunch.com/2026/05/18/sandboxaq-brings-its-drug-discovery-models-to-claude-no-phd-in-computing-required/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://deepmind.google/discover/blog/alphaevolve-impact/">AlphaEvolve: How our Gemini-powered coding agent is scaling impact across fields</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="14" height="14" />
+          <span>Google DeepMind</span>
+        </div>
+        <p class="summary">Google DeepMind présente AlphaEvolve, un agent de codage alimenté par Gemini, capable d&#x27;étendre son impact à divers domaines scientifiques. Cet agent démontre comment l&#x27;IA peut automatiser et optimiser la génération de code pour des problèmes complexes, accélérant ainsi la recherche et le développement dans des secteurs variés.</p>
+        <div class="card-tags"><span class="tag">Google DeepMind</span><span class="tag">Gemini</span></div>
+        <a href="https://deepmind.google/discover/blog/alphaevolve-impact/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://github.blog/news-insights/product-news/take-your-local-github-sessions-anywhere/" class="card-img-link"><img src="https://github.blog/wp-content/uploads/2026/01/generic-github-copilot-logo-stripe.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://github.blog/news-insights/product-news/take-your-local-github-sessions-anywhere/">Take your local GitHub sessions anywhere</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">GitHub étend les sessions Copilot à distance, permettant aux développeurs de travailler sur VS Code ou via CLI depuis n&#x27;importe quel appareil, y compris mobile. Cette fonctionnalité améliore la flexibilité et la productivité, cruciales pour les équipes distribuées et le travail hybride, en rendant l&#x27;assistant de codage IA accessible partout.</p>
+        <div class="card-tags"><span class="tag">GitHub</span><span class="tag">GitHub Copilot</span></div>
+        <a href="https://github.blog/news-insights/product-news/take-your-local-github-sessions-anywhere/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/anthropic-to-brief-global-financial-regulators-on-cyber-flaws-found-by-claude-mythos/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/glasswing_mythos_cybersecurity_anthropic-2.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/anthropic-to-brief-global-financial-regulators-on-cyber-flaws-found-by-claude-mythos/">Anthropic to brief global financial regulators on cyber flaws found by Claude Mythos</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Anthropic va informer les régulateurs financiers mondiaux des vulnérabilités cybernétiques détectées par son modèle d&#x27;IA Claude Mythos Preview. Cette initiative met en lumière le rôle croissant de l&#x27;IA dans l&#x27;identification des menaces de sécurité critiques et souligne l&#x27;importance de la collaboration entre les développeurs d&#x27;IA et les régulateurs pour renforcer la résilience des systèmes financiers.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://the-decoder.com/anthropic-to-brief-global-financial-regulators-on-cyber-flaws-found-by-claude-mythos/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.artificialintelligence-news.com/news/techex-north-america-day-one-lessons-for-all-around-ai-and-more/" class="card-img-link"><img src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/05/techex-panel-hero.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.artificialintelligence-news.com/news/techex-north-america-day-one-lessons-for-all-around-ai-and-more/">AI is a matter of power, infrastructure and security: TechEx North America</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="14" height="14" />
+          <span>AI News</span>
+        </div>
+        <p class="summary">Le sommet TechEx North America a souligné que l&#x27;IA est fondamentalement une question de puissance, d&#x27;infrastructure et de sécurité. Les discussions ont mis en évidence la nécessité d&#x27;une approche holistique pour l&#x27;adoption de l&#x27;IA, où ces trois piliers sont cruciaux pour assurer la robustesse et la fiabilité des déploiements à grande échelle.</p>
+        <div class="card-tags"><span class="tag">TechEx</span></div>
+        <a href="https://www.artificialintelligence-news.com/news/techex-north-america-day-one-lessons-for-all-around-ai-and-more/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <a href="https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/652b2e9166313ebb6197e706/Bl-qDWU9OfuXZ06hNxZE7.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers">PaddleOCR 3.5: Running OCR and Document Parsing Tasks with a Transformers Backend</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">PaddleOCR 3.5 est lancé, intégrant un backend Transformers pour des tâches d&#x27;OCR et de parsing de documents plus performantes. Cette mise à jour open source offre aux développeurs des outils améliorés pour l&#x27;extraction d&#x27;informations et l&#x27;automatisation du traitement des documents, un cas d&#x27;usage courant en entreprise.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">PaddlePaddle</span></div>
+        <a href="https://huggingface.co/blog/PaddlePaddle/paddleocr-transformers" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/ibm-research/open-agent-leaderboard" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/5fc0292de45c5468456e022b/CpwVutMu5EiniBliQ9RXs.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/ibm-research/open-agent-leaderboard">The Open Agent Leaderboard</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Un nouveau classement des agents ouverts a été introduit pour évaluer et comparer les performances des systèmes agents d&#x27;IA. Cet outil est essentiel pour la communauté open source afin de stimuler l&#x27;innovation et de fournir une référence pour le développement de futurs agents autonomes et leurs capacités.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">IBM Research</span></div>
+        <a href="https://huggingface.co/blog/ibm-research/open-agent-leaderboard" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#05966918,#05966908);"><img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://deepmind.google/discover/blog/ai-pointer/">Reimagining the mouse pointer for the AI era</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="14" height="14" />
+          <span>Google DeepMind</span>
+        </div>
+        <p class="summary">Google DeepMind explore la réinvention du pointeur de souris pour l&#x27;ère de l&#x27;IA, proposant de nouvelles interfaces utilisateur intelligentes. Cette recherche vise à améliorer l&#x27;interaction homme-machine en intégrant des capacités d&#x27;IA pour des contrôles plus intuitifs et contextuels, anticipant les futures évolutions des outils de productivité.</p>
+        <div class="card-tags"><span class="tag">Google DeepMind</span></div>
+        <a href="https://deepmind.google/discover/blog/ai-pointer/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation" class="card-img-link"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation">Fine-Tuning NVIDIA Cosmos Predict 2.5 with LoRA/DoRA for Robot Video Generation</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Cet article détaille le fine-tuning du modèle NVIDIA Cosmos Predict 2.5 à l&#x27;aide des méthodes LoRA/DoRA pour la génération de vidéos robotiques. Ces techniques d&#x27;adaptation de modèles permettent d&#x27;optimiser des modèles pré-entraînés pour des tâches spécifiques avec moins de ressources, ouvrant la voie à des applications plus efficaces en robotique et vision par ordinateur.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span><span class="tag">HuggingFace</span></div>
+        <a href="https://huggingface.co/blog/nvidia/cosmos-fine-tuning-for-robot-video-generation" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/932375/amazon-alexa-plus-ai-podcasts" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/amazon-alexa-podcasts.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0,16.342557965595,100,67.314884068811" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/932375/amazon-alexa-plus-ai-podcasts">Amazon Alexa Plus can now create AI-generated podcasts</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Alexa Plus d&#x27;Amazon peut désormais générer des podcasts basés sur l&#x27;IA sur &#x27;virtuellement n&#x27;importe quel sujet&#x27;. Cette fonctionnalité enrichit l&#x27;expérience utilisateur des assistants vocaux, transformant Alexa en une plateforme de création de contenu personnalisé, avec des implications pour l&#x27;information et le divertissement.</p>
+        <div class="card-tags"><span class="tag">Amazon</span><span class="tag">Alexa</span></div>
+        <a href="https://www.theverge.com/tech/932375/amazon-alexa-plus-ai-podcasts" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Industrialisation des Agents de Codage</strong><p>Des outils comme AlphaEvolve de DeepMind et le Composer de Cursor, aux performances compétitives et à coût réduit, rendent les agents de codage plus accessibles et efficaces pour les développeurs, marquant une étape clé vers l&#x27;automatisation du développement logiciel.</p></div><div class="trend-item"><strong>Convergence IA &amp; Sécurité Financière</strong><p>L&#x27;implication de Claude Mythos dans la détection des cyber-vulnérabilités pour les régulateurs financiers indique une intégration croissante de l&#x27;IA dans la cybersécurité des infrastructures critiques, préfigurant des changements profonds dans la gestion des risques.</p></div><div class="trend-item"><strong>Démocratisation des Modèles Performants</strong><p>L&#x27;arrivée de modèles de codage comme Cursor&#x27;s Composer 2.5 offrant des performances de pointe à une fraction du coût pousse à une adoption plus large et à une intensification de la concurrence sur les modèles d&#x27;IA, influençant les stratégies d&#x27;achat et de déploiement technologique.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 11 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/May/19/5-minute-llms/#atom-everything" class="ext-title">The last six months in LLMs in five minutes</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Simon Willison a résumé les six derniers mois des développements en LLMs en cinq minutes, offrant un aperçu rapide des tendances et innovations clés.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://www.latent.space/p/ainews-how-to-land-a-job-at-a-frontier" class="ext-title">[AINews] How to land a job at a frontier lab (on Pretraining)</a>
+        <span class="ext-source">Latent Space</span>
+        <p class="ext-summary">Un article notable explore comment décrocher un emploi dans les laboratoires d&#x27;IA de pointe, en se concentrant sur les compétences et les stratégies de pré-entraînement.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/932464/musk-v-altman-proved-that-ai-is-led-by-the-wrong-people" class="ext-title">Musk v. Altman proved that AI is led by the wrong people</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Cette analyse critique post-verdict de l&#x27;affaire Musk contre Altman affirme que le procès a exposé des lacunes en matière de leadership dans l&#x27;industrie de l&#x27;IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.latent.space/p/the-fourth-law" class="ext-title">The Next War Is Already Here. The West Isn&#x27;t Ready.</a>
+        <span class="ext-source">Latent Space</span>
+        <p class="ext-summary">Cet article soutient que la prochaine ère de conflit est déjà là, avec l&#x27;IA en son cœur, et que les nations occidentales ne sont pas préparées.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/pope-leo-xiv-presents-first-ai-encyclical-anthropic-co-founder-invited-as-guest-speaker/" class="ext-title">Pope Leo XIV presents first AI encyclical, Anthropic co-founder invited as guest speaker</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Le Pape Léon XIV présentera sa première encyclique sur l&#x27;IA, avec Christopher Olah, co-fondateur d&#x27;Anthropic, comme invité, soulignant l&#x27;engagement éthique autour de l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/a-stanford-student-reflects-on-his-chatgpt-class-and-a-culture-of-just-a-little-bit-of-fraud/" class="ext-title">A Stanford student reflects on his ChatGPT class and a culture of &quot;just a little bit of fraud&quot;</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Un étudiant de Stanford partage son expérience sur l&#x27;impact de ChatGPT sur l&#x27;intégrité académique, révélant une &quot;culture de petite fraude&quot; exacerbée par l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/maga-aligned-groups-want-government-oversight-of-frontier-ai-models/" class="ext-title">MAGA-aligned groups want government oversight of frontier AI models</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Des groupes conservateurs appellent à une surveillance gouvernementale des modèles d&#x27;IA de pointe, demandant des tests de sécurité obligatoires avant le déploiement.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://arstechnica.com/ai/2026/05/bug-bounty-businesses-bombarded-with-ai-slop/" class="ext-title">Bug bounty businesses bombarded with AI slop</a>
+        <span class="ext-source">Ars Technica AI</span>
+        <p class="ext-summary">Les programmes de primes aux bugs sont submergés par un &quot;slop&quot; généré par l&#x27;IA, soulevant des défis pour la détection de vulnérabilités réelles et la sécurité logicielle.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/18/south-koreas-letinar-is-building-the-optics-behind-ai-glasses/" class="ext-title">South Korea’s LetinAR is building optics behind AI glasses</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">LetinAR, une startup sud-coréenne, développe des optiques miniatures qui pourraient devenir un élément clé des futures lunettes intelligentes alimentées par l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.technologyreview.com/2026/05/18/1137412/inside-anduril-and-metas-quest-to-make-smart-glasses-for-warfare/" class="ext-title">Inside Anduril and Meta’s quest to make smart glasses for warfare</a>
+        <span class="ext-source">MIT Tech Review AI</span>
+        <p class="ext-summary">Anduril et Meta collaborent sur des lunettes intelligentes de réalité augmentée pour des applications militaires, explorant des commandes vocales et le suivi oculaire pour les opérations de combat.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://www.technologyreview.com/2026/05/18/1137439/what-to-expect-from-google-this-week/" class="ext-title">What to expect from Google this week</a>
+        <span class="ext-source">MIT Tech Review AI</span>
+        <p class="ext-summary">À l&#x27;approche de Google I/O, cet article examine les attentes et les défis de Google dans la course aux modèles d&#x27;IA fondateurs.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
