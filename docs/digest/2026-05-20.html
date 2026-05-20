@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Agents IA de Google et l&#x27;Évolution de Claude Redéfinissent l&#x27;Interaction avec l&#x27;Intelligence Artificielle — AI Briefing 2026-05-20</title>
+  <meta name="description" content="Google I/O 2026 marque un virage stratégique vers les agents IA autonomes et multimodaux avec Gemini 3.5 Flash et Omni, tandis qu&#x27;Anthropic renforce Claude pour l&#x27;entreprise avec de nouvelles capacités de contrôle et l&#x27;arrivée d&#x27;Andrej Karpathy.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Mercredi 20 mai 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">30 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+13 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Les Agents IA de Google et l&#x27;Évolution de Claude Redéfinissent l&#x27;Interaction avec l&#x27;Intelligence Artificielle</h2>
+      <p>Google I/O 2026 marque un virage stratégique vers les agents IA autonomes et multimodaux avec Gemini 3.5 Flash et Omni, tandis qu&#x27;Anthropic renforce Claude pour l&#x27;entreprise avec de nouvelles capacités de contrôle et l&#x27;arrivée d&#x27;Andrej Karpathy.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+13)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://www.latent.space/p/ainews-google-io-2026-gemini-35-flash" class="card-img-link"><img src="https://substackcdn.com/image/youtube/w_728,c_limit/OMhKgQmeMhI" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://www.latent.space/p/ainews-google-io-2026-gemini-35-flash">[AINews] Google I/O 2026: Gemini 3.5 Flash, Omni (NanoBanana for Video), Spark (background agents), and Antigravity 2.0</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">Google a dévoilé une pléthore d&#x27;innovations IA lors de son événement I/O 2026, signalant un pivot majeur vers les capacités d&#x27;agents autonomes. Le lancement de Gemini 3.5 Flash, optimisé pour la vitesse et l&#x27;efficacité dans les tâches agentiques, ainsi que Gemini Omni pour la multimodalité (incluant &#x27;NanoBanana&#x27; pour la vidéo), positionne Google comme un concurrent sérieux dans la course aux LLM de pointe. L&#x27;introduction de Gemini Spark, un agent en arrière-plan capable de gérer des tâches complexes, et Antigravity 2.0, pour une interaction plus fluide, montre une vision où l&#x27;IA ne se contente plus de répondre, mais agit proactivement. Pour les entreprises, cela signifie un potentiel accru d&#x27;automatisation des workflows et de développement d&#x27;applications, mais aussi une nécessité d&#x27;adapter leurs infrastructures et stratégies pour intégrer ces agents sophistiqués.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Google DeepMind</span><span class="tag">Gemini</span></div>
+        <a href="https://www.latent.space/p/ainews-google-io-2026-gemini-35-flash" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/prominent-ai-researcher-andrej-karpathy-picks-anthropic-over-former-home-openai-to-get-back-into-frontier-llm-research/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2024/08/andrej_karpathy_youtube_screenshot.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/prominent-ai-researcher-andrej-karpathy-picks-anthropic-over-former-home-openai-to-get-back-into-frontier-llm-research/">Le chercheur d&#x27;IA Andrej Karpathy choisit Anthropic plutôt que son ancien domicile OpenAI pour revenir à la recherche de LLM de pointe</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Andrej Karpathy, une figure majeure de l&#x27;IA (anciennement chez OpenAI et Tesla), rejoint Anthropic pour se concentrer sur la recherche de LLM de pointe. Ce transfert est un indicateur fort de l&#x27;attrait d&#x27;Anthropic pour les talents de premier plan et de la perception de l&#x27;entreprise comme un acteur clé pour les avancées futures de l&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/prominent-ai-researcher-andrej-karpathy-picks-anthropic-over-former-home-openai-to-get-back-into-frontier-llm-research/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/anthropic-adds-self-hosted-sandboxes-and-mcp-tunnels-to-claude-managed-agents/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/anthropic_claude_security.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/anthropic-adds-self-hosted-sandboxes-and-mcp-tunnels-to-claude-managed-agents/">Anthropic ajoute des sandboxes auto-hébergées et des tunnels MCP aux agents gérés par Claude</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Anthropic enrichit les capacités de Claude Managed Agents avec des sandboxes auto-hébergées et des tunnels MCP, permettant aux entreprises d&#x27;exécuter les outils de leurs agents IA dans leur propre infrastructure. Cette fonctionnalité est cruciale pour les environnements B2B exigeant une sécurité maximale et un contrôle granulaire sur l&#x27;exécution des outils, minimisant ainsi les risques de fuites de données sensibles.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span><span class="tag">MCP</span></div>
+        <a href="https://the-decoder.com/anthropic-adds-self-hosted-sandboxes-and-mcp-tunnels-to-claude-managed-agents/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>10 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.anthropic.com/news/anthropic-kpmg">KPMG intègre Claude à l&#x27;ensemble de ses activités principales et à ses 276 000 employés dans le cadre d&#x27;une alliance stratégique</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic News</span>
+        </div>
+        <p class="summary">KPMG a annoncé un partenariat stratégique avec Anthropic pour intégrer Claude dans ses opérations et auprès de ses 276 000 employés. Cette alliance vise à transformer les fonctions d&#x27;entreprise et à améliorer l&#x27;efficacité grâce à l&#x27;IA, marquant une adoption significative de l&#x27;IA conversationnelle dans les services professionnels à grande échelle.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">KPMG</span><span class="tag">Claude</span></div>
+        <a href="https://www.anthropic.com/news/anthropic-kpmg" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/19/with-gemini-3-5-flash-google-bets-its-next-ai-wave-on-agents-not-chatbots/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/05/IMG_1192.jpg?resize=1200,900" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/19/with-gemini-3-5-flash-google-bets-its-next-ai-wave-on-agents-not-chatbots/">Avec Gemini 3.5 Flash, Google parie sur les agents plutôt que les chatbots pour sa prochaine vague d&#x27;IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Google lance Gemini 3.5 Flash, un modèle puissant optimisé pour les agents IA capables d&#x27;exécuter des tâches complexes et de construire des logiciels. Ce focus sur les agents marque un changement de paradigme, passant de l&#x27;interaction conversationnelle à l&#x27;autonomie proactive, ce qui offre un potentiel d&#x27;automatisation et de développement sans précédent pour les entreprises.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Gemini</span><span class="tag">Agents IA</span></div>
+        <a href="https://techcrunch.com/2026/05/19/with-gemini-3-5-flash-google-bets-its-next-ai-wave-on-agents-not-chatbots/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/932364/google-ai-studio-native-android-apps-vibe-code-google-io-2026" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24007892/acastro_STK112_android_01.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/932364/google-ai-studio-native-android-apps-vibe-code-google-io-2026">Google peut maintenant vous &#x27;vibe-coder&#x27; une application Android</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Google AI Studio permet désormais de créer des applications Android natives à partir de simples invites, avec un émulateur intégré pour prévisualiser les résultats. Cette avancée simplifie considérablement le prototypage et le développement d&#x27;applications mobiles pour les développeurs et les petites entreprises, démocratisant l&#x27;accès à la création d&#x27;applications.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Android</span><span class="tag">AI Studio</span></div>
+        <a href="https://www.theverge.com/tech/932364/google-ai-studio-native-android-apps-vibe-code-google-io-2026" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://arstechnica.com/google/2026/05/googles-synthid-ai-watermarking-tech-is-being-adopted-by-openai-nvidia-and-more/" class="card-img-link"><img src="https://cdn.arstechnica.net/wp-content/uploads/2026/05/SynthID-1-300x300.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://arstechnica.com/google/2026/05/googles-synthid-ai-watermarking-tech-is-being-adopted-by-openai-nvidia-and-more/">La technologie de filigrane IA SynthID de Google est adoptée par OpenAI, Nvidia et d&#x27;autres</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=arstechnica.com&sz=32" width="14" height="14" />
+          <span>Ars Technica AI</span>
+        </div>
+        <p class="summary">La technologie de filigrane invisible SynthID de Google, conçue pour identifier le contenu généré par l&#x27;IA, est maintenant adoptée par des leaders de l&#x27;industrie comme OpenAI et Nvidia. Cette collaboration est essentielle pour établir la provenance et la confiance dans un écosystème médiatique de plus en plus saturé de contenu synthétique, offrant un outil vital pour la lutte contre la désinformation.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">OpenAI</span><span class="tag">Nvidia</span></div>
+        <a href="https://arstechnica.com/google/2026/05/googles-synthid-ai-watermarking-tech-is-being-adopted-by-openai-nvidia-and-more/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://openai.com/index/dell-codex-enterprise-partnership/" class="card-img-link"><img src="https://images.ctfassets.net/kftzwdyauwt9/17U8SngLERoATdFhOjWbDK/da377e6850f8241ea7814a347bad0a3a/Frame.png?w=3840&amp;q=90&amp;fm=webp" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://openai.com/index/dell-codex-enterprise-partnership/">OpenAI et Dell Technologies s&#x27;associent pour apporter Codex aux environnements d&#x27;entreprise hybrides et sur site</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI et Dell Technologies s&#x27;associent pour offrir Codex dans les environnements d&#x27;entreprise hybrides et sur site, permettant ainsi aux organisations de conserver un contrôle strict sur leurs données. Cette collaboration répond à un besoin croissant de solutions IA sécurisées pour le développement de code, notamment pour les entreprises soumises à des contraintes réglementaires strictes concernant la localisation des données.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Dell</span><span class="tag">Codex</span></div>
+        <a href="https://openai.com/index/dell-codex-enterprise-partnership/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/934217/google-search-box-does-everything-ai-io-2026" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/lcimg-036c9a25-7169-4853-846e-94fd035c259f.jpeg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.597538331207%2C100%2C78.804923337586&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/934217/google-search-box-does-everything-ai-io-2026">L&#x27;avenir de Google est une boîte de recherche qui fait tout</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Google redéfinit l&#x27;expérience de recherche en transformant sa célèbre boîte en un centre d&#x27;opérations IA capable d&#x27;exécuter des tâches complexes et d&#x27;intégrer des informations. Cette évolution positionne la recherche comme un point d&#x27;entrée universel pour l&#x27;ensemble de l&#x27;écosystème Google, offrant une interface unifiée pour l&#x27;interaction avec l&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Search</span><span class="tag">IA</span></div>
+        <a href="https://www.theverge.com/tech/934217/google-search-box-does-everything-ai-io-2026" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/19/how-to-use-googles-new-ai-agents-to-go-beyond-your-standard-searches/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/05/G-information-agents.png?resize=1200,750" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/19/how-to-use-googles-new-ai-agents-to-go-beyond-your-standard-searches/">Comment utiliser les nouveaux agents IA de Google pour aller au-delà de vos recherches standard</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Google introduit de nouveaux agents IA capables de surveiller des sujets en arrière-plan et d&#x27;alerter proactivement les utilisateurs des mises à jour. Ces agents transforment la recherche passive en une assistance intelligente et continue, permettant aux professionnels de rester informés sans effort constant, un atout majeur pour la veille stratégique.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Agents IA</span></div>
+        <a href="https://techcrunch.com/2026/05/19/how-to-use-googles-new-ai-agents-to-go-beyond-your-standard-searches/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/May/19/llm-gemini-2/#atom-everything">Mises à jour: llm-gemini 0.32 et datasette-llm-accountant 0.1a4</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison a publié des mises à jour pour ses plugins Datasette et LLM, notamment llm-gemini 0.32 avec prise en charge de Gemini 3.5 Flash et streaming des tokens de raisonnement, et datasette-llm-accountant 0.1a4 corrigeant le suivi des chaînes de réponses. Ces outils facilitent l&#x27;intégration des LLM et la gestion des coûts pour les développeurs travaillant avec les modèles Gemini.</p>
+        <div class="card-tags"><span class="tag">Datasette</span><span class="tag">Gemini</span><span class="tag">LLM</span></div>
+        <a href="https://simonwillison.net/2026/May/19/llm-gemini-2/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/933921/google-wants-to-compete-with-anthropics-mythos" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STK453_PRIVACY_B_CVirginia.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C9.9676601489831%2C100%2C80.064679702034&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/933921/google-wants-to-compete-with-anthropics-mythos">Google veut concurrencer Mythos d&#x27;Anthropic</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Google étend sa présence dans la cybersécurité avec l&#x27;API CodeMender, un agent IA pour la sécurité du code, afin de concurrencer le modèle Mythos d&#x27;Anthropic. Cette initiative souligne l&#x27;importance croissante de l&#x27;IA dans la détection et la correction des vulnérabilités logicielles, offrant aux équipes de développement des outils puissants pour renforcer la sécurité de leurs applications.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Anthropic</span><span class="tag">CodeMender</span></div>
+        <a href="https://www.theverge.com/tech/933921/google-wants-to-compete-with-anthropics-mythos" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/cloudflare-says-anthropics-mythos-preview-finds-exploit-chains-that-earlier-frontier-models-missed/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/glasswing_mythos_cybersecurity_anthropic-1.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/cloudflare-says-anthropics-mythos-preview-finds-exploit-chains-that-earlier-frontier-models-missed/">Cloudflare affirme que Mythos Preview d&#x27;Anthropic trouve des chaînes d&#x27;exploits que les modèles frontières précédents avaient manquées</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Cloudflare a testé le modèle Mythos Preview d&#x27;Anthropic, axé sur la sécurité, et a constaté sa capacité à identifier des chaînes d&#x27;exploits complexes manquées par d&#x27;autres modèles de pointe. Cette capacité est une avancée significative pour la cybersécurité, offrant aux entreprises un outil plus performant pour protéger leurs infrastructures logicielles contre les menaces sophistiquées.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Cloudflare</span><span class="tag">Mythos</span></div>
+        <a href="https://the-decoder.com/cloudflare-says-anthropics-mythos-preview-finds-exploit-chains-that-earlier-frontier-models-missed/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://openai.com/index/introducing-openai-for-singapore">Présentation d&#x27;OpenAI pour Singapour</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI lance un partenariat stratégique pluriannuel avec Singapour pour étendre le déploiement de l&#x27;IA, développer les talents locaux et soutenir les entreprises et services publics. Cette initiative souligne l&#x27;importance des partenariats régionaux pour l&#x27;adoption et l&#x27;intégration de l&#x27;IA à l&#x27;échelle mondiale.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Singapour</span></div>
+        <a href="https://openai.com/index/introducing-openai-for-singapore" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/allenai/olmoearth-v1-1" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/19ZFgyFbi-kj2Yf0WUPGk.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/allenai/olmoearth-v1-1">OlmoEarth v1.1: Une famille de modèles plus efficace</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">AllenAI a publié OlmoEarth v1.1, une nouvelle série de modèles open source axés sur une plus grande efficacité dans le traitement des données géospatiales. Cette mise à jour offre aux développeurs et aux chercheurs des outils performants pour des applications environnementales et climatiques, avec des ressources de calcul optimisées.</p>
+        <div class="card-tags"><span class="tag">AllenAI</span><span class="tag">HuggingFace</span><span class="tag">OlmoEarth</span></div>
+        <a href="https://huggingface.co/blog/allenai/olmoearth-v1-1" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/ettin-reranker" class="card-img-link"><img src="https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/ettin-reranker">Présentation de la famille Ettin Reranker</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">La famille Ettin Reranker est une nouvelle suite d&#x27;outils open source conçue pour améliorer la pertinence des résultats de recherche et la récupération d&#x27;informations. Pour les développeurs, cela signifie des capacités accrues pour construire des systèmes de RAG (Retrieval-Augmented Generation) plus précis et efficaces, essentiels pour les applications d&#x27;entreprise.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">Ettin Reranker</span></div>
+        <a href="https://huggingface.co/blog/ettin-reranker" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://arstechnica.com/science/2026/05/two-ai-based-science-assistants-succeed-with-drug-retargeting-tasks/" class="card-img-link"><img src="https://cdn.arstechnica.net/wp-content/uploads/2026/05/GettyImages-2164333125-300x300.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://arstechnica.com/science/2026/05/two-ai-based-science-assistants-succeed-with-drug-retargeting-tasks/">Deux assistants scientifiques basés sur l&#x27;IA réussissent des tâches de réaffectation de médicaments</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=arstechnica.com&sz=32" width="14" height="14" />
+          <span>Ars Technica AI</span>
+        </div>
+        <p class="summary">Deux assistants IA ont démontré leur capacité à générer des hypothèses et à analyser des données pour des tâches de réaffectation de médicaments, ouvrant de nouvelles voies pour l&#x27;accélération de la recherche pharmaceutique. Ces outils promettent de réduire considérablement le temps et les coûts de développement de nouveaux traitements en exploitant l&#x27;IA pour explorer des combinaisons moléculaires complexes.</p>
+        
+        <a href="https://arstechnica.com/science/2026/05/two-ai-based-science-assistants-succeed-with-drug-retargeting-tasks/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/transportation/933556/google-io-gemini-volvo-ex60-camera-ai-parking" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/Volvo-EX60-Oculus-6.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C12.449964994521%2C100%2C75.100070010958&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/transportation/933556/google-io-gemini-volvo-ex60-camera-ai-parking">Google : Gemini utilisera les caméras externes de Volvo pour interpréter les panneaux de stationnement</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Google et Volvo ont annoncé que Gemini pourra accéder aux caméras externes du SUV EX60 pour interpréter l&#x27;environnement, notamment les panneaux de stationnement. Cette intégration de la vision par IA dans l&#x27;automobile promet d&#x27;améliorer la sécurité et l&#x27;expérience de conduite, mais soulève également des questions sur la vie privée et la gestion des données des capteurs de véhicules.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Gemini</span><span class="tag">Volvo</span></div>
+        <a href="https://www.theverge.com/transportation/933556/google-io-gemini-volvo-ex60-camera-ai-parking" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;Ascension des Agents IA Proactifs</strong><p>Les annonces de Google I/O, avec Gemini Spark et Flash, ainsi que les Managed Agents d&#x27;Anthropic, signalent un pivot de l&#x27;IA conversationnelle vers des agents autonomes capables d&#x27;exécuter des tâches complexes, d&#x27;anticiper les besoins et d&#x27;agir proactivement pour les entreprises.</p></div><div class="trend-item"><strong>Contrôle et Sécurité Accrus pour l&#x27;IA d&#x27;Entreprise</strong><p>L&#x27;accent mis sur les sandboxes auto-hébergées et les tunnels MCP par Anthropic, les partenariats pour l&#x27;intégration d&#x27;IA sur site (OpenAI/Dell), et les avancées en provenance du contenu (SynthID) et cybersécurité (CodeMender, Mythos) démontrent une priorité croissante à la sécurité, à la gouvernance des données et à la confiance dans l&#x27;adoption de l&#x27;IA en milieu professionnel.</p></div><div class="trend-item"><strong>Démocratisation des Outils de Développement IA</strong><p>Des initiatives comme Google AI Studio pour la création d&#x27;applications Android par &#x27;vibe-coding&#x27; et les mises à jour des outils open source (Datasette, llm-gemini, OlmoEarth, Ettin Reranker) visent à simplifier et à rendre plus accessible le développement d&#x27;applications basées sur l&#x27;IA, élargissant la base de développeurs potentiels.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 13 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/google-overhauls-its-ai-subscriptions-at-i-o-2026-with-three-tiers-starting-at-10-a-month/" class="ext-title">Google remanie ses abonnements à l&#x27;IA lors de l&#x27;I/O 2026 avec trois niveaux à partir de 10 $ par mois</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Google a restructuré ses offres d&#x27;abonnement IA en trois niveaux tarifaires, passant à un modèle basé sur la consommation de calcul. Cela signale une maturité croissante du marché de l&#x27;IA et une volonté de monétiser l&#x27;utilisation intensive des nouveaux modèles et agents.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/mistral-ai-acquires-viennese-physical-ai-startup-emmi-ai/" class="ext-title">Mistral AI acquiert la startup viennoise d&#x27;IA physique Emmi AI</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Mistral AI a acquis la startup Emmi AI pour renforcer son offre de solutions d&#x27;IA pour l&#x27;industrie en Europe. Cette acquisition stratégique indique l&#x27;expansion de Mistral au-delà des LLM vers des applications d&#x27;IA physique et robotique.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/19/from-teen-hacker-to-iron-dome-researcher-this-founder-raised-28m-to-fight-ai-phishing/" class="ext-title">D&#x27;adolescent hacker à chercheur Iron Dome, ce fondateur a levé 28 millions de dollars pour lutter contre le phishing IA</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Ocean, une plateforme de sécurité e-mail agentique, a levé 28 millions de dollars pour combattre le phishing grâce à l&#x27;IA. Son système analyse le contexte des e-mails pour détecter les fraudes, marquant une avancée dans la protection des entreprises contre les menaces sophistiquées.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/19/ai-design-tools-are-the-next-big-battleground-and-google-is-going-all-in-at-io-2026/" class="ext-title">Google vient de se déclarer un concurrent dans la conception d&#x27;IA à l&#x27;IO 2026</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Google s&#x27;est positionné comme un acteur majeur dans le domaine des outils de conception assistée par l&#x27;IA lors de l&#x27;I/O 2026. L&#x27;entreprise vise à rendre les outils de design IA accessibles à un public plus large, des enseignants aux petites entreprises.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/19/you-can-now-talk-to-your-gmail-inbox-as-seen-at-google-io-2026/" class="ext-title">Vous pouvez maintenant parler à votre boîte de réception Gmail, comme vu à Google IO 2026</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Gmail intègre désormais une recherche vocale conversationnelle via Gemini, permettant aux utilisateurs de poser des questions complexes à leur boîte de réception pour retrouver des informations enfouies dans les e-mails. Cela transforme Gmail en un assistant personnel proactif pour la gestion des communications.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://venturebeat.com/infrastructure/aws-nabs-white-hot-gen-ai-media-creation-startup-fal-becoming-its-preferred-cloud-provider" class="ext-title">AWS acquiert la startup d&#x27;IA générative Fal, devenant son fournisseur de cloud préféré</a>
+        <span class="ext-source">VentureBeat AI</span>
+        <p class="ext-summary">AWS a acquis Fal, une startup de création de médias basée sur l&#x27;IA générative, la désignant comme son fournisseur de cloud préféré. Cette acquisition permet aux conglomérats médiatiques d&#x27;expérimenter les outils d&#x27;IA de pointe de manière sécurisée, sans exposer leurs données propriétaires.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/19/googles-genie-world-model-can-now-simulate-real-streets-with-street-view/" class="ext-title">Le modèle mondial Genie de Google peut maintenant simuler de vraies rues avec Street View</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Google DeepMind intègre Street View avec Project Genie pour créer des simulations de monde immersives et interactives. Cette technologie ouvre des perspectives pour la robotique, le jeu et le voyage, permettant d&#x27;explorer des environnements virtuels réalistes.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/934260/google-io-ai-singularity-demis-hassabis" class="ext-title">Demis Hassabis a dit que cela pourrait être les &#x27;contreforts de la singularité&#x27;. Quoi ?</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Lors de Google I/O, Demis Hassabis a évoqué un &#x27;moment profond pour l&#x27;humanité&#x27; et les &#x27;contreforts de la singularité&#x27; en lien avec l&#x27;AGI. Ces déclarations philosophiques soulignent l&#x27;ambition et la portée potentielle des avancées actuelles en IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/934172/google-io-gemini-ai-trust-personal-data" class="ext-title">L&#x27;avenir de l&#x27;IA de Google exige la confiance — et vos données personnelles</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Google mise sur la confiance des utilisateurs pour son avenir axé sur l&#x27;IA, avec de nouveaux outils comme Gemini Spark et Daily Brief. L&#x27;intégration profonde de l&#x27;IA dans la vie quotidienne nécessitera une gestion transparente et éthique des données personnelles pour gagner l&#x27;adhésion du public.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/news/932927/google-io-agentic-ai-shopping-universal-cart" class="ext-title">Google est en train de construire un &#x27;panier d&#x27;achat universel&#x27; IA qui suit les prix, offre des suggestions et trouve des réductions</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Google développe un &#x27;Panier Universel&#x27; alimenté par l&#x27;IA qui fonctionnera sur diverses plateformes et produits Google, visant à révolutionner le shopping en ligne. Cet agent IA offre des fonctionnalités de suivi de prix, de suggestions personnalisées et de recherche de réductions, promettant une expérience d&#x27;achat plus fluide et intelligente.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/19/elon-musk-said-sam-altman-stole-a-non-profit-but-the-trial-showed-he-had-similar-aims/" class="ext-title">Elon Musk a déclaré que Sam Altman avait &#x27;volé&#x27; une organisation à but non lucratif — mais le procès a montré qu&#x27;il avait des objectifs similaires</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Le procès d&#x27;Elon Musk contre OpenAI et Sam Altman a été rapidement rejeté, la cour ayant conclu que Musk lui-même avait proposé une structure à but lucratif. Ce verdict met un terme à une saga juridique très médiatisée concernant les origines et la direction d&#x27;OpenAI.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6B7280;"> Security</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6B7280;"></div>
+      <div class="ext-body">
+        <a href="https://arstechnica.com/information-technology/2026/05/in-stunning-display-of-stupid-secret-cisa-credentials-found-in-public-github-repo/" class="ext-title">En une démonstration stupéfiante de stupidité, des identifiants CISA secrets ont été trouvés dans un dépôt GitHub public</a>
+        <span class="ext-source">Ars Technica AI</span>
+        <p class="ext-summary">Des identifiants secrets de la CISA, incluant des clés SSH et des mots de passe en texte clair, ont été découverts dans un dépôt GitHub public. Cette brèche souligne les risques persistants liés à la mauvaise gestion des informations d&#x27;identification, même pour les organisations de sécurité gouvernementales.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://lastweekin.ai/p/lwiai-podcast-245-tml-interaction" class="ext-title">LWiAI Podcast #245 - TML-Interaction, Claude For Legal, Sam Altman on Stand</a>
+        <span class="ext-source">Last Week in AI</span>
+        <p class="ext-summary">Ce podcast résume les dernières nouvelles de l&#x27;IA, incluant les nouvelles fonctionnalités vocales d&#x27;OpenAI, un nouveau modèle de Thinking Machines pour les interactions humaines, et le témoignage de Sam Altman. Il offre une vue d&#x27;ensemble des développements récents dans le paysage de l&#x27;IA.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
