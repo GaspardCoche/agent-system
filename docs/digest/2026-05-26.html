@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;IA à la Croisée des Chemins Éthiques et Opérationnels : Le Pape et les Agents IA Redéfinissent le Paysage — AI Briefing 2026-05-26</title>
+  <meta name="description" content="Entre la quête d&#x27;une gouvernance éthique globale de l&#x27;IA et l&#x27;évolution rapide des outils d&#x27;agents pour développeurs, cette période marque une transition majeure vers une IA plus mature mais aussi plus scrutée.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Mardi 26 mai 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">22 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+10 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA à la Croisée des Chemins Éthiques et Opérationnels : Le Pape et les Agents IA Redéfinissent le Paysage</h2>
+      <p>Entre la quête d&#x27;une gouvernance éthique globale de l&#x27;IA et l&#x27;évolution rapide des outils d&#x27;agents pour développeurs, cette période marque une transition majeure vers une IA plus mature mais aussi plus scrutée.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+10)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://www.theverge.com/news/936945/pope-leo-letter-encyclical-ai-anthropic-labor-warfare" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/gettyimages-2278126608.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C0%2C100%2C78.487862082976&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          
+        </div>
+        <h3><a href="https://www.theverge.com/news/936945/pope-leo-letter-encyclical-ai-anthropic-labor-warfare">Pope Leo calls for being ‘profoundly human’ in the age of AI</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Le Pape Léon XIV a publié son encyclique &quot;Magnifica Humanitas&quot;, appelant à une approche &quot;profondément humaine&quot; de l&#x27;IA et à l&#x27;établissement de cadres éthiques et légaux solides. Ce document papal, qui intervient après des mois de consultations incluant des figures comme le co-fondateur d&#x27;Anthropic, Christopher Olah, met en lumière les préoccupations croissantes concernant la régulation et l&#x27;impact sociétal de l&#x27;IA. Pour les entreprises B2B, cela signifie une pression accrue pour l&#x27;intégration de principes éthiques dès la conception des systèmes d&#x27;IA, influençant potentiellement les normes industrielles et les exigences de conformité futures. La reconnaissance par une institution globale de cette envergure pourrait accélérer les débats réglementaires et la demande pour des solutions d&#x27;IA &quot;alignées&quot; éthiquement, tandis que certains critiquent l&#x27;approche comme détournant l&#x27;attention de problèmes plus anciens de pouvoir concentré. Les leaders technologiques doivent anticiper ces changements pour maintenir la confiance des utilisateurs et la viabilité à long terme de leurs innovations.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Vatican</span></div>
+        <a href="https://www.theverge.com/news/936945/pope-leo-letter-encyclical-ai-anthropic-labor-warfare" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>1 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#7C3AED18,#7C3AED08);"><img src="https://www.google.com/s2/favicons?domain=blog.google&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://blog.google/technology/ai/">I/O 2026: Welcome to the agentic Gemini era</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=blog.google&sz=32" width="14" height="14" />
+          <span>Google AI Blog</span>
+        </div>
+        <p class="summary">Google a annoncé lors de Google I/O 2026 l&#x27;avènement de &quot;l&#x27;ère des agents Gemini&quot;, signalant une nouvelle phase où les modèles d&#x27;IA ne se contentent plus de répondre, mais agissent de manière proactive. Cette orientation renforce la vision de Google pour des assistants IA capables d&#x27;automatiser des tâches complexes, ce qui aura un impact significatif sur les flux de travail d&#x27;entreprise, les outils de développement et la personnalisation des expériences utilisateur.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Google DeepMind</span></div>
+        <a href="https://blog.google/technology/ai/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>3 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/google-deepminds-alphaproof-nexus-solves-decades-old-math-problems-for-a-few-hundred-dollars/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/google_deepmind_alpha_evolve_llm_math-1200x670.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/google-deepminds-alphaproof-nexus-solves-decades-old-math-problems-for-a-few-hundred-dollars/">Google Deepmind&#x27;s AlphaProof Nexus solves decades-old math problems for a few hundred dollars</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">AlphaProof Nexus de Google DeepMind a résolu de manière autonome neuf problèmes mathématiques d&#x27;Erdős, dont certains restaient non résolus depuis 56 ans, pour seulement quelques centaines de dollars en coûts d&#x27;inférence. Cette percée, qui utilise un compilateur Lean pour vérifier chaque étape, démontre un potentiel immense pour la recherche scientifique et l&#x27;ingénierie, permettant aux entreprises de résoudre des problèmes complexes avec une efficacité et une fiabilité sans précédent.</p>
+        <div class="card-tags"><span class="tag">Google DeepMind</span></div>
+        <a href="https://the-decoder.com/google-deepminds-alphaproof-nexus-solves-decades-old-math-problems-for-a-few-hundred-dollars/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=blog.google&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://blog.google/technology/ai/">Introducing Managed Agents in the Gemini API</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=blog.google&sz=32" width="14" height="14" />
+          <span>Google AI Blog</span>
+        </div>
+        <p class="summary">Google lance les Agents Gérés via l&#x27;API Gemini, offrant aux développeurs des outils pour construire des agents IA plus robustes et autonomes. Cette initiative simplifie le déploiement et la gestion d&#x27;applications d&#x27;IA complexes, ouvrant la voie à des services clients automatisés, des assistants de productivité et des intégrations logicielles plus sophistiquées pour l&#x27;écosystème MCP.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Google DeepMind</span></div>
+        <a href="https://blog.google/technology/ai/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/25/what-clickups-mass-layoff-tells-us-about-the-future-of-work/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2023/07/GettyImages-1247853635.jpg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/25/what-clickups-mass-layoff-tells-us-about-the-future-of-work/">What ClickUp’s mass layoff tells us about the future of work</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">ClickUp a procédé à des licenciements massifs, remplaçant des centaines d&#x27;employés par des milliers d&#x27;agents IA, illustrant une tendance où l&#x27;automatisation par l&#x27;IA remodèle radicalement la composition des effectifs. Cette décision met en évidence la pression sur les entreprises pour adopter l&#x27;IA afin d&#x27;optimiser les coûts et l&#x27;efficacité, tout en soulevant des questions éthiques et sociales sur l&#x27;avenir de l&#x27;emploi.</p>
+        <div class="card-tags"><span class="tag">ClickUp</span></div>
+        <a href="https://techcrunch.com/2026/05/25/what-clickups-mass-layoff-tells-us-about-the-future-of-work/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>7 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://the-decoder.com/">George Hotz says coding agents will be &quot;one of the most costly mistakes&quot;</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Le programmeur George Hotz critique vivement les agents de codage IA, les qualifiant de coûteuse erreur en raison de leur tendance à générer des prototypes rapides mais truffés de bugs difficiles à détecter. Cette mise en garde souligne le besoin d&#x27;une intégration prudente des LLM dans les flux de développement, insistant sur l&#x27;importance de la vérification humaine et de la compréhension approfondie des architectures sous-jacentes des agents.</p>
+        
+        <a href="https://the-decoder.com/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/agent-glossary" class="card-img-link"><img src="https://huggingface.co/blog/assets/agent-glossary/thumbnail.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/agent-glossary">Harness, Scaffold, and the AI Agent Terms Worth Getting Right</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">HuggingFace publie un glossaire essentiel pour clarifier les termes liés aux agents IA, tels que &quot;Harness&quot; et &quot;Scaffold&quot;, dans un écosystème en évolution rapide. Comprendre cette terminologie est crucial pour les développeurs et les architectes cherchant à construire et à déployer des systèmes d&#x27;agents complexes de manière cohérente et efficace, particulièrement dans les environnements de développement MCP.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span></div>
+        <a href="https://huggingface.co/blog/agent-glossary" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog">Relaunching PapersWithCode with new features</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">PapersWithCode, une ressource clé pour la recherche en IA, a été relancé avec de nouvelles fonctionnalités, améliorant l&#x27;accès aux documents de recherche et au code associé. Ce développement facilite la veille technologique et la reproduction des résultats, stimulant l&#x27;innovation et la collaboration au sein de la communauté open source.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span></div>
+        <a href="https://huggingface.co/blog" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://github.blog/developer-skills/github/github-for-beginners-getting-started-with-git-and-github-in-vs-code/" class="card-img-link"><img src="https://github.blog/wp-content/uploads/2026/05/GIT901_THUMB_GFB_A-1.png?fit=1280%2C720" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://github.blog/developer-skills/github/github-for-beginners-getting-started-with-git-and-github-in-vs-code/">GitHub for Beginners: Getting started with Git and GitHub in VS Code</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">GitHub a publié un guide pour les débutants sur l&#x27;intégration de Git et GitHub avec VS Code, simplifiant le processus de développement et de gestion de projet. Cette ressource vise à rendre les outils de collaboration plus accessibles, réduisant la barrière à l&#x27;entrée pour les nouveaux développeurs et améliorant la productivité des équipes existantes dans un environnement IDE intégré.</p>
+        <div class="card-tags"><span class="tag">GitHub</span><span class="tag">Microsoft</span></div>
+        <a href="https://github.blog/developer-skills/github/github-for-beginners-getting-started-with-git-and-github-in-vs-code/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#05966918,#05966908);"><img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://the-decoder.com/">ByteDance study finds that asking LMMs questions beats making it transcribe text for long document training</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Une étude de ByteDance révèle que poser des questions à des Large Multimodal Models (LMMs) est plus efficace que la transcription pour l&#x27;entraînement sur de longs documents. Cette approche améliore la compréhension contextuelle et la capacité de l&#x27;IA à extraire des informations pertinentes, offrant une méthode plus performante et potentiellement moins coûteuse pour le traitement de documents complexes.</p>
+        <div class="card-tags"><span class="tag">ByteDance</span></div>
+        <a href="https://the-decoder.com/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#05966918,#05966908);"><img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://the-decoder.com/">Deepmind&#x27;s Hassabis sees humanity &quot;in the foothills of the singularity&quot; while LeCun says current AI isn&#x27;t intelligent</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Une dichotomie philosophique majeure persiste dans la communauté de l&#x27;IA, avec Demis Hassabis de DeepMind évoquant &quot;les prémices de la singularité&quot; et Yann LeCun de Meta affirmant que l&#x27;IA actuelle n&#x27;est pas réellement intelligente. Ce débat reflète les différentes visions de l&#x27;avenir de l&#x27;IA, influençant les directions de recherche, les investissements et les attentes quant aux capacités des systèmes futurs.</p>
+        <div class="card-tags"><span class="tag">Google DeepMind</span><span class="tag">Meta</span></div>
+        <a href="https://the-decoder.com/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://openai.com/index/grupo-folha-grupo-uol-partnership">OpenAI, Grupo Folha and Grupo UOL announce strategic content partnership</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI a conclu un partenariat stratégique avec les géants des médias brésiliens Grupo Folha et Grupo UOL pour intégrer du journalisme de confiance dans ChatGPT. Cette collaboration vise à enrichir le contenu généré par l&#x27;IA avec des informations vérifiées, tout en renforçant la transparence et l&#x27;attribution des sources, un enjeu crucial pour l&#x27;adoption de l&#x27;IA dans les secteurs de l&#x27;information.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Grupo Folha</span><span class="tag">Grupo UOL</span></div>
+        <a href="https://openai.com/index/grupo-folha-grupo-uol-partnership" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Gouvernance et Éthique de l&#x27;IA</strong><p>L&#x27;encyclique papale souligne une reconnaissance croissante au niveau mondial de la nécessité de cadres éthiques et réglementaires pour l&#x27;IA, transformant la conversation de la simple innovation à la responsabilité sociétale.</p></div><div class="trend-item"><strong>L&#x27;Ère des Agents Autonomes</strong><p>Les annonces de Google Gemini et le débat autour des agents de codage de George Hotz confirment une transition vers des systèmes d&#x27;IA plus autonomes, capables d&#x27;agir et d&#x27;interagir, posant des défis tant techniques qu&#x27;opérationnels pour les développeurs et les infrastructures MCP.</p></div><div class="trend-item"><strong>Accélération de la Recherche par l&#x27;IA</strong><p>Les progrès de Google DeepMind dans la résolution de problèmes mathématiques complexes et les initiatives comme Gemini for Science démontrent comment l&#x27;IA devient un outil indispensable pour l&#x27;avancement scientifique, réduisant les coûts et les délais de découverte.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 10 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/25/startup-battlefield-200-applications-close-in-days-apply-before-may-27/" class="ext-title">Startup Battlefield 200 applications close in days: Apply before May 27</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Les candidatures pour Startup Battlefield 200 de TechCrunch se clôturent bientôt, offrant aux startups une chance d&#x27;obtenir une visibilité et des financements importants.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/25/5-days-left-save-up-to-410-on-techcrunch-disrupt-2026-passes-before-prices-increase/" class="ext-title">5 days left: Save up to $410 on TechCrunch Disrupt 2026 passes before prices increase</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Les tarifs Early Bird pour TechCrunch Disrupt 2026 expirent bientôt, une occasion de participer à l&#x27;un des événements technologiques majeurs.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://arstechnica.com/tech-policy/2026/05/uss-big-bet-on-quantum-computing-may-not-be-entirely-legal/" class="ext-title">US&#x27;s big bet on quantum computing may not be entirely legal</a>
+        <span class="ext-source">Ars Technica AI</span>
+        <p class="ext-summary">L&#x27;investissement majeur des États-Unis dans l&#x27;informatique quantique est remis en question sur le plan légal, soulevant des incertitudes autour de cette technologie stratégique.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://deepmind.google/discover/blog/" class="ext-title">Strengthening Singapore’s AI Future: A New National Partnership</a>
+        <span class="ext-source">Google DeepMind</span>
+        <p class="ext-summary">Google DeepMind a établi un partenariat national avec Singapour pour renforcer son écosystème IA, soutenant la recherche, le développement et l&#x27;adoption de l&#x27;IA dans la région.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/blog" class="ext-title">OpenAI named a Leader in enterprise coding agents by Gartner</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">OpenAI a été reconnu comme un leader par Gartner dans le domaine des agents de codage IA pour les entreprises, validant sa position majeure dans la transformation du développement logiciel.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://deepmind.google/discover/blog/" class="ext-title">Gemini for Science: AI experiments and tools for a new era of discovery</a>
+        <span class="ext-source">Google DeepMind</span>
+        <p class="ext-summary">Google lance Gemini for Science, une initiative axée sur l&#x27;application de l&#x27;IA à la recherche scientifique, promettant d&#x27;accélérer les découvertes dans divers domaines.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://deepmind.google/discover/blog/" class="ext-title">Co-Scientist: A multi-agent AI partner to accelerate research</a>
+        <span class="ext-source">Google DeepMind</span>
+        <p class="ext-summary">Google DeepMind présente Co-Scientist, un partenaire IA multi-agent conçu pour accélérer la recherche en collaborant avec les humains sur des tâches scientifiques complexes.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/blog" class="ext-title">An OpenAI model has disproved a central conjecture in discrete geometry</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">Un modèle d&#x27;OpenAI a réfuté une conjecture centrale en géométrie discrète, démontrant les capacités de l&#x27;IA à résoudre des problèmes mathématiques fondamentaux et à repousser les limites de la connaissance humaine.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://deepmind.google/discover/blog/" class="ext-title">Introducing Google Antigravity 2.0</a>
+        <span class="ext-source">Google DeepMind</span>
+        <p class="ext-summary">Google a introduit Antigravity 2.0, un nouveau modèle dont les implications profondes pour la physique et l&#x27;ingénierie signalent des avancées continues dans la modélisation fondamentale de l&#x27;IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.anthropic.com/news" class="ext-title">Project Glasswing: An initial update</a>
+        <span class="ext-source">Anthropic News</span>
+        <p class="ext-summary">Anthropic a fourni une mise à jour initiale sur Project Glasswing, une initiative collaborative visant à sécuriser les logiciels critiques à l&#x27;échelle mondiale.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
