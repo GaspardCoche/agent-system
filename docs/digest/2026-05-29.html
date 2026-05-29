@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;IA en Pleine Mutation : Financements Géants, Nouveaux Modèles &amp; Agents Intelligents — AI Briefing 2026-05-29</title>
+  <meta name="description" content="Anthropic éblouit avec un financement record et Claude Opus 4.8, tandis que Mistral et Microsoft transforment les flux de travail avec des agents intelligents et des outils de développement améliorés, signalant une intensification de la course à l&#x27;IA.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Vendredi 29 mai 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">28 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+13 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA en Pleine Mutation : Financements Géants, Nouveaux Modèles &amp; Agents Intelligents</h2>
+      <p>Anthropic éblouit avec un financement record et Claude Opus 4.8, tandis que Mistral et Microsoft transforment les flux de travail avec des agents intelligents et des outils de développement améliorés, signalant une intensification de la course à l&#x27;IA.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+13)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://www.anthropic.com/news/series-h" class="card-img-link"><img src="https://static.simonwillison.net/static/2026/anthropic-run-rate.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://www.anthropic.com/news/series-h">Anthropic lève 65 milliards de dollars en financement de série H pour une valorisation de 965 milliards de dollars</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic News</span>
+        </div>
+        <p class="summary">Cette levée de fonds massive de 65 milliards de dollars en série H, portant la valorisation d&#x27;Anthropic à près d&#x27;un billion de dollars, ancre fermement sa position de leader dans le domaine de l&#x27;IA de pointe. Avec des revenus annualisés ayant franchi les 47 milliards de dollars, cet investissement colossal permettra une expansion agressive dans la recherche sur la sécurité, l&#x27;augmentation des capacités de calcul et l&#x27;élargissement de la gamme de produits Claude, notamment les initiatives cruciales « Claude Code » et « Cowork ». Pour les dirigeants B2B, cela signale une accélération de la course aux modèles d&#x27;IA fondamentaux, exigeant une évaluation continue des capacités d&#x27;Anthropic pour leur intégration dans les opérations commerciales clés, en particulier pour les solutions de codage avancé et d&#x27;agents. Ce capital substantiel annonce également une intensification de la concurrence, Anthropic étant désormais mieux armée pour défier ses rivaux comme OpenAI et Google sur le marché de l&#x27;IA d&#x27;entreprise.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">AWS</span><span class="tag">Google Cloud</span></div>
+        <a href="https://www.anthropic.com/news/series-h" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/anthropic-ships-claude-opus-4-8-as-a-modest-but-tangible-improvement-that-tops-gpt-5-5-in-most-benchmarks/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/claude_opus_48_title-scaled.webp" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/anthropic-ships-claude-opus-4-8-as-a-modest-but-tangible-improvement-that-tops-gpt-5-5-in-most-benchmarks/">Anthropic lance Claude Opus 4.8, une « amélioration modeste mais tangible » qui surpasse GPT-5.5 dans la plupart des benchmarks</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Anthropic a mis à jour son modèle phare, Claude Opus 4.8, qui se distingue par une meilleure performance en codage, dans les tâches agentiques et le travail professionnel. Il introduit également des « dynamic workflows » permettant de coordonner des centaines de sous-agents, une capacité clé pour les développeurs cherchant à automatiser des processus complexes et à gérer des chaînes d&#x27;agents robustes.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://the-decoder.com/anthropic-ships-claude-opus-4-8-as-a-modest-but-tangible-improvement-that-tops-gpt-5-5-in-most-benchmarks/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://venturebeat.com/technology/mistral-ai-launches-vibe-expands-into-industrial-ai-and-announces-data-center-push-to-challenge-openai" class="card-img-link"><img src="https://venturebeat.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fjdtwqhzvc2n1%2F64vl7LlTNGuZeHkUFTvu1Z%2Ff7a5d77afb596fa3342837a14d05f644%2FNuneybits_Vector_art_of_Paris_server_skyline_in_burnt_orange_ccb4ba92-3ffa-49fc-8eeb-223c3b174750.webp%3Fw%3D1000%26q%3D100&amp;w=3840&amp;q=50" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://venturebeat.com/technology/mistral-ai-launches-vibe-expands-into-industrial-ai-and-announces-data-center-push-to-challenge-openai">Mistral AI lance Vibe, s&#x27;étend à l&#x27;IA industrielle et annonce une offensive sur les centres de données pour défier OpenAI</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=venturebeat.com&sz=32" width="14" height="14" />
+          <span>VentureBeat AI</span>
+        </div>
+        <p class="summary">Mistral AI a rebaptisé son chatbot Le Chat en Vibe, le positionnant comme un agent de travail complet avec des modes dédiés à la productivité et au codage, ainsi qu&#x27;une nouvelle extension VS Code. Cette stratégie, associée à une expansion dans l&#x27;IA industrielle et l&#x27;infrastructure de centres de données, vise à concurrencer directement OpenAI et à offrir une plateforme d&#x27;IA plus intégrée et orientée développeur.</p>
+        <div class="card-tags"><span class="tag">Mistral AI</span><span class="tag">Vibe</span><span class="tag">OpenAI</span></div>
+        <a href="https://venturebeat.com/technology/mistral-ai-launches-vibe-expands-into-industrial-ai-and-announces-data-center-push-to-challenge-openai" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>7 articles</span></div><div class='grid'><article class="card">
+      <a href="https://techcrunch.com/2026/05/28/the-internet-is-being-rebuilt-for-machines/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/05/ai-agents-GettyImages-2229880232.jpg?resize=1200,675" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/28/the-internet-is-being-rebuilt-for-machines/">L&#x27;internet est en train d&#x27;être reconstruit pour les machines</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Alors que les agents IA passent des prototypes à la production, l&#x27;infrastructure cloud est redessinée pour gérer un trafic internet dominé par les machines plutôt que les utilisateurs humains. Cela indique des changements profonds à venir pour les développeurs et les architectes de systèmes, qui devront repenser les modèles d&#x27;intégration et d&#x27;optimisation des services pour cette nouvelle ère agentique.</p>
+        <div class="card-tags"><span class="tag">AWS</span><span class="tag">Cloudflare</span><span class="tag">OpenAI</span></div>
+        <a href="https://techcrunch.com/2026/05/28/the-internet-is-being-rebuilt-for-machines/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/939273/microsoft-365-copilot-redesign" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/M365Copilot_Hero_BannerImage_1920x1080.webp?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/939273/microsoft-365-copilot-redesign">Microsoft 365 Copilot bénéficie d&#x27;une accélération et d&#x27;un design plus épuré</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Microsoft 365 Copilot reçoit une refonte significative, promettant une vitesse doublée et des réponses plus structurées pour les utilisateurs. Cette amélioration met l&#x27;accent sur l&#x27;efficacité et la fiabilité de l&#x27;assistant IA, renforçant son rôle central dans la productivité d&#x27;entreprise et l&#x27;intégration des flux de travail quotidiens.</p>
+        <div class="card-tags"><span class="tag">Microsoft</span><span class="tag">Copilot</span></div>
+        <a href="https://www.theverge.com/tech/939273/microsoft-365-copilot-redesign" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/google-cloud-responds-to-ai-accelerated-cyberattacks-with-a-platform-that-aims-to-close-security-gaps-in-minutes/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/Google-AI-Threat-Defense-title-1200x670.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0891B2;">☁️ Google &amp; Cloud</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/google-cloud-responds-to-ai-accelerated-cyberattacks-with-a-platform-that-aims-to-close-security-gaps-in-minutes/">Google Cloud répond aux cyberattaques accélérées par l&#x27;IA avec une plateforme visant à combler les failles de sécurité en quelques minutes</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Google Cloud a lancé « AI Threat Defense », une plateforme qui utilise l&#x27;IA pour détecter, évaluer et corriger automatiquement les vulnérabilités de sécurité dans les systèmes d&#x27;entreprise en quelques minutes. Cette solution est cruciale pour les équipes DevOps et de sécurité face à l&#x27;évolution rapide des menaces alimentées par l&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">Google Cloud</span><span class="tag">Google</span></div>
+        <a href="https://the-decoder.com/google-cloud-responds-to-ai-accelerated-cyberattacks-with-a-platform-that-aims-to-close-security-gaps-in-minutes/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/May/28/llm-anthropic/#atom-everything">llm-anthropic 0.25.1</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">La version 0.25.1 de llm-anthropic intègre le nouveau modèle Claude Opus 4.8 et introduit une option &#x27;fast mode&#x27; pour les organisations éligibles. Cette mise à jour permet aux développeurs de tirer parti des dernières capacités d&#x27;Anthropic via une intégration facilitée dans leurs applications.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span><span class="tag">Simon Willison</span></div>
+        <a href="https://simonwillison.net/2026/May/28/llm-anthropic/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://venturebeat.com/orchestration/researchers-automated-llm-reasoning-strategy-design-and-cut-token-usage-by-69-5" class="card-img-link"><img src="https://venturebeat.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fjdtwqhzvc2n1%2F4uS7JdQ3Q7BzOfRUeZd7us%2Fe702355f143d4ca73c7269c49c846025%2Ftest-time_scaling_strategy.jpg%3Fw%3D1000%26q%3D100&amp;w=3840&amp;q=50" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://venturebeat.com/orchestration/researchers-automated-llm-reasoning-strategy-design-and-cut-token-usage-by-69-5">Des chercheurs ont automatisé la conception de stratégies de raisonnement LLM et réduit l&#x27;utilisation de jetons de 69,5 %</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=venturebeat.com&sz=32" width="14" height="14" />
+          <span>VentureBeat AI</span>
+        </div>
+        <p class="summary">Un nouveau cadre développé par Meta et Google permet d&#x27;automatiser la conception de stratégies de raisonnement pour les LLM, réduisant considérablement l&#x27;utilisation des jetons de près de 70 %. Cette avancée promet de rendre les modèles plus efficaces et moins coûteux à exécuter, un atout majeur pour les développeurs confrontés aux contraintes de coût et de latence.</p>
+        <div class="card-tags"><span class="tag">Meta</span><span class="tag">Google</span><span class="tag">LLM</span></div>
+        <a href="https://venturebeat.com/orchestration/researchers-automated-llm-reasoning-strategy-design-and-cut-token-usage-by-69-5" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://openai.com/index/openai-frontier-governance-framework" class="card-img-link"><img src="https://images.ctfassets.net/kftzwdyauwt9/2KoiHuErR5YxXGUnhCU8VY/e392c6249ec4644e07e944edea22e837/Frame2.png?w=3840&amp;q=90&amp;fm=webp" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://openai.com/index/openai-frontier-governance-framework">Cadre de gouvernance frontalier d&#x27;OpenAI</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI a détaillé son nouveau cadre de gouvernance frontalier, alignant ses pratiques de sécurité et de gestion des risques avec les réglementations émergentes de l&#x27;UE et de la Californie. Ce cadre fournit une feuille de route pour les développeurs et les entreprises intégrant les modèles d&#x27;OpenAI, en soulignant l&#x27;importance de l&#x27;éthique et de la conformité dans l&#x27;adoption de l&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Regulation</span></div>
+        <a href="https://openai.com/index/openai-frontier-governance-framework" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://arstechnica.com/security/2026/05/fed-up-with-vibe-coders-dev-sneaks-data-nuking-prompt-injection-into-their-code/" class="card-img-link"><img src="https://cdn.arstechnica.net/wp-content/uploads/2026/01/coding_robots_agents-1152x648.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://arstechnica.com/security/2026/05/fed-up-with-vibe-coders-dev-sneaks-data-nuking-prompt-injection-into-their-code/">Exaspéré par les &quot;vibe coders&quot;, un développeur insère une injection de prompt qui efface les données dans leur code</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=arstechnica.com&sz=32" width="14" height="14" />
+          <span>Ars Technica AI</span>
+        </div>
+        <p class="summary">Un développeur a secrètement ajouté une injection de prompt destructrice dans le code d&#x27;un outil open source, visant à saboter les agents de codage IA mal utilisés. Cet incident met en lumière les risques émergents de sécurité et les défis éthiques liés à l&#x27;interaction des humains et des agents IA dans les pipelines de développement.</p>
+        <div class="card-tags"><span class="tag">Sécurité AI</span><span class="tag">Prompt Injection</span></div>
+        <a href="https://arstechnica.com/security/2026/05/fed-up-with-vibe-coders-dev-sneaks-data-nuking-prompt-injection-into-their-code/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <a href="https://techcrunch.com/2026/05/28/asana-acquires-no-code-agent-builder-stack-ai/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/05/asana-illustration-getty.jpg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/28/asana-acquires-no-code-agent-builder-stack-ai/">Asana acquiert StackAI, un constructeur d&#x27;agents sans code</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Asana renforce ses capacités d&#x27;automatisation des flux de travail en acquérant StackAI, une plateforme de création d&#x27;agents sans code. Cette acquisition permet aux utilisateurs d&#x27;Asana de développer et d&#x27;intégrer plus facilement des agents IA pour des tâches spécifiques, accélérant ainsi l&#x27;adoption des solutions agentiques au sein des entreprises.</p>
+        <div class="card-tags"><span class="tag">Asana</span><span class="tag">StackAI</span></div>
+        <a href="https://techcrunch.com/2026/05/28/asana-acquires-no-code-agent-builder-stack-ai/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/May/29/datasette/#atom-everything">datasette 1.0a31</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Datasette 1.0a31 introduit des fonctionnalités clés permettant aux utilisateurs d&#x27;exécuter des requêtes d&#x27;écriture et de sauvegarder des requêtes stockées, à la fois privées et publiques. Cette évolution transforme Datasette en un outil encore plus puissant pour l&#x27;exploration et la gestion de données, utile pour les développeurs travaillant avec des bases de données légères.</p>
+        <div class="card-tags"><span class="tag">Datasette</span><span class="tag">SQLite</span></div>
+        <a href="https://simonwillison.net/2026/May/29/datasette/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/AlexWortega/borealis" class="card-img-link"><img src="https://cdn-avatars.huggingface.co/v1/production/uploads/60b23b069c978cce68723b25/rFi5BkB8XepyiQ-j4ipdO.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/AlexWortega/borealis">Borealis — une recette ouverte de données, de code et de poids pour l&#x27;apprentissage d&#x27;un modèle de langage audio (Audio LLM)</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Borealis offre une approche open source complète pour entraîner un LLM audio, incluant les données, le code et les poids du modèle. C&#x27;est une ressource précieuse pour les chercheurs et les développeurs souhaitant explorer et innover dans le traitement du langage et de l&#x27;audio avec des modèles ouverts.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span><span class="tag">Open Source</span><span class="tag">Audio LLM</span></div>
+        <a href="https://huggingface.co/blog/AlexWortega/borealis" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://openai.com/index/endava">Comment Endava construit une organisation agentique avec Codex</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">Endava utilise Codex d&#x27;OpenAI pour devenir une organisation &quot;agentique&quot;, réduisant les délais de livraison logicielle et passant l&#x27;analyse des exigences de semaines à quelques heures. Cette étude de cas démontre l&#x27;impact transformateur des agents IA sur les processus de développement et la productivité des équipes.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Codex</span><span class="tag">Endava</span></div>
+        <a href="https://openai.com/index/endava" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://openai.com/index/building-self-improving-tax-agents-with-codex/" class="card-img-link"><img src="https://images.ctfassets.net/kftzwdyauwt9/6ojJ6B55QUlmNdaLifgMkQ/22e429ec7b3fdd119a2499358af899b7/Art_Card.png?w=3840&amp;q=90&amp;fm=webp" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://openai.com/index/building-self-improving-tax-agents-with-codex/">Construire des agents fiscaux auto-améliorants avec Codex</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI explore la création d&#x27;agents fiscaux capables de s&#x27;améliorer, exploitant Codex pour automatiser et optimiser des tâches complexes. Cette avancée promet de rationaliser des opérations hautement spécialisées et ouvre la voie à des applications agentiques dans des domaines réglementés.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Codex</span><span class="tag">Agents</span></div>
+        <a href="https://openai.com/index/building-self-improving-tax-agents-with-codex/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.anthropic.com/news/milan-office-opening">Anthropic ouvre un bureau à Milan pour soutenir les entreprises, la recherche et les développeurs italiens</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic News</span>
+        </div>
+        <p class="summary">Anthropic étend sa présence européenne avec l&#x27;ouverture d&#x27;un bureau à Milan, visant à renforcer ses partenariats avec les entreprises, les institutions de recherche et la communauté des développeurs en Italie. Cette démarche souligne l&#x27;importance stratégique du marché européen pour le déploiement et l&#x27;innovation en matière d&#x27;IA.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Italie</span></div>
+        <a href="https://www.anthropic.com/news/milan-office-opening" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;Ère des Agents Autonomes et Dynamiques</strong><p>Les annonces de Claude Opus 4.8 avec ses &quot;dynamic workflows&quot; et le rebranding de LeChat en Vibe par Mistral soulignent une transition claire vers des agents IA plus sophistiqués, capables de coordonner des sous-agents et de gérer des tâches complexes, du code à la productivité.</p></div><div class="trend-item"><strong>Infrastructure Repensée pour l&#x27;IA Machine-Centrique</strong><p>Le concept d&#x27;un internet &quot;reconstruit pour les machines&quot; met en lumière la demande croissante pour des infrastructures cloud optimisées pour le trafic généré par l&#x27;IA, un changement fondamental pour les fournisseurs MCP et les développeurs d&#x27;applications agentiques.</p></div><div class="trend-item"><strong>Montée des Enjeux de Sécurité et d&#x27;Éthique en IA</strong><p>Les préoccupations autour des attaques cybernétiques accélérées par l&#x27;IA (Google Cloud Threat Defense) et les risques liés aux injections de prompt (Ars Technica) forcent l&#x27;industrie à renforcer la gouvernance et la sécurité des systèmes d&#x27;IA, un domaine critique pour la confiance et l&#x27;adoption à grande échelle.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 13 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/google-launches-a-tiny-board-that-runs-gemma-3-locally/" class="ext-title">Google lance une carte minuscule qui exécute Gemma 3 localement</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Google a dévoilé une nouvelle carte Coral, un ordinateur monocarte compact pour l&#x27;IA embarquée, permettant d&#x27;exécuter Gemma 3 localement. Cela ouvre des perspectives pour le développement d&#x27;applications d&#x27;IA sur des appareils périphériques avec des exigences de faible consommation.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/streaming/938759/youtube-custom-ai-feed-prompt-availability" class="ext-title">YouTube vous permettra de demander à l&#x27;IA de créer un flux vidéo personnalisé</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">YouTube introduit une nouvelle fonctionnalité d&#x27;IA qui génère un flux vidéo personnalisé en fonction des descriptions des utilisateurs, leur permettant d&#x27;épingler des fils thématiques. Cela marque une évolution vers une curation de contenu plus dynamique et personnalisée grâce à l&#x27;IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/938893/cnn-perplexity-ai-copyright-lawsuit" class="ext-title">CNN poursuit Perplexity pour des articles &quot;copiés mot pour mot&quot;</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">CNN a intenté un procès contre Perplexity, alléguant que ses outils d&#x27;IA génèrent des copies &quot;mot pour mot&quot; de ses articles, y compris du contenu sous abonnement. Cette affaire soulève des questions cruciales sur le droit d&#x27;auteur et l&#x27;attribution des sources pour les modèles génératifs d&#x27;IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/938915/ios-27-siri-renders-bloomberg" class="ext-title">Ces nouveaux rendus d&#x27;iOS 27 laissent entrevoir la refonte majeure de Siri</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Les rendus d&#x27;iOS 27 suggèrent une refonte majeure de Siri, avec une interface ressemblant à ChatGPT et un design &quot;Liquid Glass&quot;. Cette mise à jour, si confirmée, positionnerait Siri comme un assistant IA plus compétitif et visuellement moderne sur le marché.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/entertainment/939067/ai-film-dreams-of-violets-tribeca" class="ext-title">Un film généré par IA de 2 000 $ fera ses débuts à Tribeca</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Le Festival de Tribeca présentera &quot;Dreams of Violets&quot;, un film de 75 minutes entièrement généré par IA avec un budget de 2 000 $. Cela démontre le potentiel de l&#x27;IA pour démocratiser la production cinématographique et créer des œuvres visuelles complexes à faible coût.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/28/how-long-is-anthropics-lease-with-spacex-opinions-vary/" class="ext-title">Combien de temps dure le bail d&#x27;Anthropic avec SpaceX ? Les avis divergent</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Elon Musk minimise publiquement la durée de l&#x27;accord de calcul entre Anthropic et SpaceX, alors que les documents de SpaceX décrivent des paiements jusqu&#x27;en mai 2029. Cette divergence soulève des questions sur la stabilité des partenariats stratégiques pour l&#x27;infrastructure d&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/28/just-like-gold-and-oil-well-soon-be-able-to-trade-ai-token-futures/" class="ext-title">Comme l&#x27;or et le pétrole, nous pourrons bientôt négocier des contrats à terme sur les jetons d&#x27;IA</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">De grandes bourses conçoivent des produits dérivés autour des jetons d&#x27;IA, qui sont de plus en plus considérés comme une matière première. Cela indique une financiarisation croissante de la capacité de calcul d&#x27;IA et de l&#x27;accès aux modèles.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/meta-one-zuckerberg-finally-puts-a-price-tag-on-all-that-ai-spending/" class="ext-title">Meta One : Zuckerberg met enfin un prix sur toutes ces dépenses d&#x27;IA</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Meta déploie des modules complémentaires payants pour Instagram, Facebook et WhatsApp, tout en développant une offre IA payante distincte. Cette stratégie vise à monétiser les investissements massifs de Meta dans l&#x27;IA et à diversifier ses sources de revenus au-delà de la publicité.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/amazon-builds-its-own-ai-production-platform-and-greenlights-three-ai-animated-series-for-prime-video/" class="ext-title">Amazon construit sa propre plateforme de production IA et donne son feu vert à trois séries animées par IA pour Prime Video</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Amazon MGM Studios et AWS lancent un &quot;GenAI Creators&#x27; Fund&quot; et une plateforme interne d&#x27;IA, &quot;Project Nara&quot;, avec trois séries animées déjà en production. Cela marque l&#x27;entrée d&#x27;Amazon dans la production de contenu assistée par IA à grande échelle, visant à rationaliser les flux de travail créatifs.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://www.latent.space/p/cognition" class="ext-title">L&#x27;ère des agents asynchrones — Walden Yan de Cognition et Cole Murray d&#x27;OpenInspect</a>
+        <span class="ext-source">Latent Space</span>
+        <p class="ext-summary">Cet article explore les progrès des agents asynchrones, avec des discussions sur les workflows &quot;Spec-to-PR&quot;, la mémoire des agents et les machines virtuelles complètes. Il met en lumière les capacités des agents à automatiser des tâches de développement complexes.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/May/28/markdown-svg-renderer/#atom-everything" class="ext-title">markdown-svg-renderer</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Un outil de rendu Markdown personnalisé avec un traitement spécial pour les blocs de code SVG, permettant de visualiser l&#x27;image et d&#x27;accéder au code. Cet utilitaire est utile pour les développeurs travaillant avec des visualisations intégrées dans des documents Markdown.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/28/gleans-top-line-crosses-300m-as-ai-budget-cutting-becomes-its-major-selling-point/" class="ext-title">Le chiffre d&#x27;affaires de Glean dépasse les 300 millions de dollars, la réduction des budgets d&#x27;IA devenant son principal argument de vente</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">La startup de recherche IA pour entreprises, Glean, a triplé ses revenus annuels en se positionnant comme un outil d&#x27;optimisation des dépenses en IA. Cela met en évidence une demande croissante pour des solutions IA qui offrent non seulement des gains d&#x27;efficacité mais aussi des économies de coûts tangibles.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/index/mufg" class="ext-title">MUFG vise à devenir une organisation native de l&#x27;IA avec OpenAI</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">MUFG utilise ChatGPT Enterprise pour devenir une organisation native de l&#x27;IA, améliorant les workflows et fournissant de nouveaux services financiers alimentés par l&#x27;IA à grande échelle. Cette collaboration montre l&#x27;adoption croissante de l&#x27;IA par les institutions financières pour la transformation numérique.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
