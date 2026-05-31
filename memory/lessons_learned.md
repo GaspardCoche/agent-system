@@ -221,6 +221,26 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 ---
 
+## 2026-05-31 — Pipeline rétrospectives cassée : 7ème semaine consécutive (fixes VÉRIFIÉS par grep)
+
+**Problème :** 21 runs agent détectés, 1 artifact trouvé, **0 rétrospectives collectées**. Septième semaine consécutive avec `pipeline_status: broken`.
+
+**Cause racine (identique aux semaines précédentes, non corrigée malgré 6 entrées) :**
+
+1. **`_reusable-claude.yml` prompt** (lignes 93-100 avant fix) : Ne mentionnait toujours pas la structure JSON requise avec le champ `retrospective`. Les agents écrivaient `/tmp/agent_result.json` mais sans le champ `retrospective` → collecteur Sage filtrait `if "retrospective" in data` → 0 collectées.
+
+2. **`email-agent.yml` post-digest** : Aucun step `upload-artifact` pour `agent-result-iris-*`. Iris invisible depuis le début.
+
+**Solutions VÉRIFIÉES (2026-05-31, grep confirme les changements) :**
+- `_reusable-claude.yml` : Prompt étendu avec structure JSON complète incluant `retrospective` obligatoire et message IMPORTANT. Vérifié : `grep "retrospective" _reusable-claude.yml` → ligne 101.
+- `email-agent.yml` : Steps `Write Iris result artifact` (Python, génère `/tmp/agent_result_iris.json`) + `Upload Iris result artifact` (agent-result-iris-{run_id}, retention-days: 7) ajoutés dans `post-digest` avant "Close old digest issues". Vérifié : `grep "agent-result-iris" email-agent.yml` → ligne 469.
+
+**Règle absolue (répétée pour la 7ème fois) :** Ne JAMAIS documenter un fix sans exécuter `grep` sur le fichier pour confirmer que le changement est réellement présent. "Documenté" ≠ "Appliqué". La prochaine occurrence de cette erreur doit déclencher une révision de l'architecture de collecte d'artifacts.
+
+**Agents concernés :** Tous via reusable workflow, Iris.
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
