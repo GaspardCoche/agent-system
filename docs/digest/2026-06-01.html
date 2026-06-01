@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L&#x27;IA s&#x27;ancre dans l&#x27;infrastructure et redéfinit l&#x27;expérience développeur — AI Briefing 2026-06-01</title>
+  <meta name="description" content="Les investissements massifs dans les data centers IA et les agents autonomes façonnent un avenir où l&#x27;IA devient le tissu même de nos infrastructures et de nos workflows de développement.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Lundi 1 juin 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">15 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+3 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>L&#x27;IA s&#x27;ancre dans l&#x27;infrastructure et redéfinit l&#x27;expérience développeur</h2>
+      <p>Les investissements massifs dans les data centers IA et les agents autonomes façonnent un avenir où l&#x27;IA devient le tissu même de nos infrastructures et de nos workflows de développement.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+3)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/softbank-plans-75-billion-euro-ai-data-center-buildout-in-france/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/softbank_logo.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/softbank-plans-75-billion-euro-ai-data-center-buildout-in-france/">SoftBank plans 75 billion euro AI data center buildout in France</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">SoftBank a annoncé un plan d&#x27;investissement colossal de 75 milliards d&#x27;euros pour construire des data centers IA en France, prévoyant une capacité allant jusqu&#x27;à 5 gigawatts d&#x27;ici 2031. Cet engagement financier majeur souligne l&#x27;urgence et l&#x27;ampleur de la demande en infrastructure de calcul pour l&#x27;IA, transformant la France en un hub européen critique. Pour les entreprises B2B, cela signifie un accès futur potentiellement amélioré à des ressources de calcul haute performance, réduisant les latences et les coûts d&#x27;opération à long terme. C&#x27;est une révolution silencieuse qui impacte directement la capacité des plateformes MCP et des fournisseurs de cloud à proposer des services IA à grande échelle, offrant une base solide pour l&#x27;expansion des modèles et des agents IA. Les cadres doivent anticiper cette densification de l&#x27;infrastructure pour planifier leurs stratégies de déploiement d&#x27;IA et d&#x27;optimisation des coûts.</p>
+        <div class="card-tags"><span class="tag">SoftBank</span><span class="tag">France</span></div>
+        <a href="https://the-decoder.com/softbank-plans-75-billion-euro-ai-data-center-buildout-in-france/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/openai-starts-with-infrastructure-robots-but-aims-for-everyone-having-a-personal-robot-doing-anything-they-need/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/06/openai_robots.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/openai-starts-with-infrastructure-robots-but-aims-for-everyone-having-a-personal-robot-doing-anything-they-need/">OpenAI starts with infrastructure robots but aims for &quot;everyone having a personal robot doing anything they need&quot;</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI relance sa division robotique, visant des robots personnels universels mais commençant par l&#x27;infrastructure. Pour les développeurs, cela signale l&#x27;émergence de nouvelles plateformes d&#x27;agents physiques et un potentiel d&#x27;intégration entre les LLM et le monde réel, ouvrant des opportunités pour des applications concrètes au-delà du logiciel.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/openai-starts-with-infrastructure-robots-but-aims-for-everyone-having-a-personal-robot-doing-anything-they-need/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/May/31/datasette/#atom-everything">datasette 1.0a32</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Datasette a publié une version de correction de bugs (1.0a32), améliorant la gestion des requêtes d&#x27;écriture et des URL de base. Pour les développeurs utilisant ce puissant outil d&#x27;exploration de données, cette mise à jour garantit une meilleure stabilité et fiabilité, essentielle pour des workflows d&#x27;analyse de données sans accroc.</p>
+        <div class="card-tags"><span class="tag">Datasette</span></div>
+        <a href="https://simonwillison.net/2026/May/31/datasette/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/May/31/the-solution-might-be-cancelling-my-ai-subscription/#atom-everything">The solution might be cancelling my AI subscription</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Un développeur partage son expérience de surutilisation des outils IA, suggérant que l&#x27;excès peut nuire à la productivité et à la concentration. Cette réflexion met en lumière un enjeu croissant pour les équipes : trouver le juste équilibre dans l&#x27;intégration de l&#x27;IA pour augmenter l&#x27;efficacité sans créer de dépendance néfaste ou de &quot;projets fantômes&quot;.</p>
+        
+        <a href="https://simonwillison.net/2026/May/31/the-solution-might-be-cancelling-my-ai-subscription/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/nvidia/cosmos-3-for-physical-ai" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/6799309995f2227228bc38f3/js_kXqJrfpYZd1hZvwPug.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/nvidia/cosmos-3-for-physical-ai">Welcome NVIDIA Cosmos 3: The First Open Omni-model for Physical AI Reasoning and Action</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">NVIDIA a lancé Cosmos 3, le premier &quot;omni-modèle&quot; open-source pour le raisonnement et l&#x27;action en IA physique. Cette innovation majeure ouvre la voie à des systèmes d&#x27;IA capables de comprendre et d&#x27;interagir avec le monde physique, offrant aux développeurs et aux équipes de recherche de nouvelles capacités pour la robotique et les simulations complexes.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span><span class="tag">HuggingFace</span></div>
+        <a href="https://huggingface.co/blog/nvidia/cosmos-3-for-physical-ai" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.artificialintelligence-news.com/news/ai-in-video-game-development/" class="card-img-link"><img src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/06/alexey-savchenko-k4Akpt5-Sfk-unsplash-scaled.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.artificialintelligence-news.com/news/ai-in-video-game-development/">AI in Video Game Development: How Artificial Intelligence Is Reshaping the Industry</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="14" height="14" />
+          <span>AI News</span>
+        </div>
+        <p class="summary">L&#x27;IA transforme radicalement le développement de jeux vidéo, avec 90% des développeurs l&#x27;intégrant déjà et une augmentation de 681% des titres Steam utilisant l&#x27;IA en 2025. Cela indique un changement fondamental dans les pipelines de production, où l&#x27;IA devient un outil incontournable pour la création de contenu, l&#x27;optimisation et la personnalisation de l&#x27;expérience joueur.</p>
+        <div class="card-tags"><span class="tag">Google Cloud</span><span class="tag">Steam</span></div>
+        <a href="https://www.artificialintelligence-news.com/news/ai-in-video-game-development/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/anthropic-bans-ai-tools-during-job-interviews-to-see-how-candidates-actually-think/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/03/anthropic_office_work.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://the-decoder.com/anthropic-bans-ai-tools-during-job-interviews-to-see-how-candidates-actually-think/">Anthropic bans AI tools during job interviews to see how candidates actually think</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Anthropic interdit l&#x27;usage d&#x27;outils IA lors de ses entretiens d&#x27;embauche, valorisant la pensée critique et l&#x27;éthique des candidats. Cette approche, bien que stricte, reflète une culture d&#x27;entreprise axée sur les compétences fondamentales et la résolution de problèmes sans assistance IA, pouvant influencer les attentes en matière de recrutement dans l&#x27;écosystème Claude.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://the-decoder.com/anthropic-bans-ai-tools-during-job-interviews-to-see-how-candidates-actually-think/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#6D28D918,#6D28D908);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Jun/1/may-newsletter/#atom-everything">May 2026 newsletter</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">La newsletter de Simon Willison de mai 2026 met en lumière le coût croissant de l&#x27;IA et une légère déception face aux récentes sorties de modèles. Elle offre une vue d&#x27;ensemble précieuse sur le marché de l&#x27;IA, aidant les exécutifs à tempérer les attentes et à mieux évaluer les investissements dans les modèles et services coûteux.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://simonwillison.net/2026/Jun/1/may-newsletter/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.artificialintelligence-news.com/news/the-future-of-automated-trading-with-the-best-forex-robot-reviews/" class="card-img-link"><img src="https://www.artificialintelligence-news.com/wp-content/uploads/2026/06/forex-trading.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.artificialintelligence-news.com/news/the-future-of-automated-trading-with-the-best-forex-robot-reviews/">The future of automated trading with the best forex robot reviews</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="14" height="14" />
+          <span>AI News</span>
+        </div>
+        <p class="summary">L&#x27;automatisation par l&#x27;IA gagne du terrain dans le trading forex, avec une demande croissante pour des robots de trading performants. Pour les professionnels de la finance, cela signifie une nécessité d&#x27;intégrer des solutions IA avancées pour rester compétitifs, en se concentrant sur l&#x27;évaluation des algorithmes pour la prise de décision automatisée et la gestion des risques.</p>
+        
+        <a href="https://www.artificialintelligence-news.com/news/the-future-of-automated-trading-with-the-best-forex-robot-reviews/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/05/31/making-sense-of-the-debate-over-ai-psychosis/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/03/s.jpg?resize=1200,840" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/05/31/making-sense-of-the-debate-over-ai-psychosis/">Making sense of the debate over AI psychosis</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le débat sur la &quot;psychose de l&#x27;IA&quot; soulève des questions importantes sur la sécurité et la perception des capacités des modèles avancés. Les dirigeants doivent comprendre ces discussions pour anticiper les préoccupations éthiques et réglementaires, et pour communiquer de manière responsable sur les limites et les risques de leurs propres systèmes d&#x27;IA.</p>
+        
+        <a href="https://techcrunch.com/2026/05/31/making-sense-of-the-debate-over-ai-psychosis/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/938844/ai-tiktok-shop-blackface-shein-dropshipping" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268550_Crying_AI_avatars_AParkin_2.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/938844/ai-tiktok-shop-blackface-shein-dropshipping">AI grifters are creating fake Black people to sell Shein junk</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">L&#x27;IA est utilisée pour créer de faux avatars raciaux afin de vendre des produits de dropshipping sur TikTok, soulevant des problèmes éthiques et de confiance. Pour les entreprises, c&#x27;est un signal d&#x27;alarme sur les risques de réputation et la nécessité de surveiller l&#x27;utilisation abusive de l&#x27;IA dans le marketing et les plateformes sociales, en particulier pour la création de contenu trompeur.</p>
+        <div class="card-tags"><span class="tag">Shein</span><span class="tag">TikTok</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/938844/ai-tiktok-shop-blackface-shein-dropshipping" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/933916/ai-powered-crypto-cannabis-vape" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/268553_We_went_looking_for_the_weed_vape_that_gives_you_Bitcoin_for_smoking_CVirginia2.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C0%2C100%2C100&amp;amp;w=2400" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/933916/ai-powered-crypto-cannabis-vape">I went looking for the AI weed vape that gives you Bitcoin for smoking</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Une enquête sur un vape de cannabis &quot;IA-cryptographique&quot; qui prétend générer du Bitcoin révèle une arnaque potentielle. Cet exemple farfelu souligne la prolifération de la désinformation et des produits &quot;snake oil&quot; combinant l&#x27;IA et la crypto, exigeant une vigilance accrue des consommateurs et des entreprises face aux promesses irréalistes.</p>
+        
+        <a href="https://www.theverge.com/ai-artificial-intelligence/933916/ai-powered-crypto-cannabis-vape" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Industrialisation de l&#x27;Infrastructure IA</strong><p>Les investissements massifs dans les data centers et la relance des initiatives robotiques par des acteurs comme SoftBank et OpenAI montrent une phase d&#x27;industrialisation et de déploiement physique de l&#x27;IA, au-delà du pur logiciel.</p></div><div class="trend-item"><strong>Maturité et Réalisme de l&#x27;Adoption de l&#x27;IA</strong><p>Les retours d&#x27;expérience des développeurs sur la &#x27;sur-IA&#x27; et la déception face à certaines sorties de modèles soulignent une prise de conscience des limites et de la nécessité d&#x27;une intégration plus réfléchie de l&#x27;IA.</p></div><div class="trend-item"><strong>Défis Éthiques et Sociétaux de l&#x27;IA en Évolution</strong><p>La multiplication des cas d&#x27;utilisation abusive (désinformation, arnaques) et les questions sur la &#x27;psychose de l&#x27;IA&#x27; ou les biais de genre renforcent l&#x27;importance de la gouvernance et de l&#x27;éthique dans le développement et le déploiement de l&#x27;IA.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 3 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/05/31/erin-brockovich-takes-aim-at-data-center-secrecy/" class="ext-title">Erin Brockovich takes aim at data center secrecy</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">L&#x27;activiste environnementale Erin Brockovich cible le secret entourant les data centers, posant des questions sur leur impact et leur régulation. Cela met en lumière les préoccupations environnementales croissantes liées à l&#x27;infrastructure IA et la pression pour plus de transparence.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/anthropic-study-finds-men-use-ai-coding-agents-more-than-twice-as-often-as-women-in-social-science-research/" class="ext-title">Anthropic study finds men use AI coding agents more than twice as often as women in social science research</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Une étude d&#x27;Anthropic révèle une disparité de genre significative dans l&#x27;utilisation des agents de codage IA en recherche en sciences sociales. Cette observation souligne des inégalités potentielles dans l&#x27;adoption des outils IA selon le genre et la discipline.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/ask-ai-what-goes-with-chicken-and-the-answer-depends-on-whether-it-learned-from-recipes-or-molecules/" class="ext-title">Ask AI what goes with chicken and the answer depends on whether it learned from recipes or molecules</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Une startup a développé des modèles d&#x27;IA culinaires distincts pour la compatibilité des recettes et les relations moléculaires. Cette avancée démontre la capacité de l&#x27;IA à extraire des insights complexes de données diverses, ouvrant des voies pour l&#x27;innovation dans des domaines inattendus comme la gastronomie.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
