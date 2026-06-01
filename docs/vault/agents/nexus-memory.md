@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-05-11
+updated: 2026-06-01
 ---
 
 # Nexus — Mémoire & Patterns
@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-06-01 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (8e run consécutif) — BLOCAGE 69 jours | #26757711173 |
 | 2026-05-11 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (7e run consécutif) — BLOCAGE 48 jours | #25665697482 |
 | 2026-05-04 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (6e run consécutif) — BLOCAGE 41 jours | #25312980397 |
 | 2026-04-27 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (5e run consécutif) — BLOCAGE 34 jours | #24988758298 |
@@ -91,10 +92,10 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 ## Note escalade CRITIQUE
 
-> 2026-05-11 : **7e run consécutif en template mode** (2026-03-24, 2026-04-06, 2026-04-13, 2026-04-20, 2026-04-27, 2026-05-04, 2026-05-11).
-> Nexus bloqué depuis **48 jours**. 0 audit réel exécuté.
-> ⛔ SEUIL DÉPASSÉ : Recommandation de suspendre nexus.yml immédiatement.
-> Action prioritaire : Créer une issue GitHub `needs-config: Google Ads OAuth2` avec checklist.
+> 2026-06-01 : **8e run consécutif en template mode** (2026-03-24, 2026-04-06, 2026-04-13, 2026-04-20, 2026-04-27, 2026-05-04, 2026-05-11, 2026-06-01).
+> Nexus bloqué depuis **69 jours**. 0 audit réel exécuté.
+> ⛔ SEUIL CRITIQUE DÉPASSÉ : Suspendre nexus.yml immédiatement pour éviter les runs inutiles.
+> Action prioritaire : Créer une issue GitHub `needs-config: Google Ads OAuth2` avec checklist de configuration OAuth2.
 > Modifier nexus.yml pour skip + créer issue auto si credentials_ok=false.
 > Amélioration suggérée : ajouter step `needs: [check-credentials]` qui skip le job entier si credentials absents — économise tokens et runs.
 

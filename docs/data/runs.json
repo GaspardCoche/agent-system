@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "24556916364",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-04-17",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": " emails traités",
-    "next_actions": [],
-    "timestamp": "2026-04-17T09:01:38.640766+00:00",
-    "agents": [],
-    "report_file": "reports/2026-04-17-email-agent-daily-digest-2026-04-17.md"
-  },
-  {
     "run_id": "24557528319",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1526,5 +1512,30 @@
     "timestamp": "2026-06-01T10:40:26.400912+00:00",
     "agents": [],
     "report_file": "reports/2026-06-01-email-agent-daily-digest-2026-06-01.md"
+  },
+  {
+    "run_id": "26757711173",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-06-01",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — 8e run consécutif sans credentials (69 jours de blocage). Score estimé 58/100. 5 optimisations hypothétiques identifiées. Aucune donné",
+    "next_actions": [
+      "URGENT: Configurer GOOGLE_ADS_DEVELOPER_TOKEN dans GitHub Secrets",
+      "URGENT: Configurer GOOGLE_ADS_CLIENT_ID dans GitHub Secrets",
+      "URGENT: Configurer GOOGLE_ADS_CLIENT_SECRET dans GitHub Secrets",
+      "URGENT: Configurer GOOGLE_ADS_REFRESH_TOKEN dans GitHub Secrets",
+      "Recommandation: Suspendre nexus.yml jusqu'à configuration pour économiser les tokens"
+    ],
+    "timestamp": "2026-06-01T13:27:07.949836+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-06-01-nexus-nexus-weekly-audit-2026-06-01.md"
   }
 ]
