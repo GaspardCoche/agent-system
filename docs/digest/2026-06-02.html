@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anthropic en Bourse, Agents IA en Essor : Le Marché de l&#x27;IA en Pleine Mutation — AI Briefing 2026-06-02</title>
+  <meta name="description" content="Anthropic a déposé son dossier d&#x27;introduction en bourse, marquant une étape majeure dans la course à la valorisation des géants de l&#x27;IA, tandis que les agents IA se diversifient, des outils de productivité aux plateformes de développement local.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Mardi 2 juin 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">26 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+11 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Anthropic en Bourse, Agents IA en Essor : Le Marché de l&#x27;IA en Pleine Mutation</h2>
+      <p>Anthropic a déposé son dossier d&#x27;introduction en bourse, marquant une étape majeure dans la course à la valorisation des géants de l&#x27;IA, tandis que les agents IA se diversifient, des outils de productivité aux plateformes de développement local.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+11)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/claude-maker-anthropic-files-for-ipo-with-the-sec/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/05/Anthropic-US-Leadership.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/claude-maker-anthropic-files-for-ipo-with-the-sec/">Claude maker Anthropic files for IPO with the SEC</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Anthropic, le créateur de Claude, a confidentiellement déposé un projet de déclaration S-1 auprès de la SEC américaine en vue d&#x27;une introduction en bourse. Cette démarche, qui fait suite à une levée de fonds de 65 milliards de dollars valorisant l&#x27;entreprise à près d&#x27;un billion de dollars, positionne Anthropic comme un acteur majeur dans la course à la capitalisation sur le marché de l&#x27;IA. Pour les cadres B2B, cela signifie une validation significative de la valeur des modèles d&#x27;IA conversationnelle et des plateformes comme Claude, indiquant des opportunités d&#x27;investissement ou de partenariat accrues, et une pression concurrentielle intensifiée sur OpenAI et d&#x27;autres acteurs du secteur. L&#x27;IPO pourrait également influencer la transparence et la gouvernance, Anthropic étant une Public Benefit Corporation.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">SEC</span><span class="tag">IPO</span></div>
+        <a href="https://the-decoder.com/claude-maker-anthropic-files-for-ipo-with-the-sec/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/openai-models-now-available-on-amazon-web-services/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/06/aws-open-ai-amazon-news-jp-042426.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/openai-models-now-available-on-amazon-web-services/">OpenAI models now available on Amazon Web Services</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Les modèles d&#x27;OpenAI, incluant GPT-5.5, GPT-5.4 et Codex, sont désormais disponibles via Amazon Bedrock, offrant aux entreprises un accès sécurisé et géré à travers l&#x27;écosystème AWS. Cette intégration simplifie l&#x27;adoption des modèles de pointe pour les clients AWS, permettant une construction et un déploiement plus rapides d&#x27;applications IA avec les contrôles et les flux de travail existants.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">AWS</span><span class="tag">Amazon Bedrock</span></div>
+        <a href="https://the-decoder.com/openai-models-now-available-on-amazon-web-services/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://arstechnica.com/tech-policy/2026/06/florida-sues-openai-sam-altman-after-multiple-chatgpt-linked-murders/" class="card-img-link"><img src="https://cdn.arstechnica.net/wp-content/uploads/2026/06/GettyImages-2265991640-300x300-1780337784.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://arstechnica.com/tech-policy/2026/06/florida-sues-openai-sam-altman-after-multiple-chatgpt-linked-murders/">Florida sues OpenAI, Sam Altman after multiple ChatGPT-linked murders</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=arstechnica.com&sz=32" width="14" height="14" />
+          <span>Ars Technica AI</span>
+        </div>
+        <p class="summary">La Floride a intenté une action en justice contre OpenAI et son PDG Sam Altman, alléguant le rôle de ChatGPT dans des incidents violents. Ce procès, le premier du genre, met en lumière les préoccupations croissantes concernant la sécurité et les responsabilités des développeurs d&#x27;IA, et pourrait établir des précédents importants pour la régulation future des modèles d&#x27;IA et leur utilisation.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">ChatGPT</span><span class="tag">Régulation</span></div>
+        <a href="https://arstechnica.com/tech-policy/2026/06/florida-sues-openai-sam-altman-after-multiple-chatgpt-linked-murders/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>9 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.latent.space/p/ainews-nvidia-cosmos-3-nemotron-3" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!5bzA!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff6685277-4569-4135-92cb-e7a645246125_4096x2732.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.latent.space/p/ainews-nvidia-cosmos-3-nemotron-3">[AINews] NVIDIA Cosmos 3, Nemotron 3 Ultra, and RTX Spark</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">NVIDIA a dévoilé de nouvelles avancées majeures : Cosmos 3, un modèle mondial pour les systèmes physiques, Nemotron 3 Ultra, un modèle de langage puissant, et RTX Spark, une puce pour agents IA locaux sur Windows. Ces innovations soulignent la stratégie de NVIDIA d&#x27;intégrer l&#x27;IA à tous les niveaux, du cloud à l&#x27;edge, pour des applications allant de la simulation à l&#x27;IA embarquée.</p>
+        <div class="card-tags"><span class="tag">Nvidia</span><span class="tag">Cosmos 3</span><span class="tag">Nemotron 3 Ultra</span></div>
+        <a href="https://www.latent.space/p/ainews-nvidia-cosmos-3-nemotron-3" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#0284C718,#0284C708);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Jun/2/pasted-file-editor/#atom-everything">Pasted File Editor</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Un nouvel outil prototype a été développé pour reproduire la fonctionnalité de Claude.ai qui détecte et convertit les larges volumes de texte collés en pièces jointes. Cette capacité améliore l&#x27;interaction avec les LLM pour les développeurs, en facilitant la gestion de données volumineuses et l&#x27;expérimentation avec des modèles comme Claude dans des environnements de bureau.</p>
+        <div class="card-tags"><span class="tag">Claude</span><span class="tag">Développement</span><span class="tag">Outils</span></div>
+        <a href="https://simonwillison.net/2026/Jun/2/pasted-file-editor/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/JetBrains/mellum2-launch" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/60ef2a438432bc401cd0abbe/tFjSaWUOM_pVsgKjHrAHt.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/JetBrains/mellum2-launch">Introducing Mellum2: A 12B Mixture-of-Experts Model by JetBrains</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">JetBrains a lancé Mellum2, un modèle Mixture-of-Experts (MoE) de 12 milliards de paramètres, marquant une avancée significative dans l&#x27;IA open-source. Ce modèle promet des performances améliorées pour une variété de tâches, offrant aux développeurs et aux entreprises une option puissante et flexible pour intégrer l&#x27;IA dans leurs applications sans les coûts des modèles propriétaires.</p>
+        <div class="card-tags"><span class="tag">JetBrains</span><span class="tag">Mellum2</span><span class="tag">MoE</span></div>
+        <a href="https://huggingface.co/blog/JetBrains/mellum2-launch" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.latent.space/p/video-agents" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!VqZ9!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-video.s3.amazonaws.com%2Fvideo_upload%2Fpost%2F200078058%2F18b60925-5d6b-45ed-8314-dbe0dd70fc79%2Ftranscoded-1780294263.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.latent.space/p/video-agents">Why Video Agent models are next — Ethan He, xAI Grok Imagine</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">Ethan He de xAI explore pourquoi les modèles d&#x27;agents vidéo représentent la prochaine étape majeure de l&#x27;IA, avec un aperçu de Grok Imagine. La capacité à comprendre et à interagir avec le monde via la vidéo ouvre des possibilités pour des agents plus autonomes et interactifs, transformant potentiellement les applications en robotique, réalité augmentée et assistance intelligente.</p>
+        <div class="card-tags"><span class="tag">xAI</span><span class="tag">Grok Imagine</span><span class="tag">Agents vidéo</span></div>
+        <a href="https://www.latent.space/p/video-agents" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/report/940861/microsoft-build-ai-models-windows-dev-mode-what-to-expect" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/MS_BUILD.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/report/940861/microsoft-build-ai-models-windows-dev-mode-what-to-expect">Microsoft to unveil new AI models and Windows improvements at Build</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Microsoft s&#x27;apprête à dévoiler de nouveaux modèles d&#x27;IA et des améliorations significatives pour Windows lors de sa conférence Build, avec un accent sur une &#x27;super-application&#x27; Copilot et un nouveau modèle d&#x27;IA de raisonnement. Ces annonces sont cruciales pour les développeurs, car elles promettent de profondes intégrations de l&#x27;IA dans l&#x27;OS et les outils, façonnant l&#x27;avenir du développement logiciel sur la plateforme Microsoft.</p>
+        <div class="card-tags"><span class="tag">Microsoft</span><span class="tag">Windows</span><span class="tag">Build</span></div>
+        <a href="https://www.theverge.com/report/940861/microsoft-build-ai-models-windows-dev-mode-what-to-expect" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/nvidia-pitches-rtx-spark-as-the-chip-that-finally-makes-local-ai-agents-practical-on-windows-devices/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/06/nvidia-rtx-spark.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/nvidia-pitches-rtx-spark-as-the-chip-that-finally-makes-local-ai-agents-practical-on-windows-devices/">Nvidia pitches RTX Spark as the chip that finally makes local AI agents practical on Windows devices</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Nvidia positionne sa puce RTX Spark comme la solution pour rendre les agents d&#x27;IA locaux pratiques sur les appareils Windows, intégrant un GPU Blackwell avec un CPU Arm Grace et jusqu&#x27;à 128 Go de mémoire partagée. Cela représente une avancée majeure pour le déploiement d&#x27;agents IA performants directement sur les postes de travail, ouvrant la voie à des expériences utilisateur plus réactives et sécurisées, sans dépendre du cloud.</p>
+        <div class="card-tags"><span class="tag">Nvidia</span><span class="tag">RTX Spark</span><span class="tag">Windows</span></div>
+        <a href="https://the-decoder.com/nvidia-pitches-rtx-spark-as-the-chip-that-finally-makes-local-ai-agents-practical-on-windows-devices/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/gadgets/940854/strava-restricts-api-access-ai-apps" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2025/10/STKB305_STRAVA_B.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/gadgets/940854/strava-restricts-api-access-ai-apps">Strava blames zero-code AI apps and scrapers as it tightens API access</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Strava restreint l&#x27;accès à son API, exigeant désormais un abonnement payant de 11,99 $ par mois pour les développeurs, en réponse à l&#x27;utilisation abusive par des applications IA &quot;no-code&quot; et des &quot;scrapers&quot;. Cette décision met en évidence les défis croissants de la gestion des API face à l&#x27;IA, forçant les plateformes à repenser leurs modèles d&#x27;accès pour protéger leurs données et leur écosystème de développeurs légitimes.</p>
+        <div class="card-tags"><span class="tag">Strava</span><span class="tag">API</span><span class="tag">No-code</span></div>
+        <a href="https://www.theverge.com/gadgets/940854/strava-restricts-api-access-ai-apps" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/941179/meta-instagram-ai-support-chatbot-exploit-hacked" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/meta-chatbot-support.png?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C9.2919928911091%2C100%2C81.416014217782&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/941179/meta-instagram-ai-support-chatbot-exploit-hacked">Meta’s own AI was exploited to hijack Instagram accounts</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Le chatbot de support IA de Meta a été exploité par des hackers pour détourner des comptes Instagram, démontrant des vulnérabilités critiques dans les systèmes d&#x27;assistance alimentés par l&#x27;IA. Cet incident souligne la nécessité pour les entreprises de renforcer la sécurité de leurs intégrations IA, en particulier celles qui gèrent l&#x27;accès aux données utilisateur et aux identités, pour prévenir les abus et maintenir la confiance des clients.</p>
+        <div class="card-tags"><span class="tag">Meta</span><span class="tag">Instagram</span><span class="tag">Sécurité IA</span></div>
+        <a href="https://www.theverge.com/tech/941179/meta-instagram-ai-support-chatbot-exploit-hacked" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/06/01/nvidia-chases-200b-cpu-market-with-ai-agent-pcs-from-microsoft-dell-and-hp/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205761886.jpg?resize=1200,828" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/06/01/nvidia-chases-200b-cpu-market-with-ai-agent-pcs-from-microsoft-dell-and-hp/">Nvidia chases $200B CPU market with AI agent PCs from Microsoft, Dell, and HP</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Nvidia vise le marché des CPU de 200 milliards de dollars avec des PC équipés d&#x27;agents IA, en partenariat avec Microsoft, Dell et HP. Cette stratégie vise à démocratiser les agents d&#x27;IA en les intégrant directement au matériel client, promettant une nouvelle ère de productivité locale et de capacité de calcul distribuée pour les entreprises.</p>
+        <div class="card-tags"><span class="tag">Nvidia</span><span class="tag">Microsoft</span><span class="tag">Dell</span></div>
+        <a href="https://techcrunch.com/2026/06/01/nvidia-chases-200b-cpu-market-with-ai-agent-pcs-from-microsoft-dell-and-hp/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.interconnects.ai/p/open-and-closed-models-are-on-different" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!WhS4!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6b994b97-89a2-4101-ad81-aa3ffe274b75_3182x1790.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.interconnects.ai/p/open-and-closed-models-are-on-different">Open and closed models are on different exponentials</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.interconnects.ai&sz=32" width="14" height="14" />
+          <span>Interconnects</span>
+        </div>
+        <p class="summary">L&#x27;article analyse comment les modèles d&#x27;IA ouverts et fermés évoluent selon des trajectoires différentes, chacun ayant ses propres avantages en termes de valeur ajoutée pour diverses applications. Comprendre ces dynamiques est crucial pour les entreprises qui doivent choisir entre la flexibilité et la transparence de l&#x27;open source ou la performance et le support des solutions propriétaires.</p>
+        <div class="card-tags"><span class="tag">Open Source</span><span class="tag">Modèles propriétaires</span><span class="tag">Stratégie IA</span></div>
+        <a href="https://www.interconnects.ai/p/open-and-closed-models-are-on-different" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/06/01/this-ai-weather-startup-is-out-forecasting-government-agencies/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/06/Pic-8.jpg?resize=1200,675" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/06/01/this-ai-weather-startup-is-out-forecasting-government-agencies/">This AI weather startup is out-forecasting government agencies</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Une startup d&#x27;IA spécialisée dans la prévision météorologique surpasse les agences gouvernementales, grâce à une combinaison unique de modélisation avancée et de collecte de données via 400 ballons en vol. Cela démontre le potentiel de l&#x27;IA à révolutionner des secteurs établis et souligne l&#x27;importance des ensembles de données propriétaires pour obtenir un avantage concurrentiel significatif.</p>
+        <div class="card-tags"><span class="tag">WindBorne</span><span class="tag">Météo</span><span class="tag">IA prédictive</span></div>
+        <a href="https://techcrunch.com/2026/06/01/this-ai-weather-startup-is-out-forecasting-government-agencies/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/06/01/duckduckgo-makes-its-no-ai-search-engine-easier-to-access-as-its-traffic-booms/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/05/DuckDuckGo_NoAI.png?resize=1200,784" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/06/01/duckduckgo-makes-its-no-ai-search-engine-easier-to-access-as-its-traffic-booms/">DuckDuckGo makes its &#x27;no-AI&#x27; search engine easier to access as its traffic booms</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">DuckDuckGo facilite l&#x27;accès à son moteur de recherche &quot;sans IA&quot; via de nouvelles extensions pour Chrome et Firefox, alors que son trafic augmente. Cette initiative répond à une demande croissante d&#x27;alternatives aux outils d&#x27;IA pour la confidentialité, offrant aux utilisateurs un choix pour éviter l&#x27;analyse de leurs données par des algorithmes d&#x27;intelligence artificielle.</p>
+        <div class="card-tags"><span class="tag">DuckDuckGo</span><span class="tag">Confidentialité</span><span class="tag">Moteur de recherche</span></div>
+        <a href="https://techcrunch.com/2026/06/01/duckduckgo-makes-its-no-ai-search-engine-easier-to-access-as-its-traffic-booms/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/podcast/940831/ai-grammys-music-recording-harvey-mason" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/DCD_20260601_Mason_Grammys.jpg?quality=90&amp;amp;strip=all&amp;amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/podcast/940831/ai-grammys-music-recording-harvey-mason">Recording Academy CEO Harvey Mason Jr. on AI and the Grammys</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Le PDG de la Recording Academy, Harvey Mason Jr., discute de l&#x27;impact de l&#x27;IA sur l&#x27;industrie musicale et les Grammy Awards. L&#x27;intégration croissante de l&#x27;IA générative dans la création musicale soulève des questions complexes sur l&#x27;attribution des crédits, les droits d&#x27;auteur et l&#x27;authenticité artistique, exigeant une adaptation rapide des cadres éthiques et réglementaires.</p>
+        <div class="card-tags"><span class="tag">Musique</span><span class="tag">Grammys</span><span class="tag">IA générative</span></div>
+        <a href="https://www.theverge.com/podcast/940831/ai-grammys-music-recording-harvey-mason" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Course à l&#x27;IPO et Valorisation des Géants de l&#x27;IA</strong><p>L&#x27;introduction en bourse d&#x27;Anthropic signale une phase de maturité pour l&#x27;IA conversationnelle et une validation des investissements massifs, intensifiant la compétition pour la capitalisation boursière et la perception de la valeur.</p></div><div class="trend-item"><strong>Progrès et Démocratisation des Agents IA</strong><p>Les agents IA se déploient, des outils d&#x27;assistance comme Gemini Spark aux agents locaux intégrés aux PC Windows via RTX Spark de Nvidia, promettant une productivité et des capacités de calcul accrues directement sur les appareils des utilisateurs.</p></div><div class="trend-item"><strong>Sécurité et Régulation : Priorités Croissantes</strong><p>Des exploits d&#x27;IA (Meta) et des poursuites judiciaires (OpenAI) soulignent les défis éthiques et de sécurité, forçant les entreprises et les régulateurs à renforcer les cadres de gouvernance et de protection des utilisateurs.</p></div><div class="trend-item"><strong>Dynamisme de l&#x27;Open Source et Intégration dans les Écosystèmes Existant</strong><p>De nouveaux modèles open source puissants (Mellum2, MiniMax M3) continuent d&#x27;émerger, tandis que les modèles propriétaires s&#x27;intègrent dans les écosystèmes cloud établis (OpenAI sur AWS), offrant aux développeurs un éventail de choix plus large.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 11 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/turing-award-winner-richard-sutton-says-pure-generative-ai-cant-do-real-science/" class="ext-title">Turing Award winner Richard Sutton says pure generative AI can&#x27;t do real science</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Richard Sutton, lauréat du prix Turing, affirme que l&#x27;IA générative pure ne peut pas réaliser de véritable science sans la capacité d&#x27;évaluer ses propres résultats, limitant ainsi sa capacité de découverte.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#4F46E5;">🌐 Open Source</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#4F46E5;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/minimax-m3-open-weight-model-with-a-million-token-context-challenges-proprietary-leaders/" class="ext-title">MiniMax M3: Open-weight model with a million-token context challenges proprietary leaders</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">MiniMax a lancé M3, un modèle open-source doté d&#x27;une fenêtre de contexte d&#x27;un million de tokens et de capacités multimodales natives, défiant les leaders propriétaires en performance de codage.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#4F46E5;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/nvidias-nemotron-3-ultra-becomes-the-smartest-open-us-model-but-china-still-leads/" class="ext-title">Nvidia&#x27;s Nemotron 3 Ultra becomes the smartest open US model, but China still leads</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Nemotron 3 Ultra de Nvidia est désormais le modèle d&#x27;IA ouvert le plus performant des États-Unis selon Artificial Analysis, bien que la Chine conserve une avance dans ce domaine.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/941215/windows-laptops-nvidia-rtx-spark-apple-m1-arm-price-ram" class="ext-title">This could be Windows’ M1 moment — but expect it to cost a ton</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Les nouvelles puces RTX Spark de Nvidia pour les ordinateurs portables Windows pourraient offrir des performances similaires au M1 d&#x27;Apple, mais leur coût initial élevé sera un facteur décisif pour l&#x27;adoption.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/index/codex-for-knowledge-work" class="ext-title">Codex is becoming a productivity tool for everyone</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">Le rapport &#x27;The Next Era of Knowledge Work&#x27; examine comment Codex d&#x27;OpenAI transforme la productivité via la recherche assistée par l&#x27;IA, l&#x27;analyse de données et l&#x27;automatisation des flux de travail.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/06/01/water-access-is-now-a-risk-factor-in-spacexs-ipo/" class="ext-title">Water access is now a risk factor in SpaceX&#x27;s IPO</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">L&#x27;accès à l&#x27;eau est devenu un facteur de risque pour l&#x27;IPO de SpaceX, la société nécessitant d&#x27;importantes ressources en eau pour le refroidissement de ses centres de données.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#7C3AED;">🧠 Modeles</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#7C3AED;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/941138/google-gemini-spark-ai-agent-hands-on" class="ext-title">Gemini’s new AI agent is about as good as Google’s demo</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">L&#x27;agent IA Gemini Spark de Google montre des capacités étonnantes pour l&#x27;automatisation des tâches, mais son coût et les implications en matière de confidentialité restent des préoccupations pour les utilisateurs.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/06/01/alphabet-plans-to-raise-80-billion-to-pay-for-ai-buildout/" class="ext-title">Alphabet plans to raise $80B to pay for AI buildout</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Alphabet prévoit de lever 80 milliards de dollars pour financer le développement de son infrastructure IA, soulignant l&#x27;énorme demande et les investissements massifs nécessaires dans ce domaine.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/index/our-views-on-ai-policy-and-political-advocacy" class="ext-title">Our views on AI policy and political advocacy</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">OpenAI partage son approche de la politique et du plaidoyer en matière d&#x27;IA, insistant sur la transparence et le soutien à une réglementation réfléchie pour la sécurité de l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/Jun/1/hackers-simply-asked-meta-ai/#atom-everything" class="ext-title">Hackers Simply Asked Meta AI to Give Them Access to High-Profile Instagram Accounts. It Worked</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Des hackers ont réussi à détourner des comptes Instagram en manipulant le bot de support IA de Meta, exposant un risque de sécurité important lié aux assistants d&#x27;IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://arstechnica.com/security/2026/06/dozens-of-red-hat-packages-backdoored-through-its-offical-npm-channel/" class="ext-title">Dozens of Red Hat packages backdoored through its official NPM channel</a>
+        <span class="ext-source">Ars Technica AI</span>
+        <p class="ext-summary">Plusieurs packages Red Hat ont été compromis via leur canal NPM officiel, incitant les utilisateurs à une enquête immédiate sur les vulnérabilités de sécurité.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
