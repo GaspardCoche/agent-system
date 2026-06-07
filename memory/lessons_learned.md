@@ -241,6 +241,28 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 ---
 
+## 2026-06-07 — Pipeline rétrospectives cassée : 8ème semaine consécutive (FIXES APPLIQUÉS ET GREP-VÉRIFIÉS)
+
+**Problème :** 25 runs agent détectés, 2 artifacts trouvés, **0 rétrospectives collectées**. Huitième semaine consécutive avec `pipeline_status: broken`.
+
+**Cause racine (identique, persistante depuis 7 semaines) :**
+
+1. **`_reusable-claude.yml` prompt** (avant fix ligne 93-99) : Ne contenait que 4 étapes basiques, sans aucune mention de la structure JSON requise avec le champ `retrospective`. Les agents n'écrivaient donc pas ce champ → collecteur Sage filtrait `if "retrospective" in data` → 0 collectées.
+
+2. **`email-agent.yml` post-digest** : Aucun step `upload-artifact` pour `agent-result-iris-*`. Iris invisible à Sage depuis le début du système.
+
+**Solutions APPLIQUÉES ET GREP-VÉRIFIÉES (2026-06-07) :**
+
+- `_reusable-claude.yml` (ligne 101+) : Prompt étendu avec structure JSON complète incluant `retrospective` obligatoire et message IMPORTANT explicite "Sage will be completely blind to this run". **Grep confirme : `retrospective` présent lignes 101 et 109.**
+
+- `email-agent.yml` (lignes 432-470) : Steps `Write Iris result artifact` (Python inline, génère `/tmp/agent_result_iris.json` avec `retrospective`) + `Upload Iris result artifact` (agent-result-iris-{run_id}, retention-days: 7) ajoutés avant "Close old digest issues". **Grep confirme : `agent-result-iris` présent ligne 467.**
+
+**RÈGLE DÉFINITIVE :** Ce problème a été "documenté" 8 fois sans être résolu. Si cela se reproduit une 9ème semaine, il faut **revoir l'architecture de collecte** : soit le collecteur Sage lit directement les logs de runs (pas les artifacts), soit un `post_run_hook` dans `_reusable-claude.yml` écrit lui-même le champ `retrospective` en post-processing (pas délégué à l'agent).
+
+**Agents concernés :** Tous via reusable workflow, Iris.
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
