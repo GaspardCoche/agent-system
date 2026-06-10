@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "24722219946",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-04-21",
-    "status": "success",
-    "event": "workflow_dispatch",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "46 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-04-21T12:32:48.836028+00:00",
-    "agents": [],
-    "report_file": "reports/2026-04-21-email-agent-daily-digest-2026-04-21.md"
-  },
-  {
     "run_id": "24723135404",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-04-21",
@@ -1562,5 +1548,32 @@
     "timestamp": "2026-06-10T09:07:08.565094+00:00",
     "agents": [],
     "report_file": "reports/2026-06-10-email-agent-daily-digest-2026-06-10.md"
+  },
+  {
+    "run_id": "27273485290",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "27273485290",
+    "summary": "Daily health check completed. System status: GREEN. No code implementation required. 3 consecutive success days confirmed. ATTENTION: Issue #75 (2026- · System health verified as GREEN for 2026-06-10. All scheduled agents (Health Check, Email/Iris) r",
+    "next_actions": [
+      "URGENT: Verify Google Ads payment status (issue #75) — 138.49€ overdue flagged 2026-06-08, account suspension risk",
+      "If payment not resolved, trigger Nexus emergency account status check",
+      "Consider closing or labeling issue #75 as 'actioned' once payment is confirmed"
+    ],
+    "timestamp": "2026-06-10T11:44:42.419943+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-06-10-orchestrator-scheduled-run.md"
   }
 ]
