@@ -1,6 +1,6 @@
 {
   "version": "1.1",
-  "last_updated": "2026-05-03",
+  "last_updated": "2026-06-12",
   "description": "Registry des skills validés et candidats. Géré par Sage chaque semaine.",
   "skills": [
     {
@@ -56,7 +56,23 @@
       "usage": "python3 skills/validated/slack_notify.py --message '...' --title 'Run terminé' --status complete --run-url URL"
     }
   ],
-  "candidates": [],
+  "candidates": [
+    {
+      "name": "gh_run_artifacts",
+      "mcp_tool": null,
+      "context": "workflow_diagnostics",
+      "status": "candidate",
+      "usage_count": 3,
+      "created_date": "2026-06-12",
+      "validated_date": null,
+      "script": null,
+      "description": "Collecte les artifacts agent-result-* non-expirés d'un repo GitHub et retourne les retrospectives parsées. Encapsule la logique de collecte des rétros utilisée par Sage.",
+      "env_required": ["GITHUB_TOKEN"],
+      "usage": "python3 skills/candidates/gh_run_artifacts.py --repo owner/repo [--days 7]",
+      "source_agent": "sage",
+      "promotion_criteria": "Valider une fois que la pipeline retrospective est réparée et que le script est testé"
+    }
+  ],
   "validation_threshold": {
     "min_usage_count": 3,
     "min_weekly_uses": 3,

@@ -263,6 +263,47 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 ---
 
+## 2026-06-12 — Sage weekly : "Reached maximum number of turns (15)" — agent dépasse le budget
+
+**Problème :** Le workflow Sage (`sage.yml`) échoue depuis plusieurs semaines consécutives avec l'erreur : `SDK execution error: Error: Claude Code returned an error result: Reached maximum number of turns (15)`. Confirmé sur le run 27090737680 (2026-06-07) et vraisemblablement sur les runs des semaines précédentes (2026-05-17, 2026-05-24, 2026-05-31).
+
+**Cause :** Sage tente de faire trop de choses en 15 turns : lire le vault, analyser les artifacts, mettre à jour les skills, mettre à jour `lessons_learned.md`, mettre à jour `sage-memory.md`, écrire le résultat JSON. Avec un `all_retrospectives.json` vide et une pipeline cassée, le diagnostic seul consomme beaucoup de turns.
+
+**Solutions possibles :**
+1. Augmenter `--max-turns` à 25 dans `sage.yml` (solution immédiate)
+2. Réduire la tâche de Sage : séparer "collecte diagnostics" du "cycle d'amélioration"
+3. Pré-charger les fichiers vault dans le prompt plutôt que de laisser l'agent les lire
+
+**Solution appliquée :** Documenter le problème. Recommander l'augmentation de `--max-turns` à 25 dans `sage.yml`.
+
+**Agents concernés :** Sage
+
+---
+
+## 2026-06-12 — Node.js 20 deprecation sur GitHub Actions (deadline June 16, 2026)
+
+**Problème :** GitHub forcera Node.js 24 pour toutes les actions GitHub à partir du **16 juin 2026** (dans 4 jours). Les actions `actions/checkout@v4`, `actions/setup-python@v5`, `actions/upload-artifact@v4`, `actions/download-artifact@v4` tournent encore sur Node.js 20. Après la deadline, elles seront forcées sur Node.js 24 automatiquement — risque de comportements inattendus.
+
+**Impact :** 56 usages de ces actions dans `.github/workflows/`. Tous les workflows sont potentiellement affectés.
+
+**Solution :** Mettre `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` dans les env de workflows, OU mettre à jour vers des versions v5+ (si disponibles pour upload/download). Les actions `checkout@v4` et `setup-python@v5` supportent déjà Node.js 24 via le flag. Après le 16 juin, GitHub forcera la migration automatiquement — tester en avance.
+
+**Agents concernés :** Tous les workflows
+
+---
+
+## 2026-06-12 — Ralph : git push depuis "detached HEAD" cause exit 128
+
+**Problème :** Le run Ralph 26758317426 (2026-06-01) a échoué avec `fatal: You are not currently on a branch.` au moment du `git push`. Un merge conflict dans `docs/data/runs.json` + le fait d'être en "detached HEAD" a causé un exit 128.
+
+**Cause :** Lors d'un `git pull --rebase` avec conflit non-résolvable automatiquement, git peut laisser le repo en état "detached HEAD". Le `git push` suivant échoue.
+
+**Solution :** Ajouter `git checkout main || git checkout -b main origin/main` avant le `git push` dans les workflows qui ont des git commits. Pattern : `git pull --rebase origin main 2>/dev/null || git rebase --abort; git checkout main; git push`.
+
+**Agents concernés :** Ralph, tous les workflows avec git commit
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
