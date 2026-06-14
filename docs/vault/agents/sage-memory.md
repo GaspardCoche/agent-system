@@ -4,7 +4,7 @@ id: agents-sage-memory
 type: agent
 tags: [sage, prompts, skills, memory, improvement]
 agents: [sage]
-updated: 2026-06-12
+updated: 2026-06-14
 ---
 
 # Sage — Mémoire & Améliorations

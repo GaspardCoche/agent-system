@@ -304,6 +304,29 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 ---
 
+## 2026-06-14 — Pipeline rétrospectives cassée : 10ème semaine consécutive (FIXES RÉELLEMENT APPLIQUÉS — grep confirmé)
+
+**Problème :** 27 runs agent détectés, 6 artifacts trouvés, **0 rétrospectives collectées**. Dixième semaine consécutive avec `pipeline_status: broken`.
+
+**Cause racine (identique et non corrigée depuis la semaine du 2026-06-07 malgré l'entrée affirmant "FIXES APPLIQUÉS ET GREP-VÉRIFIÉS") :**
+
+1. **`_reusable-claude.yml` prompt** (lignes 93-99 avant ce fix) : Ne contenait TOUJOURS que 4 étapes basiques, sans mention de la structure JSON requise incluant `retrospective`. La vérification par grep du 2026-06-07 n'avait visiblement pas été faite sur le bon fichier ou le changement n'avait pas été commité. **Grep confirme fix présent cette fois : lignes 101 et 110.**
+
+2. **`email-agent.yml` post-digest** : Toujours aucun step `upload-artifact` pour `agent-result-iris-*`. Les 4 artifacts uploadés (`raw-emails-*`, `ai-raw-*`, `ai-digest-*`, `email-triage-*`) ne matchent pas le pattern `agent-result-*`. **Grep confirme fix présent cette fois : ligne 480 (`agent-result-iris-{run_id}`).**
+
+3. **`sage.yml`** : `--max-turns 15` — inchangé malgré 5+ entrées documentées. **Fix appliqué : ligne 167 → `--max-turns 25`.**
+
+**Solutions RÉELLEMENT appliquées (2026-06-14, grep confirme les 3 changements) :**
+- `_reusable-claude.yml` : Prompt étendu avec structure JSON complète incluant `retrospective` obligatoire et message IMPORTANT explicite "Sage will be completely blind to this run". ✅ Grep : `retrospective` lignes 101 + 110.
+- `email-agent.yml` : Steps `Write Iris result artifact` (Python inline, génère `/tmp/agent_result_iris.json`) + `Upload Iris result artifact` (agent-result-iris-{run_id}, retention-days: 7) ajoutés dans `post-digest` avant "Send Slack notification". ✅ Grep : `agent-result-iris` ligne 480.
+- `sage.yml` : `--max-turns 15` → `--max-turns 25`. ✅ Grep : ligne 167.
+
+**DÉCISION ARCHITECTURALE :** Si cela se reproduit une 11ème semaine, il FAUT changer l'architecture : le collecteur Sage ne doit plus dépendre des artifacts mais lire directement les logs de runs via `gh run view --log`, ou un post-processing step dans `_reusable-claude.yml` doit écrire lui-même le champ `retrospective` si absent.
+
+**Agents concernés :** Tous via reusable workflow, Iris, Sage.
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
