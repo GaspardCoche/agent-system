@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "24836793416",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-04-23",
-    "status": "success",
-    "event": "workflow_dispatch",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "12 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-04-23T13:07:34.095971+00:00",
-    "agents": [],
-    "report_file": "reports/2026-04-23-email-agent-daily-digest-2026-04-23.md"
-  },
-  {
     "run_id": "24882802602",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-04-24",
@@ -1575,5 +1561,30 @@
     "timestamp": "2026-06-15T11:30:51.913078+00:00",
     "agents": [],
     "report_file": "reports/2026-06-15-email-agent-daily-digest-2026-06-15.md"
+  },
+  {
+    "run_id": "27550559362",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-06-15",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "⚠️ TEMPLATE MODE — credentials_ok=false. 10e run consécutif sans accès Google Ads (83 jours de blocage depuis 2026-03-24). Score global estimé : 38/10",
+    "next_actions": [
+      "⛔ URGENT : Configurer les 4 secrets Google Ads dans GitHub → Settings → Secrets and variables → Actions",
+      "Envisager de suspendre nexus.yml jusqu'à configuration pour éviter les runs inutiles (économise tokens)",
+      "Après configuration : lancer un audit complet (last_30_days) pour obtenir un score réel",
+      "Modifier nexus.yml : ajouter step needs=[check-credentials] qui skip le job si credentials absents",
+      "Score estimé après déblocage + optimisations : ~72/100"
+    ],
+    "timestamp": "2026-06-15T13:46:35.221355+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-06-15-nexus-nexus-weekly-audit-2026-06-15.md"
   }
 ]
