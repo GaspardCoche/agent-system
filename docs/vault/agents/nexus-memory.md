@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-06-12
+updated: 2026-06-15
 ---
 
 # Nexus — Mémoire & Patterns
@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-06-15 | weekly_audit (dry_run) | 38/100 (estimé) | Template — credentials_ok=false (10e run consécutif) — BLOCAGE 83 jours — Score dégradé 42→38 | #27550559362 |
 | 2026-06-12 | weekly_audit (dry_run) | 42/100 (estimé) | Template — credentials_ok=false (9e run consécutif) — BLOCAGE 80 jours — Score dégradé 58→42 | #27413450637 |
 | 2026-06-01 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (8e run consécutif) — BLOCAGE 69 jours | #26757711173 |
 | 2026-05-11 | weekly_audit (template) | 58/100 (estimé) | Template — credentials_ok=false (7e run consécutif) — BLOCAGE 48 jours | #25665697482 |
@@ -93,8 +94,8 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 ## Note escalade CRITIQUE
 
-> 2026-06-12 : **9e run consécutif en template mode** (2026-03-24 → 2026-06-12).
-> Nexus bloqué depuis **80 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → 42/100.
+> 2026-06-15 : **10e run consécutif en template mode** (2026-03-24 → 2026-06-15).
+> Nexus bloqué depuis **83 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → 42/100 → 38/100.
 > ⛔ SEUIL CRITIQUE DÉPASSÉ : Suspendre nexus.yml immédiatement pour éviter les runs inutiles.
 > Action prioritaire : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
 > Action Forge : Modifier nexus.yml pour skip + créer issue auto si credentials_ok=false.
