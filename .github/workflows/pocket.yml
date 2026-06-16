@@ -116,6 +116,11 @@ jobs:
       - name: Run Claude Pocket
         uses: anthropics/claude-code-action@v1
         continue-on-error: true
+        env:
+          HUBSPOT_PRIVATE_APP_TOKEN: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
+          LEMLIST_API_KEY: ${{ secrets.LEMLIST_API_KEY }}
+          FULLENRICH_API_KEY: ${{ secrets.FULLENRICH_API_KEY }}
+          PHANTOMBUSTER_API_KEY: ${{ secrets.PHANTOMBUSTER_API_KEY }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -129,6 +134,11 @@ jobs:
             3. Lis la tâche : `cat /tmp/agent_task.json` (champs : description = corps de l'issue avec Demande / Autoriser l'écriture / Conditions / Workflow / Agent ; issue_number ; approved).
             4. Si un "Workflow" précis est demandé (≠ auto), charge son playbook : `cat agent_prompts/workflows/<workflow>.md` et suis-le.
             5. Exécute la tâche :
+               - **Pour HubSpot, utilise EN PRIORITÉ le script déterministe via Bash** (fiable, le token est dans l'env) :
+                 `python3 scripts/pocket_hubspot.py count contacts lifecyclestage lead`
+                 `python3 scripts/pocket_hubspot.py search contacts <prop> <valeur> --limit 5 --props email,firstname,lastname`
+                 `python3 scripts/pocket_hubspot.py read contacts <id> --props email,lifecyclestage`
+                 `python3 scripts/pocket_hubspot.py whoami` (test d'auth). N'utilise les outils MCP HubSpot qu'en complément.
                - Par défaut LECTURE seule (HubSpot/Lemlist) — tu cherches, lis, analyses.
                - ÉCRITURE autorisée UNIQUEMENT si `approved` = true ET "Autoriser l'écriture = oui" ET dans les Conditions ET les garde-fous durs. Si "Autoriser l'écriture = oui" mais `approved` = false, poste un PREVIEW de ce que tu ferais et demande l'approbation (label `approved`), n'écris rien.
                - Si un secret manque (ex : Lemlist), dis-le proprement, ne plante pas.
