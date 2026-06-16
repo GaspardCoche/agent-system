@@ -278,8 +278,17 @@ function init() {
     m.className = 'msg'; m.textContent = '⏳ Test de connexion…';
     try {
       const r = await gh('');
-      m.className = 'msg ok'; m.textContent = `✅ Connecté à ${r.full_name}`;
-      setTimeout(() => $('settings').classList.add('hidden'), 1200);
+      // Affiche le compte du token (le signal fiable pour détecter le mauvais compte).
+      let who = '';
+      try {
+        const u = await (await fetch('https://api.github.com/user', {
+          headers: { 'Authorization': `Bearer ${LS.pat}`, 'Accept': 'application/vnd.github+json' },
+        })).json();
+        if (u && u.login) who = ` · compte ${u.login}`;
+      } catch {}
+      m.className = 'msg ok';
+      m.textContent = `✅ Connecté à ${r.full_name}${who}`;
+      setTimeout(() => $('settings').classList.add('hidden'), 1500);
     } catch (e) {
       m.className = 'msg err'; m.textContent = '❌ ' + friendlyError(e);
     }
