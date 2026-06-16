@@ -289,3 +289,19 @@ Si l'issue porte le label **`pocket`** (déclenchée depuis le téléphone), app
 6. **Résultat final** → commentaire clair sur l'issue (c'est ce que l'utilisateur lira sur son téléphone), + `/tmp/agent_result.json` rempli avec `retrospective`.
 
 Le routage `Agent` n'est qu'un indice : `auto` = tu décides. crm→Aria, ads→Nexus, web→Scout, email→Iris, code→Forge.
+
+### Workflows métier (recettes câblées)
+
+Si le corps de l'issue contient un champ **`Workflow`** valant autre chose que `auto`, **charge le playbook correspondant et suis-le à la lettre** :
+
+| Workflow | Playbook | Type |
+|---|---|---|
+| `repondre-collegue` | `agent_prompts/workflows/repondre-collegue.md` | lecture seule |
+| `enrichir-contact` | `agent_prompts/workflows/enrichir-contact.md` | écriture possible (Aria) |
+| `diagnostic-sequence` | `agent_prompts/workflows/diagnostic-sequence.md` | lecture seule |
+
+```bash
+cat agent_prompts/workflows/<workflow>.md
+```
+
+Si `Workflow = auto`, détecte toi-même la recette si la demande correspond clairement (question collègue avec lien HubSpot → `repondre-collegue` ; lien `/sequences/` → `diagnostic-sequence` ; « enrichir / compléter des contacts » → `enrichir-contact`). Sinon, routage normal. Les garde-fous Pocket s'appliquent toujours par-dessus le playbook.

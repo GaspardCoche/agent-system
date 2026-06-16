@@ -43,12 +43,13 @@ async function ensureLabels() {
 }
 
 // ── Composer : Dispatch ──────────────────────────────────────────────────
-function buildBody(demande, writeAllowed, conditions, agent) {
+function buildBody(demande, writeAllowed, conditions, workflow, agent) {
   // Mime le rendu d'un GitHub issue-form pour un parsing uniforme par Dispatch.
   return [
     '### Demande', '', demande, '',
     "### Autoriser l'écriture ?", '', writeAllowed ? 'oui' : 'non', '',
     "### Conditions d'écriture (si OUI)", '', conditions || '_No response_', '',
+    '### Workflow (recette)', '', workflow || 'auto', '',
     '### Agent (optionnel)', '', agent || 'auto', '',
   ].join('\n');
 }
@@ -59,6 +60,7 @@ async function dispatch() {
   if (!demande) { msg.className = 'msg err'; msg.textContent = 'Écris une demande.'; return; }
   const writeAllowed = $('write-allowed').checked;
   const conditions = $('conditions').value.trim();
+  const workflow = $('workflow').value;
   const agent = $('agent').value;
 
   msg.className = 'msg'; msg.textContent = '⏳ Envoi…';
@@ -69,7 +71,7 @@ async function dispatch() {
       method: 'POST',
       body: JSON.stringify({
         title,
-        body: buildBody(demande, writeAllowed, conditions, agent),
+        body: buildBody(demande, writeAllowed, conditions, workflow, agent),
         labels: ['agent', 'pocket'],
       }),
     });

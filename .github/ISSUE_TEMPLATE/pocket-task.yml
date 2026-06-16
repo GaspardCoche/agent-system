@@ -31,6 +31,19 @@ body:
     validations:
       required: false
   - type: dropdown
+    id: workflow
+    attributes:
+      label: Workflow (recette)
+      description: "Recette métier câblée. 'auto' = Dispatch détecte/route seul."
+      options:
+        - "auto"
+        - "repondre-collegue"
+        - "enrichir-contact"
+        - "diagnostic-sequence"
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
     id: agent_hint
     attributes:
       label: Agent (optionnel)
