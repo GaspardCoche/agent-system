@@ -130,6 +130,7 @@ jobs:
           LEMLIST_API_KEY: ${{ secrets.LEMLIST_API_KEY }}
           FULLENRICH_API_KEY: ${{ secrets.FULLENRICH_API_KEY }}
           PHANTOMBUSTER_API_KEY: ${{ secrets.PHANTOMBUSTER_API_KEY }}
+          VAULT_DEPLOY_KEY: ${{ secrets.VAULT_DEPLOY_KEY }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -158,6 +159,7 @@ jobs:
             - **PhantomBuster (scraping)** — `python3 scripts/pocket_phantombuster.py agents|agent|containers|output|result` (lecture) ; `launch ... --confirm` (action).
             - **Lemlist (outreach)** — outils MCP `mcp__lemlist__*` en lecture (campagnes, stats, contacts).
             - **Web** — recherche/scrape via Bash (`curl`) si la demande est une question générale ou a besoin d'info externe.
+            - **Vault (connaissances EMAsphere)** — `python3 scripts/pocket_vault.py search "<requête>"` puis `read "<chemin.md>"` (et `list`) : accès LECTURE aux 2600+ notes du vault Obsidian privé (CRM, growth, playbooks, dev, ICP…). Utilise-le pour toute question « d'après mes notes / mon vault / ce que je sais sur X ».
             - **GitHub / repo** — Bash, Read pour le code et le contexte du repo.
             Si une app pertinente manque de secret, dis-le proprement et propose une alternative — ne plante pas.
 
