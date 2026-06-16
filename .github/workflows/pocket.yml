@@ -27,6 +27,7 @@ jobs:
           EVENT: ${{ github.event_name }}
           TRIGGER_LABEL: ${{ github.event.label.name }}
           COMMENT_USER_TYPE: ${{ github.event.comment.user.type }}
+          ISSUE_STATE: ${{ github.event.issue.state }}
         run: |
           LABELS='${{ toJSON(github.event.issue.labels.*.name) }}'
           RUN=false
@@ -34,8 +35,8 @@ jobs:
             # création/approbation : seulement sur l'ajout du label pocket/approved
             if echo "$LABELS" | grep -q '"pocket"' && { [[ "$TRIGGER_LABEL" == "pocket" ]] || [[ "$TRIGGER_LABEL" == "approved" ]]; }; then RUN=true; fi
           elif [[ "$EVENT" == "issue_comment" ]]; then
-            # chat itératif : un commentaire HUMAIN (pas un bot) sur une tâche pocket relance l'agent
-            if echo "$LABELS" | grep -q '"pocket"' && [[ "$COMMENT_USER_TYPE" == "User" ]]; then RUN=true; fi
+            # chat itératif : un commentaire HUMAIN (pas un bot) sur une tâche pocket OUVERTE relance l'agent
+            if echo "$LABELS" | grep -q '"pocket"' && [[ "$COMMENT_USER_TYPE" == "User" ]] && [[ "$ISSUE_STATE" == "open" ]]; then RUN=true; fi
           fi
           echo "run=$RUN" >> $GITHUB_OUTPUT
           if echo "$LABELS" | grep -q '"approved"'; then echo "approved=true" >> $GITHUB_OUTPUT; else echo "approved=false" >> $GITHUB_OUTPUT; fi
