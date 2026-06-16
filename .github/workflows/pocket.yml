@@ -140,6 +140,10 @@ jobs:
             {
               "env": {
                 "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
-                "GITHUB_REPOSITORY": "${{ github.repository }}"
+                "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+                "GITHUB_REPOSITORY": "${{ github.repository }}",
+                "HUBSPOT_PRIVATE_APP_TOKEN": "${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}",
+                "LEMLIST_API_KEY": "${{ secrets.LEMLIST_API_KEY }}",
+                "FIRECRAWL_API_KEY": "${{ secrets.FIRECRAWL_API_KEY }}"
               }
             }
