@@ -28,6 +28,20 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {}
+    },
+    "hubspot": {
+      "command": "npx",
+      "args": ["-y", "@hubspot/mcp-server"],
+      "env": {
+        "PRIVATE_APP_ACCESS_TOKEN": "${HUBSPOT_PRIVATE_APP_TOKEN}"
+      }
+    },
+    "lemlist": {
+      "type": "http",
+      "url": "https://app.lemlist.com/mcp",
+      "headers": {
+        "X-API-Key": "${LEMLIST_API_KEY}"
+      }
     }
   }
 }
