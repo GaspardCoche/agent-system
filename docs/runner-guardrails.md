@@ -36,6 +36,18 @@ Référence chargée par Dispatch quand une issue porte le label `pocket`. Encad
 | **PhantomBuster** | Python direct | `https://api.phantombuster.com/api/v2/` (header `X-Phantombuster-Key`) | `PHANTOMBUSTER_API_KEY` |
 | **Gemini** | env | grands fichiers (>50KB) | `GEMINI_API_KEY` |
 
+## Scripts déterministes (voie privilégiée)
+
+Le MCP dans `claude-code-action` a un plumbing d'env fragile (token vide → 401). Pour HubSpot/FullEnrich/PhantomBuster, **préférer les scripts** (REST direct, stdlib, token via env du step), appelés par Bash :
+
+| Outil | Script | Lecture | Écriture / coût (gate `--confirm` + `approved`) |
+|---|---|---|---|
+| HubSpot | `scripts/pocket_hubspot.py` | `count`, `search`, `read`, `whoami` | — (les écritures HubSpot passent encore par MCP gated) |
+| FullEnrich | `scripts/pocket_fullenrich.py` | `status <id>` | `enrich-one` / `submit` (consomme des crédits → `--confirm`) |
+| PhantomBuster | `scripts/pocket_phantombuster.py` | `agents`, `agent`, `containers`, `output`, `result` | `launch` (scraping réel → `--confirm`) |
+
+`--confirm` n'est ajouté QUE si le label `approved` est présent.
+
 ## Opérations lecture seule vs écriture
 
 | Outil | Lecture seule (auto) | Écriture (preview + `approved` + conditions) |

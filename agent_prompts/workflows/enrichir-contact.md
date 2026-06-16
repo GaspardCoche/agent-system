@@ -11,9 +11,12 @@ Le champ `Demande` désigne la cible : un email/nom, une liste, ou un segment Hu
 ## Étapes
 1. **Garde-fous** : `cat docs/runner-guardrails.md` + `cat ~/crm-context/icp_and_data_rules.md` si présent (sinon vault).
 2. **Lire l'existant** (HubSpot, lecture) : `hubspot-search-objects` / `hubspot-batch-read-objects` → repérer **les champs VIDES** à compléter (GF #1 : ne jamais écraser un champ rempli).
-3. **Enrichir via FullEnrich** (Python direct, API v2) :
-   - Par lots de **≤ 100 contacts** (GF #6).
-   - Téléphone : ne garder que le **mobile** (politique FullEnrich vault).
+3. **Enrichir via FullEnrich** (script déterministe, API v2) :
+   - `python3 scripts/pocket_fullenrich.py enrich-one --firstname F --lastname L --domain D [--linkedin URL] [--phones] [--hubspot-id ID]` (un contact) ou `submit --file contacts.json` (lot).
+   - **Sans `--confirm` = dry-run** (aucun crédit). Ajoute `--confirm` UNIQUEMENT si `approved` = true.
+   - `--phones` seulement si le mobile est réellement manquant (coûte plus cher).
+   - Puis `status <enrichment_id>` pour récupérer les résultats (flux async, statut `FINISHED`).
+   - Par lots de **≤ 100 contacts** (GF #6). Employment : filtrer `is_current=true`. Pas de match ≠ erreur.
 4. **Mapper vers HubSpot** :
    - Industry → `industry_emalist` sur **Companies** (format « Catégorie - Sous-catégorie », mapping IndustryDB). ⚠️ ne pas écrire si nom de champ non confirmé en prod.
    - `numemployees` = range ; nombre brut → `linkedin_employee_count`.
