@@ -31,8 +31,12 @@ jobs:
           if [[ "$EVENT" == "workflow_dispatch" || "$EVENT" == "schedule" ]]; then
             echo "should_run=true" >> $GITHUB_OUTPUT
           elif [[ "$EVENT" == "issues" ]]; then
+            # Anti-doublon : une issue créée avec [agent, pocket] émet un event `labeled`
+            # PAR label. On ne déclenche que sur l'ajout du label `agent` (ou `approved`
+            # pour relancer après approbation d'écriture), pas sur `pocket`.
             LABELS='${{ toJSON(github.event.issue.labels.*.name) }}'
-            if echo "$LABELS" | grep -q '"agent"'; then
+            TRIGGER_LABEL="${{ github.event.label.name }}"
+            if echo "$LABELS" | grep -q '"agent"' && { [[ "$TRIGGER_LABEL" == "agent" ]] || [[ "$TRIGGER_LABEL" == "approved" ]]; }; then
               echo "should_run=true" >> $GITHUB_OUTPUT
             else
               echo "should_run=false" >> $GITHUB_OUTPUT
