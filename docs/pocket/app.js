@@ -202,15 +202,23 @@ function escapeHtml(s) {
 
 // ── Init ─────────────────────────────────────────────────────────────────
 function init() {
-  // Réglages
-  $('repo').value = LS.repo;
+  // Réglages — repo pré-rempli par défaut
+  $('repo').value = LS.repo || 'GaspardCoche/agent-system';
   $('pat').value = LS.pat;
   if (!LS.repo || !LS.pat) $('settings').classList.remove('hidden');
   $('settings-btn').onclick = () => $('settings').classList.toggle('hidden');
-  $('save-settings').onclick = () => {
+  $('save-settings').onclick = async () => {
     LS.repo = $('repo').value.trim();
     LS.pat = $('pat').value.trim();
-    $('settings').classList.add('hidden');
+    const m = $('settings-msg');
+    m.className = 'msg'; m.textContent = '⏳ Test de connexion…';
+    try {
+      const r = await gh(''); // GET /repos/{owner}/{repo}
+      m.className = 'msg ok'; m.textContent = `✅ Connecté à ${r.full_name}`;
+      setTimeout(() => $('settings').classList.add('hidden'), 1200);
+    } catch (e) {
+      m.className = 'msg err'; m.textContent = '❌ ' + e.message + ' — vérifie le repo et le token (scopes Issues + Actions).';
+    }
   };
 
   // Toggle conditions
