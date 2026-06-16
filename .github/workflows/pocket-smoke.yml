@@ -1,0 +1,44 @@
+name: Pocket Secrets Smoke Test
+
+# Diagnostic : vérifie que les secrets API sont bien câblés en CI, SANS Claude.
+# Affiche uniquement des codes HTTP et des longueurs masquées — jamais les clés.
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: HubSpot
+        env:
+          T: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
+        run: |
+          if [ -z "$T" ]; then echo "❌ HubSpot: secret ABSENT"; exit 0; fi
+          echo "ℹ️  token longueur=${#T} préfixe=${T:0:7}…"
+          code=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $T" "https://api.hubapi.com/crm/v3/objects/contacts?limit=1")
+          echo "HubSpot /contacts → HTTP $code  (200=OK, 401=token invalide)"
+
+      - name: Lemlist
+        env:
+          T: ${{ secrets.LEMLIST_API_KEY }}
+        run: |
+          if [ -z "$T" ]; then echo "⚠️  Lemlist: secret ABSENT (optionnel)"; exit 0; fi
+          echo "ℹ️  clé longueur=${#T}"
+          code=$(curl -s -o /dev/null -w "%{http_code}" -u ":$T" "https://api.lemlist.com/api/team")
+          echo "Lemlist /team → HTTP $code  (200=OK)"
+
+      - name: PhantomBuster
+        env:
+          T: ${{ secrets.PHANTOMBUSTER_API_KEY }}
+        run: |
+          if [ -z "$T" ]; then echo "⚠️  PhantomBuster: secret ABSENT"; exit 0; fi
+          echo "ℹ️  clé longueur=${#T}"
+          code=$(curl -s -o /dev/null -w "%{http_code}" -H "X-Phantombuster-Key: $T" "https://api.phantombuster.com/api/v2/agents/fetch-all")
+          echo "PhantomBuster /agents → HTTP $code  (200=OK)"
+
+      - name: FullEnrich
+        env:
+          T: ${{ secrets.FULLENRICH_API_KEY }}
+        run: |
+          if [ -z "$T" ]; then echo "⚠️  FullEnrich: secret ABSENT"; exit 0; fi
+          echo "ℹ️  clé longueur=${#T} (endpoint non testé ici)"
