@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0f17" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Claude Pocket</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="icon" href="icon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>📱 Claude Pocket</h1>
+    <button id="settings-btn" class="icon-btn" title="Réglages">⚙️</button>
+  </header>
+
+  <!-- Réglages -->
+  <section id="settings" class="card hidden">
+    <h2>Réglages</h2>
+    <label>Repo <small>(owner/nom)</small>
+      <input id="repo" type="text" placeholder="GaspardCoche/agent-system" autocapitalize="off" autocorrect="off" />
+    </label>
+    <label>GitHub PAT <small>(fine-grained — Issues RW + Actions RW)</small>
+      <input id="pat" type="password" placeholder="github_pat_…" autocapitalize="off" autocorrect="off" />
+    </label>
+    <button id="save-settings" class="primary">Enregistrer</button>
+    <p class="hint">Le token reste sur ton téléphone (localStorage). Voir <code>docs/pocket-setup.md</code>.</p>
+  </section>
+
+  <!-- Composer une demande -->
+  <section id="composer" class="card">
+    <label>Demande
+      <div class="textarea-wrap">
+        <textarea id="demande" rows="4" placeholder="Colle la question du collègue ou décris la tâche…"></textarea>
+        <button id="mic" class="icon-btn mic" title="Dicter">🎤</button>
+      </div>
+    </label>
+
+    <div class="row">
+      <label class="toggle">
+        <input id="write-allowed" type="checkbox" />
+        <span>Autoriser l'écriture</span>
+      </label>
+      <label class="agent-label">Agent
+        <select id="agent">
+          <option value="auto">auto</option>
+          <option value="crm (HubSpot / leads)">crm</option>
+          <option value="ads (Google Ads)">ads</option>
+          <option value="web (recherche / enrichissement)">web</option>
+          <option value="email">email</option>
+          <option value="code">code</option>
+        </select>
+      </label>
+    </div>
+
+    <label id="conditions-wrap" class="hidden">Conditions d'écriture
+      <textarea id="conditions" rows="3" placeholder="Ex : tu peux mettre lifecyclestage à 'lead', jamais l'écraser. Rien d'autre."></textarea>
+    </label>
+
+    <button id="dispatch" class="primary big">🚀 Dispatch</button>
+    <p id="composer-msg" class="msg"></p>
+  </section>
+
+  <!-- Historique -->
+  <section id="history" class="card">
+    <h2>Historique</h2>
+    <ul id="history-list"></ul>
+  </section>
+
+  <!-- Détail d'une tâche -->
+  <section id="detail" class="card hidden">
+    <button id="back" class="link-btn">← Retour</button>
+    <h2 id="detail-title">Tâche</h2>
+    <div id="detail-meta" class="meta"></div>
+    <div id="comments"></div>
+    <button id="approve" class="primary hidden">✅ Approuver l'écriture</button>
+    <p id="detail-msg" class="msg"></p>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
