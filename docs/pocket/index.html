@@ -2,10 +2,11 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0f17" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#0a0e16" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Pocket" />
   <title>Claude Pocket</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icon.svg" />
@@ -13,83 +14,96 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- ── Sprite d'icônes (SVG, remplace les emojis) ── -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-gear" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7.6 1.6 1.6 0 00-1 1.5V22a2 2 0 11-4 0v-.1A1.6 1.6 0 008 20.3a1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00-.6-2.7 1.6 1.6 0 00-1.5-1H2a2 2 0 110-4h.1A1.6 1.6 0 003.7 8a1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 002.7-.6h.1A1.6 1.6 0 0010 .1V0a2 2 0 114 0v.1a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 2.7v.1a1.6 1.6 0 001.5 1H22a2 2 0 110 4h-.1a1.6 1.6 0 00-1.5 1z" transform="scale(.85) translate(2 2)"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M19 10v2a7 7 0 01-14 0v-2M12 19v4"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L14.7 3.9a2 2 0 00-3.4 0z"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></symbol>
+      <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="9" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.7"/><path stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></symbol>
+      <symbol id="i-brain" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M9.5 2A2.5 2.5 0 007 4.5v.5a3 3 0 00-2 5.6V13a3 3 0 002 5.6V19a2.5 2.5 0 005 0V4.5A2.5 2.5 0 009.5 2zM14.5 2A2.5 2.5 0 0117 4.5v.5a3 3 0 012 5.6V13a3 3 0 01-2 5.6V19a2.5 2.5 0 01-5 0"/></symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 01-3.4 0"/></symbol>
+      <symbol id="i-robot" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M12 8V4M8 2h8"/><circle cx="8.5" cy="14" r="1.4" fill="currentColor"/><circle cx="15.5" cy="14" r="1.4" fill="currentColor"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 16v-4M12 8h.01"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></symbol>
+    </defs>
+  </svg>
+
   <header>
-    <h1>📱 Claude Pocket</h1>
-    <button id="settings-btn" class="icon-btn" title="Réglages">⚙️</button>
+    <div class="brand"><span class="dot" id="conn-dot"></span> Claude Pocket</div>
+    <div class="hbtns">
+      <button class="icon-btn" id="nav-system" title="Système"><svg class="ic"><use href="#i-cpu"/></svg></button>
+      <button class="icon-btn" id="nav-settings" title="Réglages"><svg class="ic"><use href="#i-gear"/></svg></button>
+    </div>
   </header>
 
-  <!-- Réglages -->
+  <!-- ── Réglages ── -->
   <section id="settings" class="card hidden">
-    <h2>Réglages</h2>
+    <h2><svg class="ic"><use href="#i-gear"/></svg> Réglages</h2>
     <label>Repo <small>(owner/nom)</small>
-      <input id="repo" type="text" placeholder="GaspardCoche/agent-system" autocapitalize="off" autocorrect="off" />
+      <input id="repo" type="text" placeholder="GaspardCoche/agent-system" autocapitalize="off" autocorrect="off" spellcheck="false" />
     </label>
-    <label>GitHub PAT <small>(fine-grained — Issues RW + Actions RW)</small>
-      <input id="pat" type="password" placeholder="github_pat_…" autocapitalize="off" autocorrect="off" />
+    <label>GitHub token <small>(classic, scope repo)</small>
+      <input id="pat" type="password" placeholder="ghp_…" autocapitalize="off" autocorrect="off" spellcheck="false" />
     </label>
-    <button id="save-settings" class="primary">Enregistrer & tester</button>
+    <button id="save-settings" class="primary">Enregistrer &amp; tester</button>
     <p id="settings-msg" class="msg"></p>
-    <p class="hint">Le token reste sur ton téléphone (localStorage). Voir <code>docs/pocket-setup.md</code>.</p>
+    <button id="enable-push" class="ghost"><svg class="ic"><use href="#i-bell"/></svg> Activer les notifications</button>
+    <p id="push-msg" class="msg"></p>
   </section>
 
-  <!-- Composer une demande -->
+  <!-- ── Système / monitoring device ── -->
+  <section id="system" class="card hidden">
+    <button class="link-btn" id="system-back"><svg class="ic"><use href="#i-back"/></svg> Retour</button>
+    <h2><svg class="ic"><use href="#i-cpu"/></svg> Système</h2>
+    <div id="system-grid" class="kgrid"></div>
+    <h2 style="margin-top:18px"><svg class="ic"><use href="#i-brain"/></svg> Claude</h2>
+    <div id="claude-grid" class="kgrid"></div>
+    <p class="hint">Claude s'exécute sur les serveurs GitHub Actions, pas sur ton téléphone — le CPU/GPU réel du runner n'est pas exposé. Le suivi en temps réel se fait via l'état du run et les étapes (voir une tâche).</p>
+  </section>
+
+  <!-- ── Composer ── -->
   <section id="composer" class="card">
-    <label>Demande
-      <div class="textarea-wrap">
-        <textarea id="demande" rows="4" placeholder="Colle la question du collègue ou décris la tâche…"></textarea>
-        <button id="mic" class="icon-btn mic" title="Dicter">🎤</button>
-      </div>
-    </label>
-    <p id="mic-hint" class="hint hidden">🎤 Pour dicter : touche le champ ci-dessus, puis le <b>micro du clavier iOS</b> (à gauche de la barre d'espace). Plus fiable que la dictée web sur iPhone.</p>
-
-    <label>Workflow
-      <select id="workflow">
-        <option value="auto">auto (Dispatch détecte)</option>
-        <option value="repondre-collegue">répondre à un collègue</option>
-        <option value="enrichir-contact">enrichir un contact</option>
-        <option value="diagnostic-sequence">diagnostic de séquence</option>
-      </select>
-    </label>
-
-    <div class="row">
-      <label class="toggle">
-        <input id="write-allowed" type="checkbox" />
-        <span>Autoriser l'écriture</span>
-      </label>
-      <label class="agent-label">Agent
-        <select id="agent">
-          <option value="auto">auto</option>
-          <option value="crm (HubSpot / leads)">crm</option>
-          <option value="ads (Google Ads)">ads</option>
-          <option value="web (recherche / enrichissement)">web</option>
-          <option value="email">email</option>
-          <option value="code">code</option>
-        </select>
-      </label>
+    <h2><svg class="ic"><use href="#i-send"/></svg> Nouvelle tâche</h2>
+    <div class="textarea-wrap">
+      <textarea id="demande" rows="4" placeholder="Décris ta demande en langage naturel… (ex : combien de leads en France ?)"></textarea>
+      <button id="mic" class="icon-btn mic" title="Dicter"><svg class="ic"><use href="#i-mic"/></svg></button>
     </div>
-
+    <p id="mic-hint" class="hint hidden">Dictée : touche le champ puis le micro du clavier iOS.</p>
+    <div class="chips" id="chips">
+      <button class="chip" data-q="Combien de contacts par lifecyclestage ?">Stats CRM</button>
+      <button class="chip" data-q="Liste mes phantoms PhantomBuster et leur dernier run.">PhantomBuster</button>
+      <button class="chip" data-q="Donne les stats de mes campagnes Lemlist.">Lemlist</button>
+    </div>
+    <div class="row">
+      <label class="toggle"><input id="write-allowed" type="checkbox" /><span>Autoriser l'écriture</span></label>
+    </div>
     <label id="conditions-wrap" class="hidden">Conditions d'écriture
-      <textarea id="conditions" rows="3" placeholder="Ex : tu peux mettre lifecyclestage à 'lead', jamais l'écraser. Rien d'autre."></textarea>
+      <textarea id="conditions" rows="2" placeholder="Ex : mets lifecyclestage à 'lead', jamais l'écraser."></textarea>
     </label>
-
-    <button id="dispatch" class="primary big">🚀 Dispatch</button>
+    <button id="dispatch" class="primary big"><svg class="ic"><use href="#i-send"/></svg> Dispatch</button>
     <p id="composer-msg" class="msg"></p>
   </section>
 
-  <!-- Historique -->
+  <!-- ── Historique ── -->
   <section id="history" class="card">
-    <h2>Historique</h2>
+    <h2><svg class="ic"><use href="#i-list"/></svg> Tâches récentes</h2>
     <ul id="history-list"></ul>
   </section>
 
-  <!-- Détail d'une tâche -->
+  <!-- ── Détail tâche + console + monitoring ── -->
   <section id="detail" class="card hidden">
-    <button id="back" class="link-btn">← Retour</button>
+    <button class="link-btn" id="back"><svg class="ic"><use href="#i-back"/></svg> Retour</button>
     <h2 id="detail-title">Tâche</h2>
-    <div id="run-status" class="status-bar idle">⏳ Chargement…</div>
-    <div id="detail-meta" class="meta"></div>
+    <div id="run-status" class="status-bar idle">Chargement…</div>
+    <div id="monitor" class="monitor"></div>
     <div id="comments"></div>
-    <button id="approve" class="primary hidden">✅ Approuver l'écriture</button>
+    <button id="approve" class="primary hidden"><svg class="ic"><use href="#i-check"/></svg> Approuver l'écriture</button>
     <p id="detail-msg" class="msg"></p>
   </section>
 
