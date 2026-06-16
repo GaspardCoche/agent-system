@@ -1,0 +1,145 @@
+name: Claude Pocket
+
+# Workflow dédié aux tâches déclenchées depuis le téléphone (label `pocket`).
+# Mono-agent : Dispatch répond DIRECTEMENT (lecture HubSpot/Lemlist), sans le
+# pipeline multi-agents lourd. Écriture seulement si le label `approved` est présent.
+on:
+  issues:
+    types: [labeled]
+
+concurrency:
+  group: pocket-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+      approved: ${{ steps.check.outputs.approved }}
+      task_json: ${{ steps.build.outputs.task_json }}
+    steps:
+      - name: Check trigger
+        id: check
+        run: |
+          LABELS='${{ toJSON(github.event.issue.labels.*.name) }}'
+          TRIGGER="${{ github.event.label.name }}"
+          # On ne déclenche que sur l'ajout du label `pocket` ou `approved`,
+          # et seulement si l'issue porte bien le label `pocket`.
+          if echo "$LABELS" | grep -q '"pocket"' && { [[ "$TRIGGER" == "pocket" ]] || [[ "$TRIGGER" == "approved" ]]; }; then
+            echo "run=true" >> $GITHUB_OUTPUT
+          else
+            echo "run=false" >> $GITHUB_OUTPUT
+          fi
+          if echo "$LABELS" | grep -q '"approved"'; then
+            echo "approved=true" >> $GITHUB_OUTPUT
+          else
+            echo "approved=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build task JSON
+        id: build
+        if: steps.check.outputs.run == 'true'
+        env:
+          DESCRIPTION: ${{ github.event.issue.body }}
+          TITLE: ${{ github.event.issue.title }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          APPROVED: ${{ steps.check.outputs.approved }}
+        run: |
+          python3 << 'PYEOF'
+          import json, os
+          task = {
+              "source": "pocket",
+              "issue_number": os.environ.get("ISSUE_NUMBER", ""),
+              "title": os.environ.get("TITLE", ""),
+              "description": os.environ.get("DESCRIPTION", ""),
+              "approved": os.environ.get("APPROVED", "false") == "true",
+          }
+          with open("/tmp/task.json", "w") as f:
+              json.dump(task, f)
+          PYEOF
+          echo "task_json=$(cat /tmp/task.json)" >> $GITHUB_OUTPUT
+
+  pocket:
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install MCP servers
+        run: npm install -g @modelcontextprotocol/server-github @hubspot/mcp-server
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Write task to disk
+        env:
+          TASK_JSON: ${{ needs.gate.outputs.task_json }}
+        run: printf '%s' "$TASK_JSON" > /tmp/agent_task.json
+
+      - name: Write MCP config with secrets
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
+          HUBSPOT_TOKEN_MCP: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
+          LEMLIST_KEY_MCP: ${{ secrets.LEMLIST_API_KEY }}
+        run: |
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {
+            'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}}
+          }}
+          if os.environ.get('HUBSPOT_TOKEN_MCP'):
+              cfg['mcpServers']['hubspot'] = {'command': 'npx', 'args': ['-y', '@hubspot/mcp-server'], 'env': {'PRIVATE_APP_ACCESS_TOKEN': os.environ['HUBSPOT_TOKEN_MCP']}}
+          if os.environ.get('LEMLIST_KEY_MCP'):
+              cfg['mcpServers']['lemlist'] = {'type': 'http', 'url': 'https://app.lemlist.com/mcp', 'headers': {'X-API-Key': os.environ['LEMLIST_KEY_MCP']}}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
+
+      - name: Build claude_args
+        env:
+          APPROVED: ${{ needs.gate.outputs.approved }}
+        run: |
+          READ="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__hubspot__hubspot-get-engagement,mcp__lemlist__get_campaigns,mcp__lemlist__get_campaign_details,mcp__lemlist__get_campaigns_stats,mcp__lemlist__search_contacts,mcp__lemlist__get_inbox_conversations"
+          TOOLS="Bash,Read,mcp__github__add_issue_comment,$READ"
+          # Outils d'ÉCRITURE seulement si le label `approved` est présent (gate au niveau outil).
+          if [[ "$APPROVED" == "true" ]]; then
+            WRITE="mcp__hubspot__hubspot-batch-update-objects,mcp__hubspot__hubspot-batch-create-objects,mcp__hubspot__hubspot-batch-create-associations,mcp__hubspot__hubspot-create-engagement,mcp__hubspot__hubspot-update-engagement,mcp__hubspot__hubspot-create-property,mcp__hubspot__hubspot-update-property"
+            TOOLS="$TOOLS,$WRITE"
+          fi
+          echo "CLAUDE_ARGS=--model claude-sonnet-4-6 --max-turns 15 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+
+      - name: Run Claude Pocket
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Tu es Claude Pocket. Une demande arrive depuis le téléphone de Gaspard via une issue GitHub.
+
+            ÉTAPES :
+            1. Lis la section "Mode Pocket" et "Workflows métier" : `cat agent_prompts/dispatch.md`
+            2. Lis les garde-fous : `cat docs/runner-guardrails.md`
+            3. Lis la tâche : `cat /tmp/agent_task.json` (champs : description = corps de l'issue avec Demande / Autoriser l'écriture / Conditions / Workflow / Agent ; issue_number ; approved).
+            4. Si un "Workflow" précis est demandé (≠ auto), charge son playbook : `cat agent_prompts/workflows/<workflow>.md` et suis-le.
+            5. Exécute la tâche :
+               - Par défaut LECTURE seule (HubSpot/Lemlist) — tu cherches, lis, analyses.
+               - ÉCRITURE autorisée UNIQUEMENT si `approved` = true ET "Autoriser l'écriture = oui" ET dans les Conditions ET les garde-fous durs. Si "Autoriser l'écriture = oui" mais `approved` = false, poste un PREVIEW de ce que tu ferais et demande l'approbation (label `approved`), n'écris rien.
+               - Si un secret manque (ex : Lemlist), dis-le proprement, ne plante pas.
+            6. Poste TON RÉSULTAT comme commentaire sur l'issue (c'est ce que Gaspard lira sur son téléphone) :
+               `gh issue comment ${{ github.event.issue.number }} --body "..."`
+               Réponse claire, prête à copier-coller. Même langue que la demande.
+          claude_args: ${{ env.CLAUDE_ARGS }}
+          settings: |
+            {
+              "env": {
+                "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+                "GITHUB_REPOSITORY": "${{ github.repository }}"
+              }
+            }

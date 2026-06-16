@@ -36,7 +36,7 @@ async function gh(path, opts = {}) {
 
 // Crée les labels s'ils n'existent pas (idempotent)
 async function ensureLabels() {
-  for (const [name, color] of [['agent', '6aa3ff'], ['pocket', '8b5cf6'], ['approved', '3fb950']]) {
+  for (const [name, color] of [['pocket', '8b5cf6'], ['approved', '3fb950']]) {
     try { await gh('/labels', { method: 'POST', body: JSON.stringify({ name, color }) }); }
     catch (e) { /* déjà existant (422) → ignore */ }
   }
@@ -72,7 +72,7 @@ async function dispatch() {
       body: JSON.stringify({
         title,
         body: buildBody(demande, writeAllowed, conditions, workflow, agent),
-        labels: ['agent', 'pocket'],
+        labels: ['pocket'],
       }),
     });
     const hist = LS.history;
