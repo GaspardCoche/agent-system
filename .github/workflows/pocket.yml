@@ -6,6 +6,8 @@ name: Claude Pocket
 on:
   issues:
     types: [labeled]
+  issue_comment:
+    types: [created]
 
 concurrency:
   group: pocket-${{ github.event.issue.number }}
@@ -21,21 +23,22 @@ jobs:
     steps:
       - name: Check trigger
         id: check
+        env:
+          EVENT: ${{ github.event_name }}
+          TRIGGER_LABEL: ${{ github.event.label.name }}
+          COMMENT_USER_TYPE: ${{ github.event.comment.user.type }}
         run: |
           LABELS='${{ toJSON(github.event.issue.labels.*.name) }}'
-          TRIGGER="${{ github.event.label.name }}"
-          # On ne déclenche que sur l'ajout du label `pocket` ou `approved`,
-          # et seulement si l'issue porte bien le label `pocket`.
-          if echo "$LABELS" | grep -q '"pocket"' && { [[ "$TRIGGER" == "pocket" ]] || [[ "$TRIGGER" == "approved" ]]; }; then
-            echo "run=true" >> $GITHUB_OUTPUT
-          else
-            echo "run=false" >> $GITHUB_OUTPUT
+          RUN=false
+          if [[ "$EVENT" == "issues" ]]; then
+            # création/approbation : seulement sur l'ajout du label pocket/approved
+            if echo "$LABELS" | grep -q '"pocket"' && { [[ "$TRIGGER_LABEL" == "pocket" ]] || [[ "$TRIGGER_LABEL" == "approved" ]]; }; then RUN=true; fi
+          elif [[ "$EVENT" == "issue_comment" ]]; then
+            # chat itératif : un commentaire HUMAIN (pas un bot) sur une tâche pocket relance l'agent
+            if echo "$LABELS" | grep -q '"pocket"' && [[ "$COMMENT_USER_TYPE" == "User" ]]; then RUN=true; fi
           fi
-          if echo "$LABELS" | grep -q '"approved"'; then
-            echo "approved=true" >> $GITHUB_OUTPUT
-          else
-            echo "approved=false" >> $GITHUB_OUTPUT
-          fi
+          echo "run=$RUN" >> $GITHUB_OUTPUT
+          if echo "$LABELS" | grep -q '"approved"'; then echo "approved=true" >> $GITHUB_OUTPUT; else echo "approved=false" >> $GITHUB_OUTPUT; fi
 
       - name: Build task JSON
         id: build
@@ -45,15 +48,20 @@ jobs:
           TITLE: ${{ github.event.issue.title }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           APPROVED: ${{ steps.check.outputs.approved }}
+          EVENT: ${{ github.event_name }}
+          COMMENT: ${{ github.event.comment.body }}
         run: |
           python3 << 'PYEOF'
           import json, os
+          event = os.environ.get("EVENT", "")
           task = {
               "source": "pocket",
               "issue_number": os.environ.get("ISSUE_NUMBER", ""),
               "title": os.environ.get("TITLE", ""),
               "description": os.environ.get("DESCRIPTION", ""),
               "approved": os.environ.get("APPROVED", "false") == "true",
+              "is_followup": event == "issue_comment",
+              "latest_message": os.environ.get("COMMENT", "") if event == "issue_comment" else "",
           }
           with open("/tmp/task.json", "w") as f:
               json.dump(task, f)
@@ -132,9 +140,15 @@ jobs:
             la/les bonne(s) app(s), et tu agis. Le champ "Workflow" n'est qu'un raccourci optionnel.
 
             === DÉMARRAGE ===
-            - `cat /tmp/agent_task.json` (Demande, approved, issue_number) et `cat docs/runner-guardrails.md`.
-            - Poste tout de suite un bref commentaire de progression (1 ligne) pour que Gaspard voie que tu as démarré :
+            - `cat /tmp/agent_task.json` (Demande, approved, issue_number, is_followup, latest_message) et `cat docs/runner-guardrails.md`.
+            - **Lis TOUT le fil de la conversation** (c'est un chat itératif) :
+              `gh issue view ${{ github.event.issue.number }} --comments`
+              Les commentaires de `github-actions` = tes réponses précédentes ; les autres = les messages de Gaspard.
+            - Si `is_followup` = true, tu RÉPONDS au `latest_message` de Gaspard **en tenant compte de tout l'échange** (itération sur un résultat précédent). Sinon, c'est une nouvelle demande (le corps de l'issue).
+            - Poste tout de suite un bref commentaire de progression (1 ligne) :
               `gh issue comment ${{ github.event.issue.number }} --body "▶️ Compris : <reformulation> — je m'en occupe."`
+            - **Classe la tâche** (une seule fois, si pas déjà fait) en ajoutant UN label catégorie selon le domaine principal :
+              `gh issue edit ${{ github.event.issue.number }} --add-label "cat:crm"` (HubSpot/leads) — ou `cat:enrich` (FullEnrich/PhantomBuster), `cat:outreach` (Lemlist), `cat:web` (recherche web), `cat:vault` (connaissance/docs du repo), `cat:code` (dev/repo), `cat:other`. N'ajoute le label que s'il n'y en a pas déjà un `cat:*`.
 
             === APPS DISPONIBLES (choisis selon la demande) ===
             - **HubSpot (CRM)** — `python3 scripts/pocket_hubspot.py count|search|read|whoami` (lecture fiable, token en env).

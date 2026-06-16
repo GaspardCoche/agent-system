@@ -90,9 +90,10 @@
     <p id="composer-msg" class="msg"></p>
   </section>
 
-  <!-- ── Historique ── -->
+  <!-- ── Historique (classé par système) ── -->
   <section id="history" class="card">
     <h2><svg class="ic"><use href="#i-list"/></svg> Tâches récentes</h2>
+    <div class="chips" id="cat-filters"></div>
     <ul id="history-list"></ul>
   </section>
 
@@ -105,6 +106,10 @@
     <div id="comments"></div>
     <button id="approve" class="primary hidden"><svg class="ic"><use href="#i-check"/></svg> Approuver l'écriture</button>
     <p id="detail-msg" class="msg"></p>
+    <div class="chatbar">
+      <textarea id="chat-input" rows="1" placeholder="Réponds ou affine le résultat… (itère)"></textarea>
+      <button id="chat-send" class="icon-btn" title="Envoyer"><svg class="ic"><use href="#i-send"/></svg></button>
+    </div>
   </section>
 
   <script src="app.js"></script>
