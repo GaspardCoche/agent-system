@@ -2,7 +2,9 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v7';
+const APP_VERSION = 'v8';
+const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
+function estTokens(text) { return Math.round((text || '').length / 4); }
 const CATS = {
   'cat:crm': { label: 'CRM', color: '#3b6fd4' },
   'cat:enrich': { label: 'Enrichissement', color: '#8957e5' },
@@ -124,6 +126,7 @@ function renderHistory() {
   for (const i of items) {
     const cat = issueCat(i) || 'cat:other'; const cm = CATS[cat] || CATS['cat:other'];
     const li = document.createElement('li');
+    li.style.setProperty('--cat', cm.color);
     li.innerHTML = `<span class="t">#${i.number} ${escapeHtml((i.title || '').replace('[Pocket] ', ''))}</span>
       <span class="meta-r"><span class="cat-badge" style="background:${cm.color}">${cm.label}</span>
       <span class="badge ${i.state === 'open' ? 'open' : 'pending'}">${i.state === 'open' ? '●' : '✓'}</span></span>`;
@@ -148,13 +151,16 @@ async function renderRunStatus(run) {
   try { jobs = await gh(`/actions/runs/${run.id}/jobs`); const job = (jobs.jobs || []).find((j) => j.status === 'in_progress') || (jobs.jobs || [])[0]; const cur = job && (job.steps || []).find((s) => s.status === 'in_progress'); if (cur) step = STEP_LABELS[cur.name] || cur.name; } catch {}
   bar.className = 'status-bar running'; bar.textContent = step + '…'; return jobs;
 }
-async function renderMonitor(run, jobs) {
+async function renderMonitor(run, jobs, usage) {
   const el = $('monitor');
+  const u = usage || { tokens: 0, pct: 0 };
   let h = '<div class="kgrid">';
   h += cell('Modèle', 'i-brain', MODEL) + cell('Agent', 'i-robot', 'Claude Pocket');
   h += cell('Statut', 'i-info', run ? (run.status === 'completed' ? (run.conclusion || 'fini') : run.status) : '—');
   h += cell('Durée', 'i-clock', run ? fmtDur(run.run_started_at, run.status === 'completed' ? run.updated_at : null) : '—');
-  h += `<div class="kcell wide"><div class="k"><svg class="ic"><use href="#i-brain"/></svg>Contexte</div><div class="v sm">~200K tokens · session neuve par tâche (le fil de chat sert de mémoire)</div></div></div>`;
+  h += cell('Tokens (estim.)', 'i-brain', '≈ ' + u.tokens.toLocaleString('fr-FR'));
+  h += cell('Contexte', 'i-brain', u.pct.toFixed(1) + '% de 200K');
+  h += `<div class="kcell wide"><div class="k"><svg class="ic"><use href="#i-brain"/></svg>Remplissage du contexte</div><div class="gauge ${u.pct > 80 ? 'warn' : ''}"><i style="width:${Math.min(100, u.pct)}%"></i></div></div></div>`;
   if (!jobs && run && run.status !== 'completed') { try { jobs = await gh(`/actions/runs/${run.id}/jobs`); } catch {} }
   const job = jobs && ((jobs.jobs || []).find((j) => j.name && j.name.includes('pocket')) || (jobs.jobs || [])[0]);
   if (job && job.steps) { h += '<div class="steps">'; for (const s of job.steps.filter((s) => STEP_LABELS[s.name])) { const cls = s.status === 'in_progress' ? 'cur' : (s.conclusion === 'success' ? 'done' : ''); h += `<div class="step ${cls}"><span class="sdot"></span>${STEP_LABELS[s.name]}</div>`; } h += '</div>'; }
@@ -172,9 +178,12 @@ function loadDetail(number) {
     try {
       const [issue, comments] = await Promise.all([gh(`/issues/${number}`), gh(`/issues/${number}/comments?per_page=100`)]);
       const approved = (issue.labels || []).map((l) => l.name).includes('approved');
+      const threadText = (issue.body || '') + comments.map((c) => c.body).join('\n');
+      const tokens = estTokens(threadText);
+      const usage = { tokens, pct: Math.min(100, tokens / CTX_WINDOW * 100) };
       const run = await findRun(issue.title);
       const jobs = await renderRunStatus(run);
-      await renderMonitor(run, jobs);
+      await renderMonitor(run, jobs, usage);
       const c = $('comments'); c.innerHTML = '';
       const body = (issue.body || '').split('### Autoriser')[0].replace('### Demande', '').trim();
       if (body) c.appendChild(bubble(connectedLogin || 'toi', body, 'user', issue.created_at));
@@ -219,6 +228,16 @@ async function renderSystem() {
   d.push(cell('Batterie', 'i-info', bat));
   $('system-grid').innerHTML = d.join('');
   $('claude-grid').innerHTML = [cell('Modèle', 'i-brain', MODEL), cell('Version app', 'i-info', APP_VERSION), cell('Exécution', 'i-robot', 'GitHub Actions'), cell('Contexte', 'i-brain', '~200K, neuf/tâche')].join('');
+  // Usage estimé sur la fenêtre 5h (à partir des tâches récentes)
+  const now = Date.now(), WIN = 5 * 3600 * 1000;
+  const recent = (allIssues || []).filter((i) => i.created_at && now - new Date(i.created_at) < WIN);
+  let tok = 0;
+  for (const i of recent) tok += estTokens(i.body) + (i.comments || 0) * 250;
+  const REF = 1000000; // référence indicative pour une session 5h chargée
+  const pct = Math.min(100, tok / REF * 100);
+  $('usage-box').innerHTML =
+    `<div class="kgrid">${cell('Tâches (5h)', 'i-list', recent.length)}${cell('Tokens estim. (5h)', 'i-brain', '≈ ' + tok.toLocaleString('fr-FR'))}</div>` +
+    `<div class="kcell wide" style="margin-top:8px"><div class="k"><svg class="ic"><use href="#i-clock"/></svg>Fenêtre 5h (indicatif /1M)</div><div class="gauge ${pct > 80 ? 'warn' : ''}"><i style="width:${pct}%"></i></div></div>`;
 }
 
 // ── Push ────────────────────────────────────────────────────────────────────
@@ -281,6 +300,7 @@ function applyTheme(t) {
 function init() {
   $('repo').value = LS.repo || 'GaspardCoche/agent-system'; $('pat').value = LS.pat;
   if (!LS.repo || !LS.pat) $('settings').classList.remove('hidden');
+  $('brand-home').onclick = () => navigate('main');
   $('nav-settings').onclick = () => $('settings').classList.toggle('hidden');
   $('nav-system').onclick = () => navigate('system');
   $('system-back').onclick = () => history.back();
