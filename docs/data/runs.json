@@ -1574,29 +1574,30 @@
     "report_file": "reports/2026-06-16-email-agent-daily-digest-2026-06-16.md"
   },
   {
-    "run_id": "27612286517",
+    "run_id": "27612261945",
     "workflow": "orchestrator",
-    "title": "[Pocket] TEST e2e #2 — HubSpot read",
+    "title": "[Pocket] TEST e2e — lecture seule",
     "status": "success",
     "event": "issues",
     "repo": "GaspardCoche/agent-system",
-    "task_id": "86",
-    "summary": "Tentative de requête HubSpot pour compter les contacts lifecyclestage='lead'. La permission d'utiliser mcp__hubspot__hubspot-search-objects n'a pas en · Executed HubSpot search query to count contacts with lifecyclestage='lead'. Used hubspot-search-o",
+    "task_id": "83",
+    "summary": "HubSpot MCP est maintenant disponible (outil hubspot-search-objects chargé), mais l'utilisateur n'a pas accordé la permission d'exécution. Aucune clé  · HubSpot MCP authentication not configured. E2E test for HubSpot contact search (lifecyclestage='l",
     "next_actions": [
-      "Accorder la permission mcp__hubspot__hubspot-search-objects pour débloquer la requête",
-      "Relancer pour exécuter la requête et poster le résultat sur issue #86"
+      "Accorder la permission pour mcp__hubspot__hubspot-search-objects dans les settings Claude Code",
+      "Ou ajouter HUBSPOT_API_KEY comme secret GitHub et créer un skill Python hubspot_search.py",
+      "Re-lancer la tâche 83 après approbation de la permission"
     ],
-    "timestamp": "2026-06-16T10:56:03.565330+00:00",
+    "timestamp": "2026-06-16T10:57:59.168740+00:00",
     "agents": [
       {
         "name": "forge",
         "status": "needs_retry"
       },
       {
-        "name": "researcher",
-        "status": "complete"
+        "name": "lumen",
+        "status": "failed"
       }
     ],
-    "report_file": "reports/2026-06-16-orchestrator-pocket--test-e2e--2---hubspot-read.md"
+    "report_file": "reports/2026-06-16-orchestrator-pocket--test-e2e---lecture-seule.md"
   }
 ]
