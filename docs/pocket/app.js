@@ -2,7 +2,7 @@
 
 // Clé publique VAPID (notifications push). La privée est un secret GitHub.
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
-const MODEL = 'claude-sonnet-4-6';
+const MODEL = 'claude-opus-4-8';
 
 // ── Stockage local ────────────────────────────────────────────────────────
 const LS = {

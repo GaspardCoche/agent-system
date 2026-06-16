@@ -111,7 +111,7 @@ jobs:
             WRITE="mcp__hubspot__hubspot-batch-update-objects,mcp__hubspot__hubspot-batch-create-objects,mcp__hubspot__hubspot-batch-create-associations,mcp__hubspot__hubspot-create-engagement,mcp__hubspot__hubspot-update-engagement,mcp__hubspot__hubspot-create-property,mcp__hubspot__hubspot-update-property"
             TOOLS="$TOOLS,$WRITE"
           fi
-          echo "CLAUDE_ARGS=--model claude-sonnet-4-6 --max-turns 15 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+          echo "CLAUDE_ARGS=--model claude-opus-4-8 --max-turns 15 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run Claude Pocket
         uses: anthropics/claude-code-action@v1
