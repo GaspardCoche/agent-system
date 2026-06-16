@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "24989134372",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "24989134372",
-    "summary": "TEMPLATE MODE — 6e run consécutif sans credentials Google Ads (41+ jours bloqués depuis 2026-03-24). Les 4 secrets OAuth2 (DEVELOPER_TOKEN, CLIENT_ID,",
-    "next_actions": [],
-    "timestamp": "2026-04-27T10:21:31.569352+00:00",
-    "agents": [
-      {
-        "name": "nexus",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-04-27-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "25040442428",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-04-28",
@@ -1598,5 +1579,35 @@
       }
     ],
     "report_file": "reports/2026-06-16-orchestrator-feat-pocket---vault-access--read-only-deploy-key.md"
+  },
+  {
+    "run_id": "27646614787",
+    "workflow": "orchestrator",
+    "title": "fix(pocket): network-first SW + auto-update + version badge",
+    "status": "success",
+    "event": "pull_request",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "111",
+    "summary": "Validation post-merge PR #111 (pocket-sw-fix) : tous les contrôles passent. sw.js = network-first avec fallback cache. app.js = auto-reload câblé via  · ROUTING ERROR DETECTED: Task #111 is assigned to Sentinel (QA validation) but was invoked to Lume",
+    "next_actions": [
+      "Déclencher manuellement pocket-smoke.yml via GitHub Actions si validation des secrets API est souhaitée",
+      "Aucune correction de code requise — PR #111 validée post-merge"
+    ],
+    "timestamp": "2026-06-16T20:45:38.674515+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "lumen",
+        "status": "routing_clarification"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-06-16-orchestrator-fix-pocket---network-first-sw---auto-update---vers.md"
   }
 ]
