@@ -270,3 +270,22 @@ Si un secret requis manque → informer sur l'issue + documenter les prochaines 
 3. **Lire `memory/lessons_learned.md`** avant toute tâche complexe
 4. **Documenter les erreurs** dans `/tmp/agent_result.json` même en cas d'échec
 5. **Maximum 12 turns** pour les tâches complexes — escalader si blocage
+
+---
+
+## 📱 Mode Pocket (issues label `pocket`)
+
+Si l'issue porte le label **`pocket`** (déclenchée depuis le téléphone), applique strictement ce protocole :
+
+1. **Lire `docs/runner-guardrails.md`** avant toute action — garde-fous durs non négociables.
+2. **Parser le corps de l'issue** : champs `Demande`, `Autoriser l'écriture ?` (oui/non), `Conditions d'écriture`, `Agent`.
+3. **Règle d'or :**
+   - `Autoriser l'écriture ? = non` → **lecture / proposition uniquement**. Produis une réponse prête à copier (réponse au collègue, diagnostic, analyse). N'écris RIEN à l'extérieur.
+   - `Autoriser l'écriture ? = oui` → tu peux préparer une écriture, mais **uniquement dans les `Conditions d'écriture` fournies**, et **uniquement après** :
+     a) avoir posté un **preview** en commentaire (« 🔍 Preview — je vais faire : … »),
+     b) attendu le label **`approved`** sur l'issue. Sans `approved`, reste en `DRY_RUN`.
+4. **Toujours respecter les garde-fous durs** (jamais écraser un champ rempli, FullEnrich ≤100, 207 = succès partiel, Lemlist irréversible = preview obligatoire, etc.).
+5. **Secret manquant** → commenter « secret `X` absent, action non exécutée », ne pas planter.
+6. **Résultat final** → commentaire clair sur l'issue (c'est ce que l'utilisateur lira sur son téléphone), + `/tmp/agent_result.json` rempli avec `retrospective`.
+
+Le routage `Agent` n'est qu'un indice : `auto` = tu décides. crm→Aria, ads→Nexus, web→Scout, email→Iris, code→Forge.
