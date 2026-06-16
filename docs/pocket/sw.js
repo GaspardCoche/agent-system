@@ -1,5 +1,5 @@
-// Service worker — shell offline + notifications push.
-const CACHE = 'pocket-v6';
+// Service worker — réseau d'abord (évite le cache figé), repli hors-ligne + push.
+const CACHE = 'pocket-v7';
 const SHELL = ['./', './index.html', './app.js', './style.css', './icon.svg', './manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {
@@ -8,20 +8,27 @@ self.addEventListener('install', (e) => {
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
 });
+
+// Réseau d'abord : on sert toujours la dernière version si en ligne, cache en secours hors-ligne.
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
-  if (url.hostname === 'api.github.com') return; // jamais en cache
-  e.respondWith(caches.match(e.request).then((c) => c || fetch(e.request).catch(() => caches.match('./index.html'))));
+  if (url.hostname === 'api.github.com') return; // jamais intercepté
+  if (e.request.method !== 'GET') return;
+  e.respondWith(
+    fetch(e.request).then((res) => {
+      const copy = res.clone();
+      caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+      return res;
+    }).catch(() => caches.match(e.request).then((c) => c || caches.match('./index.html')))
+  );
 });
 
-// Push : affiche la notification envoyée par le workflow à la fin d'une tâche.
+// Push : notification de fin de tâche.
 self.addEventListener('push', (e) => {
   let data = {};
   try { data = e.data.json(); } catch { data = { title: 'Claude Pocket', body: e.data ? e.data.text() : 'Tâche terminée' }; }
   e.waitUntil(self.registration.showNotification(data.title || 'Claude Pocket', {
-    body: data.body || 'Une tâche est terminée.',
-    icon: './icon.svg', badge: './icon.svg', tag: data.tag || 'pocket',
-    data: { url: data.url || './' },
+    body: data.body || 'Une tâche est terminée.', icon: './icon.svg', badge: './icon.svg', tag: data.tag || 'pocket', data: { url: data.url || './' },
   }));
 });
 self.addEventListener('notificationclick', (e) => {

@@ -2,6 +2,7 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
+const APP_VERSION = 'v7';
 const CATS = {
   'cat:crm': { label: 'CRM', color: '#3b6fd4' },
   'cat:enrich': { label: 'Enrichissement', color: '#8957e5' },
@@ -217,7 +218,7 @@ async function renderSystem() {
   let bat = 'non exposé (iOS)'; if (navigator.getBattery) { try { const b = await navigator.getBattery(); bat = Math.round(b.level * 100) + '%' + (b.charging ? ' ⚡' : ''); } catch {} }
   d.push(cell('Batterie', 'i-info', bat));
   $('system-grid').innerHTML = d.join('');
-  $('claude-grid').innerHTML = [cell('Modèle', 'i-brain', MODEL), cell('Tours max', 'i-info', '15'), cell('Exécution', 'i-robot', 'GitHub Actions'), cell('Contexte', 'i-brain', '~200K, neuf/tâche')].join('');
+  $('claude-grid').innerHTML = [cell('Modèle', 'i-brain', MODEL), cell('Version app', 'i-info', APP_VERSION), cell('Exécution', 'i-robot', 'GitHub Actions'), cell('Contexte', 'i-brain', '~200K, neuf/tâche')].join('');
 }
 
 // ── Push ────────────────────────────────────────────────────────────────────
@@ -304,9 +305,15 @@ function init() {
   $('chat-input').addEventListener('input', (e) => { e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px'; });
   window.addEventListener('popstate', (e) => applyView((e.state && e.state.view) || 'main'));
 
+  const vb = $('ver-badge'); if (vb) vb.textContent = APP_VERSION;
+
   setupMic();
   history.replaceState({ view: 'main' }, '', '#main');
   if (LS.repo && LS.pat) { testConn(true).then(loadHistory); } else { renderHistory(); }
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  if ('serviceWorker' in navigator) {
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => { if (refreshing) return; refreshing = true; location.reload(); });
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
 }
 document.addEventListener('DOMContentLoaded', init);
