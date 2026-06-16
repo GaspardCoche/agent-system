@@ -139,6 +139,8 @@ jobs:
                  `python3 scripts/pocket_hubspot.py search contacts <prop> <valeur> --limit 5 --props email,firstname,lastname`
                  `python3 scripts/pocket_hubspot.py read contacts <id> --props email,lifecyclestage`
                  `python3 scripts/pocket_hubspot.py whoami` (test d'auth). N'utilise les outils MCP HubSpot qu'en complément.
+               - **Pour FullEnrich** (enrichissement) : `python3 scripts/pocket_fullenrich.py` — `status <id>` (lecture), `enrich-one --firstname F --lastname L --domain D [--linkedin URL] [--phones] [--hubspot-id ID]` ou `submit --file contacts.json`. Sans `--confirm` = dry-run (aucun crédit). N'ajoute `--confirm` QUE si `approved` = true.
+               - **Pour PhantomBuster** : `python3 scripts/pocket_phantombuster.py` — `agents`, `agent <id>`, `containers <agentId>`, `output <cId>`, `result <cId>` (lecture) ; `launch <agentId> [--argument-file f.json] --confirm` (scraping réel, seulement si `approved`).
                - Par défaut LECTURE seule (HubSpot/Lemlist) — tu cherches, lis, analyses.
                - ÉCRITURE autorisée UNIQUEMENT si `approved` = true ET "Autoriser l'écriture = oui" ET dans les Conditions ET les garde-fous durs. Si "Autoriser l'écriture = oui" mais `approved` = false, poste un PREVIEW de ce que tu ferais et demande l'approbation (label `approved`), n'écris rien.
                - Si un secret manque (ex : Lemlist), dis-le proprement, ne plante pas.
