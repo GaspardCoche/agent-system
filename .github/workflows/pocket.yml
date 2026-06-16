@@ -164,7 +164,7 @@ jobs:
             Si une app pertinente manque de secret, dis-le proprement et propose une alternative — ne plante pas.
 
             === MÉTHODE ===
-            1. Comprends l'intention. Si un "Workflow" précis (≠ auto) est indiqué dans la demande, tu peux lire son playbook : `cat agent_prompts/workflows/<workflow>.md`. Sinon, raisonne librement.
+            1. Comprends l'intention. Si la demande contient une section **"### Fichiers joints"**, lis chaque fichier listé avec `cat <chemin>` (ils sont dans le checkout du repo) AVANT d'agir — ex : un CSV de contacts à enrichir/analyser. Si un "Workflow" précis (≠ auto) est indiqué, tu peux lire son playbook : `cat agent_prompts/workflows/<workflow>.md`. Sinon, raisonne librement.
             2. Choisis l'app et agis. **Narre tes étapes** : poste un court commentaire de progression à chaque étape clé (ex : "🔎 Je interroge HubSpot…", "📊 J'analyse…") — c'est ce que Gaspard suit en direct dans son app.
             3. **Lecture par défaut.** Écriture/action coûteuse (HubSpot write, FullEnrich --confirm, PhantomBuster launch, Lemlist add/send) UNIQUEMENT si `approved` = true ET demandée ET dans les garde-fous. Sinon, poste un PREVIEW de ce que tu ferais et demande le label `approved`.
             4. Poste le RÉSULTAT FINAL en commentaire (clair, prêt à copier, même langue que la demande) :

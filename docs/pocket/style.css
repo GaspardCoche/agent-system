@@ -12,6 +12,17 @@
   --err: #f85149;
   --radius: 16px;
 }
+/* Thème clair : explicite, ou auto via préférence système */
+:root[data-theme="light"] {
+  --bg: #eef1f7; --card: #ffffff; --card2: #f1f4f9; --line: #d9e0ec;
+  --text: #18202e; --muted: #5b6781; --accent: #2f6fe0; --accent2: #2056bd;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eef1f7; --card: #ffffff; --card2: #f1f4f9; --line: #d9e0ec;
+    --text: #18202e; --muted: #5b6781; --accent: #2f6fe0; --accent2: #2056bd;
+  }
+}
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; background: var(--bg); }
 body {
@@ -153,3 +164,15 @@ ul { list-style: none; padding: 0; margin: 0; }
 .chip.active { background: var(--accent2); color: #fff; }
 .hgroup { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; font-weight: 700; margin: 14px 0 8px; }
 #history-list li .meta-r { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+
+/* segmented control (thème) */
+.seg { display: flex; gap: 0; margin-top: 6px; background: var(--card2); border: 1px solid var(--line); border-radius: 11px; overflow: hidden; }
+.seg button { flex: 1; padding: 10px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.seg button.active { background: var(--accent2); color: #fff; }
+.seg button .ic { width: 14px; height: 14px; }
+
+/* fichiers joints */
+.file-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.file-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; background: var(--card2); border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; }
+.file-row .fx { color: var(--muted); font-weight: 600; }
+.file-row button { background: none; color: var(--err); font-size: 16px; line-height: 1; padding: 0 4px; }
