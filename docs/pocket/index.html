@@ -37,7 +37,7 @@
   </svg>
 
   <header>
-    <div class="brand"><span class="dot" id="conn-dot"></span> Claude Pocket <span id="ver-badge" class="ver">v7</span></div>
+    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v8</span></button>
     <div class="hbtns">
       <button class="icon-btn" id="nav-system" title="Système"><svg class="ic"><use href="#i-cpu"/></svg></button>
       <button class="icon-btn" id="nav-settings" title="Réglages"><svg class="ic"><use href="#i-gear"/></svg></button>
@@ -73,7 +73,9 @@
     <div id="system-grid" class="kgrid"></div>
     <h2 style="margin-top:18px"><svg class="ic"><use href="#i-brain"/></svg> Claude</h2>
     <div id="claude-grid" class="kgrid"></div>
-    <p class="hint">Claude s'exécute sur les serveurs GitHub Actions, pas sur ton téléphone — le CPU/GPU réel du runner n'est pas exposé. Le suivi en temps réel se fait via l'état du run et les étapes (voir une tâche).</p>
+    <h2 style="margin-top:18px"><svg class="ic"><use href="#i-clock"/></svg> Usage (estimation)</h2>
+    <div id="usage-box"></div>
+    <p class="hint">Estimation (longueur des échanges ÷ 4 ≈ tokens). Le quota réel des sessions 5h d'Anthropic n'est pas exposé par l'API ; ces valeurs servent d'ordre de grandeur. Claude tourne sur GitHub Actions (cloud) — le CPU/GPU du runner n'est pas exposé.</p>
   </section>
 
   <!-- ── Composer ── -->
