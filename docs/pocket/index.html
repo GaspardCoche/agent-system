@@ -40,6 +40,7 @@
         <button id="mic" class="icon-btn mic" title="Dicter">🎤</button>
       </div>
     </label>
+    <p id="mic-hint" class="hint hidden">🎤 Pour dicter : touche le champ ci-dessus, puis le <b>micro du clavier iOS</b> (à gauche de la barre d'espace). Plus fiable que la dictée web sur iPhone.</p>
 
     <label>Workflow
       <select id="workflow">
@@ -85,6 +86,7 @@
   <section id="detail" class="card hidden">
     <button id="back" class="link-btn">← Retour</button>
     <h2 id="detail-title">Tâche</h2>
+    <div id="run-status" class="status-bar idle">⏳ Chargement…</div>
     <div id="detail-meta" class="meta"></div>
     <div id="comments"></div>
     <button id="approve" class="primary hidden">✅ Approuver l'écriture</button>
