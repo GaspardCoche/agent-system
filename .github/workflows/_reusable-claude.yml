@@ -16,6 +16,10 @@ on:
         required: false
         type: string
         default: "none"
+      model:
+        required: false
+        type: string
+        default: "claude-haiku-4-5"
     outputs:
       result_json:
         description: "Agent result as JSON string"
@@ -43,7 +47,8 @@ jobs:
             @modelcontextprotocol/server-github \
             @playwright/mcp \
             firecrawl-mcp \
-            @modelcontextprotocol/server-memory
+            @modelcontextprotocol/server-memory \
+            @hubspot/mcp-server
 
       - uses: actions/setup-python@v5
         with:
@@ -60,6 +65,8 @@ jobs:
         env:
           GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
           FIRECRAWL_KEY_MCP: ${{ secrets.FIRECRAWL_API_KEY }}
+          HUBSPOT_TOKEN_MCP: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
+          LEMLIST_KEY_MCP: ${{ secrets.LEMLIST_API_KEY }}
         run: |
           python3 -c "
           import json, os
@@ -70,25 +77,37 @@ jobs:
             'firecrawl': {'command': 'npx', 'args': ['-y', 'firecrawl-mcp'], 'env': {'FIRECRAWL_API_KEY': os.environ.get('FIRECRAWL_KEY_MCP', '')}},
             'memory': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-memory'], 'env': {}}
           }}
+          # HubSpot MCP — branché seulement si le secret est présent
+          if os.environ.get('HUBSPOT_TOKEN_MCP'):
+              cfg['mcpServers']['hubspot'] = {'command': 'npx', 'args': ['-y', '@hubspot/mcp-server'], 'env': {'PRIVATE_APP_ACCESS_TOKEN': os.environ['HUBSPOT_TOKEN_MCP']}}
+          # Lemlist MCP (HTTP) — branché seulement si le secret est présent
+          if os.environ.get('LEMLIST_KEY_MCP'):
+              cfg['mcpServers']['lemlist'] = {'type': 'http', 'url': 'https://app.lemlist.com/mcp', 'headers': {'X-API-Key': os.environ['LEMLIST_KEY_MCP']}}
           json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
           "
 
       - name: Build claude_args
         run: |
-          BASE="Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes"
+          # HubSpot + Lemlist : SEULEMENT les outils LECTURE sont auto-autorisés ici.
+          # Les outils d'écriture passent par l'input allowed_tools, et restent gated par approbation (label `approved`).
+          READONLY="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__lemlist__get_campaigns,mcp__lemlist__get_campaign_details,mcp__lemlist__get_campaigns_stats,mcp__lemlist__search_contacts,mcp__lemlist__get_inbox_conversations"
+          BASE="Bash,Read,Write,Edit,mcp__filesystem__read_file,mcp__filesystem__write_file,mcp__github__add_issue_comment,mcp__memory__add_observations,mcp__memory__search_nodes,$READONLY"
           EXTRA="${{ inputs.allowed_tools }}"
           if [[ "$EXTRA" == "none" || -z "$EXTRA" ]]; then
             TOOLS="$BASE"
           else
             TOOLS="$BASE,$EXTRA"
           fi
-          echo "CLAUDE_ARGS=--max-turns ${{ inputs.max_turns }} --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+          echo "CLAUDE_ARGS=--model ${{ inputs.model }} --max-turns ${{ inputs.max_turns }} --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run Claude agent
         uses: anthropics/claude-code-action@v1
         continue-on-error: true
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Auth commutable : secret vide = abonnement (OAuth, 0 €) ; rempli = API métré.
+          # Bascule plan SDK = remplir/vider ce seul secret, aucun autre changement de code.
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
             AGENT_ROLE: ${{ inputs.agent_role }}

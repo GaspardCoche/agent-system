@@ -1,0 +1,60 @@
+name: "📱 Pocket Task"
+description: "Déclencher Claude depuis le téléphone — pose une demande ou colle une question collègue."
+title: "[Pocket] "
+labels: ["agent", "pocket"]
+body:
+  - type: textarea
+    id: demande
+    attributes:
+      label: Demande
+      description: "La tâche ou la question (colle ici le message Slack du collègue si besoin)."
+      placeholder: "Ex : Pourquoi le contact X n'apparaît pas dans la séquence Y ?"
+    validations:
+      required: true
+  - type: dropdown
+    id: write_allowed
+    attributes:
+      label: Autoriser l'écriture ?
+      description: "Par défaut NON — Claude se contente de lire et proposer. Mets OUI seulement si tu veux qu'il modifie quelque chose (toujours derrière une approbation)."
+      options:
+        - "non"
+        - "oui"
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: write_conditions
+    attributes:
+      label: Conditions d'écriture (si OUI)
+      description: "Décris précisément ce qu'il a le droit de modifier, et les limites. Ces conditions doivent être respectées à la lettre."
+      placeholder: "Ex : tu peux mettre lifecyclestage à 'lead', jamais l'écraser s'il est déjà rempli. Rien d'autre."
+    validations:
+      required: false
+  - type: dropdown
+    id: workflow
+    attributes:
+      label: Workflow (recette)
+      description: "Recette métier câblée. 'auto' = Dispatch détecte/route seul."
+      options:
+        - "auto"
+        - "repondre-collegue"
+        - "enrichir-contact"
+        - "diagnostic-sequence"
+      default: 0
+    validations:
+      required: false
+  - type: dropdown
+    id: agent_hint
+    attributes:
+      label: Agent (optionnel)
+      description: "Laisse 'auto' pour que Dispatch route tout seul."
+      options:
+        - "auto"
+        - "crm (HubSpot / leads)"
+        - "ads (Google Ads)"
+        - "web (recherche / enrichissement)"
+        - "email"
+        - "code"
+      default: 0
+    validations:
+      required: false
