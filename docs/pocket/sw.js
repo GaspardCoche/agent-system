@@ -1,5 +1,5 @@
 // Service worker — shell offline + notifications push.
-const CACHE = 'pocket-v5';
+const CACHE = 'pocket-v6';
 const SHELL = ['./', './index.html', './app.js', './style.css', './icon.svg', './manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {

@@ -18,9 +18,10 @@ const LS = {
   get history() { try { return JSON.parse(localStorage.getItem('pocket_history') || '[]'); } catch { return []; } },
   set history(v) { localStorage.setItem('pocket_history', JSON.stringify(v.slice(0, 50))); },
   get device() { let d = localStorage.getItem('pocket_device'); if (!d) { d = 'dev-' + Math.random().toString(36).slice(2, 10); localStorage.setItem('pocket_device', d); } return d; },
+  get theme() { return localStorage.getItem('pocket_theme') || 'auto'; }, set theme(v) { localStorage.setItem('pocket_theme', v); },
 };
 const $ = (id) => document.getElementById(id);
-let pollTimer = null, allIssues = [], currentFilter = 'all', connectedLogin = '', detailNum = null;
+let pollTimer = null, allIssues = [], currentFilter = 'all', connectedLogin = '', detailNum = null, attachedFiles = [];
 
 // ── API GitHub ──────────────────────────────────────────────────────────────
 async function gh(path, opts = {}) {
@@ -41,6 +42,30 @@ async function putFile(path, obj) {
   let sha; try { sha = (await gh(`/contents/${path}`)).sha; } catch {}
   await gh(`/contents/${path}`, { method: 'PUT', body: JSON.stringify({ message: `pocket: sub ${LS.device}`, content: b64(JSON.stringify(obj, null, 2)), sha }) });
 }
+async function putRaw(path, b64content) {
+  let sha; try { sha = (await gh(`/contents/${path}`)).sha; } catch {}
+  await gh(`/contents/${path}`, { method: 'PUT', body: JSON.stringify({ message: `pocket: upload ${path}`, content: b64content, sha }) });
+}
+
+// ── Import de fichiers ──────────────────────────────────────────────────────
+function addFiles(fileList) {
+  for (const f of fileList) {
+    if (f.size > 4 * 1024 * 1024) { alert(`${f.name} dépasse 4 Mo — ignoré.`); continue; }
+    const r = new FileReader();
+    r.onload = () => { attachedFiles.push({ name: f.name, size: f.size, b64: String(r.result).split(',')[1] || '' }); renderFileList(); };
+    r.readAsDataURL(f);
+  }
+}
+function renderFileList() {
+  const el = $('file-list'); el.innerHTML = '';
+  attachedFiles.forEach((f, i) => {
+    const kb = Math.max(1, Math.round(f.size / 1024));
+    const row = document.createElement('div'); row.className = 'file-row';
+    row.innerHTML = `<span class="fx">📎 ${escapeHtml(f.name)} · ${kb} Ko</span><button title="Retirer">×</button>`;
+    row.querySelector('button').onclick = () => { attachedFiles.splice(i, 1); renderFileList(); };
+    el.appendChild(row);
+  });
+}
 async function ensureLabels() {
   const labels = [['pocket', '8b5cf6'], ['approved', '3fb950'], ...Object.entries(CATS).map(([k, v]) => [k, v.color.replace('#', '')])];
   for (const [name, color] of labels) { try { await gh('/labels', { method: 'POST', body: JSON.stringify({ name, color }) }); } catch {} }
@@ -57,9 +82,21 @@ async function dispatch() {
   msg.className = 'msg'; msg.textContent = 'Envoi…';
   try {
     await ensureLabels();
+    let attachNote = '';
+    if (attachedFiles.length) {
+      msg.textContent = 'Envoi des fichiers…';
+      const paths = [];
+      for (const f of attachedFiles) {
+        const path = `pocket-data/uploads/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+        await putRaw(path, f.b64); paths.push(path);
+      }
+      attachNote = '\n\n### Fichiers joints\n' + paths.map((p) => '- `' + p + '` (lis-le avec `cat ' + p + '`)').join('\n');
+      msg.textContent = 'Envoi…';
+    }
     const title = '[Pocket] ' + demande.slice(0, 60).replace(/\n/g, ' ');
-    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c), labels: ['pocket'] }) });
+    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c) + attachNote, labels: ['pocket'] }) });
     $('demande').value = ''; $('conditions').value = ''; $('write-allowed').checked = false; $('conditions-wrap').classList.add('hidden');
+    attachedFiles = []; renderFileList();
     msg.className = 'msg ok'; msg.textContent = `Tâche #${issue.number} envoyée.`;
     navigate('detail:' + issue.number);
   } catch (e) { msg.className = 'msg err'; msg.textContent = friendlyError(e); }
@@ -222,13 +259,22 @@ async function testConn(silent) {
 }
 
 function setupMic() {
-  const standalone = window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition; const mic = $('mic');
-  if (standalone || !SR) { mic.style.display = 'none'; $('mic-hint').classList.remove('hidden'); return; }
+  $('mic-hint').classList.remove('hidden'); // l'astuce clavier reste toujours dispo
+  if (!SR) { mic.style.display = 'none'; return; }
   const rec = new SR(); rec.lang = 'fr-FR'; rec.interimResults = true; rec.continuous = true; let base = '', live = false;
   rec.onresult = (e) => { let t = ''; for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript; $('demande').value = (base + ' ' + t).trim(); };
-  rec.onerror = () => { live = false; mic.classList.remove('live'); }; rec.onend = () => { live = false; mic.classList.remove('live'); };
-  mic.onclick = () => { if (live) { rec.stop(); return; } base = $('demande').value; try { rec.start(); live = true; mic.classList.add('live'); } catch {} };
+  rec.onerror = (e) => { live = false; mic.classList.remove('live'); if (e && e.error === 'not-allowed') { const m = $('composer-msg'); m.className = 'msg err'; m.textContent = 'Micro refusé. Utilise le micro du clavier iOS (astuce ci-dessus).'; } };
+  rec.onend = () => { live = false; mic.classList.remove('live'); };
+  mic.onclick = () => { if (live) { rec.stop(); return; } base = $('demande').value; try { rec.start(); live = true; mic.classList.add('live'); } catch { mic.classList.remove('live'); } };
+}
+
+// ── Thème ───────────────────────────────────────────────────────────────────
+function applyTheme(t) {
+  if (t === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', t);
+  for (const b of document.querySelectorAll('#theme-seg button')) b.classList.toggle('active', b.dataset.theme === t);
+  const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.setAttribute('content', t === 'light' ? '#eef1f7' : '#0a0e16');
 }
 
 function init() {
@@ -245,6 +291,12 @@ function init() {
     catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
   };
   $('enable-push').onclick = enablePush;
+  // Thème
+  applyTheme(LS.theme);
+  for (const b of document.querySelectorAll('#theme-seg button')) b.onclick = () => { LS.theme = b.dataset.theme; applyTheme(b.dataset.theme); };
+  // Import de fichiers
+  $('attach-btn').onclick = () => $('file-input').click();
+  $('file-input').onchange = (e) => { addFiles(e.target.files); e.target.value = ''; };
   $('write-allowed').onchange = (e) => $('conditions-wrap').classList.toggle('hidden', !e.target.checked);
   $('dispatch').onclick = dispatch;
   for (const ch of document.querySelectorAll('#chips .chip')) ch.onclick = () => { $('demande').value = ch.dataset.q; $('demande').focus(); };
