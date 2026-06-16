@@ -1574,17 +1574,29 @@
     "report_file": "reports/2026-06-16-email-agent-daily-digest-2026-06-16.md"
   },
   {
-    "run_id": "27612025393",
+    "run_id": "27612286517",
     "workflow": "orchestrator",
-    "title": "[Pocket] TEST e2e — lecture seule",
+    "title": "[Pocket] TEST e2e #2 — HubSpot read",
     "status": "success",
     "event": "issues",
     "repo": "GaspardCoche/agent-system",
-    "task_id": "83",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-06-16T10:50:27.233612+00:00",
-    "agents": [],
-    "report_file": "reports/2026-06-16-orchestrator-pocket--test-e2e---lecture-seule.md"
+    "task_id": "86",
+    "summary": "Tentative de requête HubSpot pour compter les contacts lifecyclestage='lead'. La permission d'utiliser mcp__hubspot__hubspot-search-objects n'a pas en · Executed HubSpot search query to count contacts with lifecyclestage='lead'. Used hubspot-search-o",
+    "next_actions": [
+      "Accorder la permission mcp__hubspot__hubspot-search-objects pour débloquer la requête",
+      "Relancer pour exécuter la requête et poster le résultat sur issue #86"
+    ],
+    "timestamp": "2026-06-16T10:56:03.565330+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "needs_retry"
+      },
+      {
+        "name": "researcher",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-06-16-orchestrator-pocket--test-e2e--2---hubspot-read.md"
   }
 ]
