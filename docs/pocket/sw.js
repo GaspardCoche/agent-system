@@ -1,6 +1,6 @@
 // Service worker minimal — cache du shell de l'app (offline shell).
 // Les appels API GitHub ne sont JAMAIS mis en cache (toujours réseau).
-const CACHE = 'pocket-v1';
+const CACHE = 'pocket-v2';
 const SHELL = ['./', './index.html', './app.js', './style.css', './icon.svg', './manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {
