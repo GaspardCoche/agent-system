@@ -2,7 +2,7 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v11';
+const APP_VERSION = 'v12';
 const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
 function estTokens(text) { return Math.round((text || '').length / 4); }
 function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
@@ -330,9 +330,16 @@ function loadDetail(number) {
   };
   load(); pollTimer = setInterval(load, 6000);
 }
+function linkify(safe) {
+  return safe.replace(/(https?:\/\/[^\s<]+)/g, (u) => {
+    const clean = u.replace(/&amp;/g, '&');
+    if (/\.csv(\?|$)/i.test(clean)) return `<a class="dl" href="${clean}" target="_blank" rel="noopener">📥 Télécharger le CSV</a>`;
+    return `<a href="${clean}" target="_blank" rel="noopener">${u.length > 50 ? u.slice(0, 47) + '…' : u}</a>`;
+  });
+}
 function bubble(who, text, kind, ts, prog) {
   const div = document.createElement('div'); div.className = 'comment ' + kind + (prog ? ' progress' : '');
-  div.innerHTML = `<div class="who">${escapeHtml(who)}${ts ? ' · ' + timeago(ts) : ''}</div>${escapeHtml(text)}`; return div;
+  div.innerHTML = `<div class="who">${escapeHtml(who)}${ts ? ' · ' + timeago(ts) : ''}</div>${linkify(escapeHtml(text))}`; return div;
 }
 async function chatSend() {
   const ta = $('chat-input'), txt = ta.value.trim(); if (!txt || detailNum == null) return;

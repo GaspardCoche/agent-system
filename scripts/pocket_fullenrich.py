@@ -93,11 +93,51 @@ def cmd_enrich_one(a):
     return cmd_submit(a, contacts=[c], name=f"pocket-{a.lastname}")
 
 
+def cmd_results_csv(a):
+    import sys as _s, os as _o
+    _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__)))
+    from pocket_io import save_csv
+    status, body = _req("GET", f"/contact/enrich/bulk/{a.enrichment_id}")
+    if status != 200:
+        return body
+    datas = body.get("datas") or body.get("results") or body.get("contacts") or []
+
+    def _first(lst, *keys):
+        for x in (lst or []):
+            if isinstance(x, dict):
+                for k in keys:
+                    if x.get(k):
+                        return x[k]
+            elif x:
+                return x
+        return ""
+
+    rows = []
+    for d in datas:
+        c = d.get("contact") or d
+        ci = d.get("contact_info") or d.get("enrichment") or {}
+        emails = ci.get("emails") or d.get("emails") or []
+        phones = ci.get("phones") or d.get("phones") or []
+        rows.append({
+            "firstname": c.get("firstname", ""), "lastname": c.get("lastname", ""),
+            "domain": c.get("domain", "") or c.get("company_name", ""),
+            "email": _first(emails, "email", "value", "address"),
+            "phone": _first(phones, "number", "value", "phone"),
+            "linkedin": c.get("linkedin_url", ""),
+            "hubspot_contact_id": (c.get("custom") or {}).get("hubspot_contact_id", ""),
+        })
+    cols = ["firstname", "lastname", "domain", "email", "phone", "linkedin", "hubspot_contact_id"]
+    url = save_csv(f"fullenrich-{a.enrichment_id}.csv", rows, cols)
+    return {"status": body.get("status"), "lignes": len(rows),
+            "csv_url": url or "(échec écriture — GH_TOKEN/GITHUB_REPOSITORY ?)"}
+
+
 def main():
     p = argparse.ArgumentParser(prog="pocket_fullenrich")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     s = sub.add_parser("status"); s.add_argument("enrichment_id"); s.set_defaults(fn=cmd_status)
+    rc = sub.add_parser("results-csv"); rc.add_argument("enrichment_id"); rc.set_defaults(fn=cmd_results_csv)
 
     e = sub.add_parser("enrich-one")
     e.add_argument("--firstname", required=True); e.add_argument("--lastname", required=True)
