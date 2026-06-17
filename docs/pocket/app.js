@@ -2,9 +2,11 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v8';
+const APP_VERSION = 'v9';
 const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
 function estTokens(text) { return Math.round((text || '').length / 4); }
+function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
+function decodeB64(c) { try { return decodeURIComponent(escape(atob((c || '').replace(/\s/g, '')))); } catch { return ''; } }
 const CATS = {
   'cat:crm': { label: 'CRM', color: '#3b6fd4' },
   'cat:enrich': { label: 'Enrichissement', color: '#8957e5' },
@@ -25,6 +27,7 @@ const LS = {
 };
 const $ = (id) => document.getElementById(id);
 let pollTimer = null, allIssues = [], currentFilter = 'all', connectedLogin = '', detailNum = null, attachedFiles = [];
+let allModes = [], selectedMode = 'auto', editingMode = null;
 
 // ── API GitHub ──────────────────────────────────────────────────────────────
 async function gh(path, opts = {}) {
@@ -97,7 +100,8 @@ async function dispatch() {
       msg.textContent = 'Envoi…';
     }
     const title = '[Pocket] ' + demande.slice(0, 60).replace(/\n/g, ' ');
-    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c) + attachNote, labels: ['pocket'] }) });
+    const modeNote = '\n\n### Mode\n\n' + (selectedMode || 'auto');
+    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c) + modeNote + attachNote, labels: ['pocket'] }) });
     $('demande').value = ''; $('conditions').value = ''; $('write-allowed').checked = false; $('conditions-wrap').classList.add('hidden');
     attachedFiles = []; renderFileList();
     msg.className = 'msg ok'; msg.textContent = `Tâche #${issue.number} envoyée.`;
@@ -135,6 +139,71 @@ function renderHistory() {
   }
 }
 
+// ── Modes agentiques (CRUD via repo) ────────────────────────────────────────
+async function loadModes() {
+  try {
+    const items = await gh('/contents/pocket-modes');
+    const files = (Array.isArray(items) ? items : []).filter((f) => f.name.endsWith('.json'));
+    const out = [];
+    for (const f of files) {
+      try { const c = await gh('/contents/' + f.path); const o = JSON.parse(decodeB64(c.content)); o._sha = c.sha; out.push(o); } catch {}
+    }
+    allModes = out.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  } catch { allModes = []; }
+  renderModeChips();
+}
+function renderModeChips() {
+  const el = $('mode-chips'); if (!el) return; el.innerHTML = '';
+  const mk = (slug, label) => { const b = document.createElement('button'); b.className = 'chip' + (selectedMode === slug ? ' active' : ''); b.textContent = label; b.onclick = () => { selectedMode = slug; renderModeChips(); }; return b; };
+  el.appendChild(mk('auto', '⚡ Généraliste'));
+  for (const m of allModes) el.appendChild(mk(m.slug, m.name));
+}
+function renderModes() {
+  const ul = $('modes-list'); ul.innerHTML = '';
+  if (!allModes.length) { ul.innerHTML = '<li class="empty">Aucun mode pour l\'instant. Crée ton premier agent.</li>'; return; }
+  for (const m of allModes) {
+    const cm = CATS[m.category] || CATS['cat:other'];
+    const li = document.createElement('li'); li.style.setProperty('--cat', cm.color);
+    li.innerHTML = `<div class="mh"><div><div class="mn">${escapeHtml(m.name)}</div><div class="md">${escapeHtml(m.description || '')}</div></div><div class="actions"><button class="edit">Éditer</button></div></div>`;
+    li.querySelector('.edit').onclick = () => openModeEditor(m);
+    ul.appendChild(li);
+  }
+}
+function openModeEditor(mode) {
+  editingMode = mode || null;
+  $('mode-editor').classList.remove('hidden');
+  $('mode-name').value = mode ? mode.name : '';
+  $('mode-cat').value = mode ? mode.category : 'cat:other';
+  $('mode-desc').value = mode ? mode.description : '';
+  $('mode-instr').value = mode ? mode.instructions : '';
+  $('mode-delete').classList.toggle('hidden', !mode);
+  $('mode-msg').textContent = '';
+  $('mode-editor').scrollIntoView({ behavior: 'smooth' });
+}
+async function saveMode() {
+  const name = $('mode-name').value.trim(), instr = $('mode-instr').value.trim(), m = $('mode-msg');
+  if (!name || !instr) { m.className = 'msg err'; m.textContent = 'Nom et instructions requis.'; return; }
+  const slug = editingMode ? editingMode.slug : slugify(name);
+  const obj = { name, slug, category: $('mode-cat').value, description: $('mode-desc').value.trim(), instructions: instr, created: editingMode ? editingMode.created : Date.now() };
+  m.className = 'msg'; m.textContent = 'Déploiement…';
+  try {
+    let sha = editingMode ? editingMode._sha : undefined;
+    if (!sha) { try { sha = (await gh('/contents/pocket-modes/' + slug + '.json')).sha; } catch {} }
+    await gh('/contents/pocket-modes/' + slug + '.json', { method: 'PUT', body: JSON.stringify({ message: 'pocket: mode ' + slug, content: b64(JSON.stringify(obj, null, 2)), sha }) });
+    m.className = 'msg ok'; m.textContent = '✅ Mode déployé — utilisable au lancement d\'une tâche.';
+    $('mode-editor').classList.add('hidden');
+    await loadModes(); renderModes();
+  } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
+}
+async function deleteMode() {
+  if (!editingMode) return; const m = $('mode-msg'); m.className = 'msg'; m.textContent = 'Suppression…';
+  try {
+    await gh('/contents/pocket-modes/' + editingMode.slug + '.json', { method: 'DELETE', body: JSON.stringify({ message: 'pocket: delete mode ' + editingMode.slug, sha: editingMode._sha }) });
+    if (selectedMode === editingMode.slug) selectedMode = 'auto';
+    $('mode-editor').classList.add('hidden'); await loadModes(); renderModes();
+  } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
+}
+
 // ── Monitoring run ──────────────────────────────────────────────────────────
 const STEP_LABELS = { 'Set up job': 'Préparation', 'Run actions/checkout@v4': 'Récupération du code', 'Install MCP servers': 'Installation des outils', 'Run actions/setup-python@v5': 'Préparation Python', 'Write task to disk': 'Lecture de la demande', 'Write MCP config with secrets': 'Connexion aux apps', 'Build claude_args': 'Configuration', 'Run Claude Pocket': 'Claude travaille', 'Notify (push)': 'Notification' };
 async function findRun(title) {
@@ -163,7 +232,15 @@ async function renderMonitor(run, jobs, usage) {
   h += `<div class="kcell wide"><div class="k"><svg class="ic"><use href="#i-brain"/></svg>Remplissage du contexte</div><div class="gauge ${u.pct > 80 ? 'warn' : ''}"><i style="width:${Math.min(100, u.pct)}%"></i></div></div></div>`;
   if (!jobs && run && run.status !== 'completed') { try { jobs = await gh(`/actions/runs/${run.id}/jobs`); } catch {} }
   const job = jobs && ((jobs.jobs || []).find((j) => j.name && j.name.includes('pocket')) || (jobs.jobs || [])[0]);
-  if (job && job.steps) { h += '<div class="steps">'; for (const s of job.steps.filter((s) => STEP_LABELS[s.name])) { const cls = s.status === 'in_progress' ? 'cur' : (s.conclusion === 'success' ? 'done' : ''); h += `<div class="step ${cls}"><span class="sdot"></span>${STEP_LABELS[s.name]}</div>`; } h += '</div>'; }
+  if (job && job.steps) {
+    h += '<div class="steps">';
+    for (const s of job.steps.filter((s) => STEP_LABELS[s.name])) {
+      const cls = s.status === 'in_progress' ? 'cur' : (s.conclusion === 'success' ? 'done' : '');
+      const dur = (s.started_at && s.completed_at) ? Math.max(1, Math.round((new Date(s.completed_at) - new Date(s.started_at)) / 1000)) + 's' : '';
+      h += `<div class="step ${cls}"><span class="sdot"></span>${STEP_LABELS[s.name]}${dur ? '<span style="margin-left:auto;color:var(--muted);font-size:11px">' + dur + '</span>' : ''}</div>`;
+    }
+    h += '</div>';
+  }
   el.innerHTML = h;
 }
 
@@ -184,6 +261,12 @@ function loadDetail(number) {
       const run = await findRun(issue.title);
       const jobs = await renderRunStatus(run);
       await renderMonitor(run, jobs, usage);
+      // Activité en direct (dernier message de progression) + lien logs bruts
+      const prog = comments.filter((cm) => cm.user.type !== 'User' && /^▶️|^🔎|^📊|^🧠|^⏳|m'en occupe/i.test(cm.body.trim()));
+      const la = $('live-activity');
+      if (run && run.status !== 'completed' && prog.length) { la.classList.remove('hidden'); la.textContent = prog[prog.length - 1].body.split('\n')[0].slice(0, 130); }
+      else la.classList.add('hidden');
+      const rl = $('run-link'); if (run && run.html_url) { rl.href = run.html_url; rl.classList.remove('hidden'); } else rl.classList.add('hidden');
       const c = $('comments'); c.innerHTML = '';
       const body = (issue.body || '').split('### Autoriser')[0].replace('### Demande', '').trim();
       if (body) c.appendChild(bubble(connectedLogin || 'toi', body, 'user', issue.created_at));
@@ -261,9 +344,12 @@ function applyView(view) {
   const isDetail = view.startsWith('detail:');
   $('detail').classList.toggle('hidden', !isDetail);
   $('system').classList.toggle('hidden', view !== 'system');
-  for (const id of ['composer', 'history']) $(id).classList.toggle('hidden', isDetail || view === 'system');
+  $('modes').classList.toggle('hidden', view !== 'modes');
+  const isMain = !isDetail && view !== 'system' && view !== 'modes';
+  for (const id of ['composer', 'history']) $(id).classList.toggle('hidden', !isMain);
   if (!isDetail) stopPoll();
   if (view === 'system') renderSystem();
+  else if (view === 'modes') { renderModes(); $('mode-editor').classList.add('hidden'); }
   else if (isDetail) loadDetail(parseInt(view.split(':')[1], 10));
   else { detailNum = null; loadHistory(); }
   window.scrollTo(0, 0);
@@ -303,12 +389,17 @@ function init() {
   $('brand-home').onclick = () => navigate('main');
   $('nav-settings').onclick = () => $('settings').classList.toggle('hidden');
   $('nav-system').onclick = () => navigate('system');
+  $('nav-modes').onclick = () => navigate('modes');
+  $('modes-back').onclick = () => history.back();
+  $('mode-new').onclick = () => openModeEditor(null);
+  $('mode-save').onclick = saveMode;
+  $('mode-delete').onclick = deleteMode;
   $('system-back').onclick = () => history.back();
   $('back').onclick = () => history.back();
   $('save-settings').onclick = async () => {
     LS.repo = $('repo').value.trim(); LS.pat = $('pat').value.trim();
     const m = $('settings-msg'); m.className = 'msg'; m.textContent = 'Test…';
-    try { const r = await testConn(false); m.className = 'msg ok'; m.textContent = `Connecté à ${r.full_name}${connectedLogin ? ' · ' + connectedLogin : ''}`; loadHistory(); setTimeout(() => $('settings').classList.add('hidden'), 1400); }
+    try { const r = await testConn(false); m.className = 'msg ok'; m.textContent = `Connecté à ${r.full_name}${connectedLogin ? ' · ' + connectedLogin : ''}`; loadHistory(); loadModes(); setTimeout(() => $('settings').classList.add('hidden'), 1400); }
     catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
   };
   $('enable-push').onclick = enablePush;
@@ -329,7 +420,7 @@ function init() {
 
   setupMic();
   history.replaceState({ view: 'main' }, '', '#main');
-  if (LS.repo && LS.pat) { testConn(true).then(loadHistory); } else { renderHistory(); }
+  if (LS.repo && LS.pat) { testConn(true).then(() => { loadHistory(); loadModes(); }); } else { renderHistory(); }
   if ('serviceWorker' in navigator) {
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => { if (refreshing) return; refreshing = true; location.reload(); });
