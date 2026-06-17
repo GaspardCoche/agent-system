@@ -2,7 +2,7 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v12';
+const APP_VERSION = 'v13';
 const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
 function estTokens(text) { return Math.round((text || '').length / 4); }
 function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
@@ -330,16 +330,52 @@ function loadDetail(number) {
   };
   load(); pollTimer = setInterval(load, 6000);
 }
-function linkify(safe) {
-  return safe.replace(/(https?:\/\/[^\s<]+)/g, (u) => {
-    const clean = u.replace(/&amp;/g, '&');
-    if (/\.csv(\?|$)/i.test(clean)) return `<a class="dl" href="${clean}" target="_blank" rel="noopener">📥 Télécharger le CSV</a>`;
-    return `<a href="${clean}" target="_blank" rel="noopener">${u.length > 50 ? u.slice(0, 47) + '…' : u}</a>`;
-  });
+// ── Mini-rendu Markdown (sensation Claude Desktop) ───────────────────────────
+function mdLink(u, text) {
+  const clean = u.replace(/&amp;/g, '&');
+  if (/\.csv(\?|$)/i.test(clean)) return `<a class="dl" href="${clean}" target="_blank" rel="noopener">📥 Télécharger le CSV</a>`;
+  return `<a href="${clean}" target="_blank" rel="noopener">${text || (clean.length > 46 ? clean.slice(0, 43) + '…' : clean)}</a>`;
+}
+function mdInline(s) {
+  s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/(^|[^*\w])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+  s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (m, t, u) => mdLink(u, t));
+  try { s = s.replace(/(?<!["'>=\/])(https?:\/\/[^\s<]+)/g, (m, u) => mdLink(u, null)); } catch { /* lookbehind non supporté */ }
+  return s;
+}
+function splitRow(l) { return l.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map((x) => x.trim()); }
+function renderMarkdown(raw) {
+  try {
+    const lines = escapeHtml(raw).split('\n'); let html = '', i = 0;
+    const blockStart = /^(#{1,6}\s|```|\s*[-*+]\s|\s*\d+\.\s|\s*>|\|)/;
+    while (i < lines.length) {
+      const line = lines[i];
+      if (/^```/.test(line.trim())) { let code = ''; i++; while (i < lines.length && !/^```/.test(lines[i].trim())) { code += lines[i] + '\n'; i++; } i++; html += `<pre><code>${code.replace(/\n$/, '')}</code></pre>`; continue; }
+      if (line.includes('|') && i + 1 < lines.length && lines[i + 1].includes('-') && /^[\s:|\-]+$/.test(lines[i + 1])) {
+        const header = splitRow(line); i += 2; const rows = [];
+        while (i < lines.length && lines[i].includes('|') && lines[i].trim() !== '') { rows.push(splitRow(lines[i])); i++; }
+        html += '<table><thead><tr>' + header.map((h) => `<th>${mdInline(h)}</th>`).join('') + '</tr></thead><tbody>' + rows.map((r) => '<tr>' + r.map((c) => `<td>${mdInline(c)}</td>`).join('') + '</tr>').join('') + '</tbody></table>'; continue;
+      }
+      const h = line.match(/^(#{1,6})\s+(.*)$/); if (h) { const lvl = Math.min(6, h[1].length); html += `<h${lvl} class="md-h">${mdInline(h[2])}</h${lvl}>`; i++; continue; }
+      if (/^\s*([-*_])\1\1+\s*$/.test(line)) { html += '<hr>'; i++; continue; }
+      if (/^\s*>\s?/.test(line)) { let q = ''; while (i < lines.length && /^\s*>\s?/.test(lines[i])) { q += lines[i].replace(/^\s*>\s?/, '') + '\n'; i++; } html += `<blockquote>${mdInline(q.trim()).replace(/\n/g, '<br>')}</blockquote>`; continue; }
+      if (/^\s*[-*+]\s+/.test(line) || /^\s*\d+\.\s+/.test(line)) {
+        const ordered = /^\s*\d+\.\s+/.test(line); const items = [];
+        while (i < lines.length && (/^\s*[-*+]\s+/.test(lines[i]) || /^\s*\d+\.\s+/.test(lines[i]))) { items.push(lines[i].replace(/^\s*(?:[-*+]|\d+\.)\s+/, '')); i++; }
+        html += (ordered ? '<ol>' : '<ul>') + items.map((it) => `<li>${mdInline(it)}</li>`).join('') + (ordered ? '</ol>' : '</ul>'); continue;
+      }
+      if (line.trim() === '') { i++; continue; }
+      let para = line; i++;
+      while (i < lines.length && lines[i].trim() !== '' && !blockStart.test(lines[i]) && !/^\s*([-*_])\1\1+\s*$/.test(lines[i])) { para += '\n' + lines[i]; i++; }
+      html += `<p>${mdInline(para).replace(/\n/g, '<br>')}</p>`;
+    }
+    return html;
+  } catch { return escapeHtml(raw); }
 }
 function bubble(who, text, kind, ts, prog) {
   const div = document.createElement('div'); div.className = 'comment ' + kind + (prog ? ' progress' : '');
-  div.innerHTML = `<div class="who">${escapeHtml(who)}${ts ? ' · ' + timeago(ts) : ''}</div>${linkify(escapeHtml(text))}`; return div;
+  div.innerHTML = `<div class="who">${escapeHtml(who)}${ts ? ' · ' + timeago(ts) : ''}</div><div class="md">${renderMarkdown(text)}</div>`; return div;
 }
 async function chatSend() {
   const ta = $('chat-input'), txt = ta.value.trim(); if (!txt || detailNum == null) return;
