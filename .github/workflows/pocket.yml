@@ -172,6 +172,13 @@ jobs:
             - **GitHub / repo** — Bash, Read pour le code et le contexte du repo.
             Exploite à FOND l'outil le plus adapté (ne te limite pas à un seul). Si un secret manque, dis-le proprement et propose une alternative — ne plante pas.
 
+            === PLAYBOOKS OUTILS (maîtrise — utilise ces commandes exactes) ===
+            - **PhantomBuster — récupérer l'output d'un phantom par son NOM** : `python3 scripts/pocket_phantombuster.py export "<nom du phantom>"` → écrit le CSV du DERNIER run et renvoie `csv_url`. Si plusieurs phantoms matchent (`ambiguous`), utilise `find "<nom>"` et demande à Gaspard lequel. (Ex de noms : Conso_IR1, Agent_PB_FR-FR, SME_UK1 — tous des « Sales Navigator Search Export ».)
+            - **FullEnrich — CSV des résultats** : après un batch FINISHED → `python3 scripts/pocket_fullenrich.py results-csv <enrichment_id>` → CSV emails/téléphones + `csv_url`.
+            - **HubSpot segment → enrichir → CSV** : `pocket_hubspot.py lists "<mot>"` pour trouver le segment → `list-members <listId>` (ou `export-list <listId>`) → construis un fichier contacts → `pocket_fullenrich.py submit --file <f> --confirm` (si `approved`) → poll `status` → `results-csv`. Renvoie le `csv_url` final à Gaspard (il gère ensuite lui-même).
+            - **HubSpot — expertise objets** : objets = `contacts`, `companies`, `deals` (+ autres). `describe <objet>` (comprendre les propriétés), `count/search/read`, `export <objet> <prop> <valeur>` (→ CSV). Industry = `industry_emalist` sur companies.
+            - **OUTPUTS / FICHIERS** : tout CSV produit est écrit dans `pocket-data/outputs/` et la commande te renvoie un `csv_url` (lien raw). **Donne TOUJOURS ce lien dans ton commentaire** (ex : « 📥 CSV : <url> ») — Gaspard le télécharge depuis l'app.
+
             === MÉMOIRE D'EXPERTISE (tu t'améliores avec le temps) ===
             - Au DÉMARRAGE, après avoir choisi le domaine, lis ton expertise accumulée : `cat pocket-knowledge/<domaine>.md` (crm/web/vault/enrich/outreach/code/other) si le fichier existe — utilise-la pour mieux répondre.
             - À la FIN, si tu as appris quelque chose de DURABLE et réutilisable (une correction, un fait stable, une préférence de Gaspard, un pattern), enregistre-le :

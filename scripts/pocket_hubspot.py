@@ -80,10 +80,84 @@ def cmd_read(a):
 def cmd_whoami(a):
     status, body = _req("GET", f"/oauth/v1/private-apps/v3/token-info")
     if status != 200:
-        # endpoint alternatif : un simple appel authentifié
         status, body = _req("GET", "/crm/v3/objects/contacts?limit=1")
         return {"auth_ok": status == 200, "status": status}
     return body
+
+
+def cmd_describe(a):
+    """Propriétés d'un objet (contacts/companies/deals…) — pour comprendre l'objet."""
+    status, body = _req("GET", f"/crm/v3/properties/{a.objectType}")
+    if status != 200:
+        return body
+    props = [{"name": p["name"], "label": p.get("label"), "type": p.get("type")} for p in body.get("results", [])]
+    return {"objectType": a.objectType, "nb_propriétés": len(props), "propriétés": props[: a.limit]}
+
+
+def cmd_lists(a):
+    """Liste les listes/segments HubSpot (recherche)."""
+    status, body = _req("POST", "/crm/v3/lists/search", {"query": a.query, "count": 50})
+    if status != 200:
+        return body
+    return {"lists": [{"listId": l.get("listId"), "name": l.get("name"), "size": l.get("size"), "type": l.get("processingType")} for l in body.get("lists", [])]}
+
+
+def _list_member_ids(list_id, limit=200):
+    ids, after = [], None
+    while len(ids) < limit:
+        qs = f"?limit=100" + (f"&after={after}" if after else "")
+        status, body = _req("GET", f"/crm/v3/lists/{list_id}/memberships{qs}")
+        if status != 200:
+            break
+        ids += [r.get("recordId") for r in body.get("results", [])]
+        after = (body.get("paging", {}).get("next") or {}).get("after")
+        if not after:
+            break
+    return ids[:limit]
+
+
+def _batch_read(object_type, ids, props):
+    rows = []
+    for i in range(0, len(ids), 100):
+        chunk = ids[i:i + 100]
+        status, body = _req("POST", f"/crm/v3/objects/{object_type}/batch/read",
+                            {"properties": props, "inputs": [{"id": str(x)} for x in chunk]})
+        if status == 200:
+            rows += [{"id": r["id"], **r.get("properties", {})} for r in body.get("results", [])]
+    return rows
+
+
+def cmd_list_members(a):
+    """Membres d'une liste HubSpot (pour enrichir un segment)."""
+    ids = _list_member_ids(a.listId, limit=int(a.limit))
+    props = (a.props.split(",") if a.props else ["email", "firstname", "lastname", "company", "jobtitle"])
+    rows = _batch_read("contacts", ids, props)
+    return {"listId": a.listId, "membres": len(rows), "results": rows}
+
+
+def cmd_export(a):
+    """Recherche un segment et écrit un CSV téléchargeable."""
+    import sys as _s, os as _o
+    _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__)))
+    from pocket_io import save_csv
+    props = a.props.split(",") if a.props else ["email", "firstname", "lastname", "company"]
+    status, body = _search(a.objectType, a.property, a.value, limit=int(a.limit), props=props)
+    if status != 200:
+        return body
+    rows = [{"id": r["id"], **r.get("properties", {})} for r in body.get("results", [])]
+    url = save_csv(f"hubspot-{a.objectType}-{a.property}-{a.value}.csv".replace(" ", "_")[:60], rows, ["id"] + props)
+    return {"total": body.get("total"), "exporté": len(rows), "csv_url": url or "(échec écriture)"}
+
+
+def cmd_export_list(a):
+    import sys as _s, os as _o
+    _s.path.insert(0, _o.path.dirname(_o.path.abspath(__file__)))
+    from pocket_io import save_csv
+    ids = _list_member_ids(a.listId, limit=int(a.limit))
+    props = (a.props.split(",") if a.props else ["email", "firstname", "lastname", "company", "jobtitle"])
+    rows = _batch_read("contacts", ids, props)
+    url = save_csv(f"hubspot-list-{a.listId}.csv", rows, ["id"] + props)
+    return {"listId": a.listId, "membres": len(rows), "csv_url": url or "(échec écriture)"}
 
 
 def main():
@@ -94,6 +168,11 @@ def main():
     s = sub.add_parser("search"); s.add_argument("objectType"); s.add_argument("property"); s.add_argument("value"); s.add_argument("--limit", default=10); s.add_argument("--props", default=""); s.set_defaults(fn=cmd_search)
     r = sub.add_parser("read"); r.add_argument("objectType"); r.add_argument("id"); r.add_argument("--props", default=""); r.set_defaults(fn=cmd_read)
     w = sub.add_parser("whoami"); w.set_defaults(fn=cmd_whoami)
+    d = sub.add_parser("describe"); d.add_argument("objectType"); d.add_argument("--limit", type=int, default=60); d.set_defaults(fn=cmd_describe)
+    li = sub.add_parser("lists"); li.add_argument("query", nargs="?", default=""); li.set_defaults(fn=cmd_lists)
+    lm = sub.add_parser("list-members"); lm.add_argument("listId"); lm.add_argument("--limit", default=200); lm.add_argument("--props", default=""); lm.set_defaults(fn=cmd_list_members)
+    ex = sub.add_parser("export"); ex.add_argument("objectType"); ex.add_argument("property"); ex.add_argument("value"); ex.add_argument("--limit", default=100); ex.add_argument("--props", default=""); ex.set_defaults(fn=cmd_export)
+    el = sub.add_parser("export-list"); el.add_argument("listId"); el.add_argument("--limit", default=200); el.add_argument("--props", default=""); el.set_defaults(fn=cmd_export_list)
 
     a = p.parse_args()
     print(json.dumps(a.fn(a), ensure_ascii=False, indent=2))
