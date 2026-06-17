@@ -1,2 +1,3 @@
 # Expertise web — appris par Pocket
 - (2026-06-17) Tavily MCP n'est PAS câblé dans le runner cloud ; Firecrawl peut renvoyer 402 (crédits épuisés) ; WebSearch demande une permission. Fallback web gratuit fiable : curl sur 'https://news.google.com/rss/search?q=...' puis parsing regex avec python3.12 (titre/lien/pubDate/source).
+- (2026-06-17) Pour événements/sorties à Anvers (agenda culturel Flandre), source fiable = antwerpart.be (scène art/design d'Anvers, dates+vernissages) et ap-arts.be (expos académies). Mi-juin = saison des Graduation/Masters Expo (Sint Lucas + Koninklijke Academie, dont grafisch ontwerp). UiTinVlaanderen et visit.antwerpen = apps JS, curl renvoie 500/404. DuckDuckGo HTML (html.duckduckgo.com/html/ en POST) = bon fallback recherche sans clé.
