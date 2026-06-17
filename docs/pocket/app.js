@@ -2,7 +2,7 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v10';
+const APP_VERSION = 'v11';
 const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
 function estTokens(text) { return Math.round((text || '').length / 4); }
 function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
@@ -191,6 +191,10 @@ async function openModeEditor(mode) {
       $('weekday-wrap').classList.toggle('hidden', sc.freq !== 'weekly');
     } catch {}
   }
+  // Chaînage : liste des autres modes
+  const chainSel = $('mode-chain'); chainSel.innerHTML = '<option value="">Aucun</option>';
+  for (const m of allModes) if (!mode || m.slug !== mode.slug) chainSel.appendChild(new Option(m.name, m.slug));
+  chainSel.value = (mode && mode.chain_to) ? mode.chain_to : '';
   $('mode-editor').scrollIntoView({ behavior: 'smooth' });
 }
 async function saveSchedule(slug, name, cat) {
@@ -210,6 +214,7 @@ async function saveMode() {
   if (!name || !instr) { m.className = 'msg err'; m.textContent = 'Nom et instructions requis.'; return; }
   const slug = editingMode ? editingMode.slug : slugify(name);
   const obj = { name, slug, category: $('mode-cat').value, description: $('mode-desc').value.trim(), instructions: instr, created: editingMode ? editingMode.created : Date.now() };
+  if ($('mode-chain').value) obj.chain_to = $('mode-chain').value;
   m.className = 'msg'; m.textContent = 'Déploiement…';
   try {
     let sha = editingMode ? editingMode._sha : undefined;
@@ -228,6 +233,23 @@ async function deleteMode() {
     try { const c = await gh('/contents/pocket-schedules/' + editingMode.slug + '.json'); await gh('/contents/pocket-schedules/' + editingMode.slug + '.json', { method: 'DELETE', body: JSON.stringify({ message: 'pocket: unschedule ' + editingMode.slug, sha: c.sha }) }); } catch {}
     if (selectedMode === editingMode.slug) selectedMode = 'auto';
     $('mode-editor').classList.add('hidden'); await loadModes(); renderModes();
+  } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
+}
+
+// ── Connaissances (expertise) ────────────────────────────────────────────────
+let knowSha = {};
+async function loadKnowledge() {
+  const domain = $('know-domain').value; $('know-msg').textContent = ''; $('know-text').value = 'Chargement…';
+  try { const c = await gh('/contents/pocket-knowledge/' + domain + '.md'); $('know-text').value = decodeB64(c.content); knowSha[domain] = c.sha; }
+  catch { $('know-text').value = ''; knowSha[domain] = null; }
+}
+async function saveKnowledge() {
+  const domain = $('know-domain').value, m = $('know-msg'); m.className = 'msg'; m.textContent = 'Enregistrement…';
+  try {
+    const body = { message: 'knowledge: ' + domain + ' (édition manuelle)', content: b64($('know-text').value) };
+    if (knowSha[domain]) body.sha = knowSha[domain];
+    const r = await gh('/contents/pocket-knowledge/' + domain + '.md', { method: 'PUT', body: JSON.stringify(body) });
+    knowSha[domain] = r.content.sha; m.className = 'msg ok'; m.textContent = '✅ Enregistré.';
   } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
 }
 
@@ -372,11 +394,13 @@ function applyView(view) {
   $('detail').classList.toggle('hidden', !isDetail);
   $('system').classList.toggle('hidden', view !== 'system');
   $('modes').classList.toggle('hidden', view !== 'modes');
-  const isMain = !isDetail && view !== 'system' && view !== 'modes';
+  $('knowledge').classList.toggle('hidden', view !== 'knowledge');
+  const isMain = !isDetail && !['system', 'modes', 'knowledge'].includes(view);
   for (const id of ['composer', 'history']) $(id).classList.toggle('hidden', !isMain);
   if (!isDetail) stopPoll();
   if (view === 'system') renderSystem();
   else if (view === 'modes') { renderModes(); $('mode-editor').classList.add('hidden'); }
+  else if (view === 'knowledge') loadKnowledge();
   else if (isDetail) loadDetail(parseInt(view.split(':')[1], 10));
   else { detailNum = null; loadHistory(); }
   window.scrollTo(0, 0);
@@ -422,6 +446,10 @@ function init() {
   $('mode-save').onclick = saveMode;
   $('mode-delete').onclick = deleteMode;
   $('mode-freq').onchange = (e) => { $('sched-extra').classList.toggle('hidden', e.target.value === 'none'); $('weekday-wrap').classList.toggle('hidden', e.target.value !== 'weekly'); };
+  $('open-knowledge').onclick = () => navigate('knowledge');
+  $('knowledge-back').onclick = () => history.back();
+  $('know-domain').onchange = loadKnowledge;
+  $('know-save').onclick = saveKnowledge;
   $('system-back').onclick = () => history.back();
   $('back').onclick = () => history.back();
   $('save-settings').onclick = async () => {

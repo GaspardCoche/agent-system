@@ -37,7 +37,7 @@
   </svg>
 
   <header>
-    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v10</span></button>
+    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v11</span></button>
     <div class="hbtns">
       <button class="icon-btn" id="nav-modes" title="Modes agentiques"><svg class="ic"><use href="#i-robot"/></svg></button>
       <button class="icon-btn" id="nav-system" title="Système"><svg class="ic"><use href="#i-cpu"/></svg></button>
@@ -84,6 +84,7 @@
     <button class="link-btn" id="modes-back"><svg class="ic"><use href="#i-back"/></svg> Retour</button>
     <h2><svg class="ic"><use href="#i-robot"/></svg> Modes agentiques</h2>
     <p class="hint" style="margin-top:0">Crée tes propres agents : un nom, une catégorie et des instructions. Ils deviennent sélectionnables au lancement d'une tâche.</p>
+    <button id="open-knowledge" class="ghost" style="margin-top:8px"><svg class="ic"><use href="#i-brain"/></svg> Connaissances accumulées</button>
     <button id="mode-new" class="primary" style="margin:12px 0"><svg class="ic"><use href="#i-plus"/></svg> Nouveau mode</button>
     <ul id="modes-list"></ul>
     <div id="mode-editor" class="hidden" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
@@ -100,6 +101,9 @@
         </select>
       </label>
       <label>Description <input id="mode-desc" type="text" placeholder="À quoi sert cet agent" /></label>
+      <label><svg class="ic"><use href="#i-robot"/></svg> Enchaîner vers (chaîne d'automatisation)
+        <select id="mode-chain"><option value="">Aucun</option></select>
+      </label>
       <label>Instructions (le « cerveau » de l'agent)
         <textarea id="mode-instr" rows="6" placeholder="Tu es un agent qui… Décris précisément sa mission, ses étapes, ses limites."></textarea>
       </label>
@@ -127,6 +131,23 @@
       <button id="mode-delete" class="ghost hidden">Supprimer ce mode</button>
       <p id="mode-msg" class="msg"></p>
     </div>
+  </section>
+
+  <!-- ── Connaissances (expertise accumulée) ── -->
+  <section id="knowledge" class="card hidden">
+    <button class="link-btn" id="knowledge-back"><svg class="ic"><use href="#i-back"/></svg> Retour</button>
+    <h2><svg class="ic"><use href="#i-brain"/></svg> Connaissances accumulées</h2>
+    <p class="hint" style="margin-top:0">Ce que Pocket a appris par domaine. Tu peux corriger ou élaguer.</p>
+    <label>Domaine
+      <select id="know-domain">
+        <option value="crm">CRM</option><option value="web">Web</option><option value="vault">Vault</option>
+        <option value="enrich">Enrichissement</option><option value="outreach">Outreach</option>
+        <option value="code">Code</option><option value="other">Autre</option>
+      </select>
+    </label>
+    <textarea id="know-text" rows="12" placeholder="(vide — Pocket apprendra au fil des tâches)"></textarea>
+    <button id="know-save" class="primary" style="margin-top:10px"><svg class="ic"><use href="#i-check"/></svg> Enregistrer</button>
+    <p id="know-msg" class="msg"></p>
   </section>
 
   <!-- ── Composer ── -->
