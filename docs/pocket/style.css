@@ -163,5 +163,18 @@ ul { list-style: none; padding: 0; margin: 0; }
 .chatbar .icon-btn { width: 48px; height: 48px; flex: 0 0 auto; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; box-shadow: 0 4px 12px rgba(59,111,212,.3); }
 .chatbar .icon-btn .ic { color: #fff; }
 
+/* activité live + lien logs */
+.live-activity { font-size: 13.5px; font-weight: 600; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 13px; padding: 11px 13px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.live-activity::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1s infinite; flex: 0 0 auto; }
+.run-link { display: inline-block; font-size: 12.5px; color: var(--muted); margin: 0 0 12px; text-decoration: none; }
+
+/* modes */
+#modes-list li { padding: 13px 14px; background: var(--card2); border: 1px solid var(--line); border-radius: 13px; margin-bottom: 9px; border-left: 3px solid var(--cat, var(--accent)); }
+#modes-list li .mh { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+#modes-list li .mn { font-size: 14.5px; font-weight: 650; }
+#modes-list li .md { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+#modes-list li .actions { display: flex; gap: 6px; flex: 0 0 auto; }
+#modes-list li .actions button { font-size: 12px; padding: 5px 10px; border-radius: 8px; background: var(--card); border: 1px solid var(--line); color: var(--accent); font-weight: 600; }
+
 section { animation: fade .22s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

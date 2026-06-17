@@ -39,6 +39,7 @@
   <header>
     <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v8</span></button>
     <div class="hbtns">
+      <button class="icon-btn" id="nav-modes" title="Modes agentiques"><svg class="ic"><use href="#i-robot"/></svg></button>
       <button class="icon-btn" id="nav-system" title="Système"><svg class="ic"><use href="#i-cpu"/></svg></button>
       <button class="icon-btn" id="nav-settings" title="Réglages"><svg class="ic"><use href="#i-gear"/></svg></button>
     </div>
@@ -78,9 +79,40 @@
     <p class="hint">Estimation (longueur des échanges ÷ 4 ≈ tokens). Le quota réel des sessions 5h d'Anthropic n'est pas exposé par l'API ; ces valeurs servent d'ordre de grandeur. Claude tourne sur GitHub Actions (cloud) — le CPU/GPU du runner n'est pas exposé.</p>
   </section>
 
+  <!-- ── Modes agentiques ── -->
+  <section id="modes" class="card hidden">
+    <button class="link-btn" id="modes-back"><svg class="ic"><use href="#i-back"/></svg> Retour</button>
+    <h2><svg class="ic"><use href="#i-robot"/></svg> Modes agentiques</h2>
+    <p class="hint" style="margin-top:0">Crée tes propres agents : un nom, une catégorie et des instructions. Ils deviennent sélectionnables au lancement d'une tâche.</p>
+    <button id="mode-new" class="primary" style="margin:12px 0"><svg class="ic"><use href="#i-plus"/></svg> Nouveau mode</button>
+    <ul id="modes-list"></ul>
+    <div id="mode-editor" class="hidden" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">
+      <label>Nom <input id="mode-name" type="text" placeholder="Ex : Veille concurrent" /></label>
+      <label>Catégorie
+        <select id="mode-cat">
+          <option value="cat:crm">CRM</option>
+          <option value="cat:web">Web</option>
+          <option value="cat:enrich">Enrichissement</option>
+          <option value="cat:outreach">Outreach</option>
+          <option value="cat:vault">Vault</option>
+          <option value="cat:code">Code</option>
+          <option value="cat:other">Autre</option>
+        </select>
+      </label>
+      <label>Description <input id="mode-desc" type="text" placeholder="À quoi sert cet agent" /></label>
+      <label>Instructions (le « cerveau » de l'agent)
+        <textarea id="mode-instr" rows="6" placeholder="Tu es un agent qui… Décris précisément sa mission, ses étapes, ses limites."></textarea>
+      </label>
+      <button id="mode-save" class="primary"><svg class="ic"><use href="#i-check"/></svg> Déployer le mode</button>
+      <button id="mode-delete" class="ghost hidden">Supprimer ce mode</button>
+      <p id="mode-msg" class="msg"></p>
+    </div>
+  </section>
+
   <!-- ── Composer ── -->
   <section id="composer" class="card">
     <h2><svg class="ic"><use href="#i-send"/></svg> Nouvelle tâche</h2>
+    <div class="chips" id="mode-chips"></div>
     <div class="textarea-wrap">
       <textarea id="demande" rows="4" placeholder="Décris ta demande en langage naturel… (ex : combien de leads en France ?)"></textarea>
       <button id="mic" class="icon-btn mic" title="Dicter"><svg class="ic"><use href="#i-mic"/></svg></button>
@@ -116,7 +148,9 @@
     <button class="link-btn" id="back"><svg class="ic"><use href="#i-back"/></svg> Retour</button>
     <h2 id="detail-title">Tâche</h2>
     <div id="run-status" class="status-bar idle">Chargement…</div>
+    <div id="live-activity" class="live-activity hidden"></div>
     <div id="monitor" class="monitor"></div>
+    <a id="run-link" class="run-link hidden" target="_blank" rel="noopener">Voir les logs détaillés ↗</a>
     <div id="comments"></div>
     <button id="approve" class="primary hidden"><svg class="ic"><use href="#i-check"/></svg> Approuver l'écriture</button>
     <p id="detail-msg" class="msg"></p>
