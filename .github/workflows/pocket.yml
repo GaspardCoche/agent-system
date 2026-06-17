@@ -140,6 +140,7 @@ jobs:
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -177,6 +178,7 @@ jobs:
             - **FullEnrich — CSV des résultats** : après un batch FINISHED → `python3 scripts/pocket_fullenrich.py results-csv <enrichment_id>` → CSV emails/téléphones + `csv_url`.
             - **HubSpot segment → enrichir → CSV** : `pocket_hubspot.py lists "<mot>"` pour trouver le segment → `list-members <listId>` (ou `export-list <listId>`) → construis un fichier contacts → `pocket_fullenrich.py submit --file <f> --confirm` (si `approved`) → poll `status` → `results-csv`. Renvoie le `csv_url` final à Gaspard (il gère ensuite lui-même).
             - **HubSpot — expertise objets** : objets = `contacts`, `companies`, `deals` (+ autres). `describe <objet>` (comprendre les propriétés), `count/search/read`, `export <objet> <prop> <valeur>` (→ CSV). Industry = `industry_emalist` sur companies.
+            - **Google Sheets** : `python3 scripts/pocket_sheets.py read <sheetId> [--gid N]` / `export <sheetId>` (lecture/CSV) ; `append <sheetId> <onglet> --row "a,b,c" --confirm` / `write <sheetId> <range> --values-file f.json --confirm` (écriture, si `approved` + compte de service `GOOGLE_SA_JSON`). Si le sheet est privé et qu'il n'y a pas de SA, dis-le proprement (à partager avec le compte de service).
             - **OUTPUTS / FICHIERS** : tout CSV produit est écrit dans `pocket-data/outputs/` et la commande te renvoie un `csv_url` (lien raw). **Donne TOUJOURS ce lien dans ton commentaire** (ex : « 📥 CSV : <url> ») — Gaspard le télécharge depuis l'app.
 
             === MÉMOIRE D'EXPERTISE (tu t'améliores avec le temps) ===
