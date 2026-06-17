@@ -1,5 +1,5 @@
 // Service worker — réseau d'abord (évite le cache figé), repli hors-ligne + push.
-const CACHE = 'pocket-v13';
+const CACHE = 'pocket-v14';
 const SHELL = ['./', './index.html', './app.js', './style.css', './icon.svg', './manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {

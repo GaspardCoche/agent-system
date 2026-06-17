@@ -2,7 +2,7 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v13';
+const APP_VERSION = 'v14';
 const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
 function estTokens(text) { return Math.round((text || '').length / 4); }
 function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
@@ -28,6 +28,18 @@ const LS = {
 const $ = (id) => document.getElementById(id);
 let pollTimer = null, allIssues = [], currentFilter = 'all', connectedLogin = '', detailNum = null, attachedFiles = [];
 let allModes = [], selectedMode = 'auto', editingMode = null;
+let currentSource = 'phone', currentView = 'main', mainTimer = null;
+
+// Origine d'une tâche : téléphone (app), programmé (cron), ou ordinateur (Claude Code).
+function taskSource(issue) {
+  const labels = (issue.labels || []).map((l) => l.name || l);
+  if (labels.includes('via:phone')) return 'phone';
+  const a = issue.user && issue.user.login;
+  if ((issue.title || '').includes('⏰')) return 'scheduled';
+  if (a && /github-actions/i.test(a)) return 'scheduled';
+  if (a && connectedLogin && a === connectedLogin) return 'phone';
+  return 'computer';
+}
 
 // ── API GitHub ──────────────────────────────────────────────────────────────
 async function gh(path, opts = {}) {
@@ -73,7 +85,7 @@ function renderFileList() {
   });
 }
 async function ensureLabels() {
-  const labels = [['pocket', '8b5cf6'], ['approved', '3fb950'], ...Object.entries(CATS).map(([k, v]) => [k, v.color.replace('#', '')])];
+  const labels = [['pocket', '8b5cf6'], ['approved', '3fb950'], ['via:phone', '0a84ff'], ...Object.entries(CATS).map(([k, v]) => [k, v.color.replace('#', '')])];
   for (const [name, color] of labels) { try { await gh('/labels', { method: 'POST', body: JSON.stringify({ name, color }) }); } catch {} }
 }
 
@@ -101,7 +113,7 @@ async function dispatch() {
     }
     const title = '[Pocket] ' + demande.slice(0, 60).replace(/\n/g, ' ');
     const modeNote = '\n\n### Mode\n\n' + (selectedMode || 'auto');
-    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c) + modeNote + attachNote, labels: ['pocket'] }) });
+    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c) + modeNote + attachNote, labels: ['pocket', 'via:phone'] }) });
     $('demande').value = ''; $('conditions').value = ''; $('write-allowed').checked = false; $('conditions-wrap').classList.add('hidden');
     attachedFiles = []; renderFileList();
     msg.className = 'msg ok'; msg.textContent = `Tâche #${issue.number} envoyée.`;
@@ -112,21 +124,46 @@ async function dispatch() {
 // ── Historique classé par système ───────────────────────────────────────────
 function issueCat(issue) { const l = (issue.labels || []).map((x) => x.name || x).find((n) => n.startsWith('cat:')); return l || null; }
 async function loadHistory() {
-  try { allIssues = await gh('/issues?labels=pocket&state=all&per_page=40&sort=created&direction=desc'); }
+  try { allIssues = await gh('/issues?labels=pocket&state=all&per_page=60&sort=created&direction=desc'); }
   catch { allIssues = LS.history.map((h) => ({ number: h.number, title: h.title, labels: [], state: 'open' })); }
-  renderFilters(); renderHistory();
+  renderSourceFilter(); renderFilters(); renderHistory(); renderDashboard();
+}
+function bySource(items) { return currentSource === 'all' ? items : items.filter((i) => taskSource(i) === currentSource); }
+function renderSourceFilter() {
+  for (const b of document.querySelectorAll('#source-filter button')) b.classList.toggle('active', b.dataset.src === currentSource);
 }
 function renderFilters() {
-  const present = new Set(allIssues.map(issueCat).filter(Boolean));
+  const present = new Set(bySource(allIssues).map(issueCat).filter(Boolean));
   const el = $('cat-filters'); el.innerHTML = '';
   const mk = (key, label) => { const b = document.createElement('button'); b.className = 'chip' + (currentFilter === key ? ' active' : ''); b.textContent = label; b.onclick = () => { currentFilter = key; renderFilters(); renderHistory(); }; return b; };
   el.appendChild(mk('all', 'Tout'));
   for (const k of Object.keys(CATS)) if (present.has(k)) el.appendChild(mk(k, CATS[k].label));
 }
+async function renderDashboard() {
+  const items = bySource(allIssues);
+  const today = new Date().toDateString();
+  const todayN = items.filter((i) => i.created_at && new Date(i.created_at).toDateString() === today).length;
+  let running = 0;
+  try { const r = await gh('/actions/workflows/pocket.yml/runs?status=in_progress&per_page=30'); running = (r.workflow_runs || []).length; } catch {}
+  $('dash-stats').innerHTML =
+    `<div class="ds"><div class="dsv ${running ? 'live' : ''}">${running}</div><div class="dsk">en cours</div></div>` +
+    `<div class="ds"><div class="dsv">${todayN}</div><div class="dsk">aujourd'hui</div></div>` +
+    `<div class="ds"><div class="dsv">${items.length}</div><div class="dsk">total</div></div>`;
+  const counts = {};
+  for (const i of items) { const c = issueCat(i) || 'cat:other'; counts[c] = (counts[c] || 0) + 1; }
+  const el = $('dash-domains'); el.innerHTML = '';
+  for (const [c, n] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
+    const cm = CATS[c] || CATS['cat:other'];
+    const chip = document.createElement('button'); chip.className = 'dchip' + (currentFilter === c ? ' active' : '');
+    chip.innerHTML = `<span class="ddot" style="background:${cm.color}"></span>${cm.label} <b>${n}</b>`;
+    chip.onclick = () => { currentFilter = currentFilter === c ? 'all' : c; renderFilters(); renderHistory(); renderDashboard(); $('history').scrollIntoView({ behavior: 'smooth' }); };
+    el.appendChild(chip);
+  }
+}
 function renderHistory() {
   const ul = $('history-list'); ul.innerHTML = '';
-  let items = allIssues; if (currentFilter !== 'all') items = items.filter((i) => issueCat(i) === currentFilter);
-  if (!items.length) { ul.innerHTML = '<li class="empty">Aucune tâche.</li>'; return; }
+  let items = bySource(allIssues); if (currentFilter !== 'all') items = items.filter((i) => issueCat(i) === currentFilter);
+  if (!items.length) { ul.innerHTML = '<li class="empty">Aucune tâche dans cette vue.</li>'; return; }
   for (const i of items) {
     const cat = issueCat(i) || 'cat:other'; const cm = CATS[cat] || CATS['cat:other'];
     const li = document.createElement('li');
@@ -434,20 +471,24 @@ async function enablePush() {
 // ── Router ──────────────────────────────────────────────────────────────────
 function applyView(view) {
   const isDetail = view.startsWith('detail:');
+  currentView = isDetail ? 'detail' : view;
   $('detail').classList.toggle('hidden', !isDetail);
   $('system').classList.toggle('hidden', view !== 'system');
   $('modes').classList.toggle('hidden', view !== 'modes');
   $('knowledge').classList.toggle('hidden', view !== 'knowledge');
   const isMain = !isDetail && !['system', 'modes', 'knowledge'].includes(view);
-  for (const id of ['composer', 'history']) $(id).classList.toggle('hidden', !isMain);
+  for (const id of ['dashboard', 'composer', 'history']) $(id).classList.toggle('hidden', !isMain);
   if (!isDetail) stopPoll();
+  stopMainPoll();
   if (view === 'system') renderSystem();
   else if (view === 'modes') { renderModes(); $('mode-editor').classList.add('hidden'); }
   else if (view === 'knowledge') loadKnowledge();
   else if (isDetail) loadDetail(parseInt(view.split(':')[1], 10));
-  else { detailNum = null; loadHistory(); }
+  else { detailNum = null; loadHistory(); startMainPoll(); }
   window.scrollTo(0, 0);
 }
+function startMainPoll() { stopMainPoll(); mainTimer = setInterval(() => { if (LS.repo && LS.pat && !document.hidden) loadHistory(); }, 20000); }
+function stopMainPoll() { if (mainTimer) { clearInterval(mainTimer); mainTimer = null; } }
 function navigate(view) { history.pushState({ view }, '', '#' + view); applyView(view); }
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
@@ -491,6 +532,9 @@ function init() {
   $('mode-freq').onchange = (e) => { $('sched-extra').classList.toggle('hidden', e.target.value === 'none'); $('weekday-wrap').classList.toggle('hidden', e.target.value !== 'weekly'); };
   $('open-knowledge').onclick = () => navigate('knowledge');
   $('knowledge-back').onclick = () => history.back();
+  for (const b of document.querySelectorAll('#source-filter button')) b.onclick = () => { currentSource = b.dataset.src; currentFilter = 'all'; renderSourceFilter(); renderFilters(); renderHistory(); renderDashboard(); };
+  $('refresh-btn').onclick = () => { if (LS.repo && LS.pat) loadHistory(); };
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && currentView === 'main' && LS.repo && LS.pat) loadHistory(); });
   $('know-domain').onchange = loadKnowledge;
   $('know-save').onclick = saveKnowledge;
   $('system-back').onclick = () => history.back();
@@ -519,7 +563,7 @@ function init() {
 
   setupMic();
   history.replaceState({ view: 'main' }, '', '#main');
-  if (LS.repo && LS.pat) { testConn(true).then(() => { loadHistory(); loadModes(); }); } else { renderHistory(); }
+  if (LS.repo && LS.pat) { testConn(true).then(() => { loadHistory(); loadModes(); startMainPoll(); }); } else { renderHistory(); }
   if ('serviceWorker' in navigator) {
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => { if (refreshing) return; refreshing = true; location.reload(); });
