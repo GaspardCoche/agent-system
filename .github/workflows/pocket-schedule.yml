@@ -1,0 +1,109 @@
+name: Pocket Scheduler
+
+# Déclenche les modes programmés (pocket-schedules/*.json). Crée la tâche ET
+# exécute l'agent dans le même run (pas de second workflow à déclencher).
+on:
+  schedule:
+    - cron: '0 * * * *'   # toutes les heures (coût maîtrisé ; précision ~1h, suffisant)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Decide & create scheduled task
+        id: fire
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python3 scripts/pocket_scheduler.py
+
+      - name: Commit last_fired
+        run: |
+          if [ -n "$(git status --porcelain pocket-schedules/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add pocket-schedules/
+            git commit -m "pocket: scheduler last_fired" || true
+            git push || true
+          fi
+
+      - name: Install MCP servers
+        if: steps.fire.outputs.fired == 'true'
+        run: npm install -g @modelcontextprotocol/server-github @hubspot/mcp-server
+
+      - name: Write MCP config
+        if: steps.fire.outputs.fired == 'true'
+        env:
+          GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
+          HUBSPOT_TOKEN_MCP: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
+          LEMLIST_KEY_MCP: ${{ secrets.LEMLIST_API_KEY }}
+        run: |
+          python3 -c "
+          import json, os
+          cfg = {'mcpServers': {'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}}}}
+          if os.environ.get('HUBSPOT_TOKEN_MCP'):
+              cfg['mcpServers']['hubspot'] = {'command': 'npx', 'args': ['-y', '@hubspot/mcp-server'], 'env': {'PRIVATE_APP_ACCESS_TOKEN': os.environ['HUBSPOT_TOKEN_MCP']}}
+          if os.environ.get('LEMLIST_KEY_MCP'):
+              cfg['mcpServers']['lemlist'] = {'type': 'http', 'url': 'https://app.lemlist.com/mcp', 'headers': {'X-API-Key': os.environ['LEMLIST_KEY_MCP']}}
+          json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
+          "
+
+      - name: Build claude_args
+        if: steps.fire.outputs.fired == 'true'
+        run: |
+          READ="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__hubspot__hubspot-get-engagement,mcp__lemlist__get_campaigns,mcp__lemlist__get_campaign_details,mcp__lemlist__get_campaigns_stats,mcp__lemlist__search_contacts"
+          echo "CLAUDE_ARGS=--model claude-opus-4-8 --max-turns 15 --allowedTools Bash,Read,mcp__github__add_issue_comment,$READ --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+
+      - name: Run Claude Pocket (scheduled)
+        if: steps.fire.outputs.fired == 'true'
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        env:
+          HUBSPOT_PRIVATE_APP_TOKEN: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
+          LEMLIST_API_KEY: ${{ secrets.LEMLIST_API_KEY }}
+          FULLENRICH_API_KEY: ${{ secrets.FULLENRICH_API_KEY }}
+          PHANTOMBUSTER_API_KEY: ${{ secrets.PHANTOMBUSTER_API_KEY }}
+          VAULT_DEPLOY_KEY: ${{ secrets.VAULT_DEPLOY_KEY }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Tu es Claude Pocket (tâche PROGRAMMÉE). Lecture seule (pas d'écriture, pas d'approbation possible en automatique).
+            1. `cat /tmp/agent_task.json` (issue_number, description avec "### Mode") et `cat docs/runner-guardrails.md`.
+            2. La demande indique un "### Mode" : `cat pocket-modes/<slug>.json` et **suis STRICTEMENT son champ `instructions`**.
+               Pour HubSpot : `python3 scripts/pocket_hubspot.py ...`. Vault : `python3 scripts/pocket_vault.py search/read`.
+            3. Poste un bref commentaire de progression puis le RÉSULTAT FINAL sur l'issue :
+               `gh issue comment ${{ steps.fire.outputs.issue }} --body "..."`
+            4. Classe : `gh issue edit ${{ steps.fire.outputs.issue }} --add-label "<cat du mode>"`.
+          claude_args: ${{ env.CLAUDE_ARGS }}
+          settings: |
+            {
+              "env": {
+                "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+                "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
+                "GITHUB_REPOSITORY": "${{ github.repository }}",
+                "HUBSPOT_PRIVATE_APP_TOKEN": "${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}",
+                "LEMLIST_API_KEY": "${{ secrets.LEMLIST_API_KEY }}"
+              }
+            }
+
+      - name: Notify (push)
+        if: steps.fire.outputs.fired == 'true'
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+        run: |
+          pip install --quiet pywebpush || true
+          python3 scripts/pocket_push.py --title "Claude Pocket ⏰" --body "Tâche programmée #${{ steps.fire.outputs.issue }} terminée." --url "./" || true
