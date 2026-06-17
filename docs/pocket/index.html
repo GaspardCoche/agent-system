@@ -37,7 +37,7 @@
   </svg>
 
   <header>
-    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v13</span></button>
+    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v14</span></button>
     <div class="hbtns">
       <button class="icon-btn" id="nav-modes" title="Modes agentiques"><svg class="ic"><use href="#i-robot"/></svg></button>
       <button class="icon-btn" id="nav-system" title="Système"><svg class="ic"><use href="#i-cpu"/></svg></button>
@@ -150,6 +150,15 @@
     <p id="know-msg" class="msg"></p>
   </section>
 
+  <!-- ── Dashboard (command center) ── -->
+  <section id="dashboard" class="card dash">
+    <div class="dash-head">
+      <div class="dash-stats" id="dash-stats"></div>
+      <button class="icon-btn" id="refresh-btn" title="Rafraîchir"><svg class="ic"><use href="#i-clock"/></svg></button>
+    </div>
+    <div id="dash-domains" class="dash-domains"></div>
+  </section>
+
   <!-- ── Composer ── -->
   <section id="composer" class="card">
     <h2><svg class="ic"><use href="#i-send"/></svg> Nouvelle tâche</h2>
@@ -180,6 +189,12 @@
   <!-- ── Historique (classé par système) ── -->
   <section id="history" class="card">
     <h2><svg class="ic"><use href="#i-list"/></svg> Tâches récentes</h2>
+    <div class="seg" id="source-filter">
+      <button data-src="phone" class="active">📱 Téléphone</button>
+      <button data-src="scheduled">⏰ Programmé</button>
+      <button data-src="computer">💻 Ordinateur</button>
+      <button data-src="all">Tout</button>
+    </div>
     <div class="chips" id="cat-filters"></div>
     <ul id="history-list"></ul>
   </section>
