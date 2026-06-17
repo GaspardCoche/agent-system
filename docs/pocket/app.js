@@ -2,7 +2,7 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v9';
+const APP_VERSION = 'v10';
 const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
 function estTokens(text) { return Math.round((text || '').length / 4); }
 function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
@@ -169,7 +169,7 @@ function renderModes() {
     ul.appendChild(li);
   }
 }
-function openModeEditor(mode) {
+async function openModeEditor(mode) {
   editingMode = mode || null;
   $('mode-editor').classList.remove('hidden');
   $('mode-name').value = mode ? mode.name : '';
@@ -178,7 +178,32 @@ function openModeEditor(mode) {
   $('mode-instr').value = mode ? mode.instructions : '';
   $('mode-delete').classList.toggle('hidden', !mode);
   $('mode-msg').textContent = '';
+  // Programmation : reset puis charge si existante
+  $('mode-freq').value = 'none'; $('sched-extra').classList.add('hidden'); $('weekday-wrap').classList.add('hidden');
+  $('mode-time').value = '08:00'; $('mode-sched-demande').value = '';
+  if (mode) {
+    try {
+      const c = await gh('/contents/pocket-schedules/' + mode.slug + '.json');
+      const sc = JSON.parse(decodeB64(c.content));
+      $('mode-freq').value = sc.freq; $('sched-extra').classList.remove('hidden');
+      $('mode-time').value = String(sc.hour).padStart(2, '0') + ':' + String(sc.minute || 0).padStart(2, '0');
+      $('mode-weekday').value = sc.weekday || 0; $('mode-sched-demande').value = sc.demande || '';
+      $('weekday-wrap').classList.toggle('hidden', sc.freq !== 'weekly');
+    } catch {}
+  }
   $('mode-editor').scrollIntoView({ behavior: 'smooth' });
+}
+async function saveSchedule(slug, name, cat) {
+  const path = 'pocket-schedules/' + slug + '.json';
+  const freq = $('mode-freq').value;
+  if (freq === 'none') {
+    try { const c = await gh('/contents/' + path); await gh('/contents/' + path, { method: 'DELETE', body: JSON.stringify({ message: 'pocket: unschedule ' + slug, sha: c.sha }) }); } catch {}
+    return;
+  }
+  const [hh, mm] = ($('mode-time').value || '08:00').split(':');
+  const obj = { id: slug, mode: slug, name, category: cat, freq, hour: parseInt(hh, 10), minute: parseInt(mm, 10), weekday: parseInt($('mode-weekday').value, 10), demande: $('mode-sched-demande').value.trim() || ('Lance le mode ' + name + '.'), enabled: true, tz: 'Europe/Brussels', last_fired: '' };
+  let sha; try { sha = (await gh('/contents/' + path)).sha; } catch {}
+  await gh('/contents/' + path, { method: 'PUT', body: JSON.stringify({ message: 'pocket: schedule ' + slug, content: b64(JSON.stringify(obj, null, 2)), sha }) });
 }
 async function saveMode() {
   const name = $('mode-name').value.trim(), instr = $('mode-instr').value.trim(), m = $('mode-msg');
@@ -190,7 +215,8 @@ async function saveMode() {
     let sha = editingMode ? editingMode._sha : undefined;
     if (!sha) { try { sha = (await gh('/contents/pocket-modes/' + slug + '.json')).sha; } catch {} }
     await gh('/contents/pocket-modes/' + slug + '.json', { method: 'PUT', body: JSON.stringify({ message: 'pocket: mode ' + slug, content: b64(JSON.stringify(obj, null, 2)), sha }) });
-    m.className = 'msg ok'; m.textContent = '✅ Mode déployé — utilisable au lancement d\'une tâche.';
+    await saveSchedule(slug, name, obj.category);
+    m.className = 'msg ok'; m.textContent = '✅ Mode déployé' + ($('mode-freq').value !== 'none' ? ' + programmé.' : ' — utilisable au lancement d\'une tâche.');
     $('mode-editor').classList.add('hidden');
     await loadModes(); renderModes();
   } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
@@ -199,6 +225,7 @@ async function deleteMode() {
   if (!editingMode) return; const m = $('mode-msg'); m.className = 'msg'; m.textContent = 'Suppression…';
   try {
     await gh('/contents/pocket-modes/' + editingMode.slug + '.json', { method: 'DELETE', body: JSON.stringify({ message: 'pocket: delete mode ' + editingMode.slug, sha: editingMode._sha }) });
+    try { const c = await gh('/contents/pocket-schedules/' + editingMode.slug + '.json'); await gh('/contents/pocket-schedules/' + editingMode.slug + '.json', { method: 'DELETE', body: JSON.stringify({ message: 'pocket: unschedule ' + editingMode.slug, sha: c.sha }) }); } catch {}
     if (selectedMode === editingMode.slug) selectedMode = 'auto';
     $('mode-editor').classList.add('hidden'); await loadModes(); renderModes();
   } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
@@ -394,6 +421,7 @@ function init() {
   $('mode-new').onclick = () => openModeEditor(null);
   $('mode-save').onclick = saveMode;
   $('mode-delete').onclick = deleteMode;
+  $('mode-freq').onchange = (e) => { $('sched-extra').classList.toggle('hidden', e.target.value === 'none'); $('weekday-wrap').classList.toggle('hidden', e.target.value !== 'weekly'); };
   $('system-back').onclick = () => history.back();
   $('back').onclick = () => history.back();
   $('save-settings').onclick = async () => {

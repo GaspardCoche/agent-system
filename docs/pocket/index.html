@@ -37,7 +37,7 @@
   </svg>
 
   <header>
-    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v8</span></button>
+    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v10</span></button>
     <div class="hbtns">
       <button class="icon-btn" id="nav-modes" title="Modes agentiques"><svg class="ic"><use href="#i-robot"/></svg></button>
       <button class="icon-btn" id="nav-system" title="Système"><svg class="ic"><use href="#i-cpu"/></svg></button>
@@ -103,6 +103,26 @@
       <label>Instructions (le « cerveau » de l'agent)
         <textarea id="mode-instr" rows="6" placeholder="Tu es un agent qui… Décris précisément sa mission, ses étapes, ses limites."></textarea>
       </label>
+      <label><svg class="ic"><use href="#i-clock"/></svg> Déclenchement programmé
+        <select id="mode-freq">
+          <option value="none">Aucun (lancement manuel)</option>
+          <option value="daily">Tous les jours</option>
+          <option value="weekly">Chaque semaine</option>
+        </select>
+      </label>
+      <div id="sched-extra" class="hidden">
+        <label>Heure <input id="mode-time" type="time" value="08:00" /></label>
+        <label id="weekday-wrap" class="hidden">Jour
+          <select id="mode-weekday">
+            <option value="0">Lundi</option><option value="1">Mardi</option><option value="2">Mercredi</option>
+            <option value="3">Jeudi</option><option value="4">Vendredi</option><option value="5">Samedi</option><option value="6">Dimanche</option>
+          </select>
+        </label>
+        <label>Demande à lancer automatiquement
+          <textarea id="mode-sched-demande" rows="2" placeholder="Ex : Lance l'audit CRM hebdomadaire."></textarea>
+        </label>
+        <p class="hint" style="margin-top:0">Lecture seule (les tâches programmées ne font pas d'écriture sans toi). Fuseau : Europe/Brussels. Tu recevras une notif à la fin.</p>
+      </div>
       <button id="mode-save" class="primary"><svg class="ic"><use href="#i-check"/></svg> Déployer le mode</button>
       <button id="mode-delete" class="ghost hidden">Supprimer ce mode</button>
       <p id="mode-msg" class="msg"></p>
