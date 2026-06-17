@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "25096677363",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-04-29",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "9 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-04-29T07:42:16.114252+00:00",
-    "agents": [],
-    "report_file": "reports/2026-04-29-email-agent-daily-digest-2026-04-29.md"
-  },
-  {
     "run_id": "25102708338",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1596,5 +1582,28 @@
     "timestamp": "2026-06-17T12:24:22.985751+00:00",
     "agents": [],
     "report_file": "reports/2026-06-17-orchestrator-scheduled-run.md"
+  },
+  {
+    "run_id": "27690430243",
+    "workflow": "orchestrator",
+    "title": "fix(pocket): notify only phone tasks",
+    "status": "success",
+    "event": "pull_request",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "125",
+    "summary": "Task received with incomplete context. Task message indicates 'See task in context' without providing explicit data files or analysis scope. Forge age · Task input is incomplete. The task file contains 'See task in context' but no specific research q",
+    "next_actions": [],
+    "timestamp": "2026-06-17T13:01:23.245237+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "pending_clarification"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-06-17-orchestrator-fix-pocket---notify-only-phone-tasks.md"
   }
 ]
