@@ -4,7 +4,7 @@ id: agents-sage-memory
 type: agent
 tags: [sage, prompts, skills, memory, improvement]
 agents: [sage]
-updated: 2026-06-14
+updated: 2026-06-21
 ---
 
 # Sage — Mémoire & Améliorations
@@ -19,20 +19,19 @@ updated: 2026-06-14
 ## État du système
 
 ```
-Dernière analyse    : 2026-06-12 (run manuel — 68 jours de retard, Sage weekly a échoué toutes les semaines)
+Dernière analyse    : 2026-06-21 (weekly — pipeline_status: broken 11e semaine, 3 fixes appliqués)
 Skills validés      : 4 (firecrawl_scrape, github_create_issue, gemini_analyze, slack_notify)
 Skills candidats    : 1 (gh_run_artifacts — non encore scripté)
 Prompts améliorés   : 0
-Prochaine analyse   : Dimanche 2026-06-15 (schedule normal)
+Prochaine analyse   : Dimanche 2026-06-28 (schedule normal)
 Alerte active       :
-  1. CRITIQUE — Sage weekly en échec depuis 5+ semaines (max_turns=15 insuffisant, doit passer à 25)
-  2. CRITIQUE — Pipeline rétrospectives cassée : 9e semaine consécutive
-  3. URGENT — Node.js 20 deprecation deadline : 16 juin 2026 (4 jours)
-  4. BLOQUÉ — Nexus template mode depuis 85 jours (credentials Google Ads manquants)
+  1. RÉSOLU — sage.yml --max-turns 15 → 25 (appliqué 2026-06-21, grep confirmé)
+  2. RÉSOLU — _reusable-claude.yml prompt sans retrospective (appliqué 2026-06-21, grep confirmé)
+  3. RÉSOLU — email-agent.yml sans artifact Iris (appliqué 2026-06-21, grep confirmé)
+  4. BLOQUÉ — Nexus template mode (credentials Google Ads manquants)
 Actions requises    :
-  - Modifier sage.yml : --max-turns 15 → --max-turns 25
-  - Vérifier que les fixes retrospective pipeline (2026-06-07) ont réellement été appliqués
-  - Tester les workflows avec FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true avant le 16 juin
+  - Vérifier la semaine prochaine (2026-06-28) si des rétrospectives sont enfin collectées
+  - Scripter et valider le skill gh_run_artifacts si pipeline réparée
 ```
 
 ---
@@ -101,6 +100,8 @@ Voir `memory/lessons_learned.md` pour la liste complète.
 | 2026-05-31 | ÉCHEC (max_turns) | 0 | 0 | 0 | Sage weekly failed — 7e semaine pipeline cassée |
 | 2026-06-07 | ÉCHEC (max_turns) | 0 | 0 | 0 | Sage weekly failed — 8e semaine pipeline cassée |
 | 2026-06-12 | run manuel (68j retard) | 1 (gh_run_artifacts) | 0 | 0 | Analyse via git log + reports, pipeline cassée 9e semaine |
+| 2026-06-14 | weekly | 0 | 0 | 0 | pipeline_status: broken 10e semaine |
+| 2026-06-21 | weekly | 0 | 3 fixes appliqués | 0 | pipeline_status: broken 11e semaine — fixes réellement appliqués cette fois |
 
 ---
 
@@ -129,6 +130,7 @@ Voir `memory/lessons_learned.md` pour la liste complète.
 | 2026-05-31 | weekly ÉCHEC | max_turns=15 atteint — pipeline broken 7e semaine | 26710641346 |
 | 2026-06-07 | weekly ÉCHEC | max_turns=15 atteint — pipeline broken 8e semaine | 27090737680 |
 | 2026-06-12 | manuel (ce run) | Analyse via git log + reports. 3 nouvelles leçons. 1 skill candidat identifié. | 27413450637 |
+| 2026-06-21 | weekly (ce run) | pipeline_status: broken 11e semaine. 3 fixes appliqués et GREP-VÉRIFIÉS. Leçon documentée. | 27903183395 |
 
 ---
 

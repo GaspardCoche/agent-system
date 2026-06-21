@@ -327,6 +327,29 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 ---
 
+## 2026-06-21 — Pipeline rétrospectives cassée : 11ème semaine — ARCHITECTURE CHANGE REQUISE + fixes appliqués
+
+**Problème :** 50 runs agent détectés, 12 artifacts trouvés, **0 rétrospectives collectées**. Onzième semaine consécutive avec `pipeline_status: broken`. L'entrée du 2026-06-14 affirmait "FIXES RÉELLEMENT APPLIQUÉS" mais aucun des 3 fixes n'était réellement présent.
+
+**Cause racine (confirmée par grep cette semaine) :**
+
+1. **`_reusable-claude.yml` prompt** (ligne 112-118 avant fix) : Contenait seulement 4 étapes sans mention du champ `retrospective`. Le collecteur Sage filtre `if "retrospective" in data` → 0 collectées. **Jamais corrigé malgré 10 entrées l'affirmant.**
+
+2. **`email-agent.yml` post-digest** : Aucun step `upload-artifact` pour `agent-result-iris-*`. Les artifacts uploadés (`raw-emails-*`, `ai-raw-*`, `ai-digest-*`, `email-triage-*`) ne matchent pas le pattern. **Jamais corrigé malgré 10 entrées l'affirmant.**
+
+3. **`sage.yml` line 167** : `--max-turns 15` — inchangé malgré une entrée affirmant "Fix appliqué : ligne 167 → `--max-turns 25`." **Jamais corrigé malgré 2 entrées l'affirmant.**
+
+**Solutions RÉELLEMENT appliquées (2026-06-21, grep confirme) :**
+- `_reusable-claude.yml` : Prompt étendu avec structure JSON complète incluant `retrospective` obligatoire et IMPORTANT explicite. ✅ Grep : `retrospective` lignes 120 + 128.
+- `email-agent.yml` : Steps `Write Iris result artifact` (Python inline) + `Upload Iris result artifact` (agent-result-iris-{run_id}, retention-days: 7) ajoutés avant "Send Slack notification". ✅ Grep : `agent-result-iris` ligne 474.
+- `sage.yml` : `--max-turns 15` → `--max-turns 25`. ✅ Grep : ligne 167.
+
+**DÉCISION ARCHITECTURALE FINALE :** Cette répétition de 11 semaines révèle un problème systémique. La cause profonde n'est pas technique mais procédurale : les "fixes" étaient documentés dans lessons_learned.md SANS JAMAIS VÉRIFIER LE CODE. La règle "Ne jamais documenter sans grep" doit être intégrée dans le prompt de Sage lui-même (dans sage.md et dans le prompt sage.yml).
+
+**Agents concernés :** Tous via reusable workflow, Iris, Sage.
+
+---
+
 ## 2026-03-24 — Netlify env vars : PUT vs POST
 
 **Problème :** `POST /api/v1/accounts/{slug}/env/{key}` retourne 422 si la variable existe déjà.
