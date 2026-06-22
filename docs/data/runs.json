@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "25313288270",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "25313288270",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-05-04T10:20:00.032451+00:00",
-    "agents": [],
-    "report_file": "reports/2026-05-04-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "25363566758",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-05-05",
@@ -1587,5 +1573,29 @@
     "timestamp": "2026-06-22T11:14:36.287163+00:00",
     "agents": [],
     "report_file": "reports/2026-06-22-email-agent-daily-digest-2026-06-22.md"
+  },
+  {
+    "run_id": "27955997300",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-06-22",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false (11e run consécutif, 90 jours de blocage). Score estimé dégradé : 38→35/100. 4 secrets Google Ads manquants. Aucu",
+    "next_actions": [
+      "URGENT : Configurer les 4 secrets Google Ads dans GitHub Settings → Secrets → Actions",
+      "Forge : Modifier nexus.yml — ajouter step check-credentials qui skip le job si secrets absents",
+      "Après configuration : relancer nexus pour premier audit réel (score attendu ~72/100 après optimisations)",
+      "Documentation OAuth2 : https://developers.google.com/google-ads/api/docs/oauth/overview"
+    ],
+    "timestamp": "2026-06-22T13:26:45.185041+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-06-22-nexus-nexus-weekly-audit-2026-06-22.md"
   }
 ]
