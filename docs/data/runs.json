@@ -1574,17 +1574,26 @@
     "report_file": "reports/2026-06-24-email-agent-daily-digest-2026-06-24.md"
   },
   {
-    "run_id": "28093144022",
-    "workflow": "ralph",
-    "title": "Ralph → sage (sage-weekly) 2026-06-24",
-    "status": "failed",
-    "event": "repository_dispatch",
+    "run_id": "28093042078",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
     "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-06-24T10:48:56.673589+00:00",
-    "agents": [],
-    "report_file": "reports/2026-06-24-ralph-ralph---sage--sage-weekly--2026-06-24.md"
+    "task_id": "28093042078",
+    "summary": "Task routing mismatch detected. Task asks for Sage weekly self-improvement analysis (due 2026-06-28) but is assigned to Lumen (analysis agent). Sage l",
+    "next_actions": [
+      "Clarify: should Lumen run Sage's analysis (not in Lumen's role) or trigger Sage workflow?",
+      "If yes, recommend Sage run on 2026-06-28 per schedule, OR run immediately to test pipeline health",
+      "If Lumen should analyze: collect workflow metrics (agent runs, artifacts, turn usage) and generate health report instead"
+    ],
+    "timestamp": "2026-06-24T10:54:41.134943+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "needs_clarification"
+      }
+    ],
+    "report_file": "reports/2026-06-24-orchestrator-scheduled-run.md"
   }
 ]
