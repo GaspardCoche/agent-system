@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "25956174997",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-05-16",
-    "status": "failed",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "10 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-05-16T07:32:09.904708+00:00",
-    "agents": [],
-    "report_file": "reports/2026-05-16-email-agent-daily-digest-2026-05-16.md"
-  },
-  {
     "run_id": "25985179679",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-05-17",
@@ -1563,5 +1549,34 @@
     "timestamp": "2026-07-03T08:35:54.194820+00:00",
     "agents": [],
     "report_file": "reports/2026-07-03-email-agent-daily-digest-2026-07-03.md"
+  },
+  {
+    "run_id": "28654883029",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "28654883029",
+    "summary": "Passage schedule generique (Mon-Ven 08h UTC), dry_run_all=true, aucune tache metier fournie. Lumen et researcher n'ont detecte aucune anomalie ni sign · Scheduled health check (cron Mon-Fri 08h UTC). Reviewed vault, recent commits, and system state. ",
+    "next_actions": [
+      "Sentinel : rien a valider pour ce run (no-op), simple passage de la chaine"
+    ],
+    "timestamp": "2026-07-03T10:38:37.081106+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "lumen",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-07-03-orchestrator-scheduled-run.md"
   }
 ]
