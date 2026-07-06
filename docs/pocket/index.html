@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
-  <meta name="theme-color" content="#1c1917" />
+  <meta name="theme-color" content="#101317" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Pocket" />
@@ -36,6 +36,10 @@
       <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><rect x="9" y="9" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.7"/><path stroke="currentColor" stroke-width="1.7" stroke-linecap="round" d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></symbol>
       <symbol id="i-brain" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M9.5 2A2.5 2.5 0 007 4.5v.5a3 3 0 00-2 5.6V13a3 3 0 002 5.6V19a2.5 2.5 0 005 0V4.5A2.5 2.5 0 009.5 2zM14.5 2A2.5 2.5 0 0117 4.5v.5a3 3 0 012 5.6V13a3 3 0 01-2 5.6V19a2.5 2.5 0 01-5 0"/></symbol>
       <symbol id="i-chevron" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M3 10.5L12 3l9 7.5M5 9.5V20h5v-6h4v6h5V9.5"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M4 4h11a3 3 0 013 3v13a2 2 0 00-2-2H4V4zM4 4v14M20 20V7"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M20 20l-4-4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></symbol>
     </defs>
   </svg>
 
@@ -46,8 +50,8 @@
       <span class="dot" id="conn-dot"></span>
     </button>
     <div class="hbtns">
+      <button class="icon-btn" id="nav-theme" title="Thème"><svg class="ic"><use href="#i-moon"/></svg></button>
       <button class="icon-btn" id="nav-new" title="Nouvelle conversation"><svg class="ic"><use href="#i-plus"/></svg></button>
-      <button class="icon-btn" id="nav-admin" title="Administration"><svg class="ic"><use href="#i-gear"/></svg></button>
     </div>
   </header>
 
@@ -103,7 +107,7 @@
           <h2>Conversations</h2>
           <div class="mini-stats" id="mini-stats"></div>
         </div>
-        <ul id="history-list" class="thread-list"></ul>
+        <div id="history-list"></div>
       </section>
     </section>
 
@@ -127,6 +131,20 @@
         <textarea id="chat-input" rows="1" placeholder="Réponds ou affine…"></textarea>
         <button id="chat-send" class="icon-btn send" title="Envoyer"><svg class="ic"><use href="#i-send"/></svg></button>
       </div>
+    </section>
+
+    <!-- ══ SAVOIR (vault + savoir accumulé) ══ -->
+    <section id="savoir" class="view hidden">
+      <div class="savoir-hero">
+        <h1>Savoir</h1>
+        <p>Le savoir que Pocket a accumulé, et le vault EMAsphere (2600+ notes) à portée de main.</p>
+      </div>
+      <div class="vault-search">
+        <input id="vault-q" type="text" placeholder="Chercher dans le vault…" autocapitalize="off" />
+        <button id="vault-go" title="Chercher"><svg class="ic"><use href="#i-search"/></svg></button>
+      </div>
+      <p id="vault-msg" class="msg"></p>
+      <div id="know-cards"></div>
     </section>
 
     <!-- ══ ADMINISTRATION ══ -->
@@ -212,11 +230,17 @@
       </div>
 
       <details class="acard sys-card">
-        <summary><svg class="ic"><use href="#i-cpu"/></svg> Système <span class="ver" id="ver-badge">v16</span></summary>
+        <summary><svg class="ic"><use href="#i-cpu"/></svg> Système <span class="ver" id="ver-badge">v17</span></summary>
         <div id="system-grid" class="kgrid"></div>
       </details>
     </section>
   </main>
+
+  <nav class="tabbar">
+    <button class="tab active" id="tab-home"><svg class="ic"><use href="#i-home"/></svg>Accueil</button>
+    <button class="tab" id="tab-savoir"><svg class="ic"><use href="#i-book"/></svg>Savoir</button>
+    <button class="tab" id="tab-admin"><svg class="ic"><use href="#i-gear"/></svg>Admin</button>
+  </nav>
 
   <script src="app.js"></script>
 </body>

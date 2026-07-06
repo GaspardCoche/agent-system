@@ -124,7 +124,10 @@ jobs:
           # Modèle choisi dans la boîte de commande (défaut Opus 4.8). Abonnement, 0 €.
           MODEL=$(printf '%s' "$BODY" | python3 scripts/pocket_model.py)
           READ="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__hubspot__hubspot-get-engagement,mcp__tavily__tavily_search,mcp__tavily__tavily_extract,mcp__firecrawl__firecrawl_scrape,mcp__firecrawl__firecrawl_search"
-          TOOLS="Bash,Read,mcp__github__add_issue_comment,$READ"
+          # Autonomie façon CLI Claude Code : lecture + écriture de fichiers dans
+          # le repo (outputs, notes, savoir), recherche, exécution. Les écritures
+          # EXTERNES (CRM/enrichissement) restent gatées par `approved` ci-dessous.
+          TOOLS="Bash,Read,Write,Edit,Glob,Grep,mcp__github__add_issue_comment,$READ"
           # Outils MCP ajoutés par l'utilisateur depuis l'app (panneau admin).
           USER_TOOLS=$(python3 scripts/pocket_mcp.py tools 2>/dev/null)
           [ -n "$USER_TOOLS" ] && TOOLS="$TOOLS,$USER_TOOLS"
@@ -134,7 +137,7 @@ jobs:
             TOOLS="$TOOLS,$WRITE"
           fi
           echo "Modèle: $MODEL"
-          echo "CLAUDE_ARGS=--model $MODEL --max-turns 20 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+          echo "CLAUDE_ARGS=--model $MODEL --max-turns 45 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run Claude Pocket
         id: claude
@@ -179,16 +182,25 @@ jobs:
             - **OUTPUTS** — tout CSV produit va dans `pocket-data/outputs/` ; donne TOUJOURS le `csv_url` renvoyé dans ta réponse (Gaspard le télécharge depuis l'app).
             Si un secret/outil manque, dis-le proprement et propose une alternative — ne plante jamais.
 
-            === MÉMOIRE ===
-            - Au démarrage, lis `cat pocket-knowledge/<domaine>.md` (crm/web/vault/enrich/content/other) s'il existe.
-            - À la fin, si tu as appris quelque chose de DURABLE : `python3 scripts/pocket_learn.py <domaine> "<apprentissage>"` (jamais de doublon, bref).
+            === SAVOIR (consulte-le SYSTÉMATIQUEMENT au démarrage) ===
+            - **Savoir accumulé** : lis `cat pocket-knowledge/<domaine>.md` (crm/enrich/content/web/vault/other) pertinent — c'est ta mémoire de tâches passées. Lis-en plusieurs si la tâche est transverse.
+            - **Vault EMAsphere (2600+ notes)** : dès que la tâche touche au métier (ICP, HubSpot, playbooks, historique, décisions), commence par `python3 scripts/pocket_vault.py search "<requête>"` puis `read "<chemin>"`. Le vault contient le contexte que tu n'as pas — exploite-le AVANT de répondre.
+            - À la FIN, si tu as appris quelque chose de DURABLE et réutilisable : `python3 scripts/pocket_learn.py <domaine> "<apprentissage>"` (jamais de doublon, bref).
+
+            === AUTONOMIE (comporte-toi comme la CLI Claude Code) ===
+            Tu as jusqu'à 45 tours et les outils Bash/Read/Write/Edit/Glob/Grep. Sur une tâche non triviale :
+            1. **Planifie** — décompose en étapes ; annonce le plan en une ligne.
+            2. **Exécute étape par étape**, de façon autonome : enchaîne les outils sans t'arrêter à chaque micro-décision. Tu peux CRÉER/ÉDITER des fichiers dans le repo (notes, brouillons, documents, savoir) avec Write/Edit — utile pour produire un livrable durable (ex : `pocket-data/outputs/<nom>.md`) et donner son lien.
+            3. **Vérifie ton propre travail** avant de conclure (relis, recoupe les chiffres, teste un script). Corrige si besoin — n'affirme pas sans avoir vérifié.
+            4. **Va au bout** : ne rends pas la main tant que la tâche n'est pas réellement aboutie ou réellement bloquée (dans ce cas, explique le blocage et propose la suite).
+            Garde-fou : les écritures EXTERNES (HubSpot write, FullEnrich `--confirm`) restent conditionnées à `approved` = true ; sans approbation, poste un aperçu et demande le label `approved`.
 
             === MÉTHODE ===
-            1. Comprends l'intention (et lis les fichiers joints s'il y en a).
-            2. Agis / rédige. **Narre tes étapes** par de courts commentaires de progression (ex : "Je interroge HubSpot…", "Je rédige…") — Gaspard les suit en direct.
-            3. **Lecture/génération par défaut.** Toute écriture externe coûteuse (HubSpot write, FullEnrich `--confirm`) UNIQUEMENT si `approved` = true ET demandée ET dans les garde-fous. Sinon, poste un aperçu de ce que tu ferais et demande le label `approved`.
-            4. Poste le RÉSULTAT FINAL en commentaire, clair et prêt à copier, même langue que la demande : `gh issue comment ${{ github.event.issue.number }} --body "..."`.
-            5. Applique la MÉMOIRE si pertinent.
+            1. Comprends l'intention (fichiers joints + savoir + vault d'abord).
+            2. Planifie et agis de façon autonome. **Narre tes étapes** par de courts commentaires de progression — Gaspard les suit en direct.
+            3. Écriture/génération et fichiers-repo libres ; écriture EXTERNE gatée par `approved`.
+            4. Poste le RÉSULTAT FINAL en commentaire, clair et prêt à copier, même langue que la demande (donne les liens des fichiers produits) : `gh issue comment ${{ github.event.issue.number }} --body "..."`.
+            5. Consigne un apprentissage durable si pertinent.
           claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {

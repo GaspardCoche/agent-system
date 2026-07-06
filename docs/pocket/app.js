@@ -1,7 +1,7 @@
 'use strict';
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
-const APP_VERSION = 'v16';
+const APP_VERSION = 'v17';
 const CTX_WINDOW = 200000;
 const MODELS = { fable: 'Fable 5', opus: 'Opus 4.8', sonnet: 'Sonnet' };
 const CATS = {
@@ -133,17 +133,35 @@ async function renderMiniStats() {
     (running ? `<span class="live"><b>${running}</b> en cours</span>` : '') +
     `<span><b>${todayN}</b> aujourd'hui</span><span><b>${allIssues.length}</b> total</span>`;
 }
+function histBucket(iso) {
+  if (!iso) return 'Plus tôt';
+  const d = new Date(iso), now = new Date();
+  const days = Math.floor((now.setHours(0, 0, 0, 0) - new Date(iso).setHours(0, 0, 0, 0)) / 86400000);
+  if (days <= 0) return "Aujourd'hui";
+  if (days === 1) return 'Hier';
+  if (days < 7) return '7 derniers jours';
+  if (days < 31) return 'Ce mois-ci';
+  return 'Plus tôt';
+}
 function renderHistory() {
-  const ul = $('history-list'); ul.innerHTML = '';
-  if (!allIssues.length) { ul.innerHTML = '<li class="empty">Aucune conversation. Lance ta première tâche ci-dessus.</li>'; return; }
-  for (const i of allIssues) {
-    const cat = issueCat(i) || 'cat:other'; const cm = CATS[cat] || CATS['cat:other'];
-    const li = document.createElement('li'); li.style.setProperty('--cat', cm.color);
-    li.innerHTML = `<span class="t">${escapeHtml((i.title || '').replace('[Pocket] ', ''))}</span>
-      <span class="meta-r"><span class="cat-badge" style="background:${cm.color}">${cm.label}</span>
-      <span class="st ${i.state === 'open' ? 'open' : 'done'}"></span></span>`;
-    li.onclick = () => navigate('detail:' + i.number);
-    ul.appendChild(li);
+  const host = $('history-list'); host.innerHTML = '';
+  if (!allIssues.length) { host.innerHTML = '<div class="thread-list"><div class="empty" style="text-align:center;color:var(--faint);padding:22px;font-size:13.5px">Aucune conversation. Lance ta première tâche ci-dessus.</div></div>'; return; }
+  const order = ["Aujourd'hui", 'Hier', '7 derniers jours', 'Ce mois-ci', 'Plus tôt'];
+  const groups = {};
+  for (const i of allIssues) { const b = histBucket(i.created_at); (groups[b] = groups[b] || []).push(i); }
+  for (const label of order) {
+    const items = groups[label]; if (!items || !items.length) continue;
+    const lab = document.createElement('div'); lab.className = 'hgroup-label'; lab.textContent = label; host.appendChild(lab);
+    const ul = document.createElement('ul'); ul.className = 'thread-list';
+    for (const i of items) {
+      const cat = issueCat(i) || 'cat:other'; const cm = CATS[cat] || CATS['cat:other'];
+      const li = document.createElement('li'); li.style.setProperty('--cat', cm.color);
+      li.innerHTML = `<span class="t-wrap"><span class="t">${escapeHtml((i.title || '').replace('[Pocket] ', ''))}</span><span class="t-time">${i.created_at ? timeago(i.created_at) : ''} · ${cm.label}</span></span>
+        <span class="meta-r"><span class="st ${i.state === 'open' ? 'open' : 'done'}"></span></span>`;
+      li.onclick = () => navigate('detail:' + i.number);
+      ul.appendChild(li);
+    }
+    host.appendChild(ul);
   }
 }
 
@@ -393,6 +411,38 @@ async function saveKnowledge() {
   } catch (e) { flash('know-msg', friendlyError(e), 'err'); }
 }
 
+// ── Savoir (savoir accumulé + recherche vault) ───────────────────────────────
+const DOMAIN_LABELS = { crm: 'CRM', enrich: 'Enrichissement', content: 'Contenu', web: 'Web', vault: 'Vault', other: 'Autre' };
+async function renderSavoir() {
+  const host = $('know-cards'); host.innerHTML = '<p class="savoir-empty">Chargement du savoir…</p>';
+  let files = [];
+  try { const items = await gh('/contents/pocket-knowledge'); files = (Array.isArray(items) ? items : []).filter((f) => f.name.endsWith('.md') && f.name.toLowerCase() !== 'readme.md'); } catch { files = []; }
+  host.innerHTML = '';
+  for (const f of files) {
+    const domain = f.name.replace('.md', '');
+    let content = ''; try { const c = await gh('/contents/' + f.path); content = decodeB64(c.content); } catch {}
+    if (!content.trim()) continue;
+    const cm = CATS['cat:' + domain] || CATS['cat:other'];
+    const card = document.createElement('div'); card.className = 'know-card';
+    card.innerHTML = `<div class="kc-head"><h3><span class="kc-dot" style="background:${cm.color}"></span>${DOMAIN_LABELS[domain] || domain}</h3><button class="kc-toggle">Déplier</button></div><div class="know-body md">${renderMarkdown(content)}</div>`;
+    const tg = card.querySelector('.kc-toggle');
+    tg.onclick = () => { const e = card.classList.toggle('expanded'); tg.textContent = e ? 'Replier' : 'Déplier'; };
+    host.appendChild(card);
+  }
+  if (!host.children.length) host.innerHTML = "<p class=\"savoir-empty\">Aucun savoir accumulé pour l'instant. Pocket apprend au fil des tâches — et tu peux interroger le vault ci-dessus.</p>";
+}
+async function vaultSearch() {
+  const q = $('vault-q').value.trim(); if (!q) return;
+  flash('vault-msg', 'Lancement de la recherche…');
+  try {
+    await ensureLabels();
+    const demande = `Cherche dans le vault EMAsphere : « ${q} ». Utilise pocket_vault.py (search puis read) sur les notes pertinentes, puis résume les points clés en citant les chemins des notes.`;
+    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title: '[Pocket] Vault : ' + q.slice(0, 50), body: buildBody(demande, false, ''), labels: ['pocket', 'via:phone'] }) });
+    $('vault-q').value = ''; flash('vault-msg', `Recherche #${issue.number} lancée.`, 'ok');
+    navigate('detail:' + issue.number);
+  } catch (e) { flash('vault-msg', friendlyError(e), 'err'); }
+}
+
 // ── Système (device) ─────────────────────────────────────────────────────────
 async function renderSystem() {
   const d = [];
@@ -422,15 +472,24 @@ async function enablePush() {
 }
 
 // ── Router ────────────────────────────────────────────────────────────────────
+function setTab(view) {
+  const map = { home: 'tab-home', savoir: 'tab-savoir', admin: 'tab-admin' };
+  const active = view.startsWith('detail:') ? 'tab-home' : (map[view] || null);
+  for (const id of ['tab-home', 'tab-savoir', 'tab-admin']) $(id).classList.toggle('active', id === active);
+}
 function applyView(view) {
   const isDetail = view.startsWith('detail:');
+  const isHome = view === 'home' || view === 'main';
   currentView = isDetail ? 'detail' : view;
-  $('home').classList.toggle('hidden', !(view === 'home' || view === 'main'));
+  $('home').classList.toggle('hidden', !isHome);
   $('detail').classList.toggle('hidden', !isDetail);
+  $('savoir').classList.toggle('hidden', view !== 'savoir');
   $('admin').classList.toggle('hidden', view !== 'admin');
+  setTab(view);
   if (!isDetail) stopPoll();
   stopMainPoll();
   if (isDetail) loadDetail(parseInt(view.split(':')[1], 10));
+  else if (view === 'savoir') renderSavoir();
   else if (view === 'admin') { renderHealthAndCost(); loadMCP(); renderSystem(); $('mcp-editor').classList.add('hidden'); }
   else { detailNum = null; if (LS.repo && LS.pat) { loadHistory(); startMainPoll(); } }
   window.scrollTo(0, 0);
@@ -457,8 +516,10 @@ function applyTheme(t) {
   if (t === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', t);
   for (const b of document.querySelectorAll('#theme-seg button')) b.classList.toggle('active', b.dataset.theme === t);
-  const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.setAttribute('content', t === 'light' ? '#f4efe6' : '#1b1815');
+  const dark = t === 'dark' || (t === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.setAttribute('content', dark ? '#101317' : '#eef2ef');
 }
+function cycleTheme() { const order = ['auto', 'light', 'dark']; const next = order[(order.indexOf(LS.theme) + 1) % 3]; LS.theme = next; applyTheme(next); flash('composer-msg', 'Thème : ' + next, ''); setTimeout(() => flash('composer-msg', '', ''), 1200); }
 function setModel(m) { selectedModel = m; LS.model = m; for (const b of document.querySelectorAll('#model-seg button')) b.classList.toggle('active', b.dataset.model === m); }
 
 function init() {
@@ -469,9 +530,14 @@ function init() {
   // nav
   $('brand-home').onclick = () => navigate('home');
   $('nav-new').onclick = () => { navigate('home'); $('demande').focus(); };
-  $('nav-admin').onclick = () => navigate('admin');
+  $('nav-theme').onclick = cycleTheme;
+  $('tab-home').onclick = () => navigate('home');
+  $('tab-savoir').onclick = () => navigate('savoir');
+  $('tab-admin').onclick = () => navigate('admin');
   $('back').onclick = () => history.back();
   $('admin-back').onclick = () => history.back();
+  $('vault-go').onclick = vaultSearch;
+  $('vault-q').addEventListener('keydown', (e) => { if (e.key === 'Enter') vaultSearch(); });
   // model picker
   setModel(LS.model);
   for (const b of document.querySelectorAll('#model-seg button')) b.onclick = () => setModel(b.dataset.model);
