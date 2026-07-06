@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-06-22
+updated: 2026-07-06
 ---
 
 # Nexus — Mémoire & Patterns
@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-07-06 | weekly_audit (dry_run) | 32/100 (estimé) | Template — credentials_ok=false (12e run consécutif) — BLOCAGE 104 jours — Score dégradé 35→32 | #28789500762 |
 | 2026-06-22 | weekly_audit (dry_run) | 35/100 (estimé) | Template — credentials_ok=false (11e run consécutif) — BLOCAGE 90 jours — Score dégradé 38→35 | #27955997300 |
 | 2026-06-15 | weekly_audit (dry_run) | 38/100 (estimé) | Template — credentials_ok=false (10e run consécutif) — BLOCAGE 83 jours — Score dégradé 42→38 | #27550559362 |
 | 2026-06-12 | weekly_audit (dry_run) | 42/100 (estimé) | Template — credentials_ok=false (9e run consécutif) — BLOCAGE 80 jours — Score dégradé 58→42 | #27413450637 |
@@ -94,6 +95,14 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 - [ ] Audit hebdo : chaque lundi 6h UTC (à configurer dans nexus.yml)
 
 ## Note escalade CRITIQUE
+
+> 2026-07-06 : **12e run consécutif en template mode** (2026-03-24 → 2026-07-06).
+> Nexus bloqué depuis **104 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → 42/100 → 38/100 → 35/100 → 32/100.
+> ⛔ La recommandation de suspension de `nexus.yml` formulée le 2026-06-22 (90 jours de blocage) n'a **toujours pas été appliquée** deux semaines plus tard. Chaque run hebdomadaire continue de consommer un run CI complet pour produire un template identique.
+> Action prioritaire : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
+> Action Forge : Modifier nexus.yml pour skip + créer/rafraîchir une issue de suivi automatique si credentials_ok=false, au lieu de relancer le plein cycle chaque semaine.
+> Amélioration suggérée : ajouter step `needs: [check-credentials]` qui skip le job entier si credentials absents — économise tokens et runs.
+> Score estimé après déblocage + optimisations : ~72/100.
 
 > 2026-06-22 : **11e run consécutif en template mode** (2026-03-24 → 2026-06-22).
 > Nexus bloqué depuis **90 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → 42/100 → 38/100 → 35/100.

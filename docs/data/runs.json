@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "26086269565",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-05-19",
-    "status": "failed",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "9 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-05-19T08:44:52.663740+00:00",
-    "agents": [],
-    "report_file": "reports/2026-05-19-email-agent-daily-digest-2026-05-19.md"
-  },
-  {
     "run_id": "26093631071",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1587,5 +1573,28 @@
       }
     ],
     "report_file": "reports/2026-07-06-orchestrator-feat-pocket---phase-0---health--status--cost--sche.md"
+  },
+  {
+    "run_id": "28789500762",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-07-06",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false (12e run consécutif, bloqué depuis 104 jours). Aucun appel API Google Ads effectué. 4 secrets manquants : GOOGLE_",
+    "next_actions": [
+      "Configurer GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_REFRESH_TOKEN dans GitHub Secrets",
+      "Envisager de suspendre nexus.yml jusqu'à configuration des secrets, pour économiser les runs inutiles",
+      "Relancer Nexus avec dry_run=true après configuration pour un premier audit réel"
+    ],
+    "timestamp": "2026-07-06T11:54:59.461858+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-07-06-nexus-nexus-weekly-audit-2026-07-06.md"
   }
 ]
