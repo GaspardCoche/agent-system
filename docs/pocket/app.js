@@ -1,76 +1,70 @@
 'use strict';
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
-const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v15';
-const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
-function estTokens(text) { return Math.round((text || '').length / 4); }
-function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
-function decodeB64(c) { try { return decodeURIComponent(escape(atob((c || '').replace(/\s/g, '')))); } catch { return ''; } }
+const APP_VERSION = 'v16';
+const CTX_WINDOW = 200000;
+const MODELS = { fable: 'Fable 5', opus: 'Opus 4.8', sonnet: 'Sonnet' };
 const CATS = {
-  'cat:crm': { label: 'CRM', color: '#3b6fd4' },
-  'cat:enrich': { label: 'Enrichissement', color: '#8957e5' },
-  'cat:outreach': { label: 'Outreach', color: '#2da44e' },
-  'cat:web': { label: 'Web', color: '#bf8700' },
-  'cat:vault': { label: 'Vault', color: '#1f8f9a' },
-  'cat:code': { label: 'Code', color: '#bf3989' },
-  'cat:other': { label: 'Autre', color: '#57606a' },
+  'cat:crm': { label: 'CRM', color: '#c96442' },
+  'cat:enrich': { label: 'Enrichissement', color: '#b8863a' },
+  'cat:content': { label: 'Contenu', color: '#8a6d9c' },
+  'cat:web': { label: 'Web', color: '#4f8a8b' },
+  'cat:vault': { label: 'Vault', color: '#6d8a4f' },
+  'cat:other': { label: 'Autre', color: '#8a7f70' },
 };
+const MCP_BASE = [
+  { name: 'github', desc: 'Repo & issues', badge: 'base' },
+  { name: 'hubspot', desc: 'CRM (lecture + écriture gatée)', badge: 'base' },
+  { name: 'tavily', desc: 'Recherche web', badge: 'base' },
+  { name: 'firecrawl', desc: 'Scraping web', badge: 'base' },
+];
+
+function estTokens(t) { return Math.round((t || '').length / 4); }
+function decodeB64(c) { try { return decodeURIComponent(escape(atob((c || '').replace(/\s/g, '')))); } catch { return ''; } }
+function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
 
 const LS = {
   get repo() { return localStorage.getItem('pocket_repo') || ''; }, set repo(v) { localStorage.setItem('pocket_repo', v); },
   get pat() { return localStorage.getItem('pocket_pat') || ''; }, set pat(v) { localStorage.setItem('pocket_pat', v); },
-  get history() { try { return JSON.parse(localStorage.getItem('pocket_history') || '[]'); } catch { return []; } },
-  set history(v) { localStorage.setItem('pocket_history', JSON.stringify(v.slice(0, 50))); },
   get device() { let d = localStorage.getItem('pocket_device'); if (!d) { d = 'dev-' + Math.random().toString(36).slice(2, 10); localStorage.setItem('pocket_device', d); } return d; },
   get theme() { return localStorage.getItem('pocket_theme') || 'auto'; }, set theme(v) { localStorage.setItem('pocket_theme', v); },
+  get model() { return localStorage.getItem('pocket_model') || 'opus'; }, set model(v) { localStorage.setItem('pocket_model', v); },
 };
 const $ = (id) => document.getElementById(id);
-let pollTimer = null, allIssues = [], currentFilter = 'all', connectedLogin = '', detailNum = null, attachedFiles = [];
-let allModes = [], selectedMode = 'auto', editingMode = null;
-let currentSource = 'phone', currentView = 'main', mainTimer = null;
-
-// Origine d'une tâche : téléphone (app), programmé (cron), ou ordinateur (Claude Code).
-function taskSource(issue) {
-  const labels = (issue.labels || []).map((l) => l.name || l);
-  if (labels.includes('via:phone')) return 'phone';
-  const a = issue.user && issue.user.login;
-  if ((issue.title || '').includes('⏰')) return 'scheduled';
-  if (a && /github-actions/i.test(a)) return 'scheduled';
-  if (a && connectedLogin && a === connectedLogin) return 'phone';
-  return 'computer';
-}
+let pollTimer = null, mainTimer = null, allIssues = [], currentView = 'home';
+let connectedLogin = '', detailNum = null, attachedFiles = [], selectedModel = LS.model;
+let mcpServers = [], editingMcp = null;
 
 // ── API GitHub ──────────────────────────────────────────────────────────────
 async function gh(path, opts = {}) {
-  if (!LS.pat || !LS.repo) throw new Error('Configure le repo et le token (engrenage).');
+  if (!LS.pat || !LS.repo) throw new Error('Configure le repo et le token (Administration).');
   const res = await fetch(`https://api.github.com/repos/${LS.repo}${path}`, {
     ...opts, headers: { 'Authorization': `Bearer ${LS.pat}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json', ...(opts.headers || {}) },
   });
   if (!res.ok) { let d = ''; try { d = (await res.json()).message || ''; } catch {} const e = new Error(`GitHub ${res.status} ${d}`.trim()); e.status = res.status; throw e; }
   return res.status === 204 ? null : res.json();
 }
-// Lit un fichier JSON du repo (Contents API + décodage b64). null si absent.
 async function ghJSON(path) { try { const r = await gh('/contents/' + path); return JSON.parse(decodeB64(r.content)); } catch { return null; } }
+async function putJSON(path, obj, msg) {
+  let sha; try { sha = (await gh(`/contents/${path}`)).sha; } catch {}
+  await gh(`/contents/${path}`, { method: 'PUT', body: JSON.stringify({ message: msg || `pocket: ${path}`, content: b64(JSON.stringify(obj, null, 2)), sha }) });
+}
+async function putRaw(path, content) {
+  let sha; try { sha = (await gh(`/contents/${path}`)).sha; } catch {}
+  await gh(`/contents/${path}`, { method: 'PUT', body: JSON.stringify({ message: `pocket: upload ${path}`, content, sha }) });
+}
 function friendlyError(e) {
-  if (e.status === 403) return `${e.message}\n→ Token « classic » (scope repo) du compte gcoche-bit requis + accès écriture au repo.`;
+  if (e.status === 403) return `${e.message}\n→ Token « classic » (scope repo) requis + accès écriture au repo.`;
   if (e.status === 401) return `${e.message}\n→ Token invalide/expiré.`;
   return e.message;
 }
-function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
-async function putFile(path, obj) {
-  let sha; try { sha = (await gh(`/contents/${path}`)).sha; } catch {}
-  await gh(`/contents/${path}`, { method: 'PUT', body: JSON.stringify({ message: `pocket: sub ${LS.device}`, content: b64(JSON.stringify(obj, null, 2)), sha }) });
-}
-async function putRaw(path, b64content) {
-  let sha; try { sha = (await gh(`/contents/${path}`)).sha; } catch {}
-  await gh(`/contents/${path}`, { method: 'PUT', body: JSON.stringify({ message: `pocket: upload ${path}`, content: b64content, sha }) });
-}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function timeago(iso) { const s = Math.max(0, (Date.now() - new Date(iso)) / 1000); if (s < 60) return "à l'instant"; if (s < 3600) return `il y a ${Math.floor(s / 60)} min`; if (s < 86400) return `il y a ${Math.floor(s / 3600)} h`; return `il y a ${Math.floor(s / 86400)} j`; }
 
-// ── Import de fichiers ──────────────────────────────────────────────────────
+// ── Fichiers ──────────────────────────────────────────────────────────────
 function addFiles(fileList) {
   for (const f of fileList) {
-    if (f.size > 4 * 1024 * 1024) { alert(`${f.name} dépasse 4 Mo — ignoré.`); continue; }
+    if (f.size > 4 * 1024 * 1024) { flash('composer-msg', `${f.name} dépasse 4 Mo — ignoré.`, 'err'); continue; }
     const r = new FileReader();
     r.onload = () => { attachedFiles.push({ name: f.name, size: f.size, b64: String(r.result).split(',')[1] || '' }); renderFileList(); };
     r.readAsDataURL(f);
@@ -81,243 +75,103 @@ function renderFileList() {
   attachedFiles.forEach((f, i) => {
     const kb = Math.max(1, Math.round(f.size / 1024));
     const row = document.createElement('div'); row.className = 'file-row';
-    row.innerHTML = `<span class="fx">📎 ${escapeHtml(f.name)} · ${kb} Ko</span><button title="Retirer">×</button>`;
+    row.innerHTML = `<span class="fx"><svg class="ic"><use href="#i-clip"/></svg>${escapeHtml(f.name)} · ${kb} Ko</span><button title="Retirer">&times;</button>`;
     row.querySelector('button').onclick = () => { attachedFiles.splice(i, 1); renderFileList(); };
     el.appendChild(row);
   });
 }
 async function ensureLabels() {
-  const labels = [['pocket', '8b5cf6'], ['approved', '3fb950'], ['via:phone', '0a84ff'], ...Object.entries(CATS).map(([k, v]) => [k, v.color.replace('#', '')])];
+  const labels = [['pocket', 'c96442'], ['approved', '5c8a44'], ['via:phone', 'b8863a'], ...Object.entries(CATS).map(([k, v]) => [k, v.color.replace('#', '')])];
   for (const [name, color] of labels) { try { await gh('/labels', { method: 'POST', body: JSON.stringify({ name, color }) }); } catch {} }
 }
 
 // ── Dispatch ────────────────────────────────────────────────────────────────
 function buildBody(d, w, c) {
-  return ['### Demande', '', d, '', "### Autoriser l'écriture ?", '', w ? 'oui' : 'non', '', "### Conditions d'écriture (si OUI)", '', c || '_No response_', '', '### Workflow (recette)', '', 'auto', '', '### Agent (optionnel)', '', 'auto', ''].join('\n');
+  return ['### Demande', '', d, '', "### Autoriser l'écriture ?", '', w ? 'oui' : 'non', '',
+    "### Conditions d'écriture (si OUI)", '', c || '_No response_', '',
+    '### Modèle', '', selectedModel, ''].join('\n');
 }
 async function dispatch() {
   const demande = $('demande').value.trim(); const msg = $('composer-msg');
-  if (!demande) { msg.className = 'msg err'; msg.textContent = 'Écris une demande.'; return; }
+  if (!demande) { flash('composer-msg', 'Écris une demande.', 'err'); return; }
   const w = $('write-allowed').checked, c = $('conditions').value.trim();
-  msg.className = 'msg'; msg.textContent = 'Envoi…';
+  flash('composer-msg', 'Envoi…');
   try {
     await ensureLabels();
     let attachNote = '';
     if (attachedFiles.length) {
-      msg.textContent = 'Envoi des fichiers…';
+      flash('composer-msg', 'Envoi des fichiers…');
       const paths = [];
       for (const f of attachedFiles) {
         const path = `pocket-data/uploads/${Date.now()}-${f.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
         await putRaw(path, f.b64); paths.push(path);
       }
       attachNote = '\n\n### Fichiers joints\n' + paths.map((p) => '- `' + p + '` (lis-le avec `cat ' + p + '`)').join('\n');
-      msg.textContent = 'Envoi…';
     }
     const title = '[Pocket] ' + demande.slice(0, 60).replace(/\n/g, ' ');
-    const modeNote = '\n\n### Mode\n\n' + (selectedMode || 'auto');
-    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c) + modeNote + attachNote, labels: ['pocket', 'via:phone'] }) });
+    const issue = await gh('/issues', { method: 'POST', body: JSON.stringify({ title, body: buildBody(demande, w, c) + attachNote, labels: ['pocket', 'via:phone'] }) });
     $('demande').value = ''; $('conditions').value = ''; $('write-allowed').checked = false; $('conditions-wrap').classList.add('hidden');
     attachedFiles = []; renderFileList();
-    msg.className = 'msg ok'; msg.textContent = `Tâche #${issue.number} envoyée.`;
+    flash('composer-msg', `Conversation #${issue.number} lancée.`, 'ok');
     navigate('detail:' + issue.number);
-  } catch (e) { msg.className = 'msg err'; msg.textContent = friendlyError(e); }
+  } catch (e) { flash('composer-msg', friendlyError(e), 'err'); }
 }
+function flash(id, text, cls) { const m = $(id); if (!m) return; m.className = 'msg' + (cls ? ' ' + cls : ''); m.textContent = text; }
 
-// ── Historique classé par système ───────────────────────────────────────────
-function issueCat(issue) { const l = (issue.labels || []).map((x) => x.name || x).find((n) => n.startsWith('cat:')); return l || null; }
+// ── Accueil : conversations récentes ─────────────────────────────────────────
+function issueCat(i) { const l = (i.labels || []).map((x) => x.name || x).find((n) => n.startsWith('cat:')); return l || null; }
 async function loadHistory() {
-  try { allIssues = await gh('/issues?labels=pocket&state=all&per_page=60&sort=created&direction=desc'); }
-  catch { allIssues = LS.history.map((h) => ({ number: h.number, title: h.title, labels: [], state: 'open' })); }
-  renderSourceFilter(); renderFilters(); renderHistory(); renderDashboard();
+  try { allIssues = await gh('/issues?labels=pocket&state=all&per_page=40&sort=created&direction=desc'); } catch { allIssues = []; }
+  renderMiniStats(); renderHistory();
 }
-function bySource(items) { return currentSource === 'all' ? items : items.filter((i) => taskSource(i) === currentSource); }
-function renderSourceFilter() {
-  for (const b of document.querySelectorAll('#source-filter button')) b.classList.toggle('active', b.dataset.src === currentSource);
-}
-function renderFilters() {
-  const present = new Set(bySource(allIssues).map(issueCat).filter(Boolean));
-  const el = $('cat-filters'); el.innerHTML = '';
-  const mk = (key, label) => { const b = document.createElement('button'); b.className = 'chip' + (currentFilter === key ? ' active' : ''); b.textContent = label; b.onclick = () => { currentFilter = key; renderFilters(); renderHistory(); }; return b; };
-  el.appendChild(mk('all', 'Tout'));
-  for (const k of Object.keys(CATS)) if (present.has(k)) el.appendChild(mk(k, CATS[k].label));
-}
-async function renderDashboard() {
-  const items = bySource(allIssues);
+async function renderMiniStats() {
   const today = new Date().toDateString();
-  const todayN = items.filter((i) => i.created_at && new Date(i.created_at).toDateString() === today).length;
+  const todayN = allIssues.filter((i) => i.created_at && new Date(i.created_at).toDateString() === today).length;
   let running = 0;
-  try { const r = await gh('/actions/workflows/pocket.yml/runs?status=in_progress&per_page=30'); running = (r.workflow_runs || []).length; } catch {}
-  $('dash-stats').innerHTML =
-    `<div class="ds"><div class="dsv ${running ? 'live' : ''}">${running}</div><div class="dsk">en cours</div></div>` +
-    `<div class="ds"><div class="dsv">${todayN}</div><div class="dsk">aujourd'hui</div></div>` +
-    `<div class="ds"><div class="dsv">${items.length}</div><div class="dsk">total</div></div>`;
-  const counts = {};
-  for (const i of items) { const c = issueCat(i) || 'cat:other'; counts[c] = (counts[c] || 0) + 1; }
-  const el = $('dash-domains'); el.innerHTML = '';
-  for (const [c, n] of Object.entries(counts).sort((a, b) => b[1] - a[1])) {
-    const cm = CATS[c] || CATS['cat:other'];
-    const chip = document.createElement('button'); chip.className = 'dchip' + (currentFilter === c ? ' active' : '');
-    chip.innerHTML = `<span class="ddot" style="background:${cm.color}"></span>${cm.label} <b>${n}</b>`;
-    chip.onclick = () => { currentFilter = currentFilter === c ? 'all' : c; renderFilters(); renderHistory(); renderDashboard(); $('history').scrollIntoView({ behavior: 'smooth' }); };
-    el.appendChild(chip);
-  }
+  try { const r = await gh('/actions/workflows/pocket.yml/runs?status=in_progress&per_page=20'); running = (r.workflow_runs || []).length; } catch {}
+  $('mini-stats').innerHTML =
+    (running ? `<span class="live"><b>${running}</b> en cours</span>` : '') +
+    `<span><b>${todayN}</b> aujourd'hui</span><span><b>${allIssues.length}</b> total</span>`;
 }
 function renderHistory() {
   const ul = $('history-list'); ul.innerHTML = '';
-  let items = bySource(allIssues); if (currentFilter !== 'all') items = items.filter((i) => issueCat(i) === currentFilter);
-  if (!items.length) { ul.innerHTML = '<li class="empty">Aucune tâche dans cette vue.</li>'; return; }
-  for (const i of items) {
+  if (!allIssues.length) { ul.innerHTML = '<li class="empty">Aucune conversation. Lance ta première tâche ci-dessus.</li>'; return; }
+  for (const i of allIssues) {
     const cat = issueCat(i) || 'cat:other'; const cm = CATS[cat] || CATS['cat:other'];
-    const li = document.createElement('li');
-    li.style.setProperty('--cat', cm.color);
-    li.innerHTML = `<span class="t">#${i.number} ${escapeHtml((i.title || '').replace('[Pocket] ', ''))}</span>
+    const li = document.createElement('li'); li.style.setProperty('--cat', cm.color);
+    li.innerHTML = `<span class="t">${escapeHtml((i.title || '').replace('[Pocket] ', ''))}</span>
       <span class="meta-r"><span class="cat-badge" style="background:${cm.color}">${cm.label}</span>
-      <span class="badge ${i.state === 'open' ? 'open' : 'pending'}">${i.state === 'open' ? '●' : '✓'}</span></span>`;
+      <span class="st ${i.state === 'open' ? 'open' : 'done'}"></span></span>`;
     li.onclick = () => navigate('detail:' + i.number);
     ul.appendChild(li);
   }
 }
 
-// ── Modes agentiques (CRUD via repo) ────────────────────────────────────────
-async function loadModes() {
-  try {
-    const items = await gh('/contents/pocket-modes');
-    const files = (Array.isArray(items) ? items : []).filter((f) => f.name.endsWith('.json'));
-    const out = [];
-    for (const f of files) {
-      try { const c = await gh('/contents/' + f.path); const o = JSON.parse(decodeB64(c.content)); o._sha = c.sha; out.push(o); } catch {}
-    }
-    allModes = out.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-  } catch { allModes = []; }
-  renderModeChips();
-}
-function renderModeChips() {
-  const el = $('mode-chips'); if (!el) return; el.innerHTML = '';
-  const mk = (slug, label) => { const b = document.createElement('button'); b.className = 'chip' + (selectedMode === slug ? ' active' : ''); b.textContent = label; b.onclick = () => { selectedMode = slug; renderModeChips(); }; return b; };
-  el.appendChild(mk('auto', '⚡ Généraliste'));
-  for (const m of allModes) el.appendChild(mk(m.slug, m.name));
-}
-function renderModes() {
-  const ul = $('modes-list'); ul.innerHTML = '';
-  if (!allModes.length) { ul.innerHTML = '<li class="empty">Aucun mode pour l\'instant. Crée ton premier agent.</li>'; return; }
-  for (const m of allModes) {
-    const cm = CATS[m.category] || CATS['cat:other'];
-    const li = document.createElement('li'); li.style.setProperty('--cat', cm.color);
-    li.innerHTML = `<div class="mh"><div><div class="mn">${escapeHtml(m.name)}</div><div class="md">${escapeHtml(m.description || '')}</div></div><div class="actions"><button class="edit">Éditer</button></div></div>`;
-    li.querySelector('.edit').onclick = () => openModeEditor(m);
-    ul.appendChild(li);
-  }
-}
-async function openModeEditor(mode) {
-  editingMode = mode || null;
-  $('mode-editor').classList.remove('hidden');
-  $('mode-name').value = mode ? mode.name : '';
-  $('mode-cat').value = mode ? mode.category : 'cat:other';
-  $('mode-desc').value = mode ? mode.description : '';
-  $('mode-instr').value = mode ? mode.instructions : '';
-  $('mode-delete').classList.toggle('hidden', !mode);
-  $('mode-msg').textContent = '';
-  // Programmation : reset puis charge si existante
-  $('mode-freq').value = 'none'; $('sched-extra').classList.add('hidden'); $('weekday-wrap').classList.add('hidden');
-  $('mode-time').value = '08:00'; $('mode-sched-demande').value = '';
-  if (mode) {
-    try {
-      const c = await gh('/contents/pocket-schedules/' + mode.slug + '.json');
-      const sc = JSON.parse(decodeB64(c.content));
-      $('mode-freq').value = sc.freq; $('sched-extra').classList.remove('hidden');
-      $('mode-time').value = String(sc.hour).padStart(2, '0') + ':' + String(sc.minute || 0).padStart(2, '0');
-      $('mode-weekday').value = sc.weekday || 0; $('mode-sched-demande').value = sc.demande || '';
-      $('weekday-wrap').classList.toggle('hidden', sc.freq !== 'weekly');
-    } catch {}
-  }
-  // Chaînage : liste des autres modes
-  const chainSel = $('mode-chain'); chainSel.innerHTML = '<option value="">Aucun</option>';
-  for (const m of allModes) if (!mode || m.slug !== mode.slug) chainSel.appendChild(new Option(m.name, m.slug));
-  chainSel.value = (mode && mode.chain_to) ? mode.chain_to : '';
-  $('mode-editor').scrollIntoView({ behavior: 'smooth' });
-}
-async function saveSchedule(slug, name, cat) {
-  const path = 'pocket-schedules/' + slug + '.json';
-  const freq = $('mode-freq').value;
-  if (freq === 'none') {
-    try { const c = await gh('/contents/' + path); await gh('/contents/' + path, { method: 'DELETE', body: JSON.stringify({ message: 'pocket: unschedule ' + slug, sha: c.sha }) }); } catch {}
-    return;
-  }
-  const [hh, mm] = ($('mode-time').value || '08:00').split(':');
-  const obj = { id: slug, mode: slug, name, category: cat, freq, hour: parseInt(hh, 10), minute: parseInt(mm, 10), weekday: parseInt($('mode-weekday').value, 10), demande: $('mode-sched-demande').value.trim() || ('Lance le mode ' + name + '.'), enabled: true, tz: 'Europe/Brussels', last_fired: '' };
-  let sha; try { sha = (await gh('/contents/' + path)).sha; } catch {}
-  await gh('/contents/' + path, { method: 'PUT', body: JSON.stringify({ message: 'pocket: schedule ' + slug, content: b64(JSON.stringify(obj, null, 2)), sha }) });
-}
-async function saveMode() {
-  const name = $('mode-name').value.trim(), instr = $('mode-instr').value.trim(), m = $('mode-msg');
-  if (!name || !instr) { m.className = 'msg err'; m.textContent = 'Nom et instructions requis.'; return; }
-  const slug = editingMode ? editingMode.slug : slugify(name);
-  const obj = { name, slug, category: $('mode-cat').value, description: $('mode-desc').value.trim(), instructions: instr, created: editingMode ? editingMode.created : Date.now() };
-  if ($('mode-chain').value) obj.chain_to = $('mode-chain').value;
-  m.className = 'msg'; m.textContent = 'Déploiement…';
-  try {
-    let sha = editingMode ? editingMode._sha : undefined;
-    if (!sha) { try { sha = (await gh('/contents/pocket-modes/' + slug + '.json')).sha; } catch {} }
-    await gh('/contents/pocket-modes/' + slug + '.json', { method: 'PUT', body: JSON.stringify({ message: 'pocket: mode ' + slug, content: b64(JSON.stringify(obj, null, 2)), sha }) });
-    await saveSchedule(slug, name, obj.category);
-    m.className = 'msg ok'; m.textContent = '✅ Mode déployé' + ($('mode-freq').value !== 'none' ? ' + programmé.' : ' — utilisable au lancement d\'une tâche.');
-    $('mode-editor').classList.add('hidden');
-    await loadModes(); renderModes();
-  } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
-}
-async function deleteMode() {
-  if (!editingMode) return; const m = $('mode-msg'); m.className = 'msg'; m.textContent = 'Suppression…';
-  try {
-    await gh('/contents/pocket-modes/' + editingMode.slug + '.json', { method: 'DELETE', body: JSON.stringify({ message: 'pocket: delete mode ' + editingMode.slug, sha: editingMode._sha }) });
-    try { const c = await gh('/contents/pocket-schedules/' + editingMode.slug + '.json'); await gh('/contents/pocket-schedules/' + editingMode.slug + '.json', { method: 'DELETE', body: JSON.stringify({ message: 'pocket: unschedule ' + editingMode.slug, sha: c.sha }) }); } catch {}
-    if (selectedMode === editingMode.slug) selectedMode = 'auto';
-    $('mode-editor').classList.add('hidden'); await loadModes(); renderModes();
-  } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
-}
-
-// ── Connaissances (expertise) ────────────────────────────────────────────────
-let knowSha = {};
-async function loadKnowledge() {
-  const domain = $('know-domain').value; $('know-msg').textContent = ''; $('know-text').value = 'Chargement…';
-  try { const c = await gh('/contents/pocket-knowledge/' + domain + '.md'); $('know-text').value = decodeB64(c.content); knowSha[domain] = c.sha; }
-  catch { $('know-text').value = ''; knowSha[domain] = null; }
-}
-async function saveKnowledge() {
-  const domain = $('know-domain').value, m = $('know-msg'); m.className = 'msg'; m.textContent = 'Enregistrement…';
-  try {
-    const body = { message: 'knowledge: ' + domain + ' (édition manuelle)', content: b64($('know-text').value) };
-    if (knowSha[domain]) body.sha = knowSha[domain];
-    const r = await gh('/contents/pocket-knowledge/' + domain + '.md', { method: 'PUT', body: JSON.stringify(body) });
-    knowSha[domain] = r.content.sha; m.className = 'msg ok'; m.textContent = '✅ Enregistré.';
-  } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
-}
-
-// ── Monitoring run ──────────────────────────────────────────────────────────
-const STEP_LABELS = { 'Set up job': 'Préparation', 'Run actions/checkout@v4': 'Récupération du code', 'Install MCP servers': 'Installation des outils', 'Run actions/setup-python@v5': 'Préparation Python', 'Write task to disk': 'Lecture de la demande', 'Write MCP config with secrets': 'Connexion aux apps', 'Build claude_args': 'Configuration', 'Run Claude Pocket': 'Claude travaille', 'Notify (push)': 'Notification' };
-async function findRun(title) {
-  try { const d = await gh(`/actions/workflows/pocket.yml/runs?per_page=30`); const runs = (d.workflow_runs || []).filter((r) => r.display_title === title); runs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); return runs[0] || null; } catch { return null; }
-}
+// ── Conversation (détail + chat) ─────────────────────────────────────────────
+const STEP_LABELS = { 'Set up job': 'Préparation', 'Install MCP servers': 'Installation des outils', 'Write task to disk': 'Lecture de la demande', 'Write MCP config with secrets': 'Connexion aux systèmes', 'Build claude_args': 'Configuration', 'Run Claude Pocket': 'Claude travaille', 'Check Claude result': 'Vérification', 'Notify (push)': 'Notification' };
 function fmtDur(s, e) { if (!s) return '—'; const x = Math.max(0, ((e ? new Date(e) : new Date()) - new Date(s)) / 1000); return x < 60 ? `${Math.round(x)}s` : `${Math.floor(x / 60)}m${Math.round(x % 60)}s`; }
 function cell(k, icon, v) { return `<div class="kcell"><div class="k"><svg class="ic"><use href="#${icon}"/></svg>${k}</div><div class="v sm">${v}</div></div>`; }
+async function findRun(title) {
+  try { const d = await gh('/actions/workflows/pocket.yml/runs?per_page=30'); const runs = (d.workflow_runs || []).filter((r) => r.display_title === title); runs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); return runs[0] || null; } catch { return null; }
+}
+function isProgress(text) { const t = (text || '').trim(); return t.length < 170 && !/\n\n/.test(t) && /^(compris|je\s|j'|d'accord|ok\b)/i.test(t); }
 async function renderRunStatus(run) {
   const bar = $('run-status');
-  if (!run) { bar.className = 'status-bar idle'; bar.textContent = 'Démarrage…'; return null; }
-  if (run.status === 'queued') { bar.className = 'status-bar queued'; bar.textContent = 'En file…'; return null; }
-  if (run.status === 'completed') { bar.className = 'status-bar ' + (run.conclusion === 'success' ? 'ok' : (run.conclusion === 'cancelled' ? 'idle' : 'err')); bar.textContent = run.conclusion === 'success' ? 'Terminé' : (run.conclusion === 'cancelled' ? 'Annulé' : 'Terminé avec un souci'); return null; }
+  if (!run) { bar.className = 'status-pill idle'; bar.textContent = 'En attente'; return null; }
+  if (run.status === 'queued') { bar.className = 'status-pill queued'; bar.textContent = 'En file'; return null; }
+  if (run.status === 'completed') { bar.className = 'status-pill ' + (run.conclusion === 'success' ? 'ok' : (run.conclusion === 'cancelled' ? 'idle' : 'err')); bar.textContent = run.conclusion === 'success' ? 'Terminé' : (run.conclusion === 'cancelled' ? 'Annulé' : 'Échec'); return null; }
   let step = 'Claude travaille', jobs = null;
   try { jobs = await gh(`/actions/runs/${run.id}/jobs`); const job = (jobs.jobs || []).find((j) => j.status === 'in_progress') || (jobs.jobs || [])[0]; const cur = job && (job.steps || []).find((s) => s.status === 'in_progress'); if (cur) step = STEP_LABELS[cur.name] || cur.name; } catch {}
-  bar.className = 'status-bar running'; bar.textContent = step + '…'; return jobs;
+  bar.className = 'status-pill running'; bar.textContent = step; return jobs;
 }
 async function renderMonitor(run, jobs, usage) {
-  const el = $('monitor');
-  const u = usage || { tokens: 0, pct: 0 };
+  const el = $('monitor'); const u = usage || { tokens: 0, pct: 0 };
   let h = '<div class="kgrid">';
-  h += cell('Modèle', 'i-brain', MODEL) + cell('Agent', 'i-robot', 'Claude Pocket');
+  h += cell('Modèle', 'i-brain', MODELS[selectedModel] || 'Opus 4.8');
   h += cell('Statut', 'i-info', run ? (run.status === 'completed' ? (run.conclusion || 'fini') : run.status) : '—');
   h += cell('Durée', 'i-clock', run ? fmtDur(run.run_started_at, run.status === 'completed' ? run.updated_at : null) : '—');
-  h += cell('Tokens (estim.)', 'i-brain', '≈ ' + u.tokens.toLocaleString('fr-FR'));
   h += cell('Contexte', 'i-brain', u.pct.toFixed(1) + '% de 200K');
-  h += `<div class="kcell wide"><div class="k"><svg class="ic"><use href="#i-brain"/></svg>Remplissage du contexte</div><div class="gauge ${u.pct > 80 ? 'warn' : ''}"><i style="width:${Math.min(100, u.pct)}%"></i></div></div></div>`;
+  h += '</div>';
   if (!jobs && run && run.status !== 'completed') { try { jobs = await gh(`/actions/runs/${run.id}/jobs`); } catch {} }
   const job = jobs && ((jobs.jobs || []).find((j) => j.name && j.name.includes('pocket')) || (jobs.jobs || [])[0]);
   if (job && job.steps) {
@@ -325,18 +179,16 @@ async function renderMonitor(run, jobs, usage) {
     for (const s of job.steps.filter((s) => STEP_LABELS[s.name])) {
       const cls = s.status === 'in_progress' ? 'cur' : (s.conclusion === 'success' ? 'done' : '');
       const dur = (s.started_at && s.completed_at) ? Math.max(1, Math.round((new Date(s.completed_at) - new Date(s.started_at)) / 1000)) + 's' : '';
-      h += `<div class="step ${cls}"><span class="sdot"></span>${STEP_LABELS[s.name]}${dur ? '<span style="margin-left:auto;color:var(--muted);font-size:11px">' + dur + '</span>' : ''}</div>`;
+      h += `<div class="step ${cls}"><span class="sdot"></span>${STEP_LABELS[s.name]}${dur ? '<span style="margin-left:auto">' + dur + '</span>' : ''}</div>`;
     }
     h += '</div>';
   }
   el.innerHTML = h;
 }
-
-// ── Détail + chat ───────────────────────────────────────────────────────────
 function loadDetail(number) {
   stopPoll(); detailNum = number;
-  $('detail-title').textContent = `Tâche #${number}`;
-  $('run-status').className = 'status-bar idle'; $('run-status').textContent = 'Chargement…';
+  $('detail-title').textContent = `Conversation #${number}`;
+  $('run-status').className = 'status-pill idle'; $('run-status').textContent = 'Chargement';
   $('monitor').innerHTML = ''; $('comments').innerHTML = ''; $('approve').classList.add('hidden'); $('detail-msg').textContent = '';
   const load = async () => {
     if (detailNum !== number) return;
@@ -344,13 +196,11 @@ function loadDetail(number) {
       const [issue, comments] = await Promise.all([gh(`/issues/${number}`), gh(`/issues/${number}/comments?per_page=100`)]);
       const approved = (issue.labels || []).map((l) => l.name).includes('approved');
       const threadText = (issue.body || '') + comments.map((c) => c.body).join('\n');
-      const tokens = estTokens(threadText);
-      const usage = { tokens, pct: Math.min(100, tokens / CTX_WINDOW * 100) };
+      const usage = { tokens: estTokens(threadText), pct: Math.min(100, estTokens(threadText) / CTX_WINDOW * 100) };
       const run = await findRun(issue.title);
       const jobs = await renderRunStatus(run);
       await renderMonitor(run, jobs, usage);
-      // Activité en direct (dernier message de progression) + lien logs bruts
-      const prog = comments.filter((cm) => cm.user.type !== 'User' && /^▶️|^🔎|^📊|^🧠|^⏳|m'en occupe/i.test(cm.body.trim()));
+      const prog = comments.filter((cm) => cm.user.type !== 'User' && isProgress(cm.body));
       const la = $('live-activity');
       if (run && run.status !== 'completed' && prog.length) { la.classList.remove('hidden'); la.textContent = prog[prog.length - 1].body.split('\n')[0].slice(0, 130); }
       else la.classList.add('hidden');
@@ -360,19 +210,19 @@ function loadDetail(number) {
       if (body) c.appendChild(bubble(connectedLogin || 'toi', body, 'user', issue.created_at));
       for (const cm of comments) {
         const isUser = cm.user.type === 'User';
-        const prog = !isUser && /^▶️|^🔎|^📊|^🧠|^⏳|m'en occupe/i.test(cm.body.trim());
-        c.appendChild(bubble(cm.user.login, cm.body, isUser ? 'user' : 'assistant', cm.created_at, prog));
+        c.appendChild(bubble(cm.user.login, cm.body, isUser ? 'user' : 'assistant', cm.created_at, !isUser && isProgress(cm.body)));
       }
-      const needsApproval = comments.some((cm) => /preview|approb|approuv/i.test(cm.body)) && !approved && issue.state === 'open';
+      const needsApproval = comments.some((cm) => /aperçu|preview|approb|approuv/i.test(cm.body)) && !approved && issue.state === 'open';
       $('approve').classList.toggle('hidden', !needsApproval); $('approve').onclick = () => approve(number);
-    } catch (e) { $('detail-msg').className = 'msg err'; $('detail-msg').textContent = friendlyError(e); stopPoll(); }
+    } catch (e) { flash('detail-msg', friendlyError(e), 'err'); stopPoll(); }
   };
   load(); pollTimer = setInterval(load, 6000);
 }
-// ── Mini-rendu Markdown (sensation Claude Desktop) ───────────────────────────
+
+// ── Markdown ────────────────────────────────────────────────────────────────
 function mdLink(u, text) {
   const clean = u.replace(/&amp;/g, '&');
-  if (/\.csv(\?|$)/i.test(clean)) return `<a class="dl" href="${clean}" target="_blank" rel="noopener">📥 Télécharger le CSV</a>`;
+  if (/\.csv(\?|$)/i.test(clean)) return `<a class="dl" href="${clean}" target="_blank" rel="noopener"><svg class="ic"><use href="#i-download"/></svg>Télécharger le CSV</a>`;
   return `<a href="${clean}" target="_blank" rel="noopener">${text || (clean.length > 46 ? clean.slice(0, 43) + '…' : clean)}</a>`;
 }
 function mdInline(s) {
@@ -380,7 +230,7 @@ function mdInline(s) {
   s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   s = s.replace(/(^|[^*\w])\*([^*\n]+)\*/g, '$1<em>$2</em>');
   s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (m, t, u) => mdLink(u, t));
-  try { s = s.replace(/(?<!["'>=\/])(https?:\/\/[^\s<]+)/g, (m, u) => mdLink(u, null)); } catch { /* lookbehind non supporté */ }
+  try { s = s.replace(/(?<!["'>=\/])(https?:\/\/[^\s<]+)/g, (m, u) => mdLink(u, null)); } catch {}
   return s;
 }
 function splitRow(l) { return l.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map((x) => x.trim()); }
@@ -421,190 +271,255 @@ async function chatSend() {
   ta.value = ''; ta.style.height = 'auto';
   $('comments').appendChild(bubble(connectedLogin || 'toi', txt, 'user', new Date().toISOString()));
   try { await gh(`/issues/${detailNum}/comments`, { method: 'POST', body: JSON.stringify({ body: txt }) }); setTimeout(() => { if (detailNum != null) loadDetail(detailNum); }, 900); }
-  catch (e) { $('detail-msg').className = 'msg err'; $('detail-msg').textContent = friendlyError(e); }
+  catch (e) { flash('detail-msg', friendlyError(e), 'err'); }
 }
 async function approve(number) {
-  const m = $('detail-msg'); m.className = 'msg'; m.textContent = 'Approbation…';
-  try { await gh(`/issues/${number}/labels`, { method: 'POST', body: JSON.stringify({ labels: ['approved'] }) }); m.className = 'msg ok'; m.textContent = 'Approuvé — Claude exécute.'; $('approve').classList.add('hidden'); }
-  catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
+  flash('detail-msg', 'Approbation…');
+  try { await gh(`/issues/${number}/labels`, { method: 'POST', body: JSON.stringify({ labels: ['approved'] }) }); flash('detail-msg', 'Approuvé — Claude exécute.', 'ok'); $('approve').classList.add('hidden'); }
+  catch (e) { flash('detail-msg', friendlyError(e), 'err'); }
 }
 function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
 
-// ── Système ─────────────────────────────────────────────────────────────────
-function ago(iso) { if (!iso) return '—'; const s = Math.max(0, (Date.now() - new Date(iso)) / 1000); if (s < 90) return 'à l\'instant'; if (s < 3600) return `il y a ${Math.round(s / 60)} min`; if (s < 86400) return `il y a ${Math.round(s / 3600)} h`; return `il y a ${Math.round(s / 86400)} j`; }
-const SECRET_LABELS = { hubspot: 'HubSpot', lemlist: 'Lemlist', fullenrich: 'FullEnrich', phantombuster: 'PhantomBuster', tavily: 'Tavily', firecrawl: 'Firecrawl', vault: 'Vault', google_sa: 'Google Sheets (SA)' };
-
+// ── Administration : santé & coût ────────────────────────────────────────────
+function ago(iso) { if (!iso) return '—'; const s = Math.max(0, (Date.now() - new Date(iso)) / 1000); if (s < 90) return "à l'instant"; if (s < 3600) return `il y a ${Math.round(s / 60)} min`; if (s < 86400) return `il y a ${Math.round(s / 3600)} h`; return `il y a ${Math.round(s / 86400)} j`; }
+const SECRET_LABELS = { hubspot: 'HubSpot', fullenrich: 'FullEnrich', phantombuster: 'PhantomBuster', tavily: 'Tavily', firecrawl: 'Firecrawl', vault: 'Vault', google_sa: 'Google Sheets (SA)' };
 async function renderHealthAndCost() {
-  // ── Santé ──
-  const h = await ghJSON('pocket-data/health.json');
-  const ht = $('health-token');
-  if (!h) { ht.className = 'health-token'; ht.textContent = 'Aucune donnée (le canari n\'a pas encore tourné).'; $('health-grid').innerHTML = ''; }
+  const h = await ghJSON('pocket-data/health.json'); const ht = $('health-token');
+  if (!h) { ht.className = 'health-token'; ht.textContent = "Aucune donnée (le canari n'a pas encore tourné)."; $('health-grid').innerHTML = ''; }
   else {
     ht.className = 'health-token ' + (h.token_ok ? 'ok' : 'err');
     ht.innerHTML = h.token_ok
       ? `<svg class="ic"><use href="#i-check"/></svg> Auth Claude OK <small>${escapeHtml(h.model || '')} · vérifié ${ago(h.checked_at)}</small>`
-      : `<svg class="ic"><use href="#i-alert"/></svg> Token Claude expiré — renouvelle-le <small>(vérifié ${ago(h.checked_at)})</small>`;
+      : `<svg class="ic"><use href="#i-alert"/></svg> Token Claude expiré — à renouveler <small>(vérifié ${ago(h.checked_at)})</small>`;
     const sec = h.secrets || {};
     $('health-grid').innerHTML = Object.keys(SECRET_LABELS).map((k) =>
-      `<div class="kcell"><div class="k">${SECRET_LABELS[k]}</div><div class="v sm">${sec[k] ? '<span class="ok-dot">●</span> OK' : '<span class="err-dot">●</span> absent'}</div></div>`
-    ).join('');
+      `<div class="kcell"><div class="k">${SECRET_LABELS[k]}</div><div class="v sm">${sec[k] ? '<span class="ok-dot">●</span> OK' : '<span class="err-dot">●</span> absent'}</div></div>`).join('');
   }
-  // ── Coût réel ──
-  const st = await ghJSON('pocket-data/status.json');
-  const runs = (st && st.runs) || [];
+  const st = await ghJSON('pocket-data/status.json'); const runs = (st && st.runs) || [];
   const now = new Date(), day = now.toISOString().slice(0, 10), month = day.slice(0, 7);
   let cToday = 0, cMonth = 0, nToday = 0;
   for (const r of runs) { const ts = (r.ts || '').slice(0, 10); if (ts === day) { cToday += r.cost_usd || 0; nToday++; } if (ts.slice(0, 7) === month) cMonth += r.cost_usd || 0; }
   const fmt = (n) => '$' + (n || 0).toFixed(2);
   $('cost-box').innerHTML = runs.length
-    ? `<div class="kgrid">${cell('Aujourd\'hui', 'i-clock', fmt(cToday) + ` · ${nToday} run${nToday > 1 ? 's' : ''}`)}${cell('Ce mois', 'i-clock', fmt(cMonth))}${cell('Total suivi', 'i-list', runs.length + ' runs')}</div>`
-    : '<p class="hint" style="margin-top:0">Aucun run enregistré pour l\'instant.</p>';
+    ? `<div class="kgrid">${cell("Aujourd'hui", 'i-clock', fmt(cToday) + ` · ${nToday} run${nToday > 1 ? 's' : ''}`)}${cell('Ce mois', 'i-clock', fmt(cMonth))}${cell('Total suivi', 'i-info', runs.length + ' runs')}</div>`
+    : '<p class="hint" style="margin:0">Aucun run enregistré pour l\'instant.</p>';
 }
 
+// ── Administration : éditeur MCP ─────────────────────────────────────────────
+async function loadMCP() {
+  const data = await ghJSON('pocket-config/mcp.json');
+  mcpServers = Array.isArray(data) ? data : (data && data.servers) || [];
+  renderMCP();
+}
+function renderMCP() {
+  const ul = $('mcp-list'); ul.innerHTML = '';
+  for (const b of MCP_BASE) {
+    const li = document.createElement('li'); li.className = 'mcp-row';
+    li.innerHTML = `<span class="mcp-ic"><svg class="ic"><use href="#i-plug"/></svg></span><span class="mcp-meta"><span class="mcp-n">${b.name}</span><span class="mcp-d">${b.desc}</span></span><span class="mcp-badge base">intégré</span>`;
+    ul.appendChild(li);
+  }
+  for (const s of mcpServers) {
+    const li = document.createElement('li'); li.className = 'mcp-row editable';
+    const d = s.transport === 'http' ? (s.url || '') : ((s.command || '') + ' ' + (s.args || []).join(' '));
+    li.innerHTML = `<span class="mcp-ic"><svg class="ic"><use href="#i-plug"/></svg></span><span class="mcp-meta"><span class="mcp-n">${escapeHtml(s.name)}</span><span class="mcp-d">${escapeHtml(d.trim())}</span></span><span class="mcp-badge ${s.enabled === false ? 'base' : 'on'}">${s.enabled === false ? 'off' : 'actif'}</span>`;
+    li.onclick = () => openMcpEditor(s);
+    ul.appendChild(li);
+  }
+}
+function setTransport(t) {
+  for (const b of document.querySelectorAll('#mcp-transport button')) b.classList.toggle('active', b.dataset.t === t);
+  $('mcp-stdio').classList.toggle('hidden', t !== 'stdio');
+  $('mcp-http').classList.toggle('hidden', t !== 'http');
+}
+function openMcpEditor(s) {
+  editingMcp = s || null;
+  $('mcp-editor').classList.remove('hidden');
+  $('mcp-name').value = s ? s.name : '';
+  setTransport(s && s.transport === 'http' ? 'http' : 'stdio');
+  $('mcp-command').value = s ? (s.command || 'npx') : 'npx';
+  $('mcp-args').value = s && s.args ? s.args.join('\n') : '';
+  $('mcp-url').value = s ? (s.url || '') : '';
+  $('mcp-headers').value = s && s.headers ? Object.entries(s.headers).map(([k, v]) => `${k}: ${v}`).join('\n') : '';
+  $('mcp-env').value = s && s.env ? Object.entries(s.env).map(([k, v]) => `${k}=${v}`).join('\n') : '';
+  $('mcp-tools').value = s && s.allowedTools ? s.allowedTools.join(', ') : '*';
+  $('mcp-delete').classList.toggle('hidden', !s);
+  $('mcp-msg').textContent = '';
+  $('mcp-editor').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function parsePairs(text, sep) {
+  const o = {}; for (const l of (text || '').split('\n')) { const idx = l.indexOf(sep); if (idx > 0) o[l.slice(0, idx).trim()] = l.slice(idx + 1).trim(); } return o;
+}
+async function saveMcp() {
+  const name = $('mcp-name').value.trim().replace(/[^a-zA-Z0-9_-]/g, '');
+  if (!name) { flash('mcp-msg', 'Nom requis (sans espace).', 'err'); return; }
+  const transport = document.querySelector('#mcp-transport button.active').dataset.t;
+  const tools = $('mcp-tools').value.split(',').map((x) => x.trim()).filter(Boolean);
+  const srv = { name, enabled: true, transport, allowedTools: tools.length ? tools : ['*'] };
+  if (transport === 'http') { srv.url = $('mcp-url').value.trim(); const h = parsePairs($('mcp-headers').value, ':'); if (Object.keys(h).length) srv.headers = h; }
+  else { srv.command = $('mcp-command').value.trim() || 'npx'; srv.args = $('mcp-args').value.split('\n').map((x) => x.trim()).filter(Boolean); }
+  const env = parsePairs($('mcp-env').value, '='); if (Object.keys(env).length) srv.env = env;
+  flash('mcp-msg', 'Enregistrement…');
+  try {
+    const idx = mcpServers.findIndex((x) => x.name === (editingMcp ? editingMcp.name : name));
+    if (idx >= 0) mcpServers[idx] = srv; else mcpServers.push(srv);
+    await putJSON('pocket-config/mcp.json', mcpServers, 'pocket: MCP ' + name);
+    flash('mcp-msg', 'Serveur enregistré — actif à la prochaine tâche.', 'ok');
+    $('mcp-editor').classList.add('hidden'); renderMCP();
+  } catch (e) { flash('mcp-msg', friendlyError(e), 'err'); }
+}
+async function deleteMcp() {
+  if (!editingMcp) return; flash('mcp-msg', 'Suppression…');
+  try {
+    mcpServers = mcpServers.filter((x) => x.name !== editingMcp.name);
+    await putJSON('pocket-config/mcp.json', mcpServers, 'pocket: remove MCP ' + editingMcp.name);
+    $('mcp-editor').classList.add('hidden'); renderMCP(); flash('mcp-msg', '', '');
+  } catch (e) { flash('mcp-msg', friendlyError(e), 'err'); }
+}
+
+// ── Connaissances ────────────────────────────────────────────────────────────
+let knowSha = {};
+async function loadKnowledge() {
+  const d = $('know-domain').value; $('know-msg').textContent = ''; $('know-text').value = 'Chargement…';
+  try { const c = await gh('/contents/pocket-knowledge/' + d + '.md'); $('know-text').value = decodeB64(c.content); knowSha[d] = c.sha; }
+  catch { $('know-text').value = ''; knowSha[d] = null; }
+}
+async function saveKnowledge() {
+  const d = $('know-domain').value; flash('know-msg', 'Enregistrement…');
+  try {
+    const body = { message: 'knowledge: ' + d + ' (édition manuelle)', content: b64($('know-text').value) };
+    if (knowSha[d]) body.sha = knowSha[d];
+    const r = await gh('/contents/pocket-knowledge/' + d + '.md', { method: 'PUT', body: JSON.stringify(body) });
+    knowSha[d] = r.content.sha; flash('know-msg', 'Enregistré.', 'ok');
+  } catch (e) { flash('know-msg', friendlyError(e), 'err'); }
+}
+
+// ── Système (device) ─────────────────────────────────────────────────────────
 async function renderSystem() {
-  renderHealthAndCost();
   const d = [];
   d.push(cell('CPU (cœurs)', 'i-cpu', navigator.hardwareConcurrency || '—'));
   d.push(cell('Mémoire', 'i-cpu', navigator.deviceMemory ? navigator.deviceMemory + ' Go' : 'non exposé'));
   d.push(cell('Plateforme', 'i-info', escapeHtml(navigator.platform || '—')));
-  d.push(cell('Écran', 'i-info', `${screen.width}×${screen.height}`));
   d.push(cell('Réseau', 'i-info', (navigator.connection && navigator.connection.effectiveType) || 'non exposé'));
-  let bat = 'non exposé (iOS)'; if (navigator.getBattery) { try { const b = await navigator.getBattery(); bat = Math.round(b.level * 100) + '%' + (b.charging ? ' ⚡' : ''); } catch {} }
+  let bat = 'non exposé'; if (navigator.getBattery) { try { const b = await navigator.getBattery(); bat = Math.round(b.level * 100) + '%' + (b.charging ? ' (charge)' : ''); } catch {} }
   d.push(cell('Batterie', 'i-info', bat));
+  d.push(cell('Version', 'i-info', APP_VERSION));
   $('system-grid').innerHTML = d.join('');
-  $('claude-grid').innerHTML = [cell('Modèle', 'i-brain', MODEL), cell('Version app', 'i-info', APP_VERSION), cell('Exécution', 'i-robot', 'GitHub Actions'), cell('Contexte', 'i-brain', '~200K, neuf/tâche')].join('');
-  // Usage estimé sur la fenêtre 5h (à partir des tâches récentes)
-  const now = Date.now(), WIN = 5 * 3600 * 1000;
-  const recent = (allIssues || []).filter((i) => i.created_at && now - new Date(i.created_at) < WIN);
-  let tok = 0;
-  for (const i of recent) tok += estTokens(i.body) + (i.comments || 0) * 250;
-  const REF = 1000000; // référence indicative pour une session 5h chargée
-  const pct = Math.min(100, tok / REF * 100);
-  $('usage-box').innerHTML =
-    `<div class="kgrid">${cell('Tâches (5h)', 'i-list', recent.length)}${cell('Tokens estim. (5h)', 'i-brain', '≈ ' + tok.toLocaleString('fr-FR'))}</div>` +
-    `<div class="kcell wide" style="margin-top:8px"><div class="k"><svg class="ic"><use href="#i-clock"/></svg>Fenêtre 5h (indicatif /1M)</div><div class="gauge ${pct > 80 ? 'warn' : ''}"><i style="width:${pct}%"></i></div></div>`;
 }
 
-// ── Push ────────────────────────────────────────────────────────────────────
+// ── Push ─────────────────────────────────────────────────────────────────────
 function urlB64ToUint8Array(s) { const p = '='.repeat((4 - s.length % 4) % 4); const b = (s + p).replace(/-/g, '+').replace(/_/g, '/'); const r = atob(b); const a = new Uint8Array(r.length); for (let i = 0; i < r.length; i++) a[i] = r.charCodeAt(i); return a; }
 async function enablePush() {
-  const m = $('push-msg'); m.className = 'msg';
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) { m.className = 'msg err'; m.textContent = 'Push indisponible. Ouvre l\'app depuis l\'écran d\'accueil (iOS 16.4+).'; return; }
-  m.textContent = 'Autorisation…';
+  flash('push-msg', 'Autorisation…');
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) { flash('push-msg', "Push indisponible. Ouvre l'app depuis l'écran d'accueil (iOS 16.4+).", 'err'); return; }
   try {
-    if (await Notification.requestPermission() !== 'granted') { m.className = 'msg err'; m.textContent = 'Permission refusée.'; return; }
+    if (await Notification.requestPermission() !== 'granted') { flash('push-msg', 'Permission refusée.', 'err'); return; }
     const reg = await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
     if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC) });
-    await putFile(`pocket-data/sub-${LS.device}.json`, sub.toJSON());
-    m.className = 'msg ok'; m.textContent = '✅ Notifications activées.';
-  } catch (e) { m.className = 'msg err'; m.textContent = 'Échec : ' + (e.message || e); }
+    await putJSON(`pocket-data/sub-${LS.device}.json`, sub.toJSON(), 'pocket: sub ' + LS.device);
+    flash('push-msg', 'Notifications activées.', 'ok');
+  } catch (e) { flash('push-msg', 'Échec : ' + (e.message || e), 'err'); }
 }
 
-// ── Router ──────────────────────────────────────────────────────────────────
+// ── Router ────────────────────────────────────────────────────────────────────
 function applyView(view) {
   const isDetail = view.startsWith('detail:');
   currentView = isDetail ? 'detail' : view;
+  $('home').classList.toggle('hidden', !(view === 'home' || view === 'main'));
   $('detail').classList.toggle('hidden', !isDetail);
-  $('system').classList.toggle('hidden', view !== 'system');
-  $('modes').classList.toggle('hidden', view !== 'modes');
-  $('knowledge').classList.toggle('hidden', view !== 'knowledge');
-  const isMain = !isDetail && !['system', 'modes', 'knowledge'].includes(view);
-  for (const id of ['dashboard', 'composer', 'history']) $(id).classList.toggle('hidden', !isMain);
+  $('admin').classList.toggle('hidden', view !== 'admin');
   if (!isDetail) stopPoll();
   stopMainPoll();
-  if (view === 'system') renderSystem();
-  else if (view === 'modes') { renderModes(); $('mode-editor').classList.add('hidden'); }
-  else if (view === 'knowledge') loadKnowledge();
-  else if (isDetail) loadDetail(parseInt(view.split(':')[1], 10));
-  else { detailNum = null; loadHistory(); startMainPoll(); }
+  if (isDetail) loadDetail(parseInt(view.split(':')[1], 10));
+  else if (view === 'admin') { renderHealthAndCost(); loadMCP(); renderSystem(); $('mcp-editor').classList.add('hidden'); }
+  else { detailNum = null; if (LS.repo && LS.pat) { loadHistory(); startMainPoll(); } }
   window.scrollTo(0, 0);
 }
-function startMainPoll() { stopMainPoll(); mainTimer = setInterval(() => { if (LS.repo && LS.pat && !document.hidden) loadHistory(); }, 20000); }
+function startMainPoll() { stopMainPoll(); mainTimer = setInterval(() => { if (LS.repo && LS.pat && !document.hidden && currentView === 'home') loadHistory(); }, 20000); }
 function stopMainPoll() { if (mainTimer) { clearInterval(mainTimer); mainTimer = null; } }
 function navigate(view) { history.pushState({ view }, '', '#' + view); applyView(view); }
 
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
-function timeago(iso) { const s = Math.max(0, (Date.now() - new Date(iso)) / 1000); if (s < 60) return 'à l\'instant'; if (s < 3600) return `il y a ${Math.floor(s / 60)} min`; if (s < 86400) return `il y a ${Math.floor(s / 3600)} h`; return `il y a ${Math.floor(s / 86400)} j`; }
 async function testConn(silent) {
   const dot = $('conn-dot');
   try { const r = await gh(''); dot.className = 'dot ok'; try { const u = await (await fetch('https://api.github.com/user', { headers: { Authorization: `Bearer ${LS.pat}`, Accept: 'application/vnd.github+json' } })).json(); if (u && u.login) connectedLogin = u.login; } catch {} return r; }
   catch { dot.className = 'dot err'; if (!silent) throw new Error('non connecté'); return null; }
 }
-
 function setupMic() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition; const mic = $('mic');
-  $('mic-hint').classList.remove('hidden'); // l'astuce clavier reste toujours dispo
   if (!SR) { mic.style.display = 'none'; return; }
   const rec = new SR(); rec.lang = 'fr-FR'; rec.interimResults = true; rec.continuous = true; let base = '', live = false;
   rec.onresult = (e) => { let t = ''; for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript; $('demande').value = (base + ' ' + t).trim(); };
-  rec.onerror = (e) => { live = false; mic.classList.remove('live'); if (e && e.error === 'not-allowed') { const m = $('composer-msg'); m.className = 'msg err'; m.textContent = 'Micro refusé. Utilise le micro du clavier iOS (astuce ci-dessus).'; } };
+  rec.onerror = (e) => { live = false; mic.classList.remove('live'); if (e && e.error === 'not-allowed') flash('composer-msg', 'Micro refusé. Utilise le micro du clavier iOS.', 'err'); };
   rec.onend = () => { live = false; mic.classList.remove('live'); };
   mic.onclick = () => { if (live) { rec.stop(); return; } base = $('demande').value; try { rec.start(); live = true; mic.classList.add('live'); } catch { mic.classList.remove('live'); } };
 }
-
-// ── Thème ───────────────────────────────────────────────────────────────────
 function applyTheme(t) {
   if (t === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', t);
   for (const b of document.querySelectorAll('#theme-seg button')) b.classList.toggle('active', b.dataset.theme === t);
-  const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.setAttribute('content', t === 'light' ? '#eef1f7' : '#0a0e16');
+  const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.setAttribute('content', t === 'light' ? '#f4efe6' : '#1b1815');
 }
+function setModel(m) { selectedModel = m; LS.model = m; for (const b of document.querySelectorAll('#model-seg button')) b.classList.toggle('active', b.dataset.model === m); }
 
 function init() {
   $('repo').value = LS.repo || 'GaspardCoche/agent-system'; $('pat').value = LS.pat;
-  if (!LS.repo || !LS.pat) $('settings').classList.remove('hidden');
-  $('brand-home').onclick = () => navigate('main');
-  $('nav-settings').onclick = () => $('settings').classList.toggle('hidden');
-  $('nav-system').onclick = () => navigate('system');
-  $('health-refresh').onclick = async () => {
-    const m = $('health-msg'); m.className = 'msg'; m.textContent = 'Test lancé…';
-    try {
-      await gh('/actions/workflows/pocket-health.yml/dispatches', { method: 'POST', body: JSON.stringify({ ref: 'main' }) });
-      m.className = 'msg ok'; m.textContent = 'Canari lancé — résultat dans ~40 s.';
-      setTimeout(() => { renderHealthAndCost(); m.textContent = ''; }, 45000);
-    } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
-  };
-  $('nav-modes').onclick = () => navigate('modes');
-  $('modes-back').onclick = () => history.back();
-  $('mode-new').onclick = () => openModeEditor(null);
-  $('mode-save').onclick = saveMode;
-  $('mode-delete').onclick = deleteMode;
-  $('mode-freq').onchange = (e) => { $('sched-extra').classList.toggle('hidden', e.target.value === 'none'); $('weekday-wrap').classList.toggle('hidden', e.target.value !== 'weekly'); };
-  $('open-knowledge').onclick = () => navigate('knowledge');
-  $('knowledge-back').onclick = () => history.back();
-  for (const b of document.querySelectorAll('#source-filter button')) b.onclick = () => { currentSource = b.dataset.src; currentFilter = 'all'; renderSourceFilter(); renderFilters(); renderHistory(); renderDashboard(); };
-  $('refresh-btn').onclick = () => { if (LS.repo && LS.pat) loadHistory(); };
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && currentView === 'main' && LS.repo && LS.pat) loadHistory(); });
-  $('know-domain').onchange = loadKnowledge;
-  $('know-save').onclick = saveKnowledge;
-  $('system-back').onclick = () => history.back();
+  // greeting
+  const hr = new Date().getHours();
+  $('greet').textContent = hr < 6 ? 'Bonne nuit.' : hr < 18 ? 'Bonjour.' : 'Bonsoir.';
+  // nav
+  $('brand-home').onclick = () => navigate('home');
+  $('nav-new').onclick = () => { navigate('home'); $('demande').focus(); };
+  $('nav-admin').onclick = () => navigate('admin');
   $('back').onclick = () => history.back();
-  $('save-settings').onclick = async () => {
-    LS.repo = $('repo').value.trim(); LS.pat = $('pat').value.trim();
-    const m = $('settings-msg'); m.className = 'msg'; m.textContent = 'Test…';
-    try { const r = await testConn(false); m.className = 'msg ok'; m.textContent = `Connecté à ${r.full_name}${connectedLogin ? ' · ' + connectedLogin : ''}`; loadHistory(); loadModes(); setTimeout(() => $('settings').classList.add('hidden'), 1400); }
-    catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
-  };
-  $('enable-push').onclick = enablePush;
-  // Thème
-  applyTheme(LS.theme);
-  for (const b of document.querySelectorAll('#theme-seg button')) b.onclick = () => { LS.theme = b.dataset.theme; applyTheme(b.dataset.theme); };
-  // Import de fichiers
+  $('admin-back').onclick = () => history.back();
+  // model picker
+  setModel(LS.model);
+  for (const b of document.querySelectorAll('#model-seg button')) b.onclick = () => setModel(b.dataset.model);
+  // composer
+  $('dispatch').onclick = dispatch;
+  $('write-allowed').onchange = (e) => $('conditions-wrap').classList.toggle('hidden', !e.target.checked);
+  for (const ch of document.querySelectorAll('#quick-chips .chip')) ch.onclick = () => { $('demande').value = ch.dataset.q; $('demande').focus(); };
+  // files + drag/drop
   $('attach-btn').onclick = () => $('file-input').click();
   $('file-input').onchange = (e) => { addFiles(e.target.files); e.target.value = ''; };
-  $('write-allowed').onchange = (e) => $('conditions-wrap').classList.toggle('hidden', !e.target.checked);
-  $('dispatch').onclick = dispatch;
-  for (const ch of document.querySelectorAll('#chips .chip')) ch.onclick = () => { $('demande').value = ch.dataset.q; $('demande').focus(); };
+  const dz = $('dropzone');
+  ['dragover', 'dragenter'].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop', (e) => { if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files); });
+  // detail chat
   $('chat-send').onclick = chatSend;
-  $('chat-input').addEventListener('input', (e) => { e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 140) + 'px'; });
-  window.addEventListener('popstate', (e) => applyView((e.state && e.state.view) || 'main'));
-
+  $('chat-input').addEventListener('input', (e) => { e.target.style.height = 'auto'; e.target.style.height = Math.min(e.target.scrollHeight, 130) + 'px'; });
+  // admin: settings
+  $('save-settings').onclick = async () => {
+    LS.repo = $('repo').value.trim(); LS.pat = $('pat').value.trim();
+    flash('settings-msg', 'Test…');
+    try { const r = await testConn(false); flash('settings-msg', `Connecté à ${r.full_name}${connectedLogin ? ' · ' + connectedLogin : ''}`, 'ok'); loadHistory(); renderHealthAndCost(); loadMCP(); }
+    catch (e) { flash('settings-msg', friendlyError(e), 'err'); }
+  };
+  $('health-refresh').onclick = async () => {
+    flash('health-msg', 'Test lancé…');
+    try { await gh('/actions/workflows/pocket-health.yml/dispatches', { method: 'POST', body: JSON.stringify({ ref: 'main' }) }); flash('health-msg', 'Canari lancé — résultat dans ~40 s.', 'ok'); setTimeout(() => { renderHealthAndCost(); flash('health-msg', '', ''); }, 45000); }
+    catch (e) { flash('health-msg', friendlyError(e), 'err'); }
+  };
+  // admin: MCP editor
+  $('mcp-new').onclick = () => openMcpEditor(null);
+  for (const b of document.querySelectorAll('#mcp-transport button')) b.onclick = () => setTransport(b.dataset.t);
+  $('mcp-save').onclick = saveMcp;
+  $('mcp-delete').onclick = deleteMcp;
+  // admin: knowledge
+  $('know-domain').onchange = loadKnowledge;
+  $('know-save').onclick = saveKnowledge;
+  // admin: theme + push
+  applyTheme(LS.theme);
+  for (const b of document.querySelectorAll('#theme-seg button')) b.onclick = () => { LS.theme = b.dataset.theme; applyTheme(b.dataset.theme); };
+  $('enable-push').onclick = enablePush;
+  // misc
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && currentView === 'home' && LS.repo && LS.pat) loadHistory(); });
+  window.addEventListener('popstate', (e) => applyView((e.state && e.state.view) || 'home'));
   const vb = $('ver-badge'); if (vb) vb.textContent = APP_VERSION;
-
   setupMic();
-  history.replaceState({ view: 'main' }, '', '#main');
-  if (LS.repo && LS.pat) { testConn(true).then(() => { loadHistory(); loadModes(); startMainPoll(); }); } else { renderHistory(); }
+  history.replaceState({ view: 'home' }, '', '#home');
+  if (LS.repo && LS.pat) { testConn(true).then(() => { loadHistory(); startMainPoll(); }); } else { renderHistory(); navigate('admin'); }
   if ('serviceWorker' in navigator) {
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => { if (refreshing) return; refreshing = true; location.reload(); });
