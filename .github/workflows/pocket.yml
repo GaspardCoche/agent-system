@@ -247,6 +247,15 @@ jobs:
           fi
           python3 scripts/pocket_push.py --title "$TITLE" --body "$BODY" --url "./" || true
 
+      # Enregistre le run (succès, coût réel, durée, système) dans status.json
+      # → alimente le panneau Santé et le suivi de coût de l'app.
+      - name: Record status
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python3 scripts/pocket_status.py --issue ${{ github.event.issue.number }} || true
+
       # Fait apparaître le run en ROUGE si l'agent a échoué (honnête pour le
       # dashboard de l'app), après avoir posté le repli et notifié.
       - name: Fail run if Claude errored

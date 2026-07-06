@@ -66,6 +66,7 @@ jobs:
           echo "CLAUDE_ARGS=--model claude-opus-4-8 --max-turns 15 --allowedTools Bash,Read,mcp__github__add_issue_comment,$READ --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run Claude Pocket (scheduled)
+        id: claude
         if: steps.fire.outputs.fired == 'true'
         uses: anthropics/claude-code-action@v1
         continue-on-error: true
@@ -99,6 +100,19 @@ jobs:
               }
             }
 
+      # Détecte un échec silencieux de l'agent programmé (token mort, etc.).
+      - name: Check Claude result
+        id: result
+        if: steps.fire.outputs.fired == 'true'
+        run: echo "ok=$(python3 scripts/pocket_check_result.py)" >> $GITHUB_OUTPUT
+
+      - name: Fallback comment on failure
+        if: steps.fire.outputs.fired == 'true' && steps.result.outputs.ok != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ steps.fire.outputs.issue }} --body "⚠️ **Tâche programmée non traitée** — échec probable d'authentification Claude (token à renouveler). Le run est marqué en échec." || true
+
       - name: Notify (push)
         if: steps.fire.outputs.fired == 'true'
         env:
@@ -106,4 +120,22 @@ jobs:
           VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
         run: |
           pip install --quiet pywebpush || true
-          python3 scripts/pocket_push.py --title "Claude Pocket ⏰" --body "Tâche programmée #${{ steps.fire.outputs.issue }} terminée." --url "./" || true
+          if [ "${{ steps.result.outputs.ok }}" = "true" ]; then
+            BODY="Tâche programmée #${{ steps.fire.outputs.issue }} terminée."
+          else
+            BODY="Tâche programmée #${{ steps.fire.outputs.issue }} en échec (auth/token). Ouvre l'app."
+          fi
+          python3 scripts/pocket_push.py --title "Claude Pocket ⏰" --body "$BODY" --url "./" || true
+
+      - name: Record status
+        if: steps.fire.outputs.fired == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python3 scripts/pocket_status.py --issue ${{ steps.fire.outputs.issue }} || true
+
+      - name: Fail run if Claude errored
+        if: steps.fire.outputs.fired == 'true' && steps.result.outputs.ok != 'true'
+        run: |
+          echo "::error::Tâche programmée en échec (is_error)."
+          exit 1
