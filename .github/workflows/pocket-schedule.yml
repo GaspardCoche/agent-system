@@ -47,23 +47,24 @@ jobs:
         env:
           GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
           HUBSPOT_TOKEN_MCP: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
-          LEMLIST_KEY_MCP: ${{ secrets.LEMLIST_API_KEY }}
         run: |
           python3 -c "
           import json, os
           cfg = {'mcpServers': {'github': {'command': 'npx', 'args': ['-y', '@modelcontextprotocol/server-github'], 'env': {'GITHUB_PERSONAL_ACCESS_TOKEN': os.environ['GH_TOKEN_MCP']}}}}
           if os.environ.get('HUBSPOT_TOKEN_MCP'):
               cfg['mcpServers']['hubspot'] = {'command': 'npx', 'args': ['-y', '@hubspot/mcp-server'], 'env': {'PRIVATE_APP_ACCESS_TOKEN': os.environ['HUBSPOT_TOKEN_MCP']}}
-          if os.environ.get('LEMLIST_KEY_MCP'):
-              cfg['mcpServers']['lemlist'] = {'type': 'http', 'url': 'https://app.lemlist.com/mcp', 'headers': {'X-API-Key': os.environ['LEMLIST_KEY_MCP']}}
           json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
           "
+          python3 scripts/pocket_mcp.py merge --into /tmp/mcp-config.json || true
 
       - name: Build claude_args
         if: steps.fire.outputs.fired == 'true'
         run: |
-          READ="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__hubspot__hubspot-get-engagement,mcp__lemlist__get_campaigns,mcp__lemlist__get_campaign_details,mcp__lemlist__get_campaigns_stats,mcp__lemlist__search_contacts"
-          echo "CLAUDE_ARGS=--model claude-opus-4-8 --max-turns 15 --allowedTools Bash,Read,mcp__github__add_issue_comment,$READ --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+          READ="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__hubspot__hubspot-get-engagement"
+          USER_TOOLS=$(python3 scripts/pocket_mcp.py tools 2>/dev/null)
+          TOOLS="Bash,Read,mcp__github__add_issue_comment,$READ"
+          [ -n "$USER_TOOLS" ] && TOOLS="$TOOLS,$USER_TOOLS"
+          echo "CLAUDE_ARGS=--model claude-opus-4-8 --max-turns 15 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run Claude Pocket (scheduled)
         id: claude
@@ -72,7 +73,6 @@ jobs:
         continue-on-error: true
         env:
           HUBSPOT_PRIVATE_APP_TOKEN: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
-          LEMLIST_API_KEY: ${{ secrets.LEMLIST_API_KEY }}
           FULLENRICH_API_KEY: ${{ secrets.FULLENRICH_API_KEY }}
           PHANTOMBUSTER_API_KEY: ${{ secrets.PHANTOMBUSTER_API_KEY }}
           VAULT_DEPLOY_KEY: ${{ secrets.VAULT_DEPLOY_KEY }}
@@ -95,8 +95,7 @@ jobs:
                 "GH_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
                 "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
                 "GITHUB_REPOSITORY": "${{ github.repository }}",
-                "HUBSPOT_PRIVATE_APP_TOKEN": "${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}",
-                "LEMLIST_API_KEY": "${{ secrets.LEMLIST_API_KEY }}"
+                "HUBSPOT_PRIVATE_APP_TOKEN": "${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}"
               }
             }
 
