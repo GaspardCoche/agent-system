@@ -1,7 +1,7 @@
 name: Claude Pocket
 
 # Workflow dédié aux tâches déclenchées depuis le téléphone (label `pocket`).
-# Mono-agent : Dispatch répond DIRECTEMENT (lecture HubSpot/Lemlist), sans le
+# Mono-agent : Claude répond DIRECTEMENT (CRM HubSpot + FullEnrich + web), sans le
 # pipeline multi-agents lourd. Écriture seulement si le label `approved` est présent.
 on:
   issues:
@@ -95,10 +95,11 @@ jobs:
         env:
           GH_TOKEN_MCP: ${{ secrets.GITHUB_TOKEN }}
           HUBSPOT_TOKEN_MCP: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
-          LEMLIST_KEY_MCP: ${{ secrets.LEMLIST_API_KEY }}
           TAVILY_KEY_MCP: ${{ secrets.TAVILY_API_KEY }}
           FIRECRAWL_KEY_MCP: ${{ secrets.FIRECRAWL_API_KEY }}
         run: |
+          # Base : github + hubspot (CRM) + web. Les MCP utilisateur ajoutés
+          # depuis l'app (pocket-config/mcp.json) sont fusionnés par pocket_mcp.py.
           python3 -c "
           import json, os
           cfg = {'mcpServers': {
@@ -106,27 +107,34 @@ jobs:
           }}
           if os.environ.get('HUBSPOT_TOKEN_MCP'):
               cfg['mcpServers']['hubspot'] = {'command': 'npx', 'args': ['-y', '@hubspot/mcp-server'], 'env': {'PRIVATE_APP_ACCESS_TOKEN': os.environ['HUBSPOT_TOKEN_MCP']}}
-          if os.environ.get('LEMLIST_KEY_MCP'):
-              cfg['mcpServers']['lemlist'] = {'type': 'http', 'url': 'https://app.lemlist.com/mcp', 'headers': {'X-API-Key': os.environ['LEMLIST_KEY_MCP']}}
           if os.environ.get('TAVILY_KEY_MCP'):
               cfg['mcpServers']['tavily'] = {'command': 'npx', 'args': ['-y', 'tavily-mcp@latest'], 'env': {'TAVILY_API_KEY': os.environ['TAVILY_KEY_MCP']}}
           if os.environ.get('FIRECRAWL_KEY_MCP'):
               cfg['mcpServers']['firecrawl'] = {'command': 'npx', 'args': ['-y', 'firecrawl-mcp'], 'env': {'FIRECRAWL_API_KEY': os.environ['FIRECRAWL_KEY_MCP']}}
           json.dump(cfg, open('/tmp/mcp-config.json', 'w'))
           "
+          # Fusionne les MCP ajoutés par l'utilisateur depuis l'app (best-effort).
+          python3 scripts/pocket_mcp.py merge --into /tmp/mcp-config.json || true
 
       - name: Build claude_args
         env:
           APPROVED: ${{ needs.gate.outputs.approved }}
+          BODY: ${{ github.event.issue.body }}
         run: |
-          READ="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__hubspot__hubspot-get-engagement,mcp__lemlist__get_campaigns,mcp__lemlist__get_campaign_details,mcp__lemlist__get_campaigns_stats,mcp__lemlist__get_campaigns_reports,mcp__lemlist__search_contacts,mcp__lemlist__search_companies,mcp__lemlist__get_team_overview,mcp__lemlist__get_inbox_conversations,mcp__tavily__tavily_search,mcp__tavily__tavily_extract,mcp__firecrawl__firecrawl_scrape,mcp__firecrawl__firecrawl_search"
+          # Modèle choisi dans la boîte de commande (défaut Opus 4.8). Abonnement, 0 €.
+          MODEL=$(printf '%s' "$BODY" | python3 scripts/pocket_model.py)
+          READ="mcp__hubspot__hubspot-search-objects,mcp__hubspot__hubspot-list-objects,mcp__hubspot__hubspot-batch-read-objects,mcp__hubspot__hubspot-list-properties,mcp__hubspot__hubspot-get-property,mcp__hubspot__hubspot-get-schemas,mcp__hubspot__hubspot-list-associations,mcp__hubspot__hubspot-list-workflows,mcp__hubspot__hubspot-get-workflow,mcp__hubspot__hubspot-get-engagement,mcp__tavily__tavily_search,mcp__tavily__tavily_extract,mcp__firecrawl__firecrawl_scrape,mcp__firecrawl__firecrawl_search"
           TOOLS="Bash,Read,mcp__github__add_issue_comment,$READ"
+          # Outils MCP ajoutés par l'utilisateur depuis l'app (panneau admin).
+          USER_TOOLS=$(python3 scripts/pocket_mcp.py tools 2>/dev/null)
+          [ -n "$USER_TOOLS" ] && TOOLS="$TOOLS,$USER_TOOLS"
           # Outils d'ÉCRITURE seulement si le label `approved` est présent (gate au niveau outil).
           if [[ "$APPROVED" == "true" ]]; then
             WRITE="mcp__hubspot__hubspot-batch-update-objects,mcp__hubspot__hubspot-batch-create-objects,mcp__hubspot__hubspot-batch-create-associations,mcp__hubspot__hubspot-create-engagement,mcp__hubspot__hubspot-update-engagement,mcp__hubspot__hubspot-create-property,mcp__hubspot__hubspot-update-property"
             TOOLS="$TOOLS,$WRITE"
           fi
-          echo "CLAUDE_ARGS=--model claude-opus-4-8 --max-turns 15 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
+          echo "Modèle: $MODEL"
+          echo "CLAUDE_ARGS=--model $MODEL --max-turns 20 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run Claude Pocket
         id: claude
@@ -134,7 +142,6 @@ jobs:
         continue-on-error: true
         env:
           HUBSPOT_PRIVATE_APP_TOKEN: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}
-          LEMLIST_API_KEY: ${{ secrets.LEMLIST_API_KEY }}
           FULLENRICH_API_KEY: ${{ secrets.FULLENRICH_API_KEY }}
           PHANTOMBUSTER_API_KEY: ${{ secrets.PHANTOMBUSTER_API_KEY }}
           VAULT_DEPLOY_KEY: ${{ secrets.VAULT_DEPLOY_KEY }}
@@ -147,58 +154,41 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: |
-            Tu es Claude Pocket, l'assistant de Gaspard (growth/CRM B2B chez EMAsphere).
-            Une demande arrive depuis son téléphone via une issue GitHub. Tu es GÉNÉRALISTE :
-            tu COMPRENDS l'intention depuis la demande en langage naturel, tu choisis toi-même
-            la/les bonne(s) app(s), et tu agis. Le champ "Workflow" n'est qu'un raccourci optionnel.
+            Tu es Claude Pocket : Claude, sur le téléphone de Gaspard (growth/CRM B2B chez EMAsphere).
+            Comporte-toi comme l'app Claude — un assistant génératif de haut niveau : tu RÉDIGES du
+            contenu (emails, messages, notes, analyses, textes), tu RAISONNES, et quand la tâche le
+            demande tu AGIS sur ses systèmes (CRM, enrichissement, web). L'intention est toujours dans
+            la demande (dictée ou écrite). Tu comprends, tu choisis les bons outils, et tu délivres un
+            résultat soigné, prêt à l'emploi.
 
             === DÉMARRAGE ===
             - `cat /tmp/agent_task.json` (Demande, approved, issue_number, is_followup, latest_message) et `cat docs/runner-guardrails.md`.
-            - **Lis TOUT le fil de la conversation** (c'est un chat itératif) :
-              `gh issue view ${{ github.event.issue.number }} --comments`
-              Les commentaires de `github-actions` = tes réponses précédentes ; les autres = les messages de Gaspard.
-            - Si `is_followup` = true, tu RÉPONDS au `latest_message` de Gaspard **en tenant compte de tout l'échange** (itération sur un résultat précédent). Sinon, c'est une nouvelle demande (le corps de l'issue).
-            - Poste tout de suite un bref commentaire de progression (1 ligne) :
-              `gh issue comment ${{ github.event.issue.number }} --body "▶️ Compris : <reformulation> — je m'en occupe."`
-            - **Classe la tâche** (une seule fois, si pas déjà fait) en ajoutant UN label catégorie selon le domaine principal :
-              `gh issue edit ${{ github.event.issue.number }} --add-label "cat:crm"` (HubSpot/leads) — ou `cat:enrich` (FullEnrich/PhantomBuster), `cat:outreach` (Lemlist), `cat:web` (recherche web), `cat:vault` (connaissance/docs du repo), `cat:code` (dev/repo), `cat:other`. N'ajoute le label que s'il n'y en a pas déjà un `cat:*`.
+            - **Lis TOUT le fil** (chat itératif) : `gh issue view ${{ github.event.issue.number }} --comments`.
+              Commentaires de `github-actions` = tes réponses ; les autres = Gaspard.
+            - Si `is_followup` = true, réponds au `latest_message` en tenant compte de tout l'échange. Sinon, traite le corps de l'issue.
+            - Poste tout de suite une ligne de progression : `gh issue comment ${{ github.event.issue.number }} --body "Compris : <reformulation> — je m'en occupe."`
+            - **Classe la tâche** (si pas déjà fait) avec UN label : `cat:crm` (HubSpot/leads), `cat:enrich` (FullEnrich), `cat:web` (recherche), `cat:content` (rédaction/génération), `cat:vault` (connaissances), `cat:other`. `gh issue edit ${{ github.event.issue.number }} --add-label "cat:content"`.
 
-            === APPS DISPONIBLES (choisis selon la demande) ===
-            - **HubSpot (CRM)** — `python3 scripts/pocket_hubspot.py count|search|read|whoami` (lecture fiable, token en env).
-              ex : `count contacts lifecyclestage lead` · `search companies industry_emalist "IT - Software" --limit 5`.
-            - **FullEnrich (enrichissement)** — `python3 scripts/pocket_fullenrich.py status|enrich-one|submit` (dry-run sauf --confirm).
-            - **PhantomBuster (scraping)** — `python3 scripts/pocket_phantombuster.py agents|agent|containers|output|result` (lecture) ; `launch ... --confirm` (action).
-            - **Lemlist (outreach)** — outils MCP `mcp__lemlist__*` en lecture (campagnes, stats, contacts).
-            - **Web** — privilégie les MCP : `mcp__tavily__tavily_search` (recherche récente, sourcée), `mcp__tavily__tavily_extract`, `mcp__firecrawl__firecrawl_scrape` / `firecrawl_search` (scrape de pages). `curl` en dernier recours.
-            - **Vault (connaissances EMAsphere)** — `python3 scripts/pocket_vault.py search "<requête>"` puis `read "<chemin.md>"` (et `list`) : accès LECTURE aux 2600+ notes du vault Obsidian privé.
-            - **GitHub / repo** — Bash, Read pour le code et le contexte du repo.
-            Exploite à FOND l'outil le plus adapté (ne te limite pas à un seul). Si un secret manque, dis-le proprement et propose une alternative — ne plante pas.
+            === CAPACITÉS ===
+            - **Génération de contenu (cœur)** — rédige emails, séquences, messages LinkedIn, posts, notes, synthèses, analyses. Soigne le fond ET la forme (markdown : titres, listes, gras, tableaux). C'est ta valeur première : livre un texte que Gaspard peut copier tel quel.
+            - **HubSpot (CRM, système central)** — `python3 scripts/pocket_hubspot.py count|search|read|describe|lists|list-members|export|whoami`. ex : `count contacts lifecyclestage lead`. Objets : contacts, companies, deals. Industry = `industry_emalist` sur companies. MCP `mcp__hubspot__*` aussi dispo.
+            - **FullEnrich (enrichissement, couplé au CRM)** — `python3 scripts/pocket_fullenrich.py status|enrich-one|submit|results-csv` (dry-run sauf `--confirm`). Flux type : segment HubSpot → `list-members` → `submit --file <f> --confirm` (si approved) → `status` → `results-csv`. L'enrichissement alimente HubSpot.
+            - **Web** — `mcp__tavily__tavily_search`/`tavily_extract` (récent, sourcé), `mcp__firecrawl__firecrawl_scrape`/`firecrawl_search`. `curl` en dernier recours.
+            - **Vault (connaissances EMAsphere)** — `python3 scripts/pocket_vault.py search "<requête>"` puis `read "<chemin>"` (lecture des 2600+ notes).
+            - **FICHIERS JOINTS** — si la demande contient **"### Fichiers joints"**, lis CHAQUE fichier avec `cat <chemin>` AVANT d'agir : ce sont des documents (CSV, textes, briefs) que Gaspard veut que tu utilises. Traite-les comme une pièce maîtresse de la tâche.
+            - **OUTPUTS** — tout CSV produit va dans `pocket-data/outputs/` ; donne TOUJOURS le `csv_url` renvoyé dans ta réponse (Gaspard le télécharge depuis l'app).
+            Si un secret/outil manque, dis-le proprement et propose une alternative — ne plante jamais.
 
-            === PLAYBOOKS OUTILS (maîtrise — utilise ces commandes exactes) ===
-            - **PhantomBuster — récupérer l'output d'un phantom par son NOM** : `python3 scripts/pocket_phantombuster.py export "<nom du phantom>"` → écrit le CSV du DERNIER run et renvoie `csv_url`. Si plusieurs phantoms matchent (`ambiguous`), utilise `find "<nom>"` et demande à Gaspard lequel. (Ex de noms : Conso_IR1, Agent_PB_FR-FR, SME_UK1 — tous des « Sales Navigator Search Export ».)
-            - **FullEnrich — CSV des résultats** : après un batch FINISHED → `python3 scripts/pocket_fullenrich.py results-csv <enrichment_id>` → CSV emails/téléphones + `csv_url`.
-            - **HubSpot segment → enrichir → CSV** : `pocket_hubspot.py lists "<mot>"` pour trouver le segment → `list-members <listId>` (ou `export-list <listId>`) → construis un fichier contacts → `pocket_fullenrich.py submit --file <f> --confirm` (si `approved`) → poll `status` → `results-csv`. Renvoie le `csv_url` final à Gaspard (il gère ensuite lui-même).
-            - **HubSpot — expertise objets** : objets = `contacts`, `companies`, `deals` (+ autres). `describe <objet>` (comprendre les propriétés), `count/search/read`, `export <objet> <prop> <valeur>` (→ CSV). Industry = `industry_emalist` sur companies.
-            - **Google Sheets** : `python3 scripts/pocket_sheets.py read <sheetId> [--gid N]` / `export <sheetId>` (lecture/CSV) ; `append <sheetId> <onglet> --row "a,b,c" --confirm` / `write <sheetId> <range> --values-file f.json --confirm` (écriture, si `approved` + compte de service `GOOGLE_SA_JSON`). Si le sheet est privé et qu'il n'y a pas de SA, dis-le proprement (à partager avec le compte de service).
-            - **OUTPUTS / FICHIERS** : tout CSV produit est écrit dans `pocket-data/outputs/` et la commande te renvoie un `csv_url` (lien raw). **Donne TOUJOURS ce lien dans ton commentaire** (ex : « 📥 CSV : <url> ») — Gaspard le télécharge depuis l'app.
-
-            === MÉMOIRE D'EXPERTISE (tu t'améliores avec le temps) ===
-            - Au DÉMARRAGE, après avoir choisi le domaine, lis ton expertise accumulée : `cat pocket-knowledge/<domaine>.md` (crm/web/vault/enrich/outreach/code/other) si le fichier existe — utilise-la pour mieux répondre.
-            - À la FIN, si tu as appris quelque chose de DURABLE et réutilisable (une correction, un fait stable, une préférence de Gaspard, un pattern), enregistre-le :
-              `python3 scripts/pocket_learn.py <domaine> "<apprentissage concis>"`
-              (n'enregistre que si c'est vraiment réutilisable, jamais de doublon, reste bref).
+            === MÉMOIRE ===
+            - Au démarrage, lis `cat pocket-knowledge/<domaine>.md` (crm/web/vault/enrich/content/other) s'il existe.
+            - À la fin, si tu as appris quelque chose de DURABLE : `python3 scripts/pocket_learn.py <domaine> "<apprentissage>"` (jamais de doublon, bref).
 
             === MÉTHODE ===
-            1. Comprends l'intention.
-               - Si la demande contient une section **"### Mode"** avec un slug ≠ `auto` : `cat pocket-modes/<slug>.json` et **suis STRICTEMENT le champ `instructions`** de ce mode (c'est un agent personnalisé créé par Gaspard), par-dessus les garde-fous.
-               - Si la demande contient **"### Fichiers joints"**, lis chaque fichier avec `cat <chemin>` AVANT d'agir.
-               - Si un "Workflow" précis (≠ auto) est indiqué, tu peux lire `cat agent_prompts/workflows/<workflow>.md`. Sinon, raisonne librement.
-            2. Choisis l'app et agis. **Narre tes étapes** : poste un court commentaire de progression à chaque étape clé (ex : "🔎 Je interroge HubSpot…", "📊 J'analyse…") — c'est ce que Gaspard suit en direct dans son app.
-            3. **Lecture par défaut.** Écriture/action coûteuse (HubSpot write, FullEnrich --confirm, PhantomBuster launch, Lemlist add/send) UNIQUEMENT si `approved` = true ET demandée ET dans les garde-fous. Sinon, poste un PREVIEW de ce que tu ferais et demande le label `approved`.
-            4. Poste le RÉSULTAT FINAL en commentaire (clair, prêt à copier, même langue que la demande) :
-               `gh issue comment ${{ github.event.issue.number }} --body "..."`
-            5. **Chaîne d'automatisation** : si le mode JSON contient un champ `chain_to` (slug d'un autre mode), enchaîne DANS LA FOULÉE — `cat pocket-modes/<chain_to>.json`, exécute aussi ses `instructions`, et poste son résultat (en précisant « ⛓ Étape suivante : <nom> »). Tu peux ainsi enchaîner plusieurs agents en une seule exécution.
-            6. **Mémoire** : applique la section MÉMOIRE D'EXPERTISE (enregistre un apprentissage durable via `python3 scripts/pocket_learn.py <domaine> "..."` si pertinent).
+            1. Comprends l'intention (et lis les fichiers joints s'il y en a).
+            2. Agis / rédige. **Narre tes étapes** par de courts commentaires de progression (ex : "Je interroge HubSpot…", "Je rédige…") — Gaspard les suit en direct.
+            3. **Lecture/génération par défaut.** Toute écriture externe coûteuse (HubSpot write, FullEnrich `--confirm`) UNIQUEMENT si `approved` = true ET demandée ET dans les garde-fous. Sinon, poste un aperçu de ce que tu ferais et demande le label `approved`.
+            4. Poste le RÉSULTAT FINAL en commentaire, clair et prêt à copier, même langue que la demande : `gh issue comment ${{ github.event.issue.number }} --body "..."`.
+            5. Applique la MÉMOIRE si pertinent.
           claude_args: ${{ env.CLAUDE_ARGS }}
           settings: |
             {
@@ -207,7 +197,6 @@ jobs:
                 "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}",
                 "GITHUB_REPOSITORY": "${{ github.repository }}",
                 "HUBSPOT_PRIVATE_APP_TOKEN": "${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN }}",
-                "LEMLIST_API_KEY": "${{ secrets.LEMLIST_API_KEY }}",
                 "FIRECRAWL_API_KEY": "${{ secrets.FIRECRAWL_API_KEY }}"
               }
             }

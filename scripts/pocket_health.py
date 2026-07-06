@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 
 HEALTH_PATH = "pocket-data/health.json"
 API = "https://api.github.com"
-SYSTEMS = ["hubspot", "lemlist", "fullenrich", "phantombuster", "tavily",
+SYSTEMS = ["hubspot", "fullenrich", "phantombuster", "tavily",
            "firecrawl", "vault", "google_sa"]
 
 
