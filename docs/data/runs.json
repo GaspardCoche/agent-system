@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "26031302113",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "26031302113",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-05-18T11:45:06.048993+00:00",
-    "agents": [],
-    "report_file": "reports/2026-05-18-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "26086269565",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-05-19",
@@ -1578,5 +1564,28 @@
     "timestamp": "2026-07-06T09:37:38.609457+00:00",
     "agents": [],
     "report_file": "reports/2026-07-06-email-agent-daily-digest-2026-07-06.md"
+  },
+  {
+    "run_id": "28788031320",
+    "workflow": "orchestrator",
+    "title": "feat(pocket): Phase 0 — health, status, cost, scheduler robustness",
+    "status": "success",
+    "event": "pull_request",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "143",
+    "summary": "QA de la PR #143 (deja mergee) validee en lecture seule. pocket_health.py et pocket_status.py compilent et s'executent sans exception (best-effort con",
+    "next_actions": [
+      "Optionnel : ajouter le meme retry 409 a pocket_health.py par coherence avec pocket_status.py",
+      "Optionnel : tests unitaires pour pocket_health.py/pocket_status.py si la logique se complexifie",
+      "Rappel roadmap (hors scope) : secret LEMLIST_API_KEY a ajouter hors-PR, Phase 1 = Ads+Gmail"
+    ],
+    "timestamp": "2026-07-06T11:31:07.792983+00:00",
+    "agents": [
+      {
+        "name": "sentinel",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-07-06-orchestrator-feat-pocket---phase-0---health--status--cost--sche.md"
   }
 ]
