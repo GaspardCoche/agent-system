@@ -129,6 +129,7 @@ jobs:
           echo "CLAUDE_ARGS=--model claude-opus-4-8 --max-turns 15 --allowedTools $TOOLS --mcp-config /tmp/mcp-config.json" >> $GITHUB_ENV
 
       - name: Run Claude Pocket
+        id: claude
         uses: anthropics/claude-code-action@v1
         continue-on-error: true
         env:
@@ -211,6 +212,25 @@ jobs:
               }
             }
 
+      # Détecte un échec silencieux de l'agent (ex : token OAuth expiré →
+      # is_error immédiat, coût 0, aucun commentaire posté). Sans ça,
+      # continue-on-error masque l'échec et une fausse notif « terminée » part.
+      - name: Check Claude result
+        id: result
+        if: always()
+        run: echo "ok=$(python3 scripts/pocket_check_result.py)" >> $GITHUB_OUTPUT
+
+      - name: Fallback comment on failure
+        if: always() && steps.result.outputs.ok != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body "⚠️ **Claude Pocket n'a pas pu traiter cette tâche.**
+
+          Cause la plus probable : le token d'authentification Claude (\`CLAUDE_CODE_OAUTH_TOKEN\`) est expiré ou invalide (échec immédiat, aucun jeton consommé).
+
+          **Pour réparer :** renouvelle le token (\`claude setup-token\` puis \`gh secret set CLAUDE_CODE_OAUTH_TOKEN -R GaspardCoche/agent-system\`) ou ajoute un \`ANTHROPIC_API_KEY\`, puis relance la tâche (nouveau commentaire sur cette issue)." || true
+
       - name: Notify (push)
         if: always() && contains(github.event.issue.labels.*.name, 'via:phone')
         env:
@@ -218,7 +238,19 @@ jobs:
           VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
         run: |
           pip install --quiet pywebpush || true
-          python3 scripts/pocket_push.py \
-            --title "Claude Pocket" \
-            --body "Tâche #${{ github.event.issue.number }} terminée — ouvre l'app pour voir la réponse." \
-            --url "./" || true
+          if [ "${{ steps.result.outputs.ok }}" = "true" ]; then
+            TITLE="Claude Pocket"
+            BODY="Tâche #${{ github.event.issue.number }} terminée — ouvre l'app pour voir la réponse."
+          else
+            TITLE="Claude Pocket ⚠️"
+            BODY="Tâche #${{ github.event.issue.number }} en échec (auth/token à renouveler). Ouvre l'app pour les détails."
+          fi
+          python3 scripts/pocket_push.py --title "$TITLE" --body "$BODY" --url "./" || true
+
+      # Fait apparaître le run en ROUGE si l'agent a échoué (honnête pour le
+      # dashboard de l'app), après avoir posté le repli et notifié.
+      - name: Fail run if Claude errored
+        if: always() && steps.result.outputs.ok != 'true'
+        run: |
+          echo "::error::Claude Pocket a échoué (is_error). Voir le commentaire de repli sur l'issue #${{ github.event.issue.number }}."
+          exit 1
