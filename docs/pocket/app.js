@@ -2,7 +2,7 @@
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
 const MODEL = 'claude-opus-4-8';
-const APP_VERSION = 'v14';
+const APP_VERSION = 'v15';
 const CTX_WINDOW = 200000; // fenêtre de contexte (tokens) du modèle
 function estTokens(text) { return Math.round((text || '').length / 4); }
 function slugify(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40); }
@@ -50,6 +50,8 @@ async function gh(path, opts = {}) {
   if (!res.ok) { let d = ''; try { d = (await res.json()).message || ''; } catch {} const e = new Error(`GitHub ${res.status} ${d}`.trim()); e.status = res.status; throw e; }
   return res.status === 204 ? null : res.json();
 }
+// Lit un fichier JSON du repo (Contents API + décodage b64). null si absent.
+async function ghJSON(path) { try { const r = await gh('/contents/' + path); return JSON.parse(decodeB64(r.content)); } catch { return null; } }
 function friendlyError(e) {
   if (e.status === 403) return `${e.message}\n→ Token « classic » (scope repo) du compte gcoche-bit requis + accès écriture au repo.`;
   if (e.status === 401) return `${e.message}\n→ Token invalide/expiré.`;
@@ -429,7 +431,38 @@ async function approve(number) {
 function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
 
 // ── Système ─────────────────────────────────────────────────────────────────
+function ago(iso) { if (!iso) return '—'; const s = Math.max(0, (Date.now() - new Date(iso)) / 1000); if (s < 90) return 'à l\'instant'; if (s < 3600) return `il y a ${Math.round(s / 60)} min`; if (s < 86400) return `il y a ${Math.round(s / 3600)} h`; return `il y a ${Math.round(s / 86400)} j`; }
+const SECRET_LABELS = { hubspot: 'HubSpot', lemlist: 'Lemlist', fullenrich: 'FullEnrich', phantombuster: 'PhantomBuster', tavily: 'Tavily', firecrawl: 'Firecrawl', vault: 'Vault', google_sa: 'Google Sheets (SA)' };
+
+async function renderHealthAndCost() {
+  // ── Santé ──
+  const h = await ghJSON('pocket-data/health.json');
+  const ht = $('health-token');
+  if (!h) { ht.className = 'health-token'; ht.textContent = 'Aucune donnée (le canari n\'a pas encore tourné).'; $('health-grid').innerHTML = ''; }
+  else {
+    ht.className = 'health-token ' + (h.token_ok ? 'ok' : 'err');
+    ht.innerHTML = h.token_ok
+      ? `<svg class="ic"><use href="#i-check"/></svg> Auth Claude OK <small>${escapeHtml(h.model || '')} · vérifié ${ago(h.checked_at)}</small>`
+      : `<svg class="ic"><use href="#i-alert"/></svg> Token Claude expiré — renouvelle-le <small>(vérifié ${ago(h.checked_at)})</small>`;
+    const sec = h.secrets || {};
+    $('health-grid').innerHTML = Object.keys(SECRET_LABELS).map((k) =>
+      `<div class="kcell"><div class="k">${SECRET_LABELS[k]}</div><div class="v sm">${sec[k] ? '<span class="ok-dot">●</span> OK' : '<span class="err-dot">●</span> absent'}</div></div>`
+    ).join('');
+  }
+  // ── Coût réel ──
+  const st = await ghJSON('pocket-data/status.json');
+  const runs = (st && st.runs) || [];
+  const now = new Date(), day = now.toISOString().slice(0, 10), month = day.slice(0, 7);
+  let cToday = 0, cMonth = 0, nToday = 0;
+  for (const r of runs) { const ts = (r.ts || '').slice(0, 10); if (ts === day) { cToday += r.cost_usd || 0; nToday++; } if (ts.slice(0, 7) === month) cMonth += r.cost_usd || 0; }
+  const fmt = (n) => '$' + (n || 0).toFixed(2);
+  $('cost-box').innerHTML = runs.length
+    ? `<div class="kgrid">${cell('Aujourd\'hui', 'i-clock', fmt(cToday) + ` · ${nToday} run${nToday > 1 ? 's' : ''}`)}${cell('Ce mois', 'i-clock', fmt(cMonth))}${cell('Total suivi', 'i-list', runs.length + ' runs')}</div>`
+    : '<p class="hint" style="margin-top:0">Aucun run enregistré pour l\'instant.</p>';
+}
+
 async function renderSystem() {
+  renderHealthAndCost();
   const d = [];
   d.push(cell('CPU (cœurs)', 'i-cpu', navigator.hardwareConcurrency || '—'));
   d.push(cell('Mémoire', 'i-cpu', navigator.deviceMemory ? navigator.deviceMemory + ' Go' : 'non exposé'));
@@ -524,6 +557,14 @@ function init() {
   $('brand-home').onclick = () => navigate('main');
   $('nav-settings').onclick = () => $('settings').classList.toggle('hidden');
   $('nav-system').onclick = () => navigate('system');
+  $('health-refresh').onclick = async () => {
+    const m = $('health-msg'); m.className = 'msg'; m.textContent = 'Test lancé…';
+    try {
+      await gh('/actions/workflows/pocket-health.yml/dispatches', { method: 'POST', body: JSON.stringify({ ref: 'main' }) });
+      m.className = 'msg ok'; m.textContent = 'Canari lancé — résultat dans ~40 s.';
+      setTimeout(() => { renderHealthAndCost(); m.textContent = ''; }, 45000);
+    } catch (e) { m.className = 'msg err'; m.textContent = friendlyError(e); }
+  };
   $('nav-modes').onclick = () => navigate('modes');
   $('modes-back').onclick = () => history.back();
   $('mode-new').onclick = () => openModeEditor(null);

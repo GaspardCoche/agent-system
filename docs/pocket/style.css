@@ -212,3 +212,11 @@ ul { list-style: none; padding: 0; margin: 0; }
 
 section { animation: fade .22s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ── Santé des systèmes (v15) ── */
+.health-token { padding: 11px 13px; border-radius: 12px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); margin-bottom: 10px; }
+.health-token small { font-weight: 400; color: var(--muted); margin-left: 4px; }
+.health-token.ok { background: color-mix(in srgb, var(--ok) 13%, transparent); color: var(--ok); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+.health-token.err { background: color-mix(in srgb, var(--err) 14%, transparent); color: var(--err); border-color: color-mix(in srgb, var(--err) 40%, transparent); }
+.health-token .ic { width: 16px; height: 16px; flex: 0 0 auto; }
+.ok-dot { color: var(--ok); } .err-dot { color: var(--err); }
