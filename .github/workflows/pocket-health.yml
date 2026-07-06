@@ -1,0 +1,55 @@
+name: Pocket Health
+
+# Canari : teste l'auth Claude (token OAuth) + la présence des secrets, écrit
+# pocket-data/health.json (lu par le panneau « Santé » de l'app) et pousse une
+# alerte si le token est mort. Empêche une panne d'auth de passer inaperçue.
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # toutes les 6 h
+  workflow_dispatch:          # + bouton « Rafraîchir la santé » depuis l'app
+
+permissions:
+  contents: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Canary Claude run (test token)
+        id: canary
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: "Réponds exactement: OK"
+          claude_args: --model claude-opus-4-8 --max-turns 1
+
+      - name: Check token & write health.json
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          CANARY_MODEL: claude-opus-4-8
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+          # Présence des secrets d'intégration (booléens, jamais les valeurs).
+          HAS_HUBSPOT: ${{ secrets.HUBSPOT_PRIVATE_APP_TOKEN != '' && '1' || '0' }}
+          HAS_LEMLIST: ${{ secrets.LEMLIST_API_KEY != '' && '1' || '0' }}
+          HAS_FULLENRICH: ${{ secrets.FULLENRICH_API_KEY != '' && '1' || '0' }}
+          HAS_PHANTOMBUSTER: ${{ secrets.PHANTOMBUSTER_API_KEY != '' && '1' || '0' }}
+          HAS_TAVILY: ${{ secrets.TAVILY_API_KEY != '' && '1' || '0' }}
+          HAS_FIRECRAWL: ${{ secrets.FIRECRAWL_API_KEY != '' && '1' || '0' }}
+          HAS_VAULT: ${{ secrets.VAULT_DEPLOY_KEY != '' && '1' || '0' }}
+          HAS_GOOGLE_SA: ${{ secrets.GOOGLE_SA_JSON != '' && '1' || '0' }}
+        run: |
+          pip install --quiet pywebpush || true
+          OK=$(python3 scripts/pocket_check_result.py)
+          echo "token_ok=$OK"
+          python3 scripts/pocket_health.py --token-ok "$OK"
