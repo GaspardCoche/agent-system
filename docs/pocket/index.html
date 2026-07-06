@@ -37,7 +37,7 @@
   </svg>
 
   <header>
-    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v14</span></button>
+    <button class="brand" id="brand-home"><img src="icon.svg" class="logo" alt="Pocket" /> Claude Pocket <span class="dot" id="conn-dot"></span><span id="ver-badge" class="ver">v15</span></button>
     <div class="hbtns">
       <button class="icon-btn" id="nav-modes" title="Modes agentiques"><svg class="ic"><use href="#i-robot"/></svg></button>
       <button class="icon-btn" id="nav-system" title="Système"><svg class="ic"><use href="#i-cpu"/></svg></button>
@@ -70,7 +70,14 @@
   <!-- ── Système / monitoring device ── -->
   <section id="system" class="card hidden">
     <button class="link-btn" id="system-back"><svg class="ic"><use href="#i-back"/></svg> Retour</button>
-    <h2><svg class="ic"><use href="#i-cpu"/></svg> Système</h2>
+    <h2><svg class="ic"><use href="#i-check"/></svg> Santé des systèmes</h2>
+    <div id="health-token" class="health-token">Chargement…</div>
+    <div id="health-grid" class="kgrid"></div>
+    <button id="health-refresh" class="ghost" style="margin-top:8px"><svg class="ic"><use href="#i-clock"/></svg> Tester maintenant</button>
+    <p id="health-msg" class="msg"></p>
+    <h2 style="margin-top:18px"><svg class="ic"><use href="#i-clock"/></svg> Coût réel</h2>
+    <div id="cost-box"></div>
+    <h2 style="margin-top:18px"><svg class="ic"><use href="#i-cpu"/></svg> Système</h2>
     <div id="system-grid" class="kgrid"></div>
     <h2 style="margin-top:18px"><svg class="ic"><use href="#i-brain"/></svg> Claude</h2>
     <div id="claude-grid" class="kgrid"></div>
