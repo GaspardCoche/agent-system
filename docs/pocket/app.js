@@ -1,7 +1,7 @@
 'use strict';
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
-const APP_VERSION = 'v19';
+const APP_VERSION = 'v20';
 const CTX_WINDOW = 200000;
 const MODELS = { fable: 'Fable 5', opus: 'Opus 4.8', sonnet: 'Sonnet' };
 const CATS = {
@@ -510,7 +510,15 @@ function wireMic(micId, fieldId, msgId, onInput) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   const mic = $(micId), field = $(fieldId);
   if (!mic || !field) return;
-  if (!SR) { mic.style.display = 'none'; return; }
+  // Pas de reconnaissance vocale du navigateur (cas iOS Safari / PWA installée) :
+  // on GARDE le micro visible sur CHAQUE champ (accueil ET fil de discussion) et
+  // on ouvre le clavier — la dictée se fait alors via le 🎙️ du clavier iOS, dispo
+  // sur n'importe quel champ texte. Plus jamais de micro masqué => visible partout.
+  if (!SR) {
+    mic.title = 'Dicter avec le micro du clavier';
+    mic.onclick = () => { field.focus(); flash(msgId, 'Touche le 🎙️ de ton clavier pour dicter.', 'ok'); };
+    return;
+  }
   const rec = new SR(); rec.lang = 'fr-FR'; rec.interimResults = true; rec.continuous = true; let base = '', live = false;
   rec.onresult = (e) => { let t = ''; for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript; field.value = (base + ' ' + t).trim(); if (onInput) onInput(); };
   rec.onerror = (e) => { live = false; mic.classList.remove('live'); if (e && e.error === 'not-allowed') flash(msgId, 'Micro refusé. Utilise le micro du clavier iOS.', 'err'); };
