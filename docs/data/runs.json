@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "26157647929",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "26157647929",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-05-20T10:50:50.405989+00:00",
-    "agents": [],
-    "report_file": "reports/2026-05-20-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "26215521247",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-05-21",
@@ -1605,5 +1591,24 @@
     "timestamp": "2026-07-07T08:54:06.945131+00:00",
     "agents": [],
     "report_file": "reports/2026-07-07-email-agent-daily-digest-2026-07-07.md"
+  },
+  {
+    "run_id": "28860722270",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "28860722270",
+    "summary": "Task assignment mismatch detected. The task JSON references a 'forge' agent but I'm invoked as 'researcher'. The task instruction says 'See task in co",
+    "next_actions": [],
+    "timestamp": "2026-07-07T10:59:35.172023+00:00",
+    "agents": [
+      {
+        "name": "researcher",
+        "status": "needs_clarification"
+      }
+    ],
+    "report_file": "reports/2026-07-07-orchestrator-scheduled-run.md"
   }
 ]
