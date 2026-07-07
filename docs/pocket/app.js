@@ -1,7 +1,7 @@
 'use strict';
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
-const APP_VERSION = 'v18';
+const APP_VERSION = 'v19';
 const CTX_WINDOW = 200000;
 const MODELS = { fable: 'Fable 5', opus: 'Opus 4.8', sonnet: 'Sonnet' };
 const CATS = {
@@ -493,6 +493,7 @@ function applyView(view) {
   else if (view === 'admin') { renderHealthAndCost(); loadMCP(); renderSystem(); $('mcp-editor').classList.add('hidden'); }
   else { detailNum = null; if (LS.repo && LS.pat) { loadHistory(); startMainPoll(); } }
   window.scrollTo(0, 0);
+  document.body.classList.remove('scrolled'); showNav();
 }
 function startMainPoll() { stopMainPoll(); mainTimer = setInterval(() => { if (LS.repo && LS.pat && !document.hidden && currentView === 'home') loadHistory(); }, 20000); }
 function stopMainPoll() { if (mainTimer) { clearInterval(mainTimer); mainTimer = null; } }
@@ -515,6 +516,37 @@ function wireMic(micId, fieldId, msgId, onInput) {
   rec.onerror = (e) => { live = false; mic.classList.remove('live'); if (e && e.error === 'not-allowed') flash(msgId, 'Micro refusé. Utilise le micro du clavier iOS.', 'err'); };
   rec.onend = () => { live = false; mic.classList.remove('live'); };
   mic.onclick = () => { if (live) { rec.stop(); return; } base = field.value; try { rec.start(); live = true; mic.classList.add('live'); } catch { mic.classList.remove('live'); } };
+}
+// Auto-masquage du footer (tab bar) au scroll : on le replie quand on descend
+// (lecture) et on le révèle dès qu'on remonte, en haut, ou en bas de page.
+// Objectif : moins gêner l'affichage sans jamais rendre la nav inaccessible.
+function showNav() { const t = document.querySelector('.tabbar'); if (t) t.classList.remove('tucked'); }
+function setupAutoHideNav() {
+  const bar = document.querySelector('.tabbar');
+  if (!bar) return;
+  let lastY = window.scrollY, ticking = false;
+  const HIDE_AFTER = 90;   // ne se replie qu'après un vrai défilement vers le bas
+  const DELTA = 6;         // seuil anti-tremblement
+  const onScroll = () => {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      const y = Math.max(0, window.scrollY);
+      const doc = document.documentElement;
+      const atTop = y < 40;
+      const atBottom = (window.innerHeight + y) >= (doc.scrollHeight - 6);
+      document.body.classList.toggle('scrolled', y > 4);
+      if (y > lastY + DELTA) {           // on descend
+        if (y > HIDE_AFTER && !atBottom) bar.classList.add('tucked');
+      } else if (y < lastY - DELTA) {    // on remonte
+        bar.classList.remove('tucked');
+      }
+      if (atTop || atBottom) bar.classList.remove('tucked');
+      lastY = y; ticking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  // Toujours révéler la nav quand on tape (le champ pousse le contenu vers le bas)
+  document.addEventListener('focusin', (e) => { if (e.target && e.target.matches('input, textarea')) showNav(); });
 }
 function setupMic() {
   wireMic('mic', 'demande', 'composer-msg');
@@ -596,6 +628,7 @@ function init() {
   window.addEventListener('popstate', (e) => applyView((e.state && e.state.view) || 'home'));
   const vb = $('ver-badge'); if (vb) vb.textContent = APP_VERSION;
   setupMic();
+  setupAutoHideNav();
   history.replaceState({ view: 'home' }, '', '#home');
   if (LS.repo && LS.pat) { testConn(true).then(() => { loadHistory(); startMainPoll(); }); } else { renderHistory(); navigate('admin'); }
   if ('serviceWorker' in navigator) {

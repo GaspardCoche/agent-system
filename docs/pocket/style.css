@@ -294,7 +294,17 @@ main { padding-bottom: calc(env(safe-area-inset-bottom) + var(--tabbar-h) + 22px
   background: color-mix(in srgb, var(--bg) 86%, transparent);
   backdrop-filter: saturate(1.5) blur(18px); -webkit-backdrop-filter: saturate(1.5) blur(18px);
   border-top: 1px solid var(--line-soft);
+  /* Se replie en douceur quand on scrolle vers le bas (moins gêner l'affichage) */
+  transition: transform .3s cubic-bezier(.22, .61, .36, 1), box-shadow .3s, opacity .3s;
+  will-change: transform;
 }
+/* Replié : glisse hors de l'écran (safe-area incluse) au scroll descendant */
+.tabbar.tucked {
+  transform: translateY(calc(100% + env(safe-area-inset-bottom) + 4px));
+  box-shadow: none; opacity: 0; pointer-events: none;
+}
+/* Léger relief quand elle est visible au-dessus du contenu qui défile */
+body.scrolled .tabbar:not(.tucked) { box-shadow: 0 -10px 30px -18px rgba(0, 0, 0, .5); }
 .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--faint); font-size: 10.5px; font-weight: 550; padding: 5px 18px; border-radius: 13px; transition: color .15s, transform .08s; }
 .tab .ic { width: 22px; height: 22px; }
 .tab:active { transform: scale(.9); }
