@@ -1,7 +1,7 @@
 'use strict';
 
 const VAPID_PUBLIC = 'BBrWaeSczwSz-wCywXN0OlFQ72UdUWRLLeAU9fjzD_8uw7saPxizhDNu6jTfe4xM4hbk_pV0GoAVxoTMD6BZpTw';
-const APP_VERSION = 'v17';
+const APP_VERSION = 'v18';
 const CTX_WINDOW = 200000;
 const MODELS = { fable: 'Fable 5', opus: 'Opus 4.8', sonnet: 'Sonnet' };
 const CATS = {
@@ -503,14 +503,26 @@ async function testConn(silent) {
   try { const r = await gh(''); dot.className = 'dot ok'; try { const u = await (await fetch('https://api.github.com/user', { headers: { Authorization: `Bearer ${LS.pat}`, Accept: 'application/vnd.github+json' } })).json(); if (u && u.login) connectedLogin = u.login; } catch {} return r; }
   catch { dot.className = 'dot err'; if (!silent) throw new Error('non connecté'); return null; }
 }
-function setupMic() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition; const mic = $('mic');
+// Câble un bouton micro (dictée fr-FR) sur un champ texte. Réutilisable :
+// composer principal ET fil de conversation (chaque message, pas que le premier).
+function wireMic(micId, fieldId, msgId, onInput) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const mic = $(micId), field = $(fieldId);
+  if (!mic || !field) return;
   if (!SR) { mic.style.display = 'none'; return; }
   const rec = new SR(); rec.lang = 'fr-FR'; rec.interimResults = true; rec.continuous = true; let base = '', live = false;
-  rec.onresult = (e) => { let t = ''; for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript; $('demande').value = (base + ' ' + t).trim(); };
-  rec.onerror = (e) => { live = false; mic.classList.remove('live'); if (e && e.error === 'not-allowed') flash('composer-msg', 'Micro refusé. Utilise le micro du clavier iOS.', 'err'); };
+  rec.onresult = (e) => { let t = ''; for (let i = e.resultIndex; i < e.results.length; i++) t += e.results[i][0].transcript; field.value = (base + ' ' + t).trim(); if (onInput) onInput(); };
+  rec.onerror = (e) => { live = false; mic.classList.remove('live'); if (e && e.error === 'not-allowed') flash(msgId, 'Micro refusé. Utilise le micro du clavier iOS.', 'err'); };
   rec.onend = () => { live = false; mic.classList.remove('live'); };
-  mic.onclick = () => { if (live) { rec.stop(); return; } base = $('demande').value; try { rec.start(); live = true; mic.classList.add('live'); } catch { mic.classList.remove('live'); } };
+  mic.onclick = () => { if (live) { rec.stop(); return; } base = field.value; try { rec.start(); live = true; mic.classList.add('live'); } catch { mic.classList.remove('live'); } };
+}
+function setupMic() {
+  wireMic('mic', 'demande', 'composer-msg');
+  // Dictée dans le fil : la valeur est posée par programme, donc on relance
+  // l'auto-agrandissement du textarea manuellement (l'événement input ne part pas).
+  wireMic('chat-mic', 'chat-input', 'detail-msg', () => {
+    const ci = $('chat-input'); ci.style.height = 'auto'; ci.style.height = Math.min(ci.scrollHeight, 130) + 'px';
+  });
 }
 function applyTheme(t) {
   if (t === 'auto') document.documentElement.removeAttribute('data-theme');
