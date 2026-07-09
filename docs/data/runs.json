@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "26283391533",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "26283391533",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-05-22T10:51:08.701509+00:00",
-    "agents": [],
-    "report_file": "reports/2026-05-22-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "26327415877",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-05-23",
@@ -1610,5 +1596,28 @@
     "timestamp": "2026-07-09T09:02:20.403489+00:00",
     "agents": [],
     "report_file": "reports/2026-07-09-email-agent-daily-digest-2026-07-09.md"
+  },
+  {
+    "run_id": "29012972289",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "29012972289",
+    "summary": "Task routing mismatch detected. Task specifies agents=['forge'] but invoked Lumen (analysis agent). System health analysis completed: 10/10 agents in  · Task dispatch mismatch: Agent invoked as 'researcher' but task configured for 'forge'. No researc",
+    "next_actions": [],
+    "timestamp": "2026-07-09T10:58:10.790359+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "needs_clarification"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-07-09-orchestrator-scheduled-run.md"
   }
 ]
