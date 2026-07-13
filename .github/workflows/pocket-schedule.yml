@@ -4,7 +4,11 @@ name: Pocket Scheduler
 # exécute l'agent dans le même run (pas de second workflow à déclencher).
 on:
   schedule:
-    - cron: '0 * * * *'   # toutes les heures (coût maîtrisé ; précision ~1h, suffisant)
+    # Toutes les heures MAIS uniquement 6h-22h heure belge (4-20 UTC en été) :
+    # le check lui-même ne coûte rien côté Claude (gating fired==true), mais on
+    # évite tout run nocturne et on économise les minutes Actions.
+    # ⚠️ Heure d'hiver (CET) : passer à '5 5-21 * * *'.
+    - cron: '5 4-20 * * *'
   workflow_dispatch:
 
 permissions:

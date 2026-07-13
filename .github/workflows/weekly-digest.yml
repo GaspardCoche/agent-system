@@ -74,18 +74,50 @@ jobs:
           print(f'Weekly raw content: {len(content)} chars')
           "
 
-      - name: Synthesize weekly digest with Gemini
+      - name: Check weekly content
+        id: raw
+        run: |
+          if [ -f /tmp/weekly_raw.txt ] && [ -s /tmp/weekly_raw.txt ]; then
+            echo "has_content=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_content=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Moteur principal : Claude (OAuth abonnement). Gemini en fallback.
+      - name: Synthesize weekly digest (Claude)
+        if: steps.raw.outputs.has_content == 'true'
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            You are a senior AI analyst creating a premium WEEKLY intelligence recap in French
+            for a tech-savvy B2B executive who reads daily AI briefings and wants a Sunday summary.
+            Read /tmp/weekly_raw.txt (raw daily digests + vault highlights).
+            Rules: deduplicate stories across days; top_3 = the 3 most important stories of the week;
+            group the rest by theme; write a forward-looking outlook; ALL text in French; concise recap.
+            Write ONLY valid JSON (no fences) to /tmp/weekly_digest.json with structure:
+            {"week_of":"YYYY-MM-DD","headline":"...","top_3":[{"title","summary","url","category","day"}],
+             "sections":[{"theme":"...","articles":[{"title","summary","url","source"}]}],
+             "outlook":"...","stats":{"daily_digests":0,"total_articles":0,"vault_saves":0}}
+            Then verify: Bash("python3 -c \"import json; json.load(open('/tmp/weekly_digest.json'))\"")
+          claude_args: --model claude-opus-4-8 --max-turns 6 --allowedTools Read,Write,Bash
+
+      - name: Fallback — Gemini / empty
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if [ -f /tmp/weekly_raw.txt ] && [ -s /tmp/weekly_raw.txt ]; then
+          VALID=$(python3 -c "import json; d=json.load(open('/tmp/weekly_digest.json')); print('true' if d.get('headline') else 'false')" 2>/dev/null || echo false)
+          if [ "$VALID" != "true" ] && [ -n "$GEMINI_API_KEY" ] && [ -s /tmp/weekly_raw.txt ]; then
             python3 .github/scripts/gemini_agent.py \
               --task weekly_digest \
               --input /tmp/weekly_raw.txt \
-              --output /tmp/weekly_digest.json
-          else
+              --output /tmp/weekly_digest.json || true
+          fi
+          VALID=$(python3 -c "import json; d=json.load(open('/tmp/weekly_digest.json')); print('true' if d.get('headline') else 'false')" 2>/dev/null || echo false)
+          if [ "$VALID" != "true" ]; then
             echo '{"headline":"Pas de contenu cette semaine","sections":[],"top_3":[],"outlook":""}' > /tmp/weekly_digest.json
-            echo "No weekly content found"
           fi
 
       - name: Send weekly email

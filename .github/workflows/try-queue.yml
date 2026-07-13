@@ -1,0 +1,72 @@
+name: Try Queue (from Digest CTA)
+
+# CTA « + File d'essai » de la newsletter : issue labellisée try-queue →
+# entrée ajoutée à docs/vault/ai-news/a-tester.md, puis issue fermée.
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  queue:
+    if: contains(github.event.issue.labels.*.name, 'try-queue')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Append to try list
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          python3 - << 'PYEOF'
+          import os, re
+          from datetime import datetime
+          from pathlib import Path
+          body = os.environ.get("ISSUE_BODY", "")
+          meta = {}
+          for line in body.split("\n"):
+              if line.strip() == "---":
+                  break
+              if ":" in line:
+                  k, v = line.split(":", 1)
+                  meta[k.strip().lower()] = v.strip()
+          desc = body.split("---", 1)[-1].strip() if "---" in body else ""
+          nom = meta.get("nom") or re.sub(r"^\S+\s*A tester\s*:\s*", "", os.environ.get("ISSUE_TITLE", "Outil"))
+          url = meta.get("url", "")
+          date = datetime.now().strftime("%Y-%m-%d")
+          path = Path("docs/vault/ai-news/a-tester.md")
+          path.parent.mkdir(parents=True, exist_ok=True)
+          if not path.exists():
+              path.write_text("# À tester\n\nFile d'essai alimentée depuis la newsletter (CTA « + File d'essai »).\n\n", encoding="utf-8")
+          entry = f"- [ ] **{nom}** ({date})"
+          if url:
+              entry += f" — [{url}]({url})"
+          if desc:
+              entry += f"\n  - {desc}"
+          path.write_text(path.read_text(encoding="utf-8") + entry + "\n", encoding="utf-8")
+          print(f"Queued: {nom}")
+          PYEOF
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/vault/ai-news/a-tester.md
+          git diff --cached --quiet && echo "No change" && exit 0
+          git commit -m "vault: try-queue — nouvel outil à tester"
+          git pull --rebase -X theirs origin main && git push || true
+
+      - name: Close issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue close "$ISSUE_NUMBER" \
+            --comment "Ajouté à la file d'essai (docs/vault/ai-news/a-tester.md)." \
+            --repo "${{ github.repository }}"

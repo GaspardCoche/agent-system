@@ -6,6 +6,7 @@ Reads /tmp/ai_digest.json (structured) and /tmp/digest_body.md (fallback).
 import base64
 import json
 import os
+import re
 import sys
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
@@ -169,6 +170,7 @@ def _vault_btn(article: dict) -> str:
         f"image: {article.get('image_url', '')}",
         f"importance: {article.get('importance', '')}",
         f"tags: {', '.join(article.get('company_tags', []))}",
+        f"why: {article.get('why_it_matters', '')}",
         "---", "", article.get("summary", ""),
     ]
     encoded_title = quote(f"\U0001f4cc {title}"[:120])
@@ -208,6 +210,73 @@ def _action_row(article: dict) -> str:
         f'<td style="padding-right:6px;">{_vault_btn(article)}</td>'
         f'<td>{_deep_dive_btn(article)}</td>'
         f'</tr></table>'
+    )
+
+
+def _render_why(article: dict, compact: bool = False) -> str:
+    """Encart « Pour toi » — impact personnalisé, si fourni par la synthèse."""
+    why = article.get("why_it_matters", "").strip()
+    if not why:
+        return ""
+    why = re.sub(r'^(pour toi\s*[:—-]\s*)', '', why, flags=re.I).strip()
+    pad = "8px 12px" if compact else "10px 14px"
+    fs = "12px" if compact else "13px"
+    return (
+        f'<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px;"><tr>'
+        f'<td style="background:#F5F3FF;border-left:3px solid #7C3AED;border-radius:0 8px 8px 0;padding:{pad};">'
+        f'<span style="font-size:10px;font-weight:800;color:#7C3AED;text-transform:uppercase;letter-spacing:1px;">Pour toi</span>'
+        f'<br/><span style="font-size:{fs};color:#4C1D95;line-height:1.55;">{escape(why)}</span>'
+        f'</td></tr></table>'
+    )
+
+
+def _try_queue_btn(item: dict) -> str:
+    """CTA « → File d'essai » : issue GitHub try-queue → note vault a-tester.md."""
+    nom = item.get("nom", "Outil")
+    body_lines = [
+        f"nom: {nom}",
+        f"url: {item.get('url', '')}",
+        "---", "", item.get("description", ""),
+    ]
+    encoded_title = quote(f"\U0001f9ea A tester : {nom}"[:120])
+    encoded_body = quote("\n".join(body_lines))
+    url = f"https://github.com/{VAULT_REPO}/issues/new?labels=try-queue&title={encoded_title}&body={encoded_body}"
+    return (f'<a href="{url}" style="display:inline-block;background:#ECFDF5;'
+            f'color:#047857;text-decoration:none;font-size:10px;font-weight:700;'
+            f'padding:5px 12px;border-radius:6px;letter-spacing:0.3px;">+ FILE D\'ESSAI</a>')
+
+
+def _render_a_tester(items: list) -> str:
+    """Section « À tester cette semaine » — 1-3 actions concrètes."""
+    if not items:
+        return ""
+    rows = ""
+    for it in items[:3]:
+        nom = escape(it.get("nom", ""))
+        desc = escape(it.get("description", ""))
+        url = it.get("url", "#")
+        rows += (
+            f'<tr><td style="padding:14px 0;border-bottom:1px solid #D1FAE5;">'
+            f'<table width="100%" cellpadding="0" cellspacing="0"><tr>'
+            f'<td style="vertical-align:top;">'
+            f'<a href="{escape(url)}" style="color:#065F46;text-decoration:none;font-size:14px;font-weight:700;">{nom}</a>'
+            f'<p style="color:#374151;font-size:12px;line-height:1.55;margin:4px 0 8px;">{desc}</p>'
+            f'<table cellpadding="0" cellspacing="0"><tr>'
+            f'<td style="padding-right:6px;">'
+            f'<a href="{escape(url)}" style="display:inline-block;background:#059669;color:#fff;'
+            f'text-decoration:none;font-size:10px;font-weight:700;padding:5px 14px;border-radius:6px;">ESSAYER</a></td>'
+            f'<td>{_try_queue_btn(it)}</td>'
+            f'</tr></table>'
+            f'</td></tr></table>'
+            f'</td></tr>'
+        )
+    return (
+        _section_header("À tester cette semaine", "#059669", "#059669")
+        + f'<table width="100%" cellpadding="0" cellspacing="0" style="background:#F0FDF4;border:1px solid #D1FAE5;'
+        f'border-radius:10px;overflow:hidden;">'
+        f'<tr><td style="padding:4px 22px 10px;">'
+        f'<table width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
+        f'</td></tr></table>'
     )
 
 
@@ -261,6 +330,7 @@ def _render_top_story(story: dict) -> str:
       <tr><td style="padding:16px 28px 0;">
         <p style="color:#334155;font-size:15px;line-height:1.75;margin:0;">{summary}</p>
       </td></tr>
+      <tr><td style="padding:0 28px;">{_render_why(story)}</td></tr>
       <tr><td style="padding:8px 28px 0;">{tags_html}</td></tr>
       <tr><td style="padding:4px 28px 24px;">{_action_row(story)}</td></tr>
     </table>'''
@@ -302,6 +372,7 @@ def _render_card(article: dict) -> str:
       <tr><td style="padding:12px 22px 0;">
         <p style="color:#475569;font-size:13px;line-height:1.65;margin:0;">{summary}</p>
       </td></tr>
+      <tr><td style="padding:0 22px;">{_render_why(article, compact=True)}</td></tr>
       <tr><td style="padding:4px 22px 20px;">
         {_action_row(article)}
       </td></tr>
@@ -341,6 +412,7 @@ def _render_compact(article: dict) -> str:
           <br/>
           <span style="font-size:11px;color:#94A3B8;">{source}</span>
           <p style="color:#64748B;font-size:12px;line-height:1.55;margin:5px 0 0;">{summary}</p>
+          {_render_why(article, compact=True)}
           <table cellpadding="0" cellspacing="0" style="margin-top:8px;"><tr>
             <td style="padding-right:6px;">{_vault_btn(article)}</td>
             <td>{_deep_dive_btn(article)}</td>
@@ -438,6 +510,7 @@ def render_digest_html(digest: dict) -> str:
     trends = digest.get("trends", [])
     stats = digest.get("stats", {})
     top_story = digest.get("top_story")
+    a_tester = digest.get("a_tester", [])
 
     must_reads = [a for a in articles if a.get("importance") == "must_read"]
     important = [a for a in articles if a.get("importance") == "important"]
@@ -474,6 +547,43 @@ def render_digest_html(digest: dict) -> str:
             f'<table width="100%" cellpadding="0" cellspacing="0">{compact_rows}</table>'
             f'</td></tr></table>'
         )
+
+    a_tester_section = _render_a_tester(a_tester)
+
+    # TL;DR — scan en 30 secondes : top story + must-reads (max 3 puces)
+    tldr_items = []
+    if top_story and top_story.get("title"):
+        tldr_items.append(top_story["title"])
+    tldr_items += [a.get("title", "") for a in must_reads]
+    tldr_items = [t for t in tldr_items if t][:3]
+    tldr_html = ""
+    if tldr_items:
+        bullets = "".join(
+            f'<tr><td style="vertical-align:top;padding:3px 8px 3px 0;">'
+            f'<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:#6366F1;margin-top:7px;"></span></td>'
+            f'<td style="padding:3px 0;"><span style="font-size:13px;color:#334155;line-height:1.5;font-weight:500;">{escape(t)}</span></td></tr>'
+            for t in tldr_items
+        )
+        tldr_html = (
+            f'<table width="100%" cellpadding="0" cellspacing="0" style="margin-top:14px;background:#F8FAFC;'
+            f'border-radius:10px;"><tr><td style="padding:12px 16px;">'
+            f'<span style="font-size:10px;font-weight:800;color:#6366F1;text-transform:uppercase;letter-spacing:2px;">TL;DR</span>'
+            f'<table cellpadding="0" cellspacing="0" style="margin-top:6px;">{bullets}</table>'
+            f'</td></tr></table>'
+        )
+
+    # Sommaire chiffré
+    parts = []
+    if must_reads: parts.append(f'<span style="color:#DC2626;font-weight:700;">{len(must_reads)} à ne pas rater</span>')
+    if a_tester: parts.append(f'<span style="color:#059669;font-weight:700;">{min(len(a_tester),3)} à tester</span>')
+    if important: parts.append(f'{len(important)} importants')
+    if worth_noting: parts.append(f'{len(worth_noting)} en bref')
+    if extended: parts.append(f'{n_extended} bonus')
+    sommaire_html = ""
+    if parts:
+        sep = ' <span style="color:#CBD5E1;">·</span> '
+        sommaire_html = (f'<p style="font-size:11px;color:#64748B;margin:12px 0 0;letter-spacing:0.3px;">'
+                         f'{sep.join(parts)}</p>')
 
     trends_section = ""
     if trends:
@@ -519,6 +629,8 @@ def render_digest_html(digest: dict) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
   <title>AI Briefing</title>
 </head>
 <body style="margin:0;padding:0;background-color:#F8FAFC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-font-smoothing:antialiased;">
@@ -565,6 +677,8 @@ def render_digest_html(digest: dict) -> str:
   <tr><td style="background:#fff;padding:24px 36px;border-bottom:1px solid #E2E8F0;">
     <p style="font-size:18px;font-weight:800;color:#0F172A;margin:0 0 6px;line-height:1.4;font-family:Georgia,'Times New Roman',serif;">{headline}</p>
     {"<p style='font-size:14px;color:#64748B;margin:0;line-height:1.5;'>" + one_liner + "</p>" if one_liner else ""}
+    {tldr_html}
+    {sommaire_html}
   </td></tr>
 
   <!-- Content -->
@@ -572,6 +686,7 @@ def render_digest_html(digest: dict) -> str:
 
     {top_story_html}
     {must_read_section}
+    {a_tester_section}
     {important_section}
     {compact_section}
     {trends_section}
@@ -592,9 +707,9 @@ def render_digest_html(digest: dict) -> str:
       <tr><td style="height:1px;background:linear-gradient(90deg,transparent,#6366F130,transparent);"></td></tr>
       <tr><td style="padding:24px 36px;text-align:center;">
         <p style="color:#475569;font-size:11px;margin:0 0 4px;letter-spacing:0.5px;">
-          <span style="color:#818CF8;">Agent System</span> &mdash; Gemini + Claude
+          <span style="color:#818CF8;">Agent System</span> &mdash; synth&egrave;se par Claude
         </p>
-        <p style="color:#334155;font-size:10px;margin:0;">Chaque matin a 7h30 &bull; {n_sources} sources scannees</p>
+        <p style="color:#334155;font-size:10px;margin:0;">Chaque matin &bull; {n_sources} sources scann&eacute;es</p>
       </td></tr>
     </table>
   </td></tr>

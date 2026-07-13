@@ -33,11 +33,13 @@ def main():
     category = meta.get("category", "")
     image = meta.get("image", "")
     importance = meta.get("importance", "")
+    why = meta.get("why", "")
     tags_raw = meta.get("tags", "")
     tags_list = [t.strip() for t in tags_raw.split(",") if t.strip()]
 
     tags_fmt = ", ".join(f'"{t}"' for t in tags_list)
     image_block = f"\n![{title}]({image})\n" if image else ""
+    why_block = f"\n> **Pour toi :** {why}\n" if why else ""
 
     note = f"""---
 title: "{title}"
@@ -52,7 +54,7 @@ tags: [{tags_fmt}]
 # {title}
 {image_block}
 **Source:** [{source}]({url}) | **Categorie:** {category} | **Importance:** {importance}
-
+{why_block}
 {summary}
 
 ---

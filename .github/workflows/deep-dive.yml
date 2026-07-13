@@ -71,15 +71,65 @@ jobs:
           print(f'Scraped {len(content)} chars')
           "
 
-      - name: Generate deep dive with Gemini
+      # Moteur principal : Claude (OAuth abonnement). Écrit un rapport markdown.
+      - name: Generate deep dive (Claude)
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Tu es un analyste IA senior. Lis /tmp/deep_dive_meta.json (métadonnées de l'article)
+            et /tmp/deep_dive_content.txt (contenu scrapé).
+            Écris une analyse approfondie (~800-1200 mots) EN FRANÇAIS dans /tmp/deep_dive_analysis.md,
+            en markdown propre, avec exactement ces sections :
+            ## Contexte — pourquoi ça compte, acteurs clés
+            ## Analyse détaillée — ce qui a été annoncé, détails techniques qui comptent
+            ## Impact business — implications concrètes pour une PME B2B qui utilise l'IA au quotidien (growth HubSpot/Lemlist + dev Claude Code/MCP)
+            ## Ce que ça change pour nous — actions concrètes : tester, adopter, surveiller ou ignorer
+            ## Sources & liens — liens pertinents pour aller plus loin
+            Analytique, pas promotionnel. Le « et alors ? » prime sur la description.
+          claude_args: --model claude-opus-4-8 --max-turns 6 --allowedTools Read,Write,Bash
+
+      - name: Fallback — Gemini deep dive
+        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          python3 .github/scripts/gemini_agent.py \
-            --task deep_dive \
-            --input /tmp/deep_dive_content.txt \
-            --output /tmp/deep_dive_analysis.md \
-            --context-file /tmp/deep_dive_meta.json
+          if [ ! -s /tmp/deep_dive_analysis.md ] && [ -n "$GEMINI_API_KEY" ]; then
+            python3 .github/scripts/gemini_agent.py \
+              --task deep_dive \
+              --input /tmp/deep_dive_content.txt \
+              --output /tmp/deep_dive_analysis.md \
+              --context-file /tmp/deep_dive_meta.json
+          fi
+
+      - name: Save deep dive to vault
+        continue-on-error: true
+        run: |
+          python3 - << 'PYEOF'
+          import json, re
+          from datetime import datetime
+          from pathlib import Path
+          src = Path("/tmp/deep_dive_analysis.md")
+          if not src.exists() or not src.stat().st_size:
+              print("No analysis to save"); raise SystemExit
+          meta = json.load(open("/tmp/deep_dive_meta.json"))
+          url = meta.get("url", "")
+          date = datetime.now().strftime("%Y-%m-%d")
+          slug = re.sub(r'[^a-z0-9]+', '-', url.split('/')[-1].lower())[:60].strip('-') or "article"
+          dest_dir = Path("docs/vault/ai-news/deep-dives"); dest_dir.mkdir(parents=True, exist_ok=True)
+          dest = dest_dir / f"{date}-{slug}.md"
+          header = f"---\nurl: \"{url}\"\ndate: {date}\ntype: deep-dive\n---\n\n"
+          dest.write_text(header + src.read_text(encoding="utf-8"), encoding="utf-8")
+          print(f"Saved {dest}")
+          PYEOF
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/vault/ai-news/deep-dives/ 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -m "vault: deep dive $(date +%Y-%m-%d)"
+          git pull --rebase -X theirs origin main && git push || true
 
       - name: Post analysis as comment
         env:

@@ -1,7 +1,10 @@
 name: Email Agent (Daily Digest)
 on:
   schedule:
-    - cron: '30 5 * * *'
+    # 4h10 UTC = 6h10 heure belge en été (+ retard GitHub Actions ~1-2h → arrivée ~7h-8h30).
+    # Jamais avant 6h locale pour ne pas ouvrir la fenêtre de 5 h en pleine nuit.
+    # ⚠️ Heure d'hiver (CET) : passer à '10 5 * * *'.
+    - cron: '10 4 * * *'
   workflow_dispatch:
     inputs:
       hours_back:
@@ -99,20 +102,79 @@ jobs:
           git commit -m "chore: update seen_urls.json"
           git pull --rebase -X theirs origin main && git push || true
 
-      - name: Synthesize with Gemini (structured digest)
+      - name: Check scraped content
+        id: raw
+        run: |
+          if [ -f /tmp/ai_news_raw.txt ] && [ -s /tmp/ai_news_raw.txt ]; then
+            echo "has_content=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_content=false" >> $GITHUB_OUTPUT
+            echo "⚠️  No AI news scraped"
+          fi
+
+      # Moteur principal : Claude (OAuth abonnement). Gemini reste en fallback plus bas.
+      - name: Synthesize digest (Claude)
+        if: steps.raw.outputs.has_content == 'true'
+        uses: anthropics/claude-code-action@v1
+        continue-on-error: true
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Read agent_prompts/ai-digest-schema.md and follow it EXACTLY.
+            The raw scraped content is in /tmp/ai_news_raw.txt (read it with the Read tool,
+            in chunks if needed — the VERIFIED Article Links section is critical).
+            Today's date: use the date found in the scraped content header, else today.
+            Write the final JSON (and NOTHING else — no markdown fences) to /tmp/ai_digest.json,
+            then verify it parses: Bash("python3 -c \"import json; d=json.load(open('/tmp/ai_digest.json')); print(len(d.get('articles',[])), 'articles')\"")
+          claude_args: --model claude-opus-4-8 --max-turns 8 --allowedTools Read,Write,Bash
+
+      - name: Validate Claude digest
+        id: digest_check
+        run: |
+          OK=$(python3 - << 'PYEOF'
+          import json
+          try:
+              d = json.load(open('/tmp/ai_digest.json'))
+              print("true" if d.get("articles") and d.get("headline") else "false")
+          except Exception:
+              print("false")
+          PYEOF
+          )
+          echo "ok=$OK" >> $GITHUB_OUTPUT
+          [ "$OK" = "true" ] && echo "✅ Digest Claude valide" || echo "⚠️  Digest Claude invalide ou absent"
+
+      - name: Fallback — synthesize with Gemini
+        if: steps.raw.outputs.has_content == 'true' && steps.digest_check.outputs.ok != 'true'
         continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          if [ -f /tmp/ai_news_raw.txt ] && [ -s /tmp/ai_news_raw.txt ]; then
+          if [ -n "$GEMINI_API_KEY" ]; then
             python3 .github/scripts/gemini_agent.py \
               --task ai_digest \
               --input /tmp/ai_news_raw.txt \
               --output /tmp/ai_digest.json
           else
-            echo '{"headline": "Pas de contenu scraped", "articles": [], "trends": [], "one_liner": "Scraping echoue", "stats": {"sources_scraped": 0, "articles_extracted": 0}}' > /tmp/ai_digest.json
-            echo "⚠️  No AI news scraped — wrote fallback digest"
+            echo "GEMINI_API_KEY absent — pas de fallback possible"
           fi
+
+      - name: Last-resort empty digest
+        run: |
+          python3 - << 'PYEOF'
+          import json, os
+          from datetime import date
+          try:
+              d = json.load(open('/tmp/ai_digest.json'))
+              assert d.get("headline")
+          except Exception:
+              json.dump({"date": str(date.today()), "headline": "Pas de digest aujourd'hui",
+                         "one_liner": "La synthese a echoue — verifier le run.", "articles": [],
+                         "extended": [], "a_tester": [], "trends": [],
+                         "stats": {"sources_scraped": 0, "articles_extracted": 0}},
+                        open('/tmp/ai_digest.json', 'w'), ensure_ascii=False)
+              print("⚠️  Wrote last-resort empty digest")
+          PYEOF
 
       - uses: actions/upload-artifact@v4
         with:

@@ -5,7 +5,11 @@ name: Pocket Health
 # alerte si le token est mort. Empêche une panne d'auth de passer inaperçue.
 on:
   schedule:
-    - cron: '0 */6 * * *'   # toutes les 6 h
+    # 3×/jour, jamais avant 6h heure belge : le canari fait un VRAI appel Claude
+    # et ouvre la fenêtre de 5 h du plan — le premier run du jour la démarre.
+    # 4h15/10h15/16h15 UTC = 6h15/12h15/18h15 en été (CEST).
+    # ⚠️ Heure d'hiver (CET) : passer à '15 5,11,17 * * *' pour rester ≥ 6h.
+    - cron: '15 4,10,16 * * *'
   workflow_dispatch:          # + bouton « Rafraîchir la santé » depuis l'app
 
 permissions:
