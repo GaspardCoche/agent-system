@@ -294,6 +294,13 @@ jobs:
             echo "⚠️  No AI digest found"
           fi
 
+      - name: Validate image URLs (dead images → placeholder)
+        continue-on-error: true
+        run: |
+          if [ -f /tmp/ai_digest.json ]; then
+            python3 .github/scripts/validate_images.py /tmp/ai_digest.json
+          fi
+
       - name: Auto-save must_read articles to vault
         run: |
           python3 - << 'PYEOF'
