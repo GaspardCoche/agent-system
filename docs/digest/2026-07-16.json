@@ -1,0 +1,351 @@
+{
+  "date": "2026-07-16",
+  "headline": "Inkling ouvre le frontier : Thinking Machines lâche un 975B en Apache 2.0",
+  "one_liner": "Le meilleur modèle ouvert américain sous licence permissive débarque le même jour où la sécurité des agents (Claude, Codex) devient le vrai champ de bataille.",
+  "top_story": {
+    "title": "Inkling : Thinking Machines dévoile son premier modèle, un 975B-A41B multimodal en open weights",
+    "source": "Latent Space",
+    "url": "https://www.latent.space/p/ainews-thinkys-inkling-975b-a41b",
+    "image_url": "https://substackcdn.com/image/fetch/$s_!AvrX!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F90048da3-a87f-44d8-8ad4-e954031d2721_2540x1692.png",
+    "summary": "Après dix-huit mois de développement quasi silencieux, Thinking Machines publie Inkling, un modèle multimodal à mélange d'experts de 975B paramètres (41B actifs), accompagné d'une version Inkling-Small (276B-A12B) — et surtout en open weights sous licence Apache 2.0. C'est présenté comme le meilleur modèle ouvert américain sous licence permissive, un contrepoint frontal aux modèles fermés et aux ouvertures chinoises qui dominaient le paysage open source. Le pari assumé de l'équipe de Mira Murati : refuser le 'one-size-fits-all' et miser sur des modèles personnalisables et auditables. Pour les équipes qui construisent des agents et du RAG local, c'est une base de poids libres exploitable commercialement, sans dépendance à une API. La disponibilité immédiate des poids sur HuggingFace en fait un candidat sérieux à tester dès cette semaine.",
+    "why_it_matters": "Pour toi : un modèle ouvert Apache 2.0 de ce niveau peut alimenter ton RAG local et tes agents GitHub Actions sans coût d'API ni fuite de données vers un tiers.",
+    "category": "Open Source",
+    "company_tags": [
+      "Thinking Machines"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Comment j'ai piégé Claude pour lui faire fuiter tes secrets les plus intimes",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Jul/15/claude-web-fetch-exfiltration/#atom-everything",
+      "image_url": "",
+      "summary": "Le design de l'outil web_fetch de Claude est réputé résistant à l'exfiltration de données, mais Ayush Paul a trouvé une faille dans ce garde-fou. La démonstration illustre à quel point la 'lethal trifecta' (accès aux données privées + contenu non fiable + capacité d'exfiltration) reste le talon d'Achille des assistants agentiques. Un rappel concret que même les protections les mieux pensées doivent être stress-testées avant qu'on ne branche un agent sur des données sensibles.",
+      "why_it_matters": "Pour toi : avant de connecter un agent Claude Code à ton CRM HubSpot ou à ta vault, cette faille montre exactement le type d'attaque à modéliser.",
+      "category": "Regulation & Ethique",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "xai-org/grok-build passe en open source (après le fiasco de l'upload de répertoires)",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Jul/15/grok-build/#atom-everything",
+      "image_url": "",
+      "summary": "L'outil CLI de xAI a été open-sourcé, quelques jours après un backlash violent : lancé dans un dossier, il pouvait uploader tout le répertoire vers les buckets Google Cloud de xAI — un utilisateur l'a vu partir depuis son home directory. L'ouverture du code permet enfin d'auditer ce que fait réellement l'agent de coding. Une leçon crue sur la confiance qu'on accorde aux agents CLI qui touchent au système de fichiers.",
+      "why_it_matters": "Pour toi : tu fais tourner des agents CLI en local — vérifier le périmètre d'accès fichiers d'un outil avant de l'exécuter n'est plus optionnel.",
+      "category": "Open Source",
+      "importance": "must_read",
+      "company_tags": [
+        "xAI"
+      ]
+    },
+    {
+      "title": "GPT-Red : le super-hacker LLM qu'OpenAI a construit pour durcir ses modèles",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/07/15/1140514/meet-gpt-red-an-llm-super-hacker-openai-built-to-make-its-models-safer/",
+      "image_url": "https://wp.technologyreview.com/wp-content/uploads/2026/07/spar-red.jpg?resize=1200,600",
+      "summary": "OpenAI a bâti GPT-Red, un LLM 'super-hacker' utilisé comme sparring-partner pour renforcer les défenses de ses autres modèles face aux cyberattaques. En self-play, il réussit une attaque dans 84 % des scénarios de test, contre 13 % pour les red teamers humains ; ces résultats ont directement servi à durcir GPT-5.6. C'est un signal fort : le red teaming automatisé par IA devient un pilier de l'alignement, avec des gains hors de portée de l'humain (couvert aussi par The Decoder).",
+      "category": "Recherche",
+      "importance": "must_read",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Codex chiffre désormais les instructions entre agents, rendant les devs aveugles à la délégation interne",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openais-codex-now-encrypts-instructions-between-ai-agents-leaving-developers-blind-to-internal-delegation/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/07/openai_logo_vis-1.png",
+      "summary": "Depuis début juin, l'outil de coding Codex d'OpenAI chiffre les instructions qu'un agent principal transmet à ses sous-agents : impossible pour les développeurs de tracer comment les tâches sont déléguées en interne. Pour les gros variants GPT-5.6 (Sol et Terra), le chiffrement est même obligatoire. Un choix qui protège la propriété du prompt orchestrateur mais dégrade sérieusement l'observabilité et le débogage des workflows multi-agents.",
+      "why_it_matters": "Pour toi : si tu orchestres des agents, l'observabilité de la délégation est un critère de choix — ce que Codex ferme, un stack ouvert le garde transparent.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "grok-mermaid : un rendu terminal de diagrammes Mermaid en Rust, tiré du Grok CLI",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Jul/16/grok-mermaid/#atom-everything",
+      "image_url": "https://static.simonwillison.net/static/2026/grok-mermaid-card.jpg",
+      "summary": "En explorant le code fraîchement ouvert du Grok CLI, Simon Willison a exhumé mermaid.rs, un renderer terminal autonome qui transforme des diagrammes Mermaid en box art Unicode. Petit utilitaire, mais élégant : il visualise des schémas directement en CLI, sans navigateur. Le genre de brique réutilisable pour améliorer la lisibilité d'outils en ligne de commande.",
+      "why_it_matters": "Pour toi : afficher des diagrammes Mermaid directement dans tes outils CLI d'agents peut rendre tes logs de workflow bien plus lisibles.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "xAI"
+      ]
+    },
+    {
+      "title": "Le routage de modèles, c'est simple. Jusqu'à ce que ça ne le soit plus.",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/ibm-research/model-routing-is-simple-until-it-isnt",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/642ee6f6ffd6084c6a620985/ibA2XHLJsqDH9VAL-3ou-.png",
+      "summary": "IBM Research décortique le model routing — envoyer chaque requête au bon modèle selon coût/latence/qualité — et montre pourquoi ça se complique vite en production. Un sujet clé alors que les stacks combinent de plus en plus petits et grands modèles pour optimiser la facture. Lecture utile pour quiconque conçoit une couche d'inférence multi-modèles.",
+      "why_it_matters": "Pour toi : router intelligemment entre Haiku et Opus selon la tâche peut diviser ta facture d'inférence sur tes agents en production.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "IBM",
+        "HuggingFace"
+      ]
+    },
+    {
+      "title": "Ce que construire Shippy nous a appris sur la construction d'agents",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/allenai/shippy-tech-blog",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/2Ncq9fY3Po30QjlACoYTY.png",
+      "summary": "AllenAI partage les leçons tirées de la construction de Shippy, un agent en production : gestion des erreurs, boucles de décision, et pièges concrets du passage du prototype à un système fiable. Retour d'expérience terrain plutôt que théorie, précieux pour calibrer ses propres architectures d'agents.",
+      "why_it_matters": "Pour toi : des patterns d'agents éprouvés en prod à transposer directement à tes automatisations GitHub Actions.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "AllenAI",
+        "HuggingFace"
+      ]
+    },
+    {
+      "title": "GPT-5.6 Sol réfute une conjecture statistique vieille de 30 ans en 90 minutes",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/gpt-5-6-sol-reportedly-disproves-a-30-year-old-statistics-conjecture-in-90-minutes-after-humans-couldnt-crack-it/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/07/neural_network_math-2-1200x670.png",
+      "summary": "Un professeur de statistiques de l'Université de Pennsylvanie a utilisé GPT-5.6 Sol Pro pour réfuter une conjecture centrale sur la méthode Benjamini-Hochberg, en environ 90 minutes. Le modèle précédent, GPT-5.5, avait échoué même après 20 heures. La solution combine des méthodes connues d'une manière inédite — un signal concret de progrès en raisonnement mathématique de recherche.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Bonsai 27B : un modèle de raisonnement open source complet qui tient dans un iPhone",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/bonsai-27b-is-a-full-open-reasoning-model-that-fits-on-an-iphone/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/07/prsim_ml_demo.png",
+      "summary": "PrismML a compressé un modèle de 27 milliards de paramètres sous les 4 Go, assez petit pour tourner sur un iPhone, tout en conservant 90 % des performances d'origine selon ses benchmarks — maths et code quasi intacts. Apple testerait déjà la technique de compression. Un pas de plus vers du raisonnement de qualité en local, sans cloud.",
+      "why_it_matters": "Pour toi : un modèle de raisonnement qui tourne en local et hors-ligne, idéal pour ton RAG privé sans exposer tes données.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "PrismML",
+        "Apple"
+      ]
+    },
+    {
+      "title": "Microsoft formerait ses commerciaux à dénigrer OpenAI et Anthropic",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/15/microsoft-is-reportedly-training-salespeople-to-talk-down-openai-and-anthropic/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2024/05/boxing_gloves_suit-e1650068012177.jpg?resize=1200,800",
+      "summary": "Microsoft chercherait à vendre ses modèles maison en les présentant comme plus efficaces et moins chers que ceux de ses concurrents — OpenAI et Anthropic inclus. Signal d'une bascule stratégique : après avoir bâti sur OpenAI, Microsoft pousse désormais son propre stack. À surveiller si tu dépends de l'écosystème Azure/Copilot pour tes déploiements.",
+      "why_it_matters": "Pour toi : la guerre commerciale des fournisseurs de modèles influence directement les prix et le discours que tu entendras côté sales.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Microsoft",
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "OpenAI lance enfin du hardware… pour Codex",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/965901/openai-hardware-codex-micro-launch",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/Supply-Co-Page_Brand.png?quality=90&amp;strip=all&amp;crop=0.42240779401531%2C0%2C99.155184411969%2C100&amp;w=1200",
+      "summary": "OpenAI sort son premier produit matériel : non pas le mystérieux appareil conçu avec Jony Ive, mais un clavier lumineux à 230 $ pensé pour son app de coding agentique Codex. Le lancement tombe en pleine bataille juridique avec Apple sur des allégations de vol de secrets hardware. Un pari marketing sur la culture 'agentic coding' plus qu'une révolution technique.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": [
+        "OpenAI",
+        "Apple"
+      ]
+    },
+    {
+      "title": "Suno aurait pillé des millions de titres sur YouTube, Genius et Deezer",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/966072/suno-ai-music-training-scraping-youtube-hack",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25383554/STK467_AI_MUSIC_CVirginia_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200",
+      "summary": "Des données obtenues lors d'un piratage révèlent que le générateur de musique Suno a été entraîné en scrapant des millions de chansons et paroles sur YouTube Music, Deezer et Genius, selon 404 Media. Suno n'a jamais divulgué le contenu de ses datasets. Nouveau dossier brûlant sur la légalité des données d'entraînement (aussi couvert par TechCrunch).",
+      "category": "Regulation & Ethique",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Suno"
+      ]
+    },
+    {
+      "title": "Real World VoiceEQ : mesurer la qualité humaine des IA vocales",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/real-world-voiceeq",
+      "image_url": "https://huggingface.co/blog/assets/real-world-voiceeq/thumbnail.png",
+      "summary": "Un nouveau benchmark cherche à évaluer non pas la précision technique mais la 'qualité humaine' perçue des IA vocales — naturel, empathie, fluidité conversationnelle. Utile alors que les interfaces voix se multiplient dans les produits. Un cadre d'évaluation à connaître si tu envisages du voice dans tes parcours client.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "HuggingFace"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "GitHub for Beginners : la feuille de route pour maîtriser les essentiels",
+      "source": "GitHub Blog",
+      "url": "https://github.blog/developer-skills/github/github-for-beginners-your-roadmap-to-mastering-the-github-essentials/",
+      "summary": "Guide débutant clair sur le versioning, les dépôts et les pull requests. Bon à partager pour onboarder une équipe non-technique sur GitHub.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "GitHub"
+      ]
+    },
+    {
+      "title": "Applied Computing veut un modèle IA pour toute l'usine pétrolière et gazière",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/15/applied-computing-wants-to-give-oil-and-gas-operators-an-ai-model-for-the-entire-plant/",
+      "summary": "La startup lève 20 M$ en série A pour bâtir un modèle de fondation dédié à l'industrie pétrochimique. Illustration de la spécialisation verticale des modèles de fondation.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Applied Computing"
+      ]
+    },
+    {
+      "title": "Whatnot rachète Shaped pour des recommandations de live shopping en temps réel",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/15/whatnot-acquires-shaped-to-power-real-time-live-shopping-recommendations/",
+      "summary": "La plateforme de live shopping acquiert Shaped, spécialiste ML de la reco et de la recherche en temps réel, pour muscler sa personnalisation. Consolidation classique autour de la reco.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Whatnot",
+        "Shaped"
+      ]
+    },
+    {
+      "title": "Microsoft corrige un nombre record de vulnérabilités, grâce à l'IA",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/15/microsoft-patches-record-number-of-security-vulnerabilities-citing-its-use-of-ai/",
+      "summary": "Le Patch Tuesday de Microsoft résout un record de 570 vulnérabilités, en partie découvertes par l'IA. L'IA offensive côté défense montre déjà des résultats concrets.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Microsoft"
+      ]
+    },
+    {
+      "title": "Un 0-day Windows tombe le jour même du Patch Tuesday record",
+      "source": "Ars Technica AI",
+      "url": "https://arstechnica.com/security/2026/07/windows-0-day-drops-the-same-day-microsoft-releases-record-number-of-patches/",
+      "summary": "HiveLegacy, un 'primitive' puissant, apparaît le jour du plus gros Patch Tuesday de Microsoft. Rappel que la surface d'attaque grandit aussi vite que les correctifs.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Microsoft"
+      ]
+    },
+    {
+      "title": "Sheetz quitte VMware et migre 11 000 machines virtuelles",
+      "source": "Ars Technica AI",
+      "url": "https://arstechnica.com/information-technology/2026/07/sheetz-moves-838-stores-off-vmware-broadcom-created-too-much-uncertainty/",
+      "summary": "La chaîne de convenience stores abandonne VMware pour StorMagic, invoquant trop d'incertitude depuis le rachat par Broadcom. Le mouvement anti-Broadcom continue.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "VMware",
+        "Broadcom"
+      ]
+    },
+    {
+      "title": "Le premier hardware d'OpenAI : une enceinte IA sans écran 'vivante'",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openais-first-hardware-product-is-a-screenless-ai-speaker-designed-to-feel-alive/",
+      "summary": "OpenAI préparerait une enceinte portable sans écran, dotée de caméra et de parties mécaniques mobiles, pensée comme un compagnon IA. Le procès Apple sur les secrets commerciaux pourrait retarder le lancement.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI",
+        "Apple"
+      ]
+    },
+    {
+      "title": "Spotify parie que ses abonnés Premium veulent discuter avec leur lecteur",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/spotify-bets-premium-subscribers-want-to-chat-with-their-music-player/",
+      "summary": "Spotify élargit son interface vocale IA : les abonnés Premium peuvent parler ou écrire directement au service dans l'app. La voix comme couche d'interaction produit devient mainstream.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Spotify"
+      ]
+    },
+    {
+      "title": "xAI poursuit un homme ayant utilisé Grok pour générer des deepfakes CSAM",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/966293/xai-grok-user-lawsuit-csam",
+      "summary": "xAI attaque un homme de Caroline du Sud accusé d'avoir contourné les garde-fous de Grok pour générer du contenu illégal. Un précédent judiciaire sur la responsabilité d'usage des chatbots.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "xAI"
+      ]
+    },
+    {
+      "title": "Les films 'AI slop' deviennent les nouveaux direct-to-video",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/entertainment/965616/ash-koosha-odysseus-the-fall-foundtain-zero-tilly-norwood",
+      "summary": "Une vague de films générés par IA arrive en salles et en streaming comme des produits d'appel bon marché. Le débat sur la valeur créative de l'IA générative s'installe dans l'industrie du cinéma.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "SpaceX retombe à 135 $ avant le lancement de Starship",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/07/15/spacex-falls-to-135-ipo-price-ahead-of-starship-launch/",
+      "summary": "L'action SpaceX est retombée à son prix d'IPO depuis le pic post-cotation, signe que les marchés tempèrent leur euphorie. Baromètre du sentiment tech au-delà de l'IA.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "SpaceX"
+      ]
+    },
+    {
+      "title": "Des employés Meta poursuivent l'entreprise pour des licenciements pilotés par IA",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/meta-employees-sue-over-layoffs-they-say-were-driven-by-discriminatory-ai-selection-systems/",
+      "summary": "Des salariés attaquent Meta en justice, accusant des systèmes IA d'avoir généré des listes de licenciement ciblant les personnes handicapées ou en congé parental. Premier grand litige sur les RH automatisées par IA.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "Meta"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "Inkling (Thinking Machines)",
+      "description": "Teste ce modèle ouvert Apache 2.0 sur HuggingFace pour alimenter un agent ou un RAG local sans dépendance API.",
+      "url": "https://huggingface.co/blog/thinkingmachines-inkling"
+    },
+    {
+      "nom": "grok-mermaid",
+      "description": "Essaie ce renderer Rust pour afficher des diagrammes Mermaid en box art Unicode directement dans tes outils CLI.",
+      "url": "https://simonwillison.net/2026/Jul/16/grok-mermaid/#atom-everything"
+    },
+    {
+      "nom": "Bonsai 27B (PrismML)",
+      "description": "Un modèle de raisonnement compressé sous 4 Go à tester en local/offline pour du RAG privé sur machine légère.",
+      "url": "https://the-decoder.com/bonsai-27b-is-a-full-open-reasoning-model-that-fits-on-an-iphone/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "La vague des open weights de niveau frontier",
+      "description": "Inkling (975B, Apache 2.0) et Bonsai 27B compressé pour iPhone signalent une même bascule : des modèles ouverts, exploitables commercialement et tournant en local, qui challengent frontalement les API fermées."
+    },
+    {
+      "title": "Le red teaming automatisé par IA",
+      "description": "GPT-Red d'OpenAI attaque ses propres modèles en self-play avec 84 % de réussite, loin devant les humains. L'IA offensive au service de la défense devient un pilier de l'alignement."
+    },
+    {
+      "title": "La sécurité et l'observabilité des agents au premier plan",
+      "description": "Fuite via web_fetch de Claude, chiffrement des délégations par Codex, upload sauvage du Grok CLI : à mesure que les agents touchent aux fichiers et aux données privées, leur surface d'attaque et leur traçabilité deviennent le vrai enjeu."
+    },
+    {
+      "title": "La course au hardware IA",
+      "description": "OpenAI multiplie les objets — clavier à 230 $ pour Codex, enceinte compagnon sans écran — pendant qu'un procès Apple sur des secrets commerciaux plane sur ses ambitions matérielles."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 18,
+    "articles_extracted": 32
+  }
+}
