@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anthropic rétropédale sur Fable 5 pendant que l&#x27;open-weight rattrape le peloton — AI Briefing 2026-07-19</title>
+  <meta name="description" content="L&#x27;économie de l&#x27;inférence redessine l&#x27;accès aux meilleurs modèles — et les poids ouverts n&#x27;ont jamais été aussi près de la frontière.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Dimanche 19 juillet 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">11 articles</span>
+      <span class="hero-pill">20 sources</span>
+      <span class='hero-pill'>+3 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Anthropic rétropédale sur Fable 5 pendant que l&#x27;open-weight rattrape le peloton</h2>
+      <p>L&#x27;économie de l&#x27;inférence redessine l&#x27;accès aux meilleurs modèles — et les poids ouverts n&#x27;ont jamais été aussi près de la frontière.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+3)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/anthropic-slashes-claude-fable-5-limits-in-max-and-team-premium-and-pushes-pro-users-toward-api-pricing/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/07/claude_logo_money.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/anthropic-slashes-claude-fable-5-limits-in-max-and-team-premium-and-pushes-pro-users-toward-api-pricing/">Anthropic réduit les limites de Claude Fable 5 sur Max et Team Premium et pousse les Pro vers la tarification API</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">À partir du 20 juillet, Anthropic réintègre Claude Fable 5 dans les offres Max et Team Premium — mais à seulement 50 % des limites habituelles, elles-mêmes réduites d&#x27;un tiers le même jour. Les utilisateurs Pro perdent l&#x27;accès inclus : ils reçoivent un crédit unique de 100 $ puis basculent sur la tarification API. Ce rétropédalage annule le plan initial d&#x27;Anthropic, qui voulait réserver Fable 5 à l&#x27;API, sous la pression concurrentielle de GPT-5.6 Sol et de Kimi 3. Officiellement, la contrainte reste la capacité de calcul : Anthropic doit arbitrer entre entraîner ses futurs modèles et servir la demande explosive de Claude Code.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://the-decoder.com/anthropic-slashes-claude-fable-5-limits-in-max-and-team-premium-and-pushes-pro-users-toward-api-pricing/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Jul/19/claude-code-in-bun-in-rust/#atom-everything">Claude Code utilise désormais Bun réécrit en Rust</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison confirme que Claude Code v2.1.181 et suivantes embarquent le port Rust de Bun, gagnant ~10 % au démarrage sous Linux. Un changement d&#x27;infrastructure quasi invisible pour l&#x27;utilisateur, mais révélateur : les agents de code investissent dans la performance de leur runtime. « Boring is good » — la robustesse prime sur l&#x27;effet d&#x27;annonce.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude Code</span><span class="tag">Bun</span></div>
+        <a href="https://simonwillison.net/2026/Jul/19/claude-code-in-bun-in-rust/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/open-weight-models-now-match-frontier-cyber-performance-from-just-four-months-ago-at-a-fraction-of-the-cost/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/07/aisi_logo_pattern.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/open-weight-models-now-match-frontier-cyber-performance-from-just-four-months-ago-at-a-fraction-of-the-cost/">Les modèles à poids ouverts rejoignent la performance cyber de la frontière d&#x27;il y a quatre mois, à une fraction du coût</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Selon l&#x27;AI Security Institute britannique, les modèles à poids ouverts comme GLM-5.2 et DeepSeek V4-Pro ne sont plus qu&#x27;à 4-7 mois des modèles fermés sur les capacités cyber, contre 6-10 mois début 2025. L&#x27;écart se referme vite, mais les garde-fous de sécurité de ces modèles restent largement contournables. La parité de capacité arrive ; la parité de sûreté, beaucoup moins.</p>
+        <div class="card-tags"><span class="tag">AISI</span><span class="tag">GLM</span><span class="tag">DeepSeek</span></div>
+        <a href="https://the-decoder.com/open-weight-models-now-match-frontier-cyber-performance-from-just-four-months-ago-at-a-fraction-of-the-cost/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.wired.com/story/prompt-injection-attacks-are-thwarting-ai-hacking-agents/" class="card-img-link"><img src="https://media.wired.com/photos/6a5a6798d35982f3197419e9/191:100/w_1280,c_limit/Security_AIInjection_v1.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/prompt-injection-attacks-are-thwarting-ai-hacking-agents/">Les attaques par injection de prompt neutralisent les agents de hacking IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">Une technique dite de « context bombing » retourne l&#x27;injection de prompt contre les agents malveillants : elle les pousse à s&#x27;arrêter avant de nuire. Longtemps vue comme la faille des agents, l&#x27;injection de prompt devient ici une arme défensive. Un renversement instructif pour toute équipe qui déploie ou affronte des agents autonomes.</p>
+        
+        <a href="https://www.wired.com/story/prompt-injection-attacks-are-thwarting-ai-hacking-agents/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/07/18/kimi-threat-or-menace/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/07/18/kimi-threat-or-menace/">Kimi : menace ou fléau ?</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Moonshot AI a publié une nouvelle version de Kimi cette semaine, relançant le débat sur le « communisme de l&#x27;IA » — des modèles quasi frontières, ouverts et bon marché. Au-delà de la formule, c&#x27;est la pression tarifaire et stratégique sur les labs occidentaux qui monte. Kimi 3 fait d&#x27;ailleurs partie des raisons du rétropédalage d&#x27;Anthropic sur Fable 5.</p>
+        <div class="card-tags"><span class="tag">Moonshot AI</span><span class="tag">Kimi</span></div>
+        <a href="https://techcrunch.com/2026/07/18/kimi-threat-or-menace/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>3 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.wired.com/story/how-googles-new-gemini-rates-work-and-how-to-track-your-usage/" class="card-img-link"><img src="https://media.wired.com/photos/6a57867336e98c56882c9e64/191:100/w_1280,c_limit/GeminiStorage.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0891B2;">☁️ Google &amp; Cloud</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/how-googles-new-gemini-rates-work-and-how-to-track-your-usage/">Comment fonctionnent les nouveaux quotas Gemini de Google et comment suivre ton usage</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">Google a modifié la façon dont il comptabilise les quotas d&#x27;usage de Gemini : à abonnement égal, tu peux obtenir moins de réponses qu&#x27;avant. WIRED explique comment suivre ta consommation réelle. Encore un signe que l&#x27;économie de l&#x27;inférence se répercute directement sur les plans grand public.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Gemini</span></div>
+        <a href="https://www.wired.com/story/how-googles-new-gemini-rates-work-and-how-to-track-your-usage/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Jul/18/sqlite-query-explainer/#atom-everything">SQLite Query Explainer</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison a fait générer par Fable un explorateur interactif de plans de requêtes SQLite, tournant entièrement dans le navigateur (SQLite → Python → Pyodide → WebAssembly). Un petit outil pédagogique élégant pour décoder les query plans. Illustration typique du « vibe coding » d&#x27;outils jetables mais utiles.</p>
+        <div class="card-tags"><span class="tag">SQLite</span></div>
+        <a href="https://simonwillison.net/2026/Jul/18/sqlite-query-explainer/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/chinas-new-world-artificial-intelligence-cooperation-organization-is-president-xis-clearest-play-yet-for-a-parallel-ai-order/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/07/china_flag_visual-2-1200x670.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://the-decoder.com/chinas-new-world-artificial-intelligence-cooperation-organization-is-president-xis-clearest-play-yet-for-a-parallel-ai-order/">La nouvelle World AI Cooperation Organization de la Chine, le pari le plus net de Xi pour un ordre IA parallèle</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">À la World AI Conference de Shanghai, Xi Jinping a annoncé 5 000 places de formation IA pour les pays du Sud global et le lancement d&#x27;une « World Artificial Intelligence Cooperation Organization ». Des centres de coopération avec l&#x27;ASEAN, l&#x27;Union africaine et les BRICS sont prévus. Pékin pose les bases d&#x27;un ordre IA parallèle à celui de l&#x27;Occident.</p>
+        <div class="card-tags"><span class="tag">China</span></div>
+        <a href="https://the-decoder.com/chinas-new-world-artificial-intelligence-cooperation-organization-is-president-xis-clearest-play-yet-for-a-parallel-ai-order/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Le grand rebond de l&#x27;open-weight</strong><p>Kimi 3, GLM-5.2 et DeepSeek V4-Pro réduisent l&#x27;écart avec la frontière (4-7 mois en cyber) — la parité de capacité approche, mais pas celle de la sûreté.</p></div><div class="trend-item"><strong>L&#x27;économie de l&#x27;inférence se répercute sur les abonnements</strong><p>Anthropic rétropédale sur Fable 5 et Google resserre les quotas Gemini : le coût de servir les meilleurs modèles se reporte directement sur les plans payants.</p></div><div class="trend-item"><strong>Sécurité des agents autonomes</strong><p>L&#x27;injection de prompt devient une arme défensive (« context bombing ») alors que l&#x27;écart de sécurité des agents en entreprise continue de se creuser.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 3 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/Jul/19/ai-mania/#atom-everything" class="ext-title">AI Mania Is Eviscerating Global Decision-Making</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Relayant Nik Suresh, une critique acerbe de la « manie IA » qui paralyse la décision dans les grandes entreprises, anecdotes d&#x27;initiés anonymes à l&#x27;appui.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/967630/dave-eggers-openai-chatgpt-silencing-an-entire-generation" class="ext-title">Dave Eggers a dit aux équipes d&#x27;OpenAI que ChatGPT « fait taire toute une génération »</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">L&#x27;écrivain Dave Eggers, invité par Sam Altman, a livré aux équipes d&#x27;OpenAI un réquisitoire interne sur l&#x27;impact culturel de l&#x27;IA générative sur l&#x27;écriture et la création.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.wired.com/story/security-news-this-week-your-period-tracker-is-probably-spying-on-you/" class="ext-title">Your Period Tracker Is (Probably) Spying on You</a>
+        <span class="ext-source">Wired AI</span>
+        <p class="ext-summary">Le récap sécurité de WIRED : trackers menstruels espions, cyberespions russes visant les infrastructures, et une fuite exposant le scraping d&#x27;un générateur de musique IA.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 20 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
