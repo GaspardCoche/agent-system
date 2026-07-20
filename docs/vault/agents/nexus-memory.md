@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-07-06
+updated: 2026-07-20
 ---
 
 # Nexus — Mémoire & Patterns
@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-07-20 | weekly_audit (dry_run) | 29/100 (estimé) | Template — credentials_ok=false (13e run consécutif) — BLOCAGE 118 jours — Score dégradé 32→29 | #29735692386 |
 | 2026-07-06 | weekly_audit (dry_run) | 32/100 (estimé) | Template — credentials_ok=false (12e run consécutif) — BLOCAGE 104 jours — Score dégradé 35→32 | #28789500762 |
 | 2026-06-22 | weekly_audit (dry_run) | 35/100 (estimé) | Template — credentials_ok=false (11e run consécutif) — BLOCAGE 90 jours — Score dégradé 38→35 | #27955997300 |
 | 2026-06-15 | weekly_audit (dry_run) | 38/100 (estimé) | Template — credentials_ok=false (10e run consécutif) — BLOCAGE 83 jours — Score dégradé 42→38 | #27550559362 |
@@ -95,6 +96,13 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 - [ ] Audit hebdo : chaque lundi 6h UTC (à configurer dans nexus.yml)
 
 ## Note escalade CRITIQUE
+
+> 2026-07-20 : **13e run consécutif en template mode** (2026-03-24 → 2026-07-20).
+> Nexus bloqué depuis **118 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → ... → 32/100 → 29/100.
+> ⛔ Les recommandations de suspension/guard sur `nexus.yml` formulées le 2026-06-22 (90 jours) et 2026-07-06 (104 jours) n'ont **toujours pas été appliquées**. Ce run consomme à nouveau un cycle CI complet pour un template identique.
+> Action prioritaire : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
+> Action Forge (toujours en attente) : ajouter `needs: [check-credentials]` dans `nexus.yml` pour skip le job entier si credentials absents.
+> Score estimé après déblocage + optimisations : ~72/100.
 
 > 2026-07-06 : **12e run consécutif en template mode** (2026-03-24 → 2026-07-06).
 > Nexus bloqué depuis **104 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → 42/100 → 38/100 → 35/100 → 32/100.
