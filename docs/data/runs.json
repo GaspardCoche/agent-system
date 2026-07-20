@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "26818396830",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "26818396830",
-    "summary": "Investigated all 4 maintenance items. Node.js 20 deprecation affects 14 workflows (deadline June 16) — fastest fix is adding FORCE_JAVASCRIPT_ACTIONS_",
-    "next_actions": [],
-    "timestamp": "2026-06-02T12:12:23.994634+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-06-02-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "26878402514",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-06-03",
@@ -1613,5 +1594,28 @@
     "timestamp": "2026-07-20T07:29:30.840445+00:00",
     "agents": [],
     "report_file": "reports/2026-07-20-email-agent-daily-digest-2026-07-20.md"
+  },
+  {
+    "run_id": "29735692386",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-07-20",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false. 13e run consécutif bloqué (118 jours depuis 2026-03-24). Aucun appel API tenté. Score estimé 29/100 (dégradation",
+    "next_actions": [
+      "Configurer GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_REFRESH_TOKEN dans GitHub Secrets pour débloquer l'audit réel",
+      "Forge : ajouter un step `needs: [check-credentials]` dans nexus.yml pour skip le job complet si credentials_ok=false, au lieu de relancer le cycle entier chaque semaine",
+      "Une fois les secrets configurés, relancer Nexus en dry_run=true pour un premier audit réel avant toute application de changements"
+    ],
+    "timestamp": "2026-07-20T10:40:07.747608+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-07-20-nexus-nexus-weekly-audit-2026-07-20.md"
   }
 ]
