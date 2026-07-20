@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "26878402514",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-06-03",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "8 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-06-03T10:22:14.303213+00:00",
-    "agents": [],
-    "report_file": "reports/2026-06-03-email-agent-daily-digest-2026-06-03.md"
-  },
-  {
     "run_id": "26885302476",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1617,5 +1603,28 @@
       }
     ],
     "report_file": "reports/2026-07-20-nexus-nexus-weekly-audit-2026-07-20.md"
+  },
+  {
+    "run_id": "29736352845",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "29736352845",
+    "summary": "Task dispatch to Forge lacks actionable context. System health: 7/10 agents ready (missing credentials for Sheets, HubSpot, Google Ads). Latest system · Task file is incomplete. The agent_task.json references Forge with input 'See task in context' bu",
+    "next_actions": [],
+    "timestamp": "2026-07-20T10:55:24.767907+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "incomplete"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-07-20-orchestrator-scheduled-run.md"
   }
 ]
