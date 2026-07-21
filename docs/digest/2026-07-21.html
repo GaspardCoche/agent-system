@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP se simplifie, la Chine accélère : la pile agentique bouge sous nos pieds — AI Briefing 2026-07-21</title>
+  <meta name="description" content="Le protocole MCP adopte un mode « stateless » qui va simplifier tes serveurs, pendant que Kimi K3 et Qwen 3.8 font vaciller l&#x27;avance américaine sur les modèles ouverts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Mardi 21 juillet 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">17 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+5 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>MCP se simplifie, la Chine accélère : la pile agentique bouge sous nos pieds</h2>
+      <p>Le protocole MCP adopte un mode « stateless » qui va simplifier tes serveurs, pendant que Kimi K3 et Qwen 3.8 font vaciller l&#x27;avance américaine sur les modèles ouverts.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+5)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://techcrunch.com/2026/07/20/ais-most-important-protocol-is-getting-a-little-bit-easier-to-use/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2025/10/getty-perplexity.jpg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          
+        </div>
+        <h3><a href="https://techcrunch.com/2026/07/20/ais-most-important-protocol-is-getting-a-little-bit-easier-to-use/">AI&#x27;s most important protocol is getting a little bit easier to use</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le Model Context Protocol (MCP), devenu le standard de facto pour connecter les LLM aux outils et aux données, adopte une approche « stateless » des identifiants de session côté serveur, calquée sur le fonctionnement des sites web classiques. Concrètement, un serveur MCP n&#x27;a plus besoin de conserver l&#x27;état d&#x27;une session en mémoire, ce qui simplifie radicalement le déploiement, le scaling horizontal et l&#x27;hébergement serverless. Pour les équipes qui exposent leurs systèmes internes (CRM, enrichissement, Ads) à des agents, cela réduit la complexité opérationnelle et le coût d&#x27;exploitation. C&#x27;est typiquement une « révolution silencieuse » : peu spectaculaire aujourd&#x27;hui, mais structurante pour l&#x27;écosystème agentique des 3 à 6 prochains mois. Les serveurs MCP maison deviennent plus faciles à mettre en production et à maintenir.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">MCP</span></div>
+        <a href="https://techcrunch.com/2026/07/20/ais-most-important-protocol-is-getting-a-little-bit-easier-to-use/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>3 articles</span></div><div class='grid'><article class="card">
+      <a href="https://techcrunch.com/2026/07/20/anthropics-landmark-1-5b-copyright-settlement-is-approved/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/07/20/anthropics-landmark-1-5b-copyright-settlement-is-approved/">Anthropic&#x27;s landmark $1.5B copyright settlement is approved</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">L&#x27;accord record de 1,5 milliard de dollars entre Anthropic et des ayants droit sur l&#x27;usage d&#x27;œuvres protégées pour l&#x27;entraînement de Claude a reçu son approbation finale. Cela clôt un dossier précis mais ne tranche pas la question de fond du copyright sur les données d&#x27;entraînement, qui reste ouverte pour toute l&#x27;industrie. Le signal pour les entreprises qui bâtissent sur Claude : la sécurité juridique de l&#x27;écosystème se renforce, même si l&#x27;incertitude réglementaire globale persiste.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://techcrunch.com/2026/07/20/anthropics-landmark-1-5b-copyright-settlement-is-approved/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.interconnects.ai/p/kimi-k3-the-open-weights-escalation" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!z9ev!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fb7967fef-8d08-4180-a3fd-8c2239bc9619_3182x1790.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.interconnects.ai/p/kimi-k3-the-open-weights-escalation">Kimi K3: The open-weights escalation</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.interconnects.ai&sz=32" width="14" height="14" />
+          <span>Interconnects</span>
+        </div>
+        <p class="summary">Nathan Lambert analyse Kimi K3 de Moonshot comme une escalade dans la course aux poids ouverts, avec des implications mondiales sur l&#x27;écosystème AI. Le modèle chinois s&#x27;approche des frontières des labs américains à une fraction du coût, et Alibaba enchaîne avec Qwen 3.8 (2,4 T de paramètres, « second seulement derrière Fable 5 »). Pour les praticiens, ces modèles ouverts et bon marché ouvrent des options d&#x27;auto-hébergement et de réduction de coûts d&#x27;inférence à surveiller de près.</p>
+        <div class="card-tags"><span class="tag">Moonshot</span><span class="tag">Alibaba</span><span class="tag">Kimi</span></div>
+        <a href="https://www.interconnects.ai/p/kimi-k3-the-open-weights-escalation" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/hugging-face-says-an-ai-agent-hacked-its-infrastructure-and-it-used-ai-to-fight-back/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/07/hugging_face_security.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/hugging-face-says-an-ai-agent-hacked-its-infrastructure-and-it-used-ai-to-fight-back/">Hugging Face says an AI agent hacked its infrastructure, and it used AI to fight back</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Hugging Face rapporte une attaque sur une partie de son infrastructure de production menée entièrement par un système d&#x27;agents autonomes, couvrant des milliers d&#x27;actions orchestrées par un framework agentique. Fait notable : pendant l&#x27;analyse forensique, des modèles commerciaux ont parfois gêné la défense plutôt que de l&#x27;aider. C&#x27;est un signal fort sur la sécurité des agents : la surface d&#x27;attaque agentique devient réelle et exploitable à grande échelle.</p>
+        <div class="card-tags"><span class="tag">Hugging Face</span></div>
+        <a href="https://the-decoder.com/hugging-face-says-an-ai-agent-hacked-its-infrastructure-and-it-used-ai-to-fight-back/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/nvidias-grip-on-ai-chips-weakens-as-microsoft-turns-to-amd-and-anthropic-may-follow/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/07/amd_logo_wall_blue.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/nvidias-grip-on-ai-chips-weakens-as-microsoft-turns-to-amd-and-anthropic-may-follow/">Nvidia&#x27;s grip on AI chips weakens as Microsoft turns to AMD and Anthropic may follow</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Microsoft étend l&#x27;infra AI d&#x27;Azure avec la nouvelle plateforme Helios d&#x27;AMD, qui vise à concurrencer les systèmes GPU de Nvidia au second semestre 2026. Un profil GitHub public suggère qu&#x27;Anthropic teste aussi le matériel AMD, accentuant la pression sur le pouvoir de fixation des prix de Nvidia. Plus de concurrence hardware peut se traduire, à terme, par une baisse des coûts d&#x27;inférence répercutée sur les API.</p>
+        <div class="card-tags"><span class="tag">AMD</span><span class="tag">Microsoft</span><span class="tag">Anthropic</span></div>
+        <a href="https://the-decoder.com/nvidias-grip-on-ai-chips-weakens-as-microsoft-turns-to-amd-and-anthropic-may-follow/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/googles-frozen-v2-chip-reportedly-bakes-geminis-architecture-directly-into-silicon-for-efficiency-gains/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/07/google_gemini-2.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0891B2;">☁️ Google &amp; Cloud</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/googles-frozen-v2-chip-reportedly-bakes-geminis-architecture-directly-into-silicon-for-efficiency-gains/">Google&#x27;s &quot;Frozen v2&quot; chip reportedly bakes Gemini&#x27;s architecture directly into silicon</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Google développerait « Frozen v2 », une puce serveur qui grave l&#x27;architecture de Gemini directement dans le silicium, avec un gain d&#x27;efficacité annoncé de 6 à 10x par rapport aux TPU actuels. Prévue pour 2028, elle réduirait drastiquement les coûts d&#x27;inférence de Google. C&#x27;est un pari sur l&#x27;intégration verticale modèle-matériel qui pourrait redéfinir l&#x27;économie de l&#x27;inférence à grande échelle.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Gemini</span></div>
+        <a href="https://the-decoder.com/googles-frozen-v2-chip-reportedly-bakes-geminis-architecture-directly-into-silicon-for-efficiency-gains/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Jul/20/cheap-reverse-engineering/#atom-everything">Reverse-engineering is cheap now</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison observe une multiplication d&#x27;anecdotes de gens utilisant des agents de code pour rétro-ingénier et automatiser leurs appareils domestiques. Le point clé : ce n&#x27;était pas impossible avant, mais l&#x27;effondrement du coût d&#x27;écriture de code rend ces projets soudain accessibles au tout-venant. Une illustration concrète de ce que « coder devient gratuit » change dans les usages quotidiens.</p>
+        
+        <a href="https://simonwillison.net/2026/Jul/20/cheap-reverse-engineering/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/967781/chinese-ai-models-open-source-moonshot-kimi-k3-alibaba-qwen" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/gettyimages-2286280034.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/967781/chinese-ai-models-open-source-moonshot-kimi-k3-alibaba-qwen">China delivers a one-two punch to America&#x27;s AI dominance</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Moonshot (Kimi K3) et Alibaba (Qwen) ont dévoilé coup sur coup des modèles qu&#x27;ils disent capables de rivaliser avec le meilleur d&#x27;OpenAI et Anthropic, à une fraction du coût. Ces sorties rapprochées suggèrent que l&#x27;avance américaine à la frontière se resserre. Pour les acheteurs, c&#x27;est l&#x27;arrivée d&#x27;alternatives crédibles et bon marché à intégrer dans les arbitrages de coûts.</p>
+        <div class="card-tags"><span class="tag">Moonshot</span><span class="tag">Alibaba</span><span class="tag">Kimi</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/967781/chinese-ai-models-open-source-moonshot-kimi-k3-alibaba-qwen" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <a href="https://github.blog/open-source/maintainers/100-million-for-open-source-a-milestone-built-by-the-community/" class="card-img-link"><img src="https://github.blog/wp-content/uploads/2026/07/e3f6db2b136f577a2c96c5cda433d0a8ffbb615b397882ed3d352a28ec4e9cd1-2400x1260-1.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://github.blog/open-source/maintainers/100-million-for-open-source-a-milestone-built-by-the-community/">$100 million for open source: A milestone built by the community</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">GitHub célèbre 100 millions de dollars contribués par la communauté aux mainteneurs qui font vivre l&#x27;open source. Au-delà du chiffre symbolique, c&#x27;est un signal sur la pérennisation du financement des dépendances critiques dont dépendent tous les stacks modernes. Un rappel utile pour qui construit sur des briques open source au quotidien.</p>
+        <div class="card-tags"><span class="tag">GitHub</span></div>
+        <a href="https://github.blog/open-source/maintainers/100-million-for-open-source-a-milestone-built-by-the-community/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/nvidia/cosmos3edge" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/6a45813c717ace23b8c3b562/9_7TYr_qt6fVauHKiFGh5.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/nvidia/cosmos3edge">Introducing Cosmos 3 Edge</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">NVIDIA publie Cosmos 3 Edge, une nouvelle itération de sa famille de modèles pensée pour l&#x27;exécution en périphérie. L&#x27;orientation « edge » vise des déploiements plus légers et locaux, dans la lignée des besoins de latence et de coût maîtrisés. À tester pour tout cas d&#x27;usage nécessitant de l&#x27;inférence hors cloud.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span></div>
+        <a href="https://huggingface.co/blog/nvidia/cosmos3edge" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://simonwillison.net/2026/Jul/20/afraid-of-chinese-models/#atom-everything" class="card-img-link"><img src="https://static.simonwillison.net/static/2026/qwen-3.8-max-pelican.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Jul/20/afraid-of-chinese-models/#atom-everything">Who&#x27;s Afraid of Chinese Models?</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison relaie une proposition de Ben Thompson qui pointe l&#x27;hypocrisie des labs interdisant la distillation de leurs modèles tout en s&#x27;entraînant sur des données non licenciées, et suggère une voie pour rendre les modèles ouverts américains plus compétitifs face à la Chine. Un débat de fond sur la stratégie open-weights des États-Unis, alors que Qwen 3.8 et Kimi K3 montent en puissance.</p>
+        <div class="card-tags"><span class="tag">Qwen</span><span class="tag">OpenAI</span></div>
+        <a href="https://simonwillison.net/2026/Jul/20/afraid-of-chinese-models/#atom-everything" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.technologyreview.com/2026/07/20/1140655/ai-biases-hiring-humans/" class="card-img-link"><img src="https://wp.technologyreview.com/wp-content/uploads/2026/07/ai-slant1b.jpg?resize=1200,600" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.technologyreview.com/2026/07/20/1140655/ai-biases-hiring-humans/">AI is more likely than humans to form biases when hiring</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.technologyreview.com&sz=32" width="14" height="14" />
+          <span>MIT Tech Review AI</span>
+        </div>
+        <p class="summary">De nouvelles recherches montrent que les LLM ne se contentent pas d&#x27;hériter des biais humains présents dans leurs données : ils peuvent aussi en fabriquer de nouveaux, notamment lors du tri de CV. Pour toute automatisation de scoring ou de qualification de contacts, c&#x27;est un avertissement sur la fiabilité et l&#x27;équité des décisions déléguées à un modèle.</p>
+        
+        <a href="https://www.technologyreview.com/2026/07/20/1140655/ai-biases-hiring-humans/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;escalade des poids ouverts chinois</strong><p>Kimi K3 (Moonshot) et Qwen 3.8 (Alibaba) revendiquent des performances quasi-frontière à bas coût, forçant le débat US entre ouverture et protectionnisme.</p></div><div class="trend-item"><strong>Silicium spécialisé pour l&#x27;inférence</strong><p>Google grave Gemini dans sa puce Frozen v2 pendant que Microsoft et peut-être Anthropic se tournent vers AMD : la course à l&#x27;efficacité hardware s&#x27;accélère.</p></div><div class="trend-item"><strong>La sécurité des agents devient concrète</strong><p>L&#x27;attaque agentique autonome sur Hugging Face illustre l&#x27;écart croissant entre la prolifération des agents et les contrôles d&#x27;identité et d&#x27;isolation.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 5 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/07/20/trumps-latest-ai-czar-has-already-resigned/" class="ext-title">Trump&#x27;s latest AI czar has already resigned</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Le poste de directeur du Center for AI Standards and Innovation (CAISI) est devenu une porte tournante depuis le départ de David Sacks. L&#x27;instabilité de la gouvernance AI américaine complique la lisibilité réglementaire.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.technologyreview.com/2026/07/20/1140675/chinas-ai-models-have-trumps-ai-world-at-war-with-itself/" class="ext-title">China&#x27;s AI models have Trump&#x27;s AI world at war with itself</a>
+        <span class="ext-source">MIT Tech Review AI</span>
+        <p class="ext-summary">Les modèles gratuits chinois comme Kimi ravivent les tensions entre conseillers de Trump sur la stratégie AI à adopter. Le débat oppose ouverture et protectionnisme, sans consensus clair.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/968375/sony-udio-lawsuit-songs-ai-copyright" class="ext-title">Here are the 30,000 songs Sony is suing Udio&#x27;s AI music generator over</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Sony Music attaque de nouveau Udio pour violation présumée du copyright de plus de 30 000 titres. Le contentieux sur les données d&#x27;entraînement musical s&#x27;intensifie.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/business/968257/spacex-in-your-index-fund-explained" class="ext-title">SpaceX in your index fund, explained</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">L&#x27;intégration accélérée de SpaceX au Nasdaq-100 interroge la sécurité supposée des fonds indiciels quand une valorisation très spéculative y entre.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://www.latent.space/p/ainews-not-much-happened-today-173" class="ext-title">[AINews] not much happened today</a>
+        <span class="ext-source">Latent Space</span>
+        <p class="ext-summary">Le roundup quotidien de Latent Space confirme une journée calme côté AI Engineering, dominée par le bruit autour des modèles ouverts chinois plutôt que par des sorties produit majeures.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
