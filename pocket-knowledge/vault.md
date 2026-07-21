@@ -1,0 +1,2 @@
+# Expertise vault — appris par Pocket
+- (2026-07-21) « Dispatch » dans le vault EMAsphere est ambigu : 3 sens — (1) Claude Dispatch, orchestrateur agent-system (notes clés : 01-Projects/01-EMAsphere/Agent-System.md + 02-Stack/Agent-System-Metered-Billing-Readiness.md ; pas de note dédiée), (2) PrintDispatch v2, projet perso 3D print (01-Projects/03-Perso/PrintDispatch.md), (3) workflow_dispatch / pattern router-dispatch (04-Reference). FlowCopy.md contient un agent homonyme « Claude Dispatch ».
