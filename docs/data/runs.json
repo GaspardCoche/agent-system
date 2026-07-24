@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "27090737680",
-    "workflow": "sage",
-    "title": "Sage Weekly 2026-06-07",
-    "status": "failed",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-06-07T11:08:20.779577+00:00",
-    "agents": [],
-    "report_file": "reports/2026-06-07-sage-sage-weekly-2026-06-07.md"
-  },
-  {
     "run_id": "27130134470",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-06-08",
@@ -1645,5 +1631,28 @@
     "timestamp": "2026-07-24T06:44:06.490143+00:00",
     "agents": [],
     "report_file": "reports/2026-07-24-email-agent-daily-digest-2026-07-24.md"
+  },
+  {
+    "run_id": "30085415068",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "30085415068",
+    "summary": "Task routed to Lumen (analysis & data agent) but appears to be a Forge (development) task. Task JSON requests 'forge' agent. Awaiting clarification fr · Task routing mismatch: task specifies role 'forge' (code development) but researcher agent was in",
+    "next_actions": [],
+    "timestamp": "2026-07-24T10:18:43.282004+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "pending_approval"
+      },
+      {
+        "name": "researcher",
+        "status": "routing_error"
+      }
+    ],
+    "report_file": "reports/2026-07-24-orchestrator-scheduled-run.md"
   }
 ]
