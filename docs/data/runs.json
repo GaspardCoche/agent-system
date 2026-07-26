@@ -1,30 +1,5 @@
 [
   {
-    "run_id": "27137129383",
-    "workflow": "nexus",
-    "title": "Nexus weekly_audit 2026-06-08",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "⚠️ TEMPLATE MODE — 9e run consécutif sans credentials (75 jours bloqué depuis 2026-03-24). Audit réel impossible. Rapport template généré avec instruc",
-    "next_actions": [
-      "PRIORITÉ 1 : Créer les credentials OAuth2 sur Google Cloud Console",
-      "PRIORITÉ 2 : Obtenir le Developer Token via https://ads.google.com/aw/apicenter",
-      "PRIORITÉ 3 : Générer le Refresh Token via le script oauth2 Google Ads",
-      "PRIORITÉ 4 : Ajouter les 4 secrets dans GitHub → Settings → Secrets → Actions",
-      "PRIORITÉ 5 : Modifier nexus.yml pour skip automatique si credentials_ok=false (économie tokens)"
-    ],
-    "timestamp": "2026-06-08T12:21:03.975851+00:00",
-    "agents": [
-      {
-        "name": "nexus",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-06-08-nexus-nexus-weekly-audit-2026-06-08.md"
-  },
-  {
     "run_id": "27137524510",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1654,5 +1629,19 @@
     "timestamp": "2026-07-25T06:33:23.390708+00:00",
     "agents": [],
     "report_file": "reports/2026-07-25-email-agent-daily-digest-2026-07-25.md"
+  },
+  {
+    "run_id": "30191613840",
+    "workflow": "email-agent",
+    "title": "Daily Digest 2026-07-26",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "0 emails traités",
+    "next_actions": [],
+    "timestamp": "2026-07-26T06:52:24.904429+00:00",
+    "agents": [],
+    "report_file": "reports/2026-07-26-email-agent-daily-digest-2026-07-26.md"
   }
 ]
