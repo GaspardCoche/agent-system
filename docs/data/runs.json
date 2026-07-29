@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "27407777868",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-06-12",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "9 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-06-12T09:45:09.148398+00:00",
-    "agents": [],
-    "report_file": "reports/2026-06-12-email-agent-daily-digest-2026-06-12.md"
-  },
-  {
     "run_id": "27413450637",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1622,5 +1608,31 @@
     "timestamp": "2026-07-29T06:49:25.242979+00:00",
     "agents": [],
     "report_file": "reports/2026-07-29-email-agent-daily-digest-2026-07-29.md"
+  },
+  {
+    "run_id": "30444262174",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "30444262174",
+    "summary": "Aucune tâche exploitable dans /tmp/agent_task.json (run schedule, description='Scheduled maintenance', input='See task in context'). Aucun changement  · No research task was assigned in this run. The task was routed to the forge agent.",
+    "next_actions": [
+      "Sage : revoir dispatch.md pour ajouter un garde-fou sur event=schedule sans description exploitable (voir lessons_learned.md 2026-07-29)",
+      "Envisager que le cron 0 8 * * 1-5 route vers une tâche d'audit explicite (lessons_learned dedup, vault healthcheck, revue issues label agent) plutôt que vers forge sans contenu"
+    ],
+    "timestamp": "2026-07-29T10:41:54.294446+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "no_task"
+      },
+      {
+        "name": "researcher",
+        "status": "no_task"
+      }
+    ],
+    "report_file": "reports/2026-07-29-orchestrator-scheduled-run.md"
   }
 ]
