@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-08-03 | weekly_audit (dry_run) | 26/100 (estimé) | Template — credentials_ok=false (14e run consécutif) — BLOCAGE 132 jours — Score dégradé 29→26 — Issue de suivi #185 déjà ouverte | #30808430148 |
 | 2026-07-20 | weekly_audit (dry_run) | 29/100 (estimé) | Template — credentials_ok=false (13e run consécutif) — BLOCAGE 118 jours — Score dégradé 32→29 | #29735692386 |
 | 2026-07-06 | weekly_audit (dry_run) | 32/100 (estimé) | Template — credentials_ok=false (12e run consécutif) — BLOCAGE 104 jours — Score dégradé 35→32 | #28789500762 |
 | 2026-06-22 | weekly_audit (dry_run) | 35/100 (estimé) | Template — credentials_ok=false (11e run consécutif) — BLOCAGE 90 jours — Score dégradé 38→35 | #27955997300 |
@@ -96,6 +97,14 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 - [ ] Audit hebdo : chaque lundi 6h UTC (à configurer dans nexus.yml)
 
 ## Note escalade CRITIQUE
+
+> 2026-08-03 : **14e run consécutif en template mode** (2026-03-24 → 2026-08-03).
+> Nexus bloqué depuis **132 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → ... → 29/100 → 26/100.
+> Une issue de suivi dédiée existe désormais : **#185** ("Nexus bloqué — secrets Google Ads manquants", ouverte le 2026-07-27). Ce run y a posté une mise à jour au lieu de créer un doublon.
+> ⛔ Le gating `needs: [check-credentials]` recommandé depuis le run #11 (2026-06-22, 90 jours) n'est **toujours pas implémenté** dans `nexus.yml` — le workflow exécute encore le pre-flight + l'agent complet chaque lundi malgré l'absence connue des secrets.
+> Action prioritaire (inchangée) : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
+> Action Forge (toujours en attente, 6 semaines après la 1ère demande) : ajouter `needs: [check-credentials]` dans `nexus.yml`.
+> Score estimé après déblocage + optimisations : ~72/100.
 
 > 2026-07-20 : **13e run consécutif en template mode** (2026-03-24 → 2026-07-20).
 > Nexus bloqué depuis **118 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → ... → 32/100 → 29/100.

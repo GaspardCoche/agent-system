@@ -38,14 +38,14 @@ updated: 2026-07-20
 
 | Metrique | Valeur | Objectif | Statut |
 |----------|--------|---------|--------|
-| Score global | 29/100 | 80/100 | Critique — 13e run template consecutif, degradation continue |
+| Score global | 26/100 | 80/100 | Critique — 14e run template consecutif, degradation continue |
 | ROAS | -- | > 3x | -- |
 | CTR moyen | -- | > 3% | -- |
 | Quality Score | -- | >= 7/10 | -- |
 | CPA | -- | -- | -- |
 | Budget mensuel | -- | -- | -- |
 
-*Note : Score 29/100 base sur audit template (compte non configure -- ajouter secrets Google Ads). Degradation continue depuis le 2026-03-24 (58 -> 42 -> 38 -> 35 -> 32 -> 29) faute de credentials. Voir [[agents/nexus-memory]] pour le detail des 13 runs consecutifs bloques (118 jours).*
+*Note : Score 26/100 base sur audit template (compte non configure -- ajouter secrets Google Ads). Degradation continue depuis le 2026-03-24 (58 -> 42 -> 38 -> 35 -> 32 -> 29 -> 26) faute de credentials. Issue de suivi : #185. Voir [[agents/nexus-memory]] pour le detail des 14 runs consecutifs bloques (132 jours).*
 
 ---
 
