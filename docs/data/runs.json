@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "27628799064",
-    "workflow": "orchestrator",
-    "title": "feat(pocket): vault access (read-only deploy key)",
-    "status": "success",
-    "event": "pull_request",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "106",
-    "summary": "Task routing analysis: PR #106 validation is not an analysis task suited for Lumen. The task should be delegated to Sentinel (code security validation",
-    "next_actions": [],
-    "timestamp": "2026-06-16T15:46:02.162528+00:00",
-    "agents": [
-      {
-        "name": "lumen",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-06-16-orchestrator-feat-pocket---vault-access--read-only-deploy-key.md"
-  },
-  {
     "run_id": "27646614787",
     "workflow": "orchestrator",
     "title": "fix(pocket): network-first SW + auto-update + version badge",
@@ -1615,5 +1596,28 @@
     "timestamp": "2026-08-04T06:46:13.808918+00:00",
     "agents": [],
     "report_file": "reports/2026-08-04-email-agent-daily-digest-2026-08-04.md"
+  },
+  {
+    "run_id": "30901265398",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "30901265398",
+    "summary": "Task routing analysis complete. Task ID 30901265398 delegated to Forge agent with incomplete context ('See task in context'). Analysis: The task struc · Task routing indicates forge agent should handle task 30901265398, but researcher was invoked. Ta",
+    "next_actions": [],
+    "timestamp": "2026-08-04T10:43:11.811904+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "routing_mismatch"
+      }
+    ],
+    "report_file": "reports/2026-08-04-orchestrator-scheduled-run.md"
   }
 ]
