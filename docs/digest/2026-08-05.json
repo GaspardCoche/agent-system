@@ -1,0 +1,346 @@
+{
+  "date": "2026-08-05",
+  "headline": "LLM 0.32 rebat les cartes de l'outillage, pendant qu'Anthropic verrouille 10 Md$ de compute",
+  "one_liner": "Simon Willison livre la plus grosse mise à jour de LLM depuis sa création — traces de raisonnement, outils côté serveur et nouveaux modèles Claude — au moment où l'écosystème dev se réarme.",
+  "top_story": {
+    "title": "New release of LLM adds support for reasoning traces, OpenAI Responses, server-side tools, and smarter logging",
+    "source": "Simon Willison",
+    "url": "https://simonwillison.net/2026/Aug/4/new-release-of-llm/#atom-everything",
+    "image_url": "https://static.simonwillison.net/static/2026/best-thing-pelicans-card.jpg",
+    "summary": "LLM 0.32 est décrite par Simon Willison comme la version la plus significative de son outil CLI depuis son lancement. Elle apporte les traces de raisonnement visibles, la prise en charge des outils côté serveur des fournisseurs (WebSearch, WebFetch, exécution de code), des logs SQLite repensés en content-addressable, et de nouveaux modèles. Concrètement, on peut désormais brancher un LLM sur des outils hébergés côté API sans réimplémenter la boucle d'orchestration localement. Pour qui construit des pipelines d'agents scriptés, c'est une baisse nette de la friction entre prototype terminal et automatisation en production. C'est le genre de brique discrète qui change la façon de bâtir des workflows d'ici quelques semaines.",
+    "why_it_matters": "Pour toi : LLM 0.32 est un banc d'essai idéal pour tester rapidement les outils serveur de Claude en CLI avant de les câbler dans tes agents GitHub Actions.",
+    "category": "Outils & Plateformes",
+    "company_tags": [
+      "Simon Willison",
+      "OpenAI",
+      "Anthropic"
+    ]
+  },
+  "articles": [
+    {
+      "title": "llm-anthropic 0.26",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/4/llm-anthropic/#atom-everything",
+      "image_url": "",
+      "summary": "Le plugin llm-anthropic 0.26 exploite LLM 0.32 pour ajouter les nouveaux modèles claude-fable-5, claude-sonnet-5 et claude-opus-5. Il expose surtout les outils côté serveur d'Anthropic — WebSearch, WebFetch, CodeExecution et AnthropicMCP — accessibles via l'interface -T de LLM ou l'argument tools= en Python. C'est un accès direct au MCP hébergé de Claude sans monter de serveur soi-même.",
+      "why_it_matters": "Pour toi : tu peux appeler un serveur MCP Anthropic depuis une ligne de commande Python en quelques minutes, idéal pour tes prototypes d'enrichissement.",
+      "category": "Outils & Plateformes",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Simon Willison"
+      ]
+    },
+    {
+      "title": "Turn one giant AI-generated pull request to a reviewable stack",
+      "source": "GitHub Blog",
+      "url": "https://github.blog/engineering/turn-one-giant-ai-generated-pull-request-to-a-reviewable-stack/",
+      "image_url": "https://github.blog/wp-content/uploads/2026/01/generic-mona-github.png",
+      "summary": "GitHub explique comment apprendre aux agents de code à décomposer leur travail en une pile de pull requests ordonnées et relisibles, plutôt qu'une seule PR géante impossible à réviser. La méthode repose sur les stacked pull requests pour garder chaque changement atomique et auditable. C'est une réponse directe au problème de gouvernance des agents qui génèrent trop de code d'un coup.",
+      "why_it_matters": "Pour toi : appliquer les stacked PRs à Forge/tes agents GitHub Actions rendrait leurs sorties bien plus faciles à valider avant merge.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "GitHub"
+      ]
+    },
+    {
+      "title": "Deploy local agents everywhere with LFM2.5-2.6B",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/LiquidAI/lfm2-5-2-6b",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/644249b08443bce4c9890a0f/DsoMk3kqhMYedjPiZINKv.png",
+      "summary": "Liquid AI publie LFM2.5-2.6B, un modèle compact pensé pour déployer des agents locaux partout, y compris sur des appareils contraints. L'argument est le déploiement embarqué et hors ligne d'agents sans dépendre d'une API cloud. Pour les cas d'usage privacy-first ou edge, c'est une brique open-weight crédible.",
+      "why_it_matters": "Pour toi : un modèle 2.6B tournant en local pourrait alimenter un scoring ICP ou un pré-tri de leads sans envoyer de données hors de ton infra.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "Liquid AI",
+        "HuggingFace"
+      ]
+    },
+    {
+      "title": "Unpacking ChatGPT Work: the Agent for a Billion Users",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/unpacking-chatgpt-work",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!Lavj!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3f4e59a2-820f-4225-abfd-6720ef85df8e_1315x1196.png",
+      "summary": "Latent Space reconstitue de l'extérieur l'architecture de ChatGPT Work : mémoire, proactivité, planification, usage du navigateur, plugins, skills et tools. C'est une plongée dans la manière dont OpenAI industrialise un agent grand public à l'échelle du milliard d'utilisateurs. Une lecture précieuse pour anticiper les patterns d'agents qui vont se généraliser.",
+      "why_it_matters": "Pour toi : les mécanismes de Memory et de Skills décrits ici sont directement transposables à ton propre stack d'agents et à ton vault Obsidian.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "How the GitHub legal team used Copilot CLI to streamline their workflows",
+      "source": "GitHub Blog",
+      "url": "https://github.blog/ai-and-ml/github-copilot/how-the-github-legal-team-used-copilot-cli-to-streamline-their-workflows/",
+      "image_url": "https://github.blog/wp-content/uploads/2026/01/generic-github-copilot-smiling-flying-logo.png",
+      "summary": "L'équipe juridique de GitHub raconte comment elle a construit des outils pour simplifier ses workflows via Copilot CLI, sans écrire une seule ligne de code. Le cas montre l'usage d'agents CLI par des profils non-développeurs pour automatiser des tâches métier. Un signal concret de démocratisation des agents en ligne de commande.",
+      "why_it_matters": "Pour toi : c'est un modèle réplicable pour outiller des équipes non-tech (sales, ops) avec des agents CLI maison.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "GitHub",
+        "Microsoft"
+      ]
+    },
+    {
+      "title": "Anthropic locks in $10 billion of compute from Volta, a cloud startup that didn't exist six months ago",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-locks-in-10-billion-of-compute-from-volta-a-cloud-startup-that-didnt-exist-six-months-ago/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/07/anthropic_logoreihe.png",
+      "summary": "Anthropic sécurise 10 milliards de dollars de capacité de calcul auprès de Volta Infra Holdings, une startup cloud vieille de seulement quelques mois. L'accord illustre la course effrénée au compute et la naissance quasi instantanée de « neoclouds » adossés à un seul gros client. Pour l'écosystème Claude, c'est un gage de scalabilité à moyen terme.",
+      "why_it_matters": "Pour toi : plus de compute garanti chez Anthropic, c'est plus de stabilité et de capacité pour tes agents Claude en production.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Anthropic",
+        "Volta"
+      ]
+    },
+    {
+      "title": "Open-weight AI models are catching up to the frontier. The safety gap remains.",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/04/open-weight-ai-models-are-catching-up-to-the-frontier-the-safety-gap-remains/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/08/Z.ai-GLM-5.2-chat.png?resize=1200,576",
+      "summary": "Un rapport de SaferAI conclut que le modèle open-weight GLM-5.2 de Z.ai approche les capacités des modèles frontière tout en manquant de mitigations de sécurité clés. L'écart de gouvernance entre puissance et garde-fous se creuse à mesure que l'open source rattrape le peloton de tête. Le débat sur les modèles à poids ouverts devient central.",
+      "why_it_matters": "Pour toi : les modèles open-weight de niveau frontière deviennent des alternatives crédibles pour tes tâches internes à moindre coût.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "Z.ai",
+        "SaferAI"
+      ]
+    },
+    {
+      "title": "Google moves billions in Anthropic chip risk off its balance sheet",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/google-moves-billions-in-anthropic-chip-risk-off-its-balance-sheet/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/08/google_anthropic_finance_illustration.png",
+      "summary": "Google monte avec Broadcom, Apollo, Blackstone et Morgan Stanley une structure de financement à plusieurs milliards qui fournit puces et data centers à Anthropic tout en gardant l'essentiel du risque hors de son bilan. Le montage laisse environ 200 milliards de dollars de contrats dépendants d'Anthropic. Une ingénierie financière qui révèle l'ampleur des engagements de calcul.",
+      "why_it_matters": "Pour toi : comprendre qui finance le compute de Claude aide à jauger la pérennité de tes dépendances côté fournisseur.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Google",
+        "Anthropic",
+        "Broadcom"
+      ]
+    },
+    {
+      "title": "Nvidia doesn't mess around: A week after open AI industry group formed, it's already showing progress",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/04/nvidia-doesnt-mess-around-a-week-after-open-ai-industry-group-formed-its-already-showing-progress/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/01/jensen-ces-2026-getty.jpg?resize=1200,800",
+      "summary": "L'Open Secure AI Alliance, portée par Nvidia et déjà forte de plus de 120 entreprises en une semaine, publie ses premières propositions pour défendre les systèmes contre les agents AI malveillants. La rapidité d'exécution signale une prise au sérieux de la sécurité des agents à l'échelle industrielle. Un chantier à suivre pour quiconque déploie des agents.",
+      "why_it_matters": "Pour toi : les standards de sécurité des agents qui émergent ici finiront par cadrer tes propres déploiements d'agents.",
+      "category": "Regulation & Ethique",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "PipeNetwork/minimax-h3-mlx",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/4/minimax-h3-mlx/#atom-everything",
+      "image_url": "https://static.simonwillison.net/static/2026/skunk.jpg",
+      "summary": "MiniMax a publié MiniMax-H3, un système génératif omni-modal qui accepte texte, images, audio et vidéo pour produire des clips vidéo de 15 secondes avec son. Ce package Python le porte sur MLX pour tourner sur Apple Silicon — Simon Willison l'a fait fonctionner sur un MacBook Pro M5 Max après 115 Go de téléchargement et 45 minutes de génération. Impressionnant sur la vidéo, encore brut sur l'audio.",
+      "category": "Modeles",
+      "importance": "worth_noting",
+      "company_tags": [
+        "MiniMax",
+        "Apple"
+      ]
+    },
+    {
+      "title": "[AINews] Megakernels are so dead and so back",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/ainews-megakernels-are-so-dead-and",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!Gpou!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fpbs.substack.com%2Fmedia%2FHNw6xyYaUAA_BVO.jpg",
+      "summary": "La revue quotidienne AINews profite d'une journée calme pour mettre en avant un lancement de Cursor et un débat d'ingénierie sur les megakernels. Le signal notable est le rythme continu d'itération côté outillage de code (Cursor). Un bon thermomètre de l'état du dev AI au jour le jour.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Cursor"
+      ]
+    },
+    {
+      "title": "Silicon Valley's rift over open source pushes back contemplated White House bans on Chinese AI",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/silicon-valleys-rift-over-open-source-pushes-back-contemplated-white-house-bans-on-chinese-ai/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/08/china_vs_usa_ai_arms_race.png",
+      "summary": "L'administration Trump a envisagé des sanctions et des interdictions cloud visant les modèles open-weight chinois ; OpenAI et Anthropic poussaient pour des restrictions, tandis que Nvidia, Google et Meta s'y opposaient. Après le tir de barrage de la Silicon Valley, Washington a reculé pour l'instant. Le sort des modèles chinois à poids ouverts reste en suspens.",
+      "category": "Regulation & Ethique",
+      "importance": "worth_noting",
+      "company_tags": [
+        "OpenAI",
+        "Anthropic",
+        "Nvidia",
+        "Meta"
+      ]
+    },
+    {
+      "title": "Spotify expands AI remix and covers project with Merlin partnership",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/04/spotify-adds-merlin-to-its-ai-music-remix-and-covers-effort/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/02/spotify-logo-phone-GettyImages-2236404299.jpg?w=1024",
+      "summary": "Spotify obtient le soutien de Merlin — plus de 30 000 labels et distributeurs indépendants — pour son futur produit de remix et de reprises générés par IA, après Universal Music Group. L'outil payant laissera les fans créer des covers et remixes IA des artistes participants, avec un cadre de consentement. Un cas concret de monétisation IA négociée avec les ayants droit.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Spotify",
+        "Merlin",
+        "Universal Music Group"
+      ]
+    },
+    {
+      "title": "AMD's data center business is booming while gaming takes a backseat",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/975381/amd-q2-2026-earnings-ai-gaming-ryzen",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/24002467/acastro_STK081_amd_02.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "summary": "Portés par la demande de capacité IA, les revenus data center d'AMD ont plus que doublé sur un an pour atteindre 6,7 milliards de dollars, en hausse de 107 %. Le gaming passe clairement au second plan dans la stratégie du groupe. Signe supplémentaire que l'infrastructure IA aspire l'ensemble du marché des semiconducteurs.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "AMD"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "SpaceX made more revenue as an AI company than a space company",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/science/975335/spacex-made-more-money-as-a-neocloud",
+      "summary": "Les revenus IA de SpaceX ont triplé à 2,6 milliards de dollars, tirés par des contrats de fourniture de compute à d'autres entreprises IA. Le « neocloud » devient une ligne de revenu majeure.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "SpaceX"
+      ]
+    },
+    {
+      "title": "SpaceX has bought $329M worth of Tesla Megapacks so far this year",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/04/spacex-has-bought-329m-worth-of-tesla-megapacks-so-far-this-year/",
+      "summary": "SpaceX a acheté pour 329 M$ de Megapacks Tesla cette année, illustrant l'imbrication croissante des entreprises de l'univers Musk autour des besoins énergétiques du compute.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "SpaceX",
+        "Tesla"
+      ]
+    },
+    {
+      "title": "OpenAI fires back at Apple's trade secret lawsuit with chat logs",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-fires-back-at-apples-trade-secret-lawsuit-with-chat-logs-showing-apple-employees-kept-texting-their-former-colleague/",
+      "summary": "OpenAI riposte à la plainte d'Apple pour vol de secrets commerciaux en publiant des échanges iMessage montrant des employés d'Apple sollicitant eux-mêmes leur ancien collègue. La bataille juridique se joue aussi dans l'opinion publique.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI",
+        "Apple"
+      ]
+    },
+    {
+      "title": "Texas says data centers must pass an audit before connecting to the grid",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/policy/975071/texas-data-center-audit",
+      "summary": "Le Texas impose un audit aux nouveaux data centers avant leur raccordement au réseau électrique, ce qui pourrait ralentir les projets. Même l'État le plus permissif atteint ses limites face à la demande IA.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Texas"
+      ]
+    },
+    {
+      "title": "Can Reddit fend off a new wave of AI SEO spam?",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/973098/reddit-ai-search-seo-marketing-brands-spam",
+      "summary": "L'ère de la recherche dopée à l'IA rend les mentions Reddit très précieuses, poussant des marques à y injecter du spam SEO déguisé. Les modérateurs de subreddits tentent d'endiguer la vague.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Reddit"
+      ]
+    },
+    {
+      "title": "'Not healthy' LLM use is more common than you think",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/975180/llm-ai-chatbot-use-not-healthy",
+      "summary": "Le YouTubeur Hank Green prend du recul face aux critiques sur son usage de l'IA, qu'il qualifie lui-même de « pas sain ». Le débat sur les usages problématiques des chatbots s'intensifie.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "How an OpenAI influencer trip backfired",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/975173/openai-influencers-brand-trip-ai-backlash-marketing",
+      "summary": "Un voyage de marque organisé par OpenAI pour des influenceurs a suscité critiques publiques et ressentiment, illustrant les risques du marketing d'influence appliqué à l'IA.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Meet Wrinkles, an app that uncovers the hidden stories of the places around you",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/04/meet-wrinkles-an-ai-app-that-uncovers-the-hidden-stories-of-the-places-around-you/",
+      "summary": "Wrinkles, disponible sur iOS et Android, agit comme un guide audio IA qui révèle l'histoire cachée et les récits locaux des lieux environnants. Un cas d'usage grand public de l'IA géolocalisée.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Wrinkles"
+      ]
+    },
+    {
+      "title": "This year's Pulitzer Prizes saw a record number of winners disclose AI use",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/this-years-pulitzer-prizes-saw-a-record-number-of-winners-disclose-ai-use/",
+      "summary": "Huit entrées primées aux Pulitzer 2026 ont divulgué un usage de l'IA, dont cinq lauréats, essentiellement pour fouiller de grands corpus de documents. L'écriture et l'édition restent hors limites.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Elon Musk spends half his time talking robots and AI on Tesla earnings calls",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/04/elon-musk-spends-half-his-time-talking-robots-and-ai-on-tesla-earnings-calls/",
+      "summary": "Une analyse de sept ans d'earnings calls Tesla montre que Musk consacre désormais la moitié de son temps aux robots et à l'IA, au détriment du cœur automobile. Un recentrage narratif révélateur.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Tesla"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "LLM 0.32",
+      "description": "Tester les outils côté serveur (WebSearch, WebFetch, exécution de code) et les traces de raisonnement directement en CLI pour prototyper un agent avant de l'industrialiser.",
+      "url": "https://simonwillison.net/2026/Aug/4/new-release-of-llm/#atom-everything"
+    },
+    {
+      "nom": "llm-anthropic 0.26",
+      "description": "Appeler les nouveaux modèles Claude (opus-5, sonnet-5, fable-5) et le MCP hébergé d'Anthropic via l'interface -T de LLM, sans monter ton propre serveur.",
+      "url": "https://simonwillison.net/2026/Aug/4/llm-anthropic/#atom-everything"
+    },
+    {
+      "nom": "LFM2.5-2.6B",
+      "description": "Déployer un agent local léger de Liquid AI pour tester un scoring ICP ou un pré-tri de leads en local, sans dépendance cloud.",
+      "url": "https://huggingface.co/blog/LiquidAI/lfm2-5-2-6b"
+    }
+  ],
+  "trends": [
+    {
+      "title": "L'outillage agent devient une brique de commodité",
+      "description": "De LLM 0.32 aux stacked PRs de GitHub, en passant par Copilot CLI, l'écosystème passe de la démo à des workflows d'agents scriptables, relisibles et déployables en production."
+    },
+    {
+      "title": "La course au compute se financiarise",
+      "description": "Le deal Anthropic-Volta à 10 Md$ et le montage Google-Broadcom pour sortir le risque du bilan montrent que le compute IA se structure désormais via l'ingénierie financière et des neoclouds éclairs."
+    },
+    {
+      "title": "L'open-weight rattrape la frontière, la sécurité traîne",
+      "description": "GLM-5.2 approche les modèles de tête tandis que les débats réglementaires (Alliance Nvidia, bans US sur l'IA chinoise) peinent à suivre l'écart de garde-fous."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 14,
+    "articles_extracted": 24
+  }
+}
