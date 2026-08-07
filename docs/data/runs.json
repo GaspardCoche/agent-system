@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "27757326958",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "27757326958",
-    "summary": "Task is a dispatch request for Sage weekly analysis, not a research task. Routing to Sage agent.",
-    "next_actions": [],
-    "timestamp": "2026-06-18T11:57:22.880163+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "routing"
-      }
-    ],
-    "report_file": "reports/2026-06-18-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "27818873310",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-06-19",
@@ -1604,5 +1585,24 @@
     "timestamp": "2026-08-07T05:55:01.879969+00:00",
     "agents": [],
     "report_file": "reports/2026-08-07-email-agent-daily-digest-2026-08-07.md"
+  },
+  {
+    "run_id": "31163770407",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "31163770407",
+    "summary": "Researcher agent invoked but task file indicates 'forge' agent should execute. Task input states 'See task in context' but no research query or contex",
+    "next_actions": [],
+    "timestamp": "2026-08-07T09:04:23.315160+00:00",
+    "agents": [
+      {
+        "name": "researcher",
+        "status": "pending_clarification"
+      }
+    ],
+    "report_file": "reports/2026-08-07-orchestrator-scheduled-run.md"
   }
 ]
