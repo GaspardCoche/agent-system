@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "27948511428",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-06-22",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "5 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-06-22T11:14:36.287163+00:00",
-    "agents": [],
-    "report_file": "reports/2026-06-22-email-agent-daily-digest-2026-06-22.md"
-  },
-  {
     "run_id": "27955997300",
     "workflow": "nexus",
     "title": "Nexus weekly_audit 2026-06-22",
@@ -1604,5 +1590,36 @@
     "timestamp": "2026-08-10T09:05:54.910789+00:00",
     "agents": [],
     "report_file": "reports/2026-08-10-nexus-nexus-weekly-audit-2026-08-10.md"
+  },
+  {
+    "run_id": "31373805290",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "31373805290",
+    "summary": "Aucune tâche actionnable reçue : /tmp/agent_task.json ne contenait qu'un stub fallback ('See task in context'). Diagnostic root cause via `gh run view · Lumen en attente de résultats Forge (task_id: 31373805290). Prêt à analyser dès que Forge complèt",
+    "next_actions": [
+      "Dispatch/Sage : corriger orchestrator.yml — gate schedule sans issue → should_run=false ou plan par défaut sans appel Claude",
+      "Filtrer run-researcher/run-analyzer/run-coder pour ne s'exécuter que si leur rôle est dans dispatch_plan.agents",
+      "Relancer Forge une fois une vraie tâche (issue/PR) dispatchée"
+    ],
+    "timestamp": "2026-08-10T09:24:22.658293+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "needs_retry"
+      },
+      {
+        "name": "lumen",
+        "status": "pending"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_clarification"
+      }
+    ],
+    "report_file": "reports/2026-08-10-orchestrator-scheduled-run.md"
   }
 ]
