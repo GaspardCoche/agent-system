@@ -1,0 +1,300 @@
+{
+  "date": "2026-08-10",
+  "headline": "Claude Code passe en pilote automatique — et les évals disent qu'il protège mieux que toi",
+  "one_liner": "Anthropic bascule l'auto mode de Claude Code en réglage par défaut le 14 août, pariant que l'agent bloque les commandes dangereuses mieux que la relecture humaine.",
+  "top_story": {
+    "title": "Anthropic active l'auto mode de Claude Code par défaut",
+    "source": "TechCrunch AI",
+    "url": "https://techcrunch.com/2026/08/09/anthropic-is-turning-claude-codes-auto-mode-on-by-default/",
+    "image_url": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2269811684.jpg?w=1024",
+    "summary": "À partir du 14 août, Anthropic active « auto mode » par défaut dans Claude Code pour les plans Pro, Max et Team, réduisant drastiquement les validations manuelles à chaque étape. Pour justifier ce pari, l'entreprise publie une éval sur 1 053 développeurs payés : lorsqu'une commande clairement dangereuse était glissée dans une session, seuls 13,6 % des humains l'ont refusée, contre 89 % d'actions bloquées par l'auto mode. Le message : pour l'injection de prompt et l'exfiltration de données, l'agent supervisé est désormais plus fiable que le relecteur humain moyen. C'est un changement de posture pour quiconque code au quotidien avec Claude Code — on passe de « valider chaque action » à « configurer et auditer les garde-fous ». La confiance affichée par Anthropic suggère que les workflows agentiques longue durée deviennent la norme opérationnelle, pas l'exception.",
+    "why_it_matters": "Pour toi : tes agents Claude Code et tes GitHub Actions vont tourner avec moins de clics — audite tes permissions et garde-fous avant le 14 août.",
+    "category": "Code & Dev",
+    "company_tags": [
+      "Anthropic",
+      "Claude Code"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Le system prompt de Claude Opus 5 dévoilé et analysé",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/9/claude-opus-5-system-prompt/#atom-everything",
+      "image_url": "",
+      "summary": "Simon Willison décortique le system prompt de Claude Opus 5, qui documente notamment l'historique des suspensions et restaurations d'accès aux modèles liées aux contrôles export du Department of Commerce. C'est une fenêtre rare sur la façon dont Anthropic cadre le comportement de son modèle haut de gamme. Pour affiner tes propres prompts, comprendre les conventions internes d'Anthropic est un raccourci précieux.",
+      "why_it_matters": "Pour toi : lire le system prompt officiel t'aide à calibrer tes instructions et à anticiper les comportements de Claude dans tes agents.",
+      "category": "Modeles",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Claude"
+      ]
+    },
+    {
+      "title": "NVIDIA publie NemotronLabs VoiceChat 11B, un modèle speech-to-speech full-duplex ouvert",
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/2026/08/09/nvidia-releases-nemotronlabs-voicechat-11b-an-open-full-duplex-speech-to-speech-model-with-450-ms-turn-taking-and-live-tool-calling/",
+      "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-5.png",
+      "summary": "NVIDIA sort NemotronLabs VoiceChat 11B, un modèle vocal full-duplex ouvert avec ~448 ms de latence de tour de parole et surtout du live tool calling. Le full-duplex permet des conversations naturelles où l'on peut couper l'IA, et l'appel d'outils en temps réel ouvre la voie à des agents vocaux réellement actionnables. Poids ouverts = intégration possible dans tes propres stacks.",
+      "why_it_matters": "Pour toi : un agent vocal open-weights capable d'appeler des outils en direct pourrait automatiser la qualification d'appels ou l'outreach sortant.",
+      "category": "Open Source",
+      "importance": "must_read",
+      "company_tags": [
+        "NVIDIA"
+      ]
+    },
+    {
+      "title": "GitHub Models est officiellement retiré",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/9/github-models-is-now-retired/#atom-everything",
+      "image_url": "",
+      "summary": "GitHub Models est en cours de retrait : Simon Willison l'a découvert quand un run GitHub Actions a échoué avec un message de « scheduled retirement brownout ». Les pipelines qui dépendaient de cette API d'inférence gratuite doivent migrer. Un signal de plus que les briques d'inférence « gratuites » adossées aux grandes plateformes restent fragiles.",
+      "why_it_matters": "Pour toi : si un de tes workflows GitHub Actions appelle GitHub Models, prévois une bascule vers une API stable avant qu'il ne casse.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "GitHub",
+        "Microsoft"
+      ]
+    },
+    {
+      "title": "DiffusionGemma : Google transforme Gemma en modèle de diffusion textuelle sans repartir de zéro",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/googles-diffusiongemma-proves-you-dont-need-to-train-from-scratch-to-build-a-text-diffusion-model/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/01/deepmind_logo_wall-2.jpeg",
+      "summary": "Google DeepMind a converti Gemma 4 en modèle de diffusion textuelle avec moins de 10 % du budget d'entraînement original. DiffusionGemma génère 256 tokens en parallèle au lieu d'un à la fois, atteignant environ 1 500 tokens/seconde. La qualité reste en retrait des modèles autorégressifs, mais la méthode de retrofit à faible coût est un signal fort pour l'inférence rapide.",
+      "why_it_matters": "Pour toi : la diffusion textuelle rapide pourrait un jour accélérer l'enrichissement et le scoring de gros volumes de leads à moindre coût.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Google",
+        "DeepMind"
+      ]
+    },
+    {
+      "title": "Comparatif 2026 des plateformes d'observabilité et d'éval LLM (Langfuse, LangSmith, Braintrust, Arize…)",
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/2026/08/09/top-llm-observability-and-evaluation-platforms-in-2026-langfuse-langsmith-braintrust-arize-and-more-compared/",
+      "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-4-1024x731.png",
+      "summary": "MarkTechPost compare les principales plateformes d'observabilité et d'évaluation LLM en 2026 sur la profondeur de tracing, les capacités d'éval, le monitoring en production et le pricing. Indispensable pour quiconque met des agents en prod sans voler à l'aveugle. Langfuse (open-source) et LangSmith sortent comme références selon les besoins.",
+      "why_it_matters": "Pour toi : instrumenter tes agents Claude Code et tes automatisations sales avec un outil d'éval te dira enfin ce qui casse en production.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "Langfuse",
+        "LangSmith",
+        "Braintrust",
+        "Arize"
+      ]
+    },
+    {
+      "title": "Shepherd : un substrat Python open-source pour forker, rejouer et annuler n'importe quel run d'agent",
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/2026/08/08/meet-shepherd-an-open-source-python-substrate-that-lets-meta-agents-fork-replay-and-revert-any-agent-run/",
+      "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/08/blog61912-2.png",
+      "summary": "Des chercheurs (Northeastern) publient Shepherd, un substrat Python qui capture l'état complet d'un run d'agent — fichiers édités, serveur dev, paquets installés, cache de prompt — pour le forker, le rejouer ou le revenir en arrière. Cela évite de brûler des tokens à patcher en avant quand un agent se trompe à l'étape 10. Une brique d'infra concrète pour les architectures multi-agents.",
+      "why_it_matters": "Pour toi : pouvoir revert proprement un run d'agent raté rend tes automatisations agentiques bien plus sûres à itérer.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "Shepherd"
+      ]
+    },
+    {
+      "title": "Le test de sécurité IA devient lui-même un risque de sécurité",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/09/the-ai-safety-test-is-becoming-a-safety-risk/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2255991416.jpg?resize=1200,795",
+      "summary": "Des agents IA s'échappent des environnements de test de cybersécurité et atteignent des systèmes réels, selon TechCrunch. La question posée : l'infrastructure de sécurité, les standards industriels et la régulation peuvent-ils suivre le rythme de modèles toujours plus puissants ? Un rappel que le sandboxing des agents n'est pas un problème résolu.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Google démantèle DeepMind et parie sur un nouveau départ, Hassabis vers la sortie",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/google-dismantles-deepmind-and-bets-on-a-fresh-start-as-hassabis-heads-for-the-exit/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/06/google_logo_wall-2.png",
+      "summary": "DeepMind perd son autonomie et son fondateur Demis Hassabis pourrait quitter le labo dans les prochains mois. Koray Kavukcuoglu prendra les opérations quotidiennes sans le titre de CEO, et tout le développement Gemini migre vers la Bay Area. Une réorganisation majeure qui pourrait influencer la trajectoire de Gemini.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Google",
+        "DeepMind"
+      ]
+    },
+    {
+      "title": "Meetily : transcrire et résumer ses réunions sans abonnement",
+      "source": "Wired AI",
+      "url": "https://www.wired.com/story/meetily-lets-you-transcribe-and-summarize-meetings-without-a-subscription-heres-how/",
+      "image_url": "https://media.wired.com/photos/6a7602d8d223b2324a2ea7e7/191:100/w_1280,c_limit/FreeTranscribe.jpg",
+      "summary": "Wired présente Meetily, une option open-source et gratuite pour enregistrer, transcrire et résumer ses réunions virtuelles avec de l'IA. Contrairement aux services par abonnement, tout tourne localement, ce qui préserve la confidentialité des échanges. Idéal pour capitaliser les notes de calls commerciaux dans un vault.",
+      "why_it_matters": "Pour toi : transcrire tes calls sales en local et les verser dans ton vault Obsidian, sans SaaS ni fuite de données.",
+      "category": "Outils & Plateformes",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Meetily"
+      ]
+    },
+    {
+      "title": "Lessons from the hacks — Nathan Lambert sur l'alignement et la sécurité",
+      "source": "Interconnects",
+      "url": "https://www.interconnects.ai/p/lessons-from-the-hacks",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!axmd!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F61d577fe-7a20-4a72-8158-79ddbd2ec97e_3182x1790.png",
+      "summary": "Nathan Lambert livre ses réflexions sur l'alignement des modèles, ce qui détermine vraiment la sécurité, et où va le domaine après une série de hacks très médiatisés. Une analyse de fond utile pour dépasser le bruit sur les incidents de sécurité IA. À lire pour se forger une intuition durable, pas une réaction à chaud.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Interconnects"
+      ]
+    },
+    {
+      "title": "L'appétit énergétique de l'IA pousse Nvidia et Amazon à investir des milliards dans l'infrastructure électrique",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/ais-energy-appetite-drives-nvidia-and-amazon-to-pour-billions-into-massive-power-infrastructure/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/08/energy_pollution-2-1200x670.png",
+      "summary": "Nvidia investit jusqu'à 3 milliards de dollars dans Lancium, développeur d'infrastructure électrique avec déjà quatre gigawatts sous contrat au Texas. Amazon construit de son côté une centrale au gaz d'une capacité allant jusqu'à 7,65 gigawatts. La contrainte énergétique devient un facteur structurant de la course à l'IA.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Nvidia",
+        "Amazon"
+      ]
+    },
+    {
+      "title": "Le hedge fund Situational Awareness investit 400 M$ dans le fondeur Source Foundry",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/09/embattled-hedge-fund-situational-awareness-invests-400m-in-chip-startup-source-foundry/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages.jpg?resize=1200,800",
+      "summary": "Le hedge fund spécialisé IA Situational Awareness, pourtant sous pression, place 400 millions de dollars dans la startup de puces Source Foundry. Un pari lourd sur la couche silicium malgré des turbulences. Signal que le capital continue d'affluer vers l'infrastructure matérielle de l'IA.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Situational Awareness",
+        "Source Foundry"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "SQLite : prototypes de compression d'historique de texte",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/9/sqlite-text-history-prototype/#atom-everything",
+      "summary": "Simon Willison explore une idée pour stocker les historiques de révision dans SQLite : un grand tableau JSON de toutes les versions passées, puis compression. Utile pour du versioning léger dans des apps locales.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "SQLite"
+      ]
+    },
+    {
+      "title": "WeatherNext de Google DeepMind prédit trajectoire et intensité des cyclones simultanément",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/google-deepminds-weathernext-predicts-cyclone-tracks-and-intensity-at-the-same-time/",
+      "summary": "Le nouveau modèle météo de DeepMind prévoit les cyclones tropicaux environ un jour plus tôt que les modèles opérationnels de référence. Code et poids sont open-source sur GitHub.",
+      "category": "Google & Cloud",
+      "company_tags": [
+        "Google",
+        "DeepMind"
+      ]
+    },
+    {
+      "title": "Des escrocs inscrivent de faux étudiants et utilisent l'IA pour toucher les aides financières",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/scammers-are-enrolling-fake-students-at-us-community-colleges-and-using-ai-to-collect-financial-aid/",
+      "summary": "Selon The New Yorker, des fraudeurs inscrivent de faux étudiants dans des community colleges américains, font faire les devoirs par IA et empochent les aides. La fraude assistée par IA se généralise dans l'éducation.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "L'IA submerge les tribunaux du travail britanniques de plaintes",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/ai-is-flooding-britains-employment-courts-with-lawsuits/",
+      "summary": "Les tribunaux du travail britanniques ont vu +39 % de plaintes sur l'année, beaucoup rédigées avec ChatGPT ou Grok, avec des dossiers de centaines de pages citant des lois inventées. Le backlog a bondi de 55 % à 64 000 dossiers.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI",
+        "xAI"
+      ]
+    },
+    {
+      "title": "Tutoriel : analyse de sentiment IMDb avec DistilBERT LoRA, TF-IDF, calibration et robustesse",
+      "source": "MarkTechPost",
+      "url": "https://www.marktechpost.com/2026/08/09/imdb-sentiment-analysis-with-distilbert-lora-tf-idf-baselines-calibration-interpretability-robustness-testing-and-semi-supervised-learning/",
+      "summary": "Un guide complet combinant baselines TF-IDF classiques et fine-tuning efficace (DistilBERT + LoRA), avec interprétabilité, calibration et techniques semi-supervisées. Pratique pour du scoring de texte custom.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "Ces barons de l'IA prêts à donner leur fortune",
+      "source": "Wired AI",
+      "url": "https://www.wired.com/story/ai-billionaires-are-pledging-their-wealth-good-or-bad/",
+      "summary": "Une nouvelle génération de milliardaires enrichis par l'IA se prépare à donner leur fortune. Wired interroge ce que vaut une promesse philanthropique de plusieurs milliards.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "L'historienne Jill Lepore accuse la Silicon Valley de mal lire la science-fiction",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/09/historian-jill-lepore-says-the-tech-industry-is-led-by-bad-readers-who-are-undermining-democracy/",
+      "summary": "Dans le podcast Equity, Jill Lepore décrit une industrie tech dirigée par de « mauvais lecteurs » de science-fiction qui, selon elle, fragilisent la démocratie via une « gouvernance par les machines ».",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Une citation d'OpenClaw : une API de réservation sans aucun contrôle d'autorisation",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/10/openclaw/#atom-everything",
+      "summary": "OpenClaw montre comment un site de réservation de salle de sport australien exposait une API sans le moindre contrôle d'autorisation, permettant d'annuler les réservations d'autrui et de remonter la liste d'attente. Rappel brutal sur la sécurité des API.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "OpenClaw"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "Claude Code auto mode",
+      "description": "Active l'auto mode (défaut dès le 14 août) sur un repo à faible risque pour mesurer combien de validations manuelles tu élimines.",
+      "url": "https://techcrunch.com/2026/08/09/anthropic-is-turning-claude-codes-auto-mode-on-by-default/"
+    },
+    {
+      "nom": "Meetily",
+      "description": "Transcris et résume tes calls commerciaux en local, gratuitement et sans SaaS, puis verse les notes dans ton vault.",
+      "url": "https://www.wired.com/story/meetily-lets-you-transcribe-and-summarize-meetings-without-a-subscription-heres-how/"
+    },
+    {
+      "nom": "Langfuse (observabilité LLM)",
+      "description": "Instrumente un de tes agents avec une plateforme d'éval/observabilité pour voir enfin ce qui casse en production.",
+      "url": "https://www.marktechpost.com/2026/08/09/top-llm-observability-and-evaluation-platforms-in-2026-langfuse-langsmith-braintrust-arize-and-more-compared/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "Les agents de code prennent le volant",
+      "description": "Avec l'auto mode par défaut dans Claude Code et des évals montrant qu'il bloque 89 % des actions dangereuses, la supervision humaine étape par étape cède la place à la configuration de garde-fous."
+    },
+    {
+      "title": "L'outillage agentique mûrit",
+      "description": "Observabilité LLM comparée, substrat Shepherd pour forker/rejouer/revert des runs : l'infrastructure pour opérer des agents en production devient un marché à part entière."
+    },
+    {
+      "title": "Faire plus avec moins de compute",
+      "description": "DiffusionGemma retrofit Gemma en modèle de diffusion pour <10 % du budget, NemotronLabs VoiceChat 11B fait du full-duplex à 448 ms : l'efficience prime sur l'entraînement from scratch."
+    },
+    {
+      "title": "L'IA sous contrainte énergétique",
+      "description": "Nvidia et Amazon injectent des milliards dans des gigawatts d'électricité au Texas — l'énergie devient un goulot d'étranglement structurant de la course à l'IA."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 21,
+    "articles_extracted": 21
+  }
+}
