@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "27956535329",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "27956535329",
-    "summary": "Task routing error: received task_id 27956535329 intended for Nexus agent (Google Ads audit) and Dispatch agent (report cleanup). Researcher agent is ",
-    "next_actions": [],
-    "timestamp": "2026-06-22T13:39:50.153616+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "failed"
-      }
-    ],
-    "report_file": "reports/2026-06-22-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "28013687648",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-06-23",
@@ -1611,5 +1592,32 @@
     "timestamp": "2026-08-11T05:25:55.910026+00:00",
     "agents": [],
     "report_file": "reports/2026-08-11-email-agent-daily-digest-2026-08-11.md"
+  },
+  {
+    "run_id": "31475063846",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "31475063846",
+    "summary": "Aucune tâche d'implémentation concrète n'était fournie dans /tmp/agent_task.json (input: 'See task in context', prior researcher déjà en needs_retry p · Task file incomplete. No research query provided. The task JSON references 'See task in context' ",
+    "next_actions": [
+      "Dispatch/Sage : augmenter --max-turns du step dispatch dans orchestrator.yml (8 → ~12-15)",
+      "Dispatch : ajouter un garde-fou pour que researcher/analyzer/coder skip proprement (status: skipped) si /tmp/dispatch_plan.json est absent, au lieu de consommer un run complet",
+      "Ne pas relancer Forge tant qu'un dispatch_plan.json valide n'a pas été produit"
+    ],
+    "timestamp": "2026-08-11T08:58:43.208060+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "needs_retry"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-08-11-orchestrator-scheduled-run.md"
   }
 ]
