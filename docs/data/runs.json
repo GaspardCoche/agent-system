@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "28022091905",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "28022091905",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-06-23T11:22:47.511595+00:00",
-    "agents": [],
-    "report_file": "reports/2026-06-23-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "28086103675",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-06-24",
@@ -1619,5 +1605,28 @@
     "timestamp": "2026-08-12T05:51:45.149220+00:00",
     "agents": [],
     "report_file": "reports/2026-08-12-email-agent-daily-digest-2026-08-12.md"
+  },
+  {
+    "run_id": "31581552569",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "31581552569",
+    "summary": "Task routing issue detected. Lumen (analysis agent) received task referencing Forge agent with minimal context. No data available for analysis. Awaiti · Task JSON contains dispatch instruction for 'forge' agent, not a research query. Input 'See task ",
+    "next_actions": [],
+    "timestamp": "2026-08-12T09:15:52.409427+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "pending_approval"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-08-12-orchestrator-scheduled-run.md"
   }
 ]
