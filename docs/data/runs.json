@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "28164341506",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "28164341506",
-    "summary": "Analysé 5 runs échoués (2026-06-18 à 2026-06-22). Identifié 3 patterns critiques : (1) race condition git detached HEAD sur docs/data/runs.json lors d",
-    "next_actions": [],
-    "timestamp": "2026-06-25T10:47:37.158071+00:00",
-    "agents": [
-      {
-        "name": "lumen",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-06-25-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "28227066472",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-06-26",
@@ -1624,5 +1605,36 @@
     "timestamp": "2026-08-14T05:50:02.385567+00:00",
     "agents": [],
     "report_file": "reports/2026-08-14-email-agent-daily-digest-2026-08-14.md"
+  },
+  {
+    "run_id": "31786510506",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "31786510506",
+    "summary": "Aucune tâche de code exploitable trouvée dans /tmp/agent_task.json — le champ input pour le rôle forge était le placeholder 'See task in context' sans · 30 points de données analysés. 6 insights identifiés. 1 critique (KPI dashboard), 2 moyens, 2 opp",
+    "next_actions": [
+      "Dispatch/orchestrator doit fournir une description concrète du travail attendu avant de router vers forge",
+      "Si l'origine est une issue GitHub, vérifier que son corps contient bien la demande et que dispatch_agent.py la propage dans task.json",
+      "Si ce run est un test/health-check automatisé du pipeline, envisager de le distinguer des vrais dispatches pour éviter de solliciter forge inutilement"
+    ],
+    "timestamp": "2026-08-14T09:11:29.296251+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "needs_retry"
+      },
+      {
+        "name": "lumen",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_input"
+      }
+    ],
+    "report_file": "reports/2026-08-14-orchestrator-scheduled-run.md"
   }
 ]
