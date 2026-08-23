@@ -1,0 +1,173 @@
+{
+  "date": "2026-08-23",
+  "headline": "Les skills et le harness des agents : la vraie bataille n'est plus le modèle",
+  "one_liner": "Journée calme côté modèles, mais un signal fort pour les builders : ce qui fait progresser les agents, ce sont les workflows structurés (skills) et le harness — pas seulement des poids plus gros.",
+  "top_story": {
+    "title": "Study explains why AI agents benefit from \"skills\" and when they fail",
+    "source": "The Decoder",
+    "url": "https://the-decoder.com/study-explains-why-ai-agents-benefit-from-skills-and-when-they-fail/",
+    "image_url": "https://the-decoder.com/wp-content/uploads/2026/08/Agent-Skill-Pick-1200x670.png",
+    "summary": "Une étude de Princeton et UC San Diego montre que les \"skills\" améliorent surtout les agents via des workflows structurés, et non par un simple ajout de connaissances. Le revers : plus la bibliothèque de skills grossit, plus l'agent peine à trouver le bon jeu d'instructions au bon moment. Autrement dit, empiler des skills sans discipline de sélection dégrade la performance au lieu de l'augmenter. Pour quiconque construit des agents en production, cela déplace l'effort d'ingénierie du \"contenu\" vers le routage et la découverte des instructions. C'est une confirmation empirique de ce que ressentent déjà les équipes qui gèrent des dizaines de skills/MCP.",
+    "why_it_matters": "Pour toi : avec ton stack Claude Code + MCP + skills/registry.json, ce résultat justifie d'investir dans le routage et le tri des skills validés plutôt que d'en multiplier le nombre.",
+    "category": "Recherche",
+    "company_tags": [
+      "Princeton",
+      "UC San Diego"
+    ]
+  },
+  "articles": [
+    {
+      "title": "The Evolution of the Agent Harness",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/attention-interface",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!bUv7!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F758de9a0-631f-43a0-a331-fd871432a60b_1280x720.png",
+      "summary": "Dan McAteer défend l'idée que les modèles absorbent progressivement le harness dans leurs poids : ce qui était de la plomberie externe (outils, boucles, mémoire) devient natif. À terme, le vrai harness ne sera plus celui du modèle mais celui de l'attention humaine. Pour les builders, cela veut dire concevoir dès maintenant des architectures qui survivront à l'internalisation de ces couches.",
+      "why_it_matters": "Pour toi : évite de sur-investir dans du scaffolding jetable — mise sur la logique métier et l'orchestration que le modèle n'absorbera pas.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "Latent Space"
+      ]
+    },
+    {
+      "title": "More than just code review",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/22/more-than-just-code-review/",
+      "image_url": "",
+      "summary": "Simon Willison rappelle que la compétence clé pour tirer parti des agents de code n'est pas de tout relire ligne par ligne, mais de savoir instruire avec précision puis vérifier que le changement a bien été appliqué comme voulu. La revue de code n'est qu'une facette d'un travail plus large de cadrage et de validation. Un cadre mental utile pour industrialiser le développement assisté.",
+      "why_it_matters": "Pour toi : formalise des checklists de vérification dans tes agents Forge/Sentinel plutôt que de compter sur une relecture exhaustive.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": []
+    },
+    {
+      "title": "llm 0.33",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/22/llm/",
+      "image_url": "",
+      "summary": "Nouvelle version de l'outil CLI llm : passage à la librairie OpenAI Python 3.x et bascule du client HTTP de httpx vers httpx2. Les commandes llm embed et llm embed-multi (ainsi que les méthodes Python associées) acceptent désormais --key / key= pour passer une clé par appel sans modifier l'état partagé du modèle. Un correctif plus complet que le hotfix 0.32.1 de la veille.",
+      "why_it_matters": "Pour toi : utile pour tes pipelines d'enrichissement et de RAG local où tu jongles avec plusieurs clés d'embeddings.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Inherent, founded by DeepMind alumni, says its AI 'teammate' just outperformed Anthropic and OpenAI at replicating research",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/22/inherent-founded-by-deepmind-alumni-says-its-ai-teammate-just-outperformed-anthropic-and-openai-at-replicating-research/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/08/inherent-labs-cofounders-credit-Anna-Gordon.jpeg?resize=1200,800",
+      "summary": "Le labo britannique Inherent, fondé par d'anciens de DeepMind, présente Faraday, un agent capable de répliquer des articles scientifiques mieux qu'Anthropic et OpenAI sur ce test précis. La réplication de recherche est vue comme un tremplin vers l'innovation automatisée. Un nouvel entrant qui vise les agents \"coéquipiers\" spécialisés plutôt que les modèles généralistes.",
+      "why_it_matters": "Pour toi : signal que des agents verticaux très spécialisés peuvent battre les généralistes sur des tâches ciblées — pertinent pour tes agents métier.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Inherent",
+        "DeepMind",
+        "Anthropic",
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "[AINews] 10% worse, 100x cheaper, 10000x faster: Why Simulation is taking over",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/ainews-10-worse-100x-cheaper-10000x",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!Vw9p!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc661e612-544b-4eaa-9603-78e5f28276b7_1956x1228.png",
+      "summary": "Le roundup AINews argumente que la simulation gagne du terrain : des modèles \"10% moins bons\" mais 100x moins chers et 10000x plus rapides suffisent à changer l'équation économique, y compris pour l'auto-amélioration récursive (RSI). La qualité brute cède du terrain au rapport coût/vitesse à grande échelle. Un déplacement de priorité à surveiller dans le choix des modèles.",
+      "why_it_matters": "Pour toi : arbitre tes agents non plus sur la seule qualité mais sur le triptyque coût/latence/qualité — souvent un modèle plus rapide et moins cher gagne en volume.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Latent Space"
+      ]
+    },
+    {
+      "title": "Netflix tests language model as alternative to hand-built recommendation logic",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/netflix-tests-language-model-as-alternative-to-hand-built-recommendation-logic/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/07/netflix_logo.png",
+      "summary": "Netflix a opposé son moteur de recommandation historique à un modèle de langage maison, GenRec, et obtient de meilleurs résultats. Plutôt que des milliers de features codées à la main, GenRec convertit le comportement de visionnage en texte brut. Netflix reste prudent (\"étape précoce mais prometteuse\") mais le signal est clair sur le remplacement des systèmes de reco classiques.",
+      "why_it_matters": "Pour toi : la même logique s'applique au scoring ICP et au ciblage — remplacer des features manuelles par des représentations textuelles nourries à un LLM.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Netflix"
+      ]
+    },
+    {
+      "title": "OpenAI says California should strengthen its AI safety bill",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/22/openai-says-california-should-strengthen-its-ai-safety-bill/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2263890424.jpg?w=1024",
+      "summary": "OpenAI appelle désormais la Californie à renforcer SB 53, un texte de sécurité IA que l'entreprise avait auparavant combattu. Ce revirement illustre le repositionnement des grands labos sur la régulation. À suivre pour ses effets sur les obligations de transparence et de conformité des acteurs IA.",
+      "category": "Regulation & Ethique",
+      "importance": "worth_noting",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Quoting Linus Torvalds",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Aug/22/linus-torvalds/",
+      "image_url": "",
+      "summary": "Linus Torvalds raconte une session de debug \"infernale\" largement facilitée par une IA qui a abattu le gros du travail — tout en abandonnant plusieurs fois, la déclarant impossible avant de repartir sous sa pression. Son constat : l'IA aide énormément mais manque de ténacité et a besoin d'un humain obstiné qui la relance. Une anecdote parlante sur le rôle réel de l'humain dans le duo.",
+      "why_it_matters": "Pour toi : la persévérance et le cadrage humains restent le facteur limitant — tes agents ont besoin de boucles de relance explicites.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": []
+    }
+  ],
+  "extended": [
+    {
+      "title": "Frontier AI labs still won't say how they'd contain a rogue model",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/08/22/frontier-ai-labs-still-wont-say-how-theyd-contain-a-rogue-model/",
+      "summary": "Une étude constate que les grands labos IA n'ont quasiment aucun plan public documenté pour contenir un modèle devenu incontrôlable, malgré des comportements de plus en plus imprévisibles. La question de la préparation reste ouverte.",
+      "category": "Regulation & Ethique",
+      "company_tags": []
+    },
+    {
+      "title": "World models that ignore human beliefs predict the wrong actions, new research shows",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/world-models-that-ignore-human-beliefs-predict-the-wrong-actions-new-research-shows/",
+      "summary": "Les world models type Sora ou Genie ne simulent que la physique et ignorent ce que pensent les humains. Le framework \"Mental World Modeling\" ajoute des variables mentales (croyances, intentions) et permet même à des modèles plus faibles de dépasser des modèles plus forts sans cette modélisation.",
+      "category": "Recherche",
+      "company_tags": []
+    },
+    {
+      "title": "The Unlikely Place at the Center of China's AI Boom",
+      "source": "Wired AI",
+      "url": "https://www.wired.com/story/the-unlikely-place-at-the-center-of-chinas-ai-boom/",
+      "summary": "Énergie bon marché, terrains abondants et proximité de Pékin ont transformé une ville de Mongolie-Intérieure en hub crucial de data centers pour l'IA chinoise. Un éclairage sur la géographie physique de la course à l'IA.",
+      "category": "Tech & Business",
+      "company_tags": []
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "llm 0.33",
+      "description": "Mets à jour le CLI llm et teste --key sur llm embed / llm embed-multi pour passer une clé d'embeddings par appel sans toucher à l'état partagé — pratique pour tes pipelines RAG et d'enrichissement.",
+      "url": "https://simonwillison.net/2026/Aug/22/llm/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "Le harness et les skills passent devant le modèle",
+      "description": "Deux sources indépendantes (étude Princeton/UCSD sur les skills, essai Latent Space sur le harness) convergent : la valeur se déplace du modèle brut vers l'orchestration, le routage des instructions et le scaffolding — jusqu'à ce que les modèles l'absorbent."
+    },
+    {
+      "title": "Coût et vitesse plutôt que qualité maximale",
+      "description": "La logique \"un peu moins bon mais radicalement moins cher et plus rapide\" (simulation, GenRec de Netflix) gagne du terrain dans les choix d'architecture à l'échelle."
+    },
+    {
+      "title": "La régulation IA se durcit, y compris à la demande des labos",
+      "description": "OpenAI qui pousse à renforcer SB 53 et l'absence de plans de confinement des modèles rogue montrent une pression croissante sur la gouvernance et la transparence."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 20,
+    "articles_extracted": 15
+  }
+}
