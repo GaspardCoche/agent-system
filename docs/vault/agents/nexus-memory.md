@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-07-20
+updated: 2026-08-24
 ---
 
 # Nexus — Mémoire & Patterns
@@ -57,6 +57,9 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-08-24 | weekly_audit (dry_run) | 20/100 (estimé) | Template — credentials_ok=false (16e run consécutif) — BLOCAGE 153 jours — Score dégradé 23→20 — Comment posté sur issue #185 | #32706895798 |
+| 2026-08-17 | weekly_audit (dry_run) | 23/100 (estimé, non persisté) | Template — credentials_ok=false (15e run, 146j) — Run marqué **failed** avant la sauvegarde vault (commentaire #185 posté mais docs/vault/ jamais mis à jour ce jour-là) | #32010508378 |
+| 2026-08-10 | weekly_audit (dry_run) | -- (non persisté) | Template — credentials_ok=false — Run marqué **failed**, aucune trace dans le vault ni sur l'issue #185 | #31372856139 |
 | 2026-08-03 | weekly_audit (dry_run) | 26/100 (estimé) | Template — credentials_ok=false (14e run consécutif) — BLOCAGE 132 jours — Score dégradé 29→26 — Issue de suivi #185 déjà ouverte | #30808430148 |
 | 2026-07-20 | weekly_audit (dry_run) | 29/100 (estimé) | Template — credentials_ok=false (13e run consécutif) — BLOCAGE 118 jours — Score dégradé 32→29 | #29735692386 |
 | 2026-07-06 | weekly_audit (dry_run) | 32/100 (estimé) | Template — credentials_ok=false (12e run consécutif) — BLOCAGE 104 jours — Score dégradé 35→32 | #28789500762 |
@@ -78,7 +81,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Erreur | Résolution |
 |------|--------|-----------|
-| — | — | — |
+| 2026-08-10 / 2026-08-17 | Run marqué `status: failed` dans `docs/reports/` — l'agent a probablement dépassé `--max-turns 12` ou plante après avoir posté le commentaire sur l'issue #185 mais avant d'écrire `docs/vault/`. Perte silencieuse de deux semaines de mémoire. | Non résolu — recommandation : réduire le travail par run (éviter re-lecture complète du vault + calculs redondants) ou augmenter `--max-turns` dans `nexus.yml`. |
 
 ---
 
@@ -95,8 +98,18 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 - [ ] Configurer les 4 secrets Google Ads (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN)
 - [ ] Relancer après configuration pour obtenir un audit réel
 - [ ] Audit hebdo : chaque lundi 6h UTC (à configurer dans nexus.yml)
+- [ ] Investiguer les 2 runs `failed` consécutifs (08-10, 08-17) pour éviter une nouvelle perte de mémoire vault
 
 ## Note escalade CRITIQUE
+
+> 2026-08-24 : **16e run consécutif en template mode** (2026-03-24 → 2026-08-24).
+> Nexus bloqué depuis **153 jours**. 0 audit réel exécuté. Score dégradé (estimé) : 58/100 → ... → 26/100 → 23/100 → 20/100.
+> Nouveau constat : les runs des 2026-08-10 et 2026-08-17 se sont terminés en `status: failed` (voir `docs/reports/`) — le run du 08-17 a réussi à commenter l'issue #185 avant d'échouer, mais **aucun des deux n'a persisté ses apprentissages dans `docs/vault/`**. Ce fichier reprend donc le fil directement depuis le run du 2026-08-03 pour la continuité du score.
+> ⛔ Le gating `needs: [check-credentials]` recommandé depuis le run #11 (2026-06-22, 90 jours) n'est **toujours pas implémenté** dans `nexus.yml` (vérifié dans le workflow au 2026-08-24) — le job complet (agent Claude + commit vault) continue de s'exécuter chaque lundi malgré l'absence connue des secrets.
+> Action prioritaire (inchangée depuis 6 mois) : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
+> Action Forge (toujours en attente, ~9 semaines après la 1ère demande) : ajouter `needs: [check-credentials]` dans `nexus.yml`.
+> Action Forge (nouvelle, 2026-08-24) : investiguer pourquoi les runs 08-10 et 08-17 échouent en `status: failed` — probable dépassement de `--max-turns 12` ou erreur silencieuse après le commentaire GitHub.
+> Score estimé après déblocage + optimisations : ~72/100.
 
 > 2026-08-03 : **14e run consécutif en template mode** (2026-03-24 → 2026-08-03).
 > Nexus bloqué depuis **132 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → ... → 29/100 → 26/100.
@@ -104,29 +117,6 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 > ⛔ Le gating `needs: [check-credentials]` recommandé depuis le run #11 (2026-06-22, 90 jours) n'est **toujours pas implémenté** dans `nexus.yml` — le workflow exécute encore le pre-flight + l'agent complet chaque lundi malgré l'absence connue des secrets.
 > Action prioritaire (inchangée) : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
 > Action Forge (toujours en attente, 6 semaines après la 1ère demande) : ajouter `needs: [check-credentials]` dans `nexus.yml`.
-> Score estimé après déblocage + optimisations : ~72/100.
-
-> 2026-07-20 : **13e run consécutif en template mode** (2026-03-24 → 2026-07-20).
-> Nexus bloqué depuis **118 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → ... → 32/100 → 29/100.
-> ⛔ Les recommandations de suspension/guard sur `nexus.yml` formulées le 2026-06-22 (90 jours) et 2026-07-06 (104 jours) n'ont **toujours pas été appliquées**. Ce run consomme à nouveau un cycle CI complet pour un template identique.
-> Action prioritaire : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
-> Action Forge (toujours en attente) : ajouter `needs: [check-credentials]` dans `nexus.yml` pour skip le job entier si credentials absents.
-> Score estimé après déblocage + optimisations : ~72/100.
-
-> 2026-07-06 : **12e run consécutif en template mode** (2026-03-24 → 2026-07-06).
-> Nexus bloqué depuis **104 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → 42/100 → 38/100 → 35/100 → 32/100.
-> ⛔ La recommandation de suspension de `nexus.yml` formulée le 2026-06-22 (90 jours de blocage) n'a **toujours pas été appliquée** deux semaines plus tard. Chaque run hebdomadaire continue de consommer un run CI complet pour produire un template identique.
-> Action prioritaire : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
-> Action Forge : Modifier nexus.yml pour skip + créer/rafraîchir une issue de suivi automatique si credentials_ok=false, au lieu de relancer le plein cycle chaque semaine.
-> Amélioration suggérée : ajouter step `needs: [check-credentials]` qui skip le job entier si credentials absents — économise tokens et runs.
-> Score estimé après déblocage + optimisations : ~72/100.
-
-> 2026-06-22 : **11e run consécutif en template mode** (2026-03-24 → 2026-06-22).
-> Nexus bloqué depuis **90 jours**. 0 audit réel exécuté. Score dégradé : 58/100 → 42/100 → 38/100 → 35/100.
-> ⛔ SEUIL CRITIQUE DÉPASSÉ : Suspendre nexus.yml immédiatement pour éviter les runs inutiles.
-> Action prioritaire : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
-> Action Forge : Modifier nexus.yml pour skip + créer issue auto si credentials_ok=false.
-> Amélioration suggérée : ajouter step `needs: [check-credentials]` qui skip le job entier si credentials absents — économise tokens et runs.
 > Score estimé après déblocage + optimisations : ~72/100.
 
 ---
