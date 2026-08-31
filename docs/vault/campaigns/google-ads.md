@@ -4,7 +4,7 @@ id: campaigns-google-ads
 type: campaigns
 tags: [google-ads, nexus, marketing, roas, emasphere]
 agents: [nexus]
-updated: 2026-07-20
+updated: 2026-08-31
 ---
 
 # Google Ads -- Etat des Campagnes
@@ -38,14 +38,14 @@ updated: 2026-07-20
 
 | Metrique | Valeur | Objectif | Statut |
 |----------|--------|---------|--------|
-| Score global | 26/100 | 80/100 | Critique — 14e run template consecutif, degradation continue |
+| Score global | 17/100 | 80/100 | Critique — 17e run template consecutif, degradation continue |
 | ROAS | -- | > 3x | -- |
 | CTR moyen | -- | > 3% | -- |
 | Quality Score | -- | >= 7/10 | -- |
 | CPA | -- | -- | -- |
 | Budget mensuel | -- | -- | -- |
 
-*Note : Score 26/100 base sur audit template (compte non configure -- ajouter secrets Google Ads). Degradation continue depuis le 2026-03-24 (58 -> 42 -> 38 -> 35 -> 32 -> 29 -> 26) faute de credentials. Issue de suivi : #185. Voir [[agents/nexus-memory]] pour le detail des 14 runs consecutifs bloques (132 jours).*
+*Note : Score 17/100 base sur audit template (compte non configure -- ajouter secrets Google Ads). Degradation continue depuis le 2026-03-24 (58 -> 42 -> 38 -> 35 -> 32 -> 29 -> 26 -> 23 -> 20 -> 17) faute de credentials. Issue de suivi : #185. Voir [[agents/nexus-memory]] pour le detail des 17 runs consecutifs bloques (160 jours).*
 
 ---
 

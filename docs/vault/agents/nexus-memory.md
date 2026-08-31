@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-08-31 | weekly_audit (dry_run) | 17/100 (estimé) | Template — credentials_ok=false (17e run consécutif) — BLOCAGE 160 jours — Score dégradé 20→17 — Comment posté sur issue #185 | #33409211710 |
 | 2026-08-24 | weekly_audit (dry_run) | 20/100 (estimé) | Template — credentials_ok=false (16e run consécutif) — BLOCAGE 153 jours — Score dégradé 23→20 — Comment posté sur issue #185 | #32706895798 |
 | 2026-08-17 | weekly_audit (dry_run) | 23/100 (estimé, non persisté) | Template — credentials_ok=false (15e run, 146j) — Run marqué **failed** avant la sauvegarde vault (commentaire #185 posté mais docs/vault/ jamais mis à jour ce jour-là) | #32010508378 |
 | 2026-08-10 | weekly_audit (dry_run) | -- (non persisté) | Template — credentials_ok=false — Run marqué **failed**, aucune trace dans le vault ni sur l'issue #185 | #31372856139 |
@@ -101,6 +102,13 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 - [ ] Investiguer les 2 runs `failed` consécutifs (08-10, 08-17) pour éviter une nouvelle perte de mémoire vault
 
 ## Note escalade CRITIQUE
+
+> 2026-08-31 : **17e run consécutif en template mode** (2026-03-24 → 2026-08-31).
+> Nexus bloqué depuis **160 jours**. 0 audit réel exécuté. Score dégradé (estimé) : 58/100 → ... → 20/100 → 17/100.
+> Gating `needs: [check-credentials]` toujours absent de `nexus.yml` (vérifié au 2026-08-31, ~10 semaines après la 1ère demande) — le job complet continue de tourner chaque lundi pour rien.
+> Action prioritaire (inchangée depuis 5+ mois) : Configurer les 4 secrets GitHub (DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN).
+> Action Forge (toujours en attente) : ajouter `needs: [check-credentials]` dans `nexus.yml`.
+> Score estimé après déblocage + optimisations : ~72/100.
 
 > 2026-08-24 : **16e run consécutif en template mode** (2026-03-24 → 2026-08-24).
 > Nexus bloqué depuis **153 jours**. 0 audit réel exécuté. Score dégradé (estimé) : 58/100 → ... → 26/100 → 23/100 → 20/100.
