@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "29244561224",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "29244561224",
-    "summary": "Task was incomplete. The /tmp/agent_task.json file references a Forge agent task with 'See task in context' but no actual research query was provided.",
-    "next_actions": [],
-    "timestamp": "2026-07-13T11:04:26.160733+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "failed"
-      }
-    ],
-    "report_file": "reports/2026-07-13-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "29311118091",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-07-14",
@@ -1632,5 +1613,31 @@
     "timestamp": "2026-09-01T09:30:32.840698+00:00",
     "agents": [],
     "report_file": "reports/2026-09-01-email-agent-daily-digest-2026-09-01.md"
+  },
+  {
+    "run_id": "33511180972",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "33511180972",
+    "summary": "No concrete implementation task was attached to this run. This is a scheduled 'Orchestrator' cron dispatch (Mon-Fri 08:00) with description='Scheduled · Task file is incomplete. No research query provided. The task JSON references a 'forge' agent but",
+    "next_actions": [
+      "Sage: consider updating agent_prompts/orchestrator.md so schedule-triggered runs without a real backlog item short-circuit to a no-op/health-check instead of chaining researcher->analyzer->coder.",
+      "If there IS a real backlog task intended for this run, it needs to be supplied explicitly (issue label 'agent', or a concrete task_description via workflow_dispatch)."
+    ],
+    "timestamp": "2026-09-01T13:11:05.669834+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_clarification"
+      }
+    ],
+    "report_file": "reports/2026-09-01-orchestrator-scheduled-run.md"
   }
 ]
