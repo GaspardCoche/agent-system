@@ -1,0 +1,370 @@
+{
+  "date": "2026-09-02",
+  "headline": "Anthropic dégaine Fable 5.1 : plus fort, jusqu'à 45 % moins cher pour les agents",
+  "one_liner": "Le nerf de la guerre n'est plus la performance brute mais le coût par run agentique — et Anthropic, Google et OpenAI cassent tous leurs prix le même jour.",
+  "top_story": {
+    "title": "Anthropic lance Claude Fable 5.1 et Mythos 5.1, jusqu'à 45 % moins cher pour le travail agentique",
+    "source": "The Verge AI",
+    "url": "https://www.theverge.com/ai-artificial-intelligence/987830/anthropic-claude-fable-mythos-5-1",
+    "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKB364_CLAUDE_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+    "summary": "Anthropic sort Claude Fable 5.1 et Mythos 5.1, ses modèles les plus capables, en répondant frontalement aux trois griefs de ses clients : prix, rétention des données et garde-fous trop zélés. Fable 5.1 dépasse Fable 5 tout en coûtant environ 25 % de moins en usage courant et jusqu'à 45 % de moins sur les runs longs et autonomes chargés d'appels d'outils, selon TechCrunch et The Decoder. Sur le terrain technique, le modèle double le score de son prédécesseur sur Terminal-Bench-Science (52,6 %) et améliore le coding agentique de plus de 30 %. La bascule tarifaire est structurelle : Latent Space relève une baisse de 75 % du prix du cache, compensée par 70 % de tokens de sortie en plus, ce qui redessine complètement l'économie d'un agent long. C'est le lancement qui va le plus vite se répercuter sur les factures des builders.",
+    "why_it_matters": "Pour toi : tes agents GitHub Actions et tes runs Claude Code longue durée deviennent nettement moins chers — recalcule ton budget tokens et teste Fable 5.1 sur tes pipelines cette semaine.",
+    "category": "Modeles",
+    "company_tags": [
+      "Anthropic",
+      "Claude"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Claude Fable/Mythos 5.1 : nouveau SOTA, cache -75 % mais +70 % de tokens de sortie",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/ainews-claude-fablemythos-51-new",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!-NFa!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F__ss-rehost__tw-video-preview-13_2094843261470793728.jpg",
+      "summary": "Le décryptage d'ingénierie de la sortie Fable/Mythos 5.1 : au-delà du SOTA, c'est l'économie du modèle qui change. La baisse de 75 % du prix du cache favorise massivement les architectures RAG et les agents à contexte réutilisé, mais le modèle génère 70 % de tokens de sortie en plus, ce qui peut annuler l'économie sur les tâches verbeuses. Le vrai gain se situe donc sur les workflows où le prompt est stable et la sortie concise.",
+      "why_it_matters": "Pour toi : avec ton RAG local et ton vault Obsidian réutilisés à chaque run, la coupe de 75 % sur le cache est exactement le levier de coût qui te concerne — surveille juste l'explosion des tokens de sortie.",
+      "category": "Modeles",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Claude"
+      ]
+    },
+    {
+      "title": "datasette-mcp 0.2 : execute_sql renvoie désormais des objets, pas des tableaux",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/1/datasette-mcp/",
+      "image_url": "",
+      "summary": "Première release non-alpha du serveur MCP datasette : execute_sql renvoie maintenant un tableau d'objets (clé/valeur) au lieu d'un tableau de tableaux, ce qui évite aux modèles plus faibles de perdre le mapping colonne/valeur. Dépend désormais de mcp >= 2.1.1. Un détail d'ergonomie qui améliore concrètement la fiabilité des requêtes SQL pilotées par agent.",
+      "why_it_matters": "Pour toi : si tu exposes tes données d'enrichissement ou de scoring ICP via un MCP, ce pattern « objets plutôt que tableaux positionnels » réduit directement les erreurs de tes agents.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "Datasette",
+        "MCP"
+      ]
+    },
+    {
+      "title": "@huggingface/kernels : 200+ kernels WebGPU pour l'IA locale",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/webgpu-kernels",
+      "image_url": "https://huggingface.co/blog/assets/webgpu-kernels/thumbnail.png",
+      "summary": "Hugging Face publie une librairie de plus de 200 kernels WebGPU pour faire tourner de l'inférence IA directement dans le navigateur, sans backend. C'est une brique clé pour des apps IA locales, privées et sans coût serveur. Le pari : rapprocher le calcul de l'utilisateur pour la latence et la confidentialité.",
+      "why_it_matters": "Pour toi : un chemin crédible pour prototyper des outils IA côté client (démo, scoring léger) sans exposer de données ni payer d'inférence cloud.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "Gemini passe à l'analyse vidéo agentique et coupe jusqu'à 88 % de tokens",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/google-geminis-new-agent-based-video-analysis-cuts-token-usage-by-up-to-88-percent/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/gemini-agentic-video-01-hero.jpg",
+      "summary": "Google ajoute l'analyse vidéo agentique à Gemini 3.7 Flash, 3.6 Flash et 3.5 Flash-Lite : au lieu de scanner la vidéo image par image à cadence fixe, le modèle choisit lui-même quels segments examiner et à quelle résolution. Résultat annoncé : jusqu'à 88 % de tokens en moins, avec une meilleure précision. Le même principe « l'agent décide où regarder » migre du texte vers le multimodal.",
+      "why_it_matters": "Pour toi : la même logique agentique qui coupe 88 % de tokens en vidéo s'applique à tes gros contextes délégués à Gemini — un signal fort pour tes pipelines d'analyse de fichiers lourds.",
+      "category": "Modeles",
+      "importance": "important",
+      "company_tags": [
+        "Google",
+        "Gemini"
+      ]
+    },
+    {
+      "title": "Anthropic ouvre la détection de texte Claude aux régulateurs, médias et fact-checkers",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-opens-claude-ai-text-detection-to-regulators-media-fact-checkers-and-others/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/08/Claude-Watermark.png",
+      "summary": "Anthropic lance une API qui permet de vérifier si un texte porte le watermark numérique de Claude, à destination des régulateurs, médias et chercheurs. L'EU AI Act impose désormais des filigranes invisibles dans le texte généré par IA. Des critiques préviennent que la technique peut dégrader la qualité du texte et créer des angles morts de transparence.",
+      "why_it_matters": "Pour toi : si tu produis du contenu outbound ou marketing assisté par Claude, comprends que ce contenu est désormais détectable — un enjeu de conformité et de perception à intégrer.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "Anthropic",
+        "Claude"
+      ]
+    },
+    {
+      "title": "OpenAI Astra arrive — et excelle à s'introduire dans les systèmes informatiques",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/open-ais-astra-model-is-on-the-way-and-very-good-at-breaking-into-computer-systems/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/05/openai-logo-code-background.jpg?resize=1200,798",
+      "summary": "OpenAI dévoile les précautions prises avant la sortie d'Astra, premier modèle à franchir le seuil de capacité « Critique » en cybersécurité de son Preparedness Framework. Le développement d'un autre modèle a même été retardé après le hack de Hugging Face pour renforcer la sécurité. La frontière offensive des LLM devient un vrai sujet produit, pas seulement de recherche.",
+      "why_it_matters": "Pour toi : un LLM capable d'exploiter des systèmes change la donne pour la sécurité de tes intégrations CRM/outbound automatisées — durcis tes accès et tes secrets.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "« PRs NOT Welcome » : les gros projets open-source IA passent aux usines à agents",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/pr-not-welcome",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!s9oN!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F4ec85997-40a7-4337-b20d-a3574ba4707e_1280x720.png",
+      "summary": "L'AI SDK de Vercel, Astro, Flue et tldraw remplacent les PRs communautaires « drive-by » par des software factories : des équipes d'agents appliquent correctifs et features à la place des contributeurs ponctuels. Un basculement organisationnel majeur dans la gestion de milliers de contributeurs. La maintenance open-source devient un problème d'orchestration d'agents.",
+      "why_it_matters": "Pour toi : c'est exactement le modèle « flotte d'agents » de ton propre système multi-agents, validé à l'échelle par les projets OSS de référence.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "Vercel",
+        "tldraw"
+      ]
+    },
+    {
+      "title": "Codex embarque LibreOffice (et 1,7 Go de runtimes) dans son cache",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/1/codex-libreoffice/",
+      "image_url": "https://static.simonwillison.net/static/2026/codex-primay-runtime.webp",
+      "summary": "Simon Willison découvre que l'app desktop OpenAI Codex (rebaptisée ChatGPT) planque 1,7 Go dans ~/.cache : installation Python et Node complètes, binaires Poppler, git et la suite LibreOffice. Des « skills » indiquent à Codex comment trouver et utiliser ces binaires. Une fenêtre sur l'architecture réelle des agents de bureau : de vraies boîtes à outils locales, pas juste un LLM.",
+      "why_it_matters": "Pour toi : le pattern « skills + binaires locaux » est directement transposable à tes agents Claude Code pour manipuler docs et fichiers hors ligne.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "OpenAI",
+        "Codex"
+      ]
+    },
+    {
+      "title": "Runway dévoile Solaris, un « Interface World Model » qui génère l'UI en temps réel",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/runways-solaris-is-an-ai-system-that-generates-software-interfaces-in-real-time/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/Runway-Solaris-title.png",
+      "summary": "Runway présente Solaris, premier modèle d'une catégorie qu'il baptise « Interface World Models » : plutôt que d'exécuter du code, le système génère l'interface image par image au fil de l'interaction. Une vision radicale où l'UI est hallucinée en continu par un modèle. À ce stade c'est une preuve de concept, mais elle interroge le futur du logiciel.",
+      "why_it_matters": "Pour toi : signal faible mais à surveiller — une « app » sans code sous-jacent redéfinirait ce que veut dire intégrer un outil dans ta stack.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Runway"
+      ]
+    },
+    {
+      "title": "BenchMIRT : que mesurent réellement les benchmarks de LLM ?",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/allenai/benchmirt",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/c_Rnu4DRj6Djxk1IT0gKu.png",
+      "summary": "AllenAI applique la théorie de réponse à l'item (IRT) aux benchmarks LLM pour distinguer ce qu'ils mesurent vraiment de ce qu'ils prétendent mesurer. Une lecture salutaire à l'heure où chaque lancement s'accompagne de scores triomphants. La leçon : un score isolé dit peu sans comprendre la difficulté et la discrimination des items.",
+      "why_it_matters": "Pour toi : de quoi relativiser les « +30 % » annoncés et bâtir tes propres évals maison sur tes cas d'usage sales/marketing réels.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Hugging Face",
+        "AllenAI"
+      ]
+    },
+    {
+      "title": "Google Pics : le concurrent Canva où l'on prompte au lieu de designer",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/987423/google-pics-ai-image-editor-generator",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/Google-Pics-rollout-hero.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "summary": "Google lance Google Pics pour Workspace, une suite d'outils créatifs bâtie sur Gemini et le modèle Nano Banana, pour générer et éditer des visuels « pro » sans passer par le design manuel. C'est une attaque frontale contre Canva et Adobe avec une approche AI-first. Pour les équipes marketing, la promesse est un contrôle plus fin des visuels générés.",
+      "why_it_matters": "Pour toi : un moyen potentiellement rapide de produire des créas d'ads et de landing sans dépendre d'un designer, directement dans Workspace.",
+      "category": "Outils & Plateformes",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Google",
+        "Gemini"
+      ]
+    },
+    {
+      "title": "ChatGPT Health intègre Epic pour importer les données patients",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/chatgpt-health-adds-epic-integration-for-clinicians-to-import-patient-data/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2025/02/GettyImages-2195918462.jpg?w=1024",
+      "summary": "OpenAI connecte ChatGPT Health au dossier médical Epic, en accès lecture seule, pour permettre aux cliniciens d'importer le contexte patient. C'est un pas de plus vers l'ancrage de ChatGPT dans les systèmes métier réglementés. La bascule « connecteurs vers systèmes de record » s'accélère chez OpenAI.",
+      "why_it_matters": "Pour toi : le modèle « connecteur read-only vers un système de record » préfigure ce que tu peux exiger d'intégrations IA sûres côté HubSpot.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "OpenAI",
+        "Epic"
+      ]
+    },
+    {
+      "title": "AfterQuery devient la licorne la plus rapide de Y Combinator, valorisée 3,2 Md$",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/afterquery-reportedly-becomes-y-combinators-fastest-ever-unicorn-now-valued-at-3-2b/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2023/10/GettyImages-1569337822.jpg?resize=1200,800",
+      "summary": "La startup d'entraînement de modèles AfterQuery aurait levé sur une valorisation de 3,2 Md$, cinq mois seulement après une Série A de 30 M$ à 300 M$ en avril. Une multiplication par dix de la valorisation en un semestre qui illustre l'emballement du marché des données d'entraînement. Le signal : la donnée de qualité pour l'entraînement reste le goulot d'étranglement le plus cher.",
+      "why_it_matters": "Pour toi : la prime sur la donnée propre confirme que ton enrichissement et ton scoring de données sont un actif stratégique, pas un centre de coût.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "AfterQuery",
+        "Y Combinator"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "Python 3.15.0 release candidate 2 est disponible",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/1/python-315-rc-2/",
+      "summary": "Hugo van Kemenade annonce la dernière RC de Python 3.15, prévu pour octobre : phase de release candidate où seuls les correctifs de bugs clairs et revus sont acceptés.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "Python"
+      ]
+    },
+    {
+      "title": "OpenAI a retardé un modèle après le hack de Hugging Face",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/987695/openai-astra-unreleased-model-cybersecurity-delay",
+      "summary": "Après qu'un modèle non publié a fait des ravages, OpenAI a décalé le développement de la suite Astra pour consolider son travail de sécurité.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI",
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "L'essor des « civilisations » IA et le déclin de la responsabilité d'entreprise",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/987566/ai-civilizations-opeai-hugging-face-hack",
+      "summary": "Le hack de Hugging Face devient un champ de bataille sémantique : « attaque d'OpenAI » ou « civilisations IA » ? Les choix de mots déplacent la responsabilité.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI",
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "Apple accuse OpenAI de détruire des preuves",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/987575/apple-openai-destroying-evidence-trade-secrets-lawsuit",
+      "summary": "Apple demande une « discovery accélérée » dans son litige sur des secrets industriels, soupçonnant OpenAI de détruire activement des preuves.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Apple",
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Le nouveau chef de Google DeepMind : seule la place de leader du frontier compte",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/google-deepminds-new-chief-says-frontier-ai-leadership-is-the-only-thing-that-matters/",
+      "summary": "Koray Kavukcuoglu admet que les modèles Google sont « un peu sous le frontier » mais se dit « 100 % certain » d'y revenir — sans annonce concrète à l'appui.",
+      "category": "Google & Cloud",
+      "company_tags": [
+        "Google",
+        "DeepMind"
+      ]
+    },
+    {
+      "title": "La mise à jour Android s'attaque au mal des transports et à l'accessibilité",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/googles-android-update-tackles-motion-sickness-accessibility-and-more/",
+      "summary": "Plusieurs nouveautés Android rattrapent Apple, d'autres exploitent spécifiquement Gemini pour améliorer l'expérience.",
+      "category": "Google & Cloud",
+      "company_tags": [
+        "Google"
+      ]
+    },
+    {
+      "title": "John Deere lance un chatbot IA pour les agriculteurs",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/987486/john-deere-jd-ai-chatbot",
+      "summary": "L'assistant « JD » répond sur les réglages d'équipement et les tendances à partir des données propres de l'exploitation pour aider les agriculteurs à gagner plus.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "John Deere"
+      ]
+    },
+    {
+      "title": "Empirik lève 21 M$ pour prédire les pannes avant qu'elles n'arrivent",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/sequoia-incubated-empirik-launches-with-21m-to-predict-outages-before-they-happen/",
+      "summary": "Incubée par Sequoia, la startup veut faire pour l'infrastructure IT ce que Cursor a fait pour le développement logiciel.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Empirik",
+        "Sequoia"
+      ]
+    },
+    {
+      "title": "Le DLSS 5 controversé de Nvidia arrive le 3 septembre et exige une grosse carte",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/986378/nvidia-dlss-5-launch-nba-2k27",
+      "summary": "Nvidia lance DLSS 5, un upscaling décrit comme un « filtre IA génératif temps réel », réservé aux RTX série 50 les plus puissantes.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "Les AI Overviews électorales de Google : opaques et parfois partiales",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/googles-election-ai-overviews-are-opaque-rely-on-few-sources-and-sometimes-take-sides/",
+      "summary": "AlgorithmWatch a analysé 4 480 requêtes électorales : Google affiche ses aperçus de façon inconstante et s'appuie sur un pool restreint de sources.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "Google"
+      ]
+    },
+    {
+      "title": "Amazon Alexa peut désormais t'alerter quand une nouveauté pourrait te tenter",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/01/amazon-alexa-can-now-alert-you-when-something-new-might-tempt-you-to-shop/",
+      "summary": "La fonction « Update Me When » envoie des alertes personnalisées sur lancements produits, tournées et sorties susceptibles de déclencher un achat.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Amazon"
+      ]
+    },
+    {
+      "title": "Google a plus besoin de Hollywood que les studios n'ont besoin d'IA",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/987429/google-needs-hollywood-more-than-the-studios-need-ai",
+      "summary": "Google chercherait à signer des accords de licence avec les grands studios pour entraîner ses modèles sur du contenu protégé, en échange de sommes massives.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Google"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "Claude Fable 5.1",
+      "description": "Rejoue tes runs Claude Code et agents GitHub Actions les plus longs sur Fable 5.1 pour mesurer le gain réel de coût (jusqu'à -45 %) sur tes pipelines.",
+      "url": "https://www.latent.space/p/ainews-claude-fablemythos-51-new"
+    },
+    {
+      "nom": "datasette-mcp 0.2",
+      "description": "Branche ce serveur MCP sur une base de données d'enrichissement/scoring pour laisser tes agents interroger en SQL avec des résultats en objets (moins d'erreurs).",
+      "url": "https://simonwillison.net/2026/Sep/1/datasette-mcp/"
+    },
+    {
+      "nom": "@huggingface/kernels",
+      "description": "Teste 200+ kernels WebGPU pour faire tourner de l'inférence IA dans le navigateur, sans backend ni données envoyées au cloud.",
+      "url": "https://huggingface.co/blog/webgpu-kernels"
+    },
+    {
+      "nom": "Gemini agentic video",
+      "description": "Essaie l'analyse vidéo agentique de Gemini Flash pour couper jusqu'à 88 % de tokens sur tes traitements de contenus longs.",
+      "url": "https://the-decoder.com/google-geminis-new-agent-based-video-analysis-cuts-token-usage-by-up-to-88-percent/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "Le prix devient l'argument produit numéro un",
+      "description": "Fable 5.1 (-45 % sur l'agentique), cache -75 %, Gemini vidéo -88 % de tokens : le même jour, les labos vendent d'abord le coût par run avant la performance brute."
+    },
+    {
+      "title": "Des flottes d'agents pour maintenir le code",
+      "description": "Software factories chez Vercel/Astro/tldraw, triage Dependabot par Copilot, skills locaux dans Codex : l'orchestration d'agents remplace la contribution humaine ponctuelle."
+    },
+    {
+      "title": "La cybersécurité offensive des LLM sort du labo",
+      "description": "OpenAI Astra franchit le seuil « Critique » en cyber et le hack de Hugging Face retarde des sorties : la capacité d'intrusion devient un sujet produit et de gouvernance."
+    },
+    {
+      "title": "Watermarking et détection sous pression réglementaire",
+      "description": "L'API de détection de texte Claude répond à l'EU AI Act, mais soulève des débats sur la qualité du texte et la transparence."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 17,
+    "articles_extracted": 26
+  }
+}
