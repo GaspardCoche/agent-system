@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "29406527756",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "29406527756",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-07-15T10:02:16.902374+00:00",
-    "agents": [],
-    "report_file": "reports/2026-07-15-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "29476820361",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-07-16",
@@ -1644,5 +1630,28 @@
     "timestamp": "2026-09-03T08:59:31.462482+00:00",
     "agents": [],
     "report_file": "reports/2026-09-03-email-agent-daily-digest-2026-09-03.md"
+  },
+  {
+    "run_id": "33756050671",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "33756050671",
+    "summary": "Task routing information received but task appears to be designated for forge agent, not analysis. No data payload provided for Lumen analysis. Task r · Task JSON is incomplete and does not specify a research query. The task references a 'forge' agen",
+    "next_actions": [],
+    "timestamp": "2026-09-03T12:43:24.274475+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "needs_clarification"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-09-03-orchestrator-scheduled-run.md"
   }
 ]
