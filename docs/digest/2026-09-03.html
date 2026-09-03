@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini 3.8 Flash presse le pas, Anthropic sécurise 35 Md$ de calcul — AI Briefing 2026-09-03</title>
+  <meta name="description" content="Google sort son troisième Flash en six semaines qui rivalise avec Claude Opus 5 sur le code agentique — mais son surcroît de raisonnement gonfle la facture en tokens.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Jeudi 3 septembre 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">34 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+10 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Gemini 3.8 Flash presse le pas, Anthropic sécurise 35 Md$ de calcul</h2>
+      <p>Google sort son troisième Flash en six semaines qui rivalise avec Claude Opus 5 sur le code agentique — mais son surcroît de raisonnement gonfle la facture en tokens.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+10)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/gemini-3-8-flash-is-googles-third-budget-model-in-six-weeks-while-frontier-models-remain-mia/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/09/gemini_flash_fast.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/gemini-3-8-flash-is-googles-third-budget-model-in-six-weeks-while-frontier-models-remain-mia/">Gemini 3.8 Flash : le troisième modèle budget de Google en six semaines</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Google lance Gemini 3.8 Flash, son troisième modèle Flash en six semaines, qui égale Claude Opus 5 sur certains benchmarks de code agentique pour un prix par token inchangé (0,75 $/M en entrée). Le modèle « travaille plus dur » en enchaînant davantage d&#x27;étapes de raisonnement et d&#x27;appels d&#x27;outils itératifs, mais brûle environ 30 % de tokens de sortie en plus par tâche. Résultat : à tarif nominal identique, le coût réel par tâche grimpe, un piège classique quand on facture à l&#x27;usage. Google continue d&#x27;empiler les Flash pendant que ses modèles Pro/frontier restent aux abonnés absents, signe d&#x27;une stratégie volume/prix agressive sur le milieu de gamme. Pour un usage agentique, le vrai KPI n&#x27;est plus le prix affiché mais le coût complet d&#x27;une tâche menée à bout.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">DeepMind</span><span class="tag">Anthropic</span></div>
+        <a href="https://the-decoder.com/gemini-3-8-flash-is-googles-third-budget-model-in-six-weeks-while-frontier-models-remain-mia/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>1 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/anthropic-ramps-up-claude-infrastructure-with-35-billion-lambda-deal/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/08/anthropic_claude.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/anthropic-ramps-up-claude-infrastructure-with-35-billion-lambda-deal/">Anthropic sécurise son infra Claude avec un contrat cloud de 35 Md$ chez Lambda</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Anthropic signe un accord de calcul cloud de 35 milliards de dollars avec Lambda, fournisseur adossé à Nvidia. L&#x27;objectif : garantir la capacité GPU nécessaire pour entraîner et servir la famille Claude à mesure que la demande agentique explose. C&#x27;est un signal fort de pérennité pour tous ceux qui bâtissent sur l&#x27;écosystème Claude.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Lambda</span><span class="tag">Nvidia</span></div>
+        <a href="https://the-decoder.com/anthropic-ramps-up-claude-infrastructure-with-35-billion-lambda-deal/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.latent.space/p/ainews-muse-spark-13-matches-gpt" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!vyuW!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff20254a9-6670-4842-b0c9-89101011f15c_2342x984.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.latent.space/p/ainews-muse-spark-13-matches-gpt">Muse Spark 1.3 égale GPT-5.6-Sol : Meta Superintelligence entre dans le club des frontier labs</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">Le roundup AINews détaille le retour en force de Meta : son modèle Muse Spark 1.3 égale GPT-5.6-Sol et propulse Meta Superintelligence au rang de nouveau frontier lab. Point saillant : un rabais annoncé de plus de 90 % sur les coûts d&#x27;entraînement. La compétition frontier se densifie à quatre acteurs, ce qui accélère la baisse des prix.</p>
+        <div class="card-tags"><span class="tag">Meta</span><span class="tag">OpenAI</span></div>
+        <a href="https://www.latent.space/p/ainews-muse-spark-13-matches-gpt" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://simonwillison.net/2026/Sep/2/llm-gemini/" class="card-img-link"><img src="https://static.simonwillison.net/static/2026-09-02/image.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Sep/2/llm-gemini/">llm-gemini 0.34 : support de Gemini 3.8 Flash avec niveaux de réflexion</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Le plugin llm-gemini passe en 0.34 et ajoute le modèle gemini-3.8-flash avec trois niveaux de réflexion (low, medium, high) pilotables en CLI. Un correctif règle aussi l&#x27;enregistrement de la version de modèle résolue en asynchrone. Idéal pour tester Gemini 3.8 Flash en une ligne de commande sans changer de stack.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Simon Willison</span></div>
+        <a href="https://simonwillison.net/2026/Sep/2/llm-gemini/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://github.blog/ai-and-ml/github-copilot/how-we-make-ai-coding-more-cost-efficient-without-sacrificing-task-quality/" class="card-img-link"><img src="https://github.blog/wp-content/uploads/2026/01/generic-github-copilot-commit-logo.png?fit=1920%2C1080" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://github.blog/ai-and-ml/github-copilot/how-we-make-ai-coding-more-cost-efficient-without-sacrificing-task-quality/">Comment GitHub rend le code par IA plus économique sans sacrifier la qualité</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">GitHub explique pourquoi des sorties plus courtes peuvent au final coûter plus cher, et comment Copilot réduit le travail gaspillé sur l&#x27;ensemble de la tâche de code. L&#x27;analyse porte sur le coût complet d&#x27;une tâche menée à bout plutôt que sur le prix par token. Une grille de lecture directement transposable à tout agent de dev que tu orchestres.</p>
+        <div class="card-tags"><span class="tag">GitHub</span><span class="tag">Microsoft</span></div>
+        <a href="https://github.blog/ai-and-ml/github-copilot/how-we-make-ai-coding-more-cost-efficient-without-sacrificing-task-quality/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/world-labs-unveils-atlas-a-single-ai-model-that-generates-reconstructs-and-simulates-3d-worlds-from-just-a-few-photos/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/09/world-labs-atlas-01-hero.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/world-labs-unveils-atlas-a-single-ai-model-that-generates-reconstructs-and-simulates-3d-worlds-from-just-a-few-photos/">World Labs dévoile Atlas, un modèle unique qui génère et simule des mondes 3D depuis quelques photos</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">World Labs, cofondée par Fei-Fei Li, présente Atlas, un world model qui génère, reconstruit et simule des scènes 3D à partir de quelques images seulement. L&#x27;entreprise affirme battre les modèles spécialisés en ancrant toutes les entrées dans l&#x27;espace 3D plutôt qu&#x27;en les traitant comme des séquences plates. Un pas de plus vers des modèles multimodaux qui raisonnent nativement en 3D.</p>
+        <div class="card-tags"><span class="tag">World Labs</span></div>
+        <a href="https://the-decoder.com/world-labs-unveils-atlas-a-single-ai-model-that-generates-reconstructs-and-simulates-3d-worlds-from-just-a-few-photos/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/09/02/openais-new-reasoning-technique-alarms-ai-safety-experts/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/07/OpenAI-logo-in-Seoul.jpg?w=1024" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/09/02/openais-new-reasoning-technique-alarms-ai-safety-experts/">La nouvelle technique de raisonnement d&#x27;OpenAI (Astra) inquiète les experts sécurité</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le futur modèle Astra d&#x27;OpenAI utilisera la « recurrent depth », une technique qui lui permet de raisonner hors du fil séquentiel des modèles de raisonnement classiques. Problème : ce raisonnement latent est moins observable, et OpenAI classe déjà Astra comme son premier système à capacités cyber « critiques ». La supervision par chaîne de pensée devient un miroir peu fiable des décisions réelles du modèle.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://techcrunch.com/2026/09/02/openais-new-reasoning-technique-alarms-ai-safety-experts/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/988344/trump-administration-new-york-times-openai-lawsuit" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25462046/STK155_OPEN_AI_CVirginia_2_C.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/988344/trump-administration-new-york-times-openai-lawsuit">L&#x27;administration Trump soutient OpenAI dans le procès copyright du New York Times</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Le gouvernement américain intervient dans le procès du New York Times contre OpenAI, plaidant que l&#x27;entraînement de modèles sur du texte protégé relève du fair use. La position du DOJ contredit directement un rapport du Copyright Office, dont le directeur a été limogé peu après. Un jalon juridique majeur pour la légalité de l&#x27;entraînement des LLM aux États-Unis.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">New York Times</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/988344/trump-administration-new-york-times-openai-lawsuit" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>7 articles</span></div><div class='grid'><article class="card">
+      <a href="https://github.blog/ai-and-ml/decoding-the-new-ai-lingo-loops-harnesses-squads-hill-climbing-oh-my/" class="card-img-link"><img src="https://github.blog/wp-content/uploads/2025/07/LinkedIn-Light-Mode-16x9-1.png?fit=1920%2C1080" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://github.blog/ai-and-ml/decoding-the-new-ai-lingo-loops-harnesses-squads-hill-climbing-oh-my/">Décoder le nouveau jargon IA : loops, harnesses, squads, hill climbing…</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">Le GitHub Podcast décrypte le vocabulaire qui monte dans les conversations dev : loop engineering, harnesses, squads d&#x27;agents, open weights, hill climbing. Un glossaire utile pour parler juste de l&#x27;orchestration multi-agents. Pratique pour cadrer ton propre système d&#x27;agents.</p>
+        <div class="card-tags"><span class="tag">GitHub</span></div>
+        <a href="https://github.blog/ai-and-ml/decoding-the-new-ai-lingo-loops-harnesses-squads-hill-climbing-oh-my/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/train-to-paint-with-code" class="card-img-link"><img src="https://huggingface.co/blog/assets/train-to-paint-with-code/thumbnail.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/train-to-paint-with-code">Entraîner un modèle de code à peindre à l&#x27;aquarelle avec TRL et OpenEnv</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">HuggingFace montre comment utiliser TRL et OpenEnv pour entraîner par renforcement un modèle de code sur une tâche visuelle (peindre à l&#x27;aquarelle via du code). Un tutoriel concret sur le RL appliqué aux agents de code dans un environnement ouvert. Bon point d&#x27;entrée pour comprendre OpenEnv.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span></div>
+        <a href="https://huggingface.co/blog/train-to-paint-with-code" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://simonwillison.net/2026/Sep/2/claudes-new-system-prompt/" class="card-img-link"><img src="https://static.simonwillison.net/static/2026-09-01/IMG_7797.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Sep/2/claudes-new-system-prompt/">Le nouveau system prompt de Claude refuse fermement de reproduire des paroles de chansons</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Anthropic publie les system prompts de ses applications grand public Claude (Claude.ai et mobiles), avec l&#x27;historique des changements. Simon Willison note les nouvelles instructions très strictes contre la reproduction de paroles de chansons. Une mine pour qui veut apprendre le prompt engineering de production.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://simonwillison.net/2026/Sep/2/claudes-new-system-prompt/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/988518/amazon-alexa-for-shopping-verify-emails" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/alexa-shopping-ai-hero-lm.jpg?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/988518/amazon-alexa-for-shopping-verify-emails">L&#x27;assistant IA d&#x27;Amazon détecte désormais les faux emails de l&#x27;entreprise</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Amazon lance une fonction où Alexa for Shopping analyse un email, SMS ou appel pour dire s&#x27;il provient vraiment de l&#x27;entreprise. L&#x27;objectif est de contrer les arnaques par usurpation d&#x27;identité de marque. Un cas d&#x27;usage concret d&#x27;IA appliquée à la confiance et à la lutte anti-phishing.</p>
+        <div class="card-tags"><span class="tag">Amazon</span></div>
+        <a href="https://www.theverge.com/tech/988518/amazon-alexa-for-shopping-verify-emails" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/09/02/palo-alto-networks-paid-500m-for-thrive-backed-console-sources-say/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2025/07/GettyImages-2215666246.jpg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/09/02/palo-alto-networks-paid-500m-for-thrive-backed-console-sources-say/">Palo Alto Networks aurait payé 500 M$ pour Console, adossé à Thrive</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Selon des sources, Palo Alto Networks a déboursé 500 M$ pour racheter Console. L&#x27;opération laisse Serval, adossé à Sequoia, en position de leader startup de l&#x27;automatisation IT par IA. Signe que l&#x27;automatisation des services IT par agents devient un champ de bataille M&amp;A.</p>
+        <div class="card-tags"><span class="tag">Palo Alto Networks</span><span class="tag">Console</span><span class="tag">Serval</span></div>
+        <a href="https://techcrunch.com/2026/09/02/palo-alto-networks-paid-500m-for-thrive-backed-console-sources-say/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/09/02/wonderful-more-than-doubles-its-valuation-to-5b-in-under-6-months/">Wonderful double sa valorisation à 5 Md$ en moins de six mois</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Wonderful lève une Série C de 550 M$ et double sa valorisation à 5 Md$ en moins de six mois. Les fonds serviront à accélérer le développement produit et à étoffer ses équipes FDE (forward-deployed engineers). Le rythme des valorisations IA reste débridé sur les acteurs applicatifs.</p>
+        <div class="card-tags"><span class="tag">Wonderful</span></div>
+        <a href="https://techcrunch.com/2026/09/02/wonderful-more-than-doubles-its-valuation-to-5b-in-under-6-months/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/policy/988228/nyc-ai-restrictions-in-schools-chatbot-ban" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK_414_AI_CHATBOT_R2_CVirginia_D.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/policy/988228/nyc-ai-restrictions-in-schools-chatbot-ban">New York interdit l&#x27;IA aux élèves jusqu&#x27;au lycée</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Le maire de New York annonce un moratoire d&#x27;un an interdisant l&#x27;usage de l&#x27;IA en classe pour les élèves de la maternelle à la 4e (2-K à 8th grade), soit environ 600 000 élèves. La mesure prend effet dès l&#x27;année scolaire 2026-2027. Un signal réglementaire fort sur l&#x27;IA dans l&#x27;éducation.</p>
+        
+        <a href="https://www.theverge.com/policy/988228/nyc-ai-restrictions-in-schools-chatbot-ban" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Prix affiché ≠ coût réel des agents</strong><p>Gemini 3.8 Flash « travaille plus dur » mais brûle 30 % de tokens en plus ; GitHub montre que des sorties courtes coûtent parfois plus cher. Le vrai KPI devient le coût de la tâche terminée.</p></div><div class="trend-item"><strong>Guerre des modèles budget et frontier</strong><p>Troisième Gemini Flash en six semaines, Meta Superintelligence qui égale GPT-5.6-Sol avec −90 % sur l&#x27;entraînement : la densification de la concurrence tire les prix vers le bas.</p></div><div class="trend-item"><strong>Le fair use s&#x27;ancre juridiquement aux États-Unis</strong><p>Le DOJ soutient qu&#x27;entraîner des LLM sur du texte protégé relève du fair use, contredisant le Copyright Office. Un jalon qui sécurise (pour l&#x27;instant) l&#x27;entraînement des modèles.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 10 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/988355/mrbeast-google-partnership-gemini-fitbit" class="ext-title">Google envoie MrBeast en pleine nature, armé d&#x27;IA</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">MrBeast met en avant Gemini, Google Health et le Fitbit Air dans un partenariat pluriannuel avec Google, premier volet dès le 5 septembre. Opération d&#x27;influence massive pour ancrer Gemini dans le grand public.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/us-military-adds-chatgpt-and-grok-to-ai-platform-genai-mil/" class="ext-title">L&#x27;armée américaine ajoute ChatGPT et Grok à sa plateforme GenAI.mil</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Le Pentagone étend sa plateforme IA avec ChatGPT Mil (OpenAI) et Grok for Government (xAI). L&#x27;adoption gouvernementale des LLM frontier s&#x27;accélère.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/protests-against-ai-data-centers-play-into-chinas-hands-trump-says/" class="ext-title">Les protestations contre les data centers IA font le jeu de la Chine, selon Trump</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Le président Trump s&#x27;oppose fermement à la contestation croissante contre les data centers IA aux États-Unis. Le débat énergie/infrastructure IA devient politique.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/988261/openai-tumbler-ridge-shooting-lawsuit-aiding-abetting" class="ext-title">OpenAI visée par des dizaines de nouvelles plaintes liées à la tuerie de Tumbler Ridge</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">OpenAI et Sam Altman font face à 30 nouvelles plaintes les accusant d&#x27;avoir fourni « assistance et encouragement substantiels » au suspect de la fusillade de Tumbler Ridge. La responsabilité juridique des chatbots se durcit.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/video/pangrams-max-spero-on-why-ai-detection-is-harder-than-real-or-fake/" class="ext-title">Pangram : pourquoi la détection d&#x27;IA est plus dure que « vrai ou faux »</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Max Spero (Pangram) explique pourquoi la détection de contenu IA est un problème bien plus complexe qu&#x27;un simple binaire, alors que textes et images générés envahissent candidatures, avis et réclamations.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://arstechnica.com/security/2026/09/my-drivers-license-is-one-of-153-million-for-sale-on-a-new-dark-website/" class="ext-title">J&#x27;ai loué une voiture, et en quelques heures mon permis était en vente</a>
+        <span class="ext-source">Ars Technica AI</span>
+        <p class="ext-summary">Le FBI enquête sur une fuite massive de données en cours : 153 millions de permis de conduire mis en vente sur un nouveau site du dark web. Rappel brutal des risques data à l&#x27;ère de l&#x27;agrégation.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.technologyreview.com/2026/09/02/1142879/facilitating-ai-integration-with-simplicity-at-scale/" class="ext-title">Faciliter l&#x27;intégration de l&#x27;IA avec de la simplicité à grande échelle</a>
+        <span class="ext-source">MIT Tech Review AI</span>
+        <p class="ext-summary">MIT Tech Review analyse comment, à mesure que les entreprises grandissent, les systèmes déconnectés et les silos de données freinent l&#x27;intégration de l&#x27;IA. Plaidoyer pour la simplicité à l&#x27;échelle.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://huggingface.co/blog/ibm-research/real-time-intelligence" class="ext-title">Intelligence temps réel avec les modèles IBM Time Series sur Confluent</a>
+        <span class="ext-source">HuggingFace Blog</span>
+        <p class="ext-summary">IBM Research montre comment déployer ses modèles Time Series sur Confluent pour de l&#x27;inférence en flux temps réel. Utile pour les pipelines de données streaming.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://arstechnica.com/security/2026/09/well-executed-bgp-attack-uses-hijacked-ips-to-infect-real-networks/" class="ext-title">Un détournement BGP infecte des réseaux : une cascade d&#x27;erreurs qui ne fait pas rire</a>
+        <span class="ext-source">Ars Technica AI</span>
+        <p class="ext-summary">Une attaque BGP bien exécutée a utilisé des IP détournées pour infecter de vrais réseaux et empoisonner un logiciel de production. Leçons de sécurité réseau à retenir.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://deepmind.google/blog/proactive-cyber-defense-for-governments-and-enterprises/" class="ext-title">Fairwind : les outils de cyberdéfense de Google pour partenaires de confiance</a>
+        <span class="ext-source">Google DeepMind</span>
+        <p class="ext-summary">Google DeepMind présente le programme Fairwind, des outils de cyberdéfense proactive pour gouvernements et entreprises partenaires. L&#x27;IA défensive devient un produit à part entière.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
