@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "29489608915",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "29489608915",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-07-16T10:09:02.769415+00:00",
-    "agents": [],
-    "report_file": "reports/2026-07-16-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "29559968008",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-07-17",
@@ -1653,5 +1639,24 @@
     "timestamp": "2026-09-04T08:55:12.060655+00:00",
     "agents": [],
     "report_file": "reports/2026-09-04-email-agent-daily-digest-2026-09-04.md"
+  },
+  {
+    "run_id": "33872982147",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "33872982147",
+    "summary": "Task cannot be executed. The Orchestrator workflow failed before creating the dispatch plan, so no research query was provided. Upstream issue: orches",
+    "next_actions": [],
+    "timestamp": "2026-09-04T12:35:59.360963+00:00",
+    "agents": [
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-09-04-orchestrator-scheduled-run.md"
   }
 ]
