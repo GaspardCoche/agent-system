@@ -1,28 +1,5 @@
 [
   {
-    "run_id": "29736352845",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "29736352845",
-    "summary": "Task dispatch to Forge lacks actionable context. System health: 7/10 agents ready (missing credentials for Sheets, HubSpot, Google Ads). Latest system · Task file is incomplete. The agent_task.json references Forge with input 'See task in context' bu",
-    "next_actions": [],
-    "timestamp": "2026-07-20T10:55:24.767907+00:00",
-    "agents": [
-      {
-        "name": "lumen",
-        "status": "incomplete"
-      },
-      {
-        "name": "researcher",
-        "status": "needs_retry"
-      }
-    ],
-    "report_file": "reports/2026-07-20-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "29807651945",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-07-21",
@@ -1654,5 +1631,32 @@
     "timestamp": "2026-09-08T08:56:22.202416+00:00",
     "agents": [],
     "report_file": "reports/2026-09-08-email-agent-daily-digest-2026-09-08.md"
+  },
+  {
+    "run_id": "34227038811",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "34227038811",
+    "summary": "No actionable task provided. /tmp/agent_task.json contains only 'See task in context' with no feature/bug description, file references, or issue numbe · Task invoked but task.json contains incomplete information. No data file specified for analysis, ",
+    "next_actions": [
+      "Orchestrator should only dispatch to forge/coder when a concrete issue/PR body with an actual requirement is available",
+      "If this scheduled run is meant to do something specific (e.g. a recurring maintenance task), that task needs to be defined explicitly in the orchestrator's dispatch plan rather than passed through as 'See task in context'",
+      "Re-run with a real GitHub issue number or explicit task description for forge to act on"
+    ],
+    "timestamp": "2026-09-08T12:42:30.905651+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "failed"
+      },
+      {
+        "name": "lumen",
+        "status": "needs_clarification"
+      }
+    ],
+    "report_file": "reports/2026-09-08-orchestrator-scheduled-run.md"
   }
 ]
