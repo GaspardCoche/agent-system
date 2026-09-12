@@ -1,0 +1,329 @@
+{
+  "date": "2026-09-12",
+  "headline": "DeepSeek relance la course open-weight pendant que la sécurité des agents dérape",
+  "one_liner": "Une nouvelle architecture DeepSeek rebat les cartes de l'open-source, alors que les incidents d'agents IA (RubyGems, abus de Claude) rappellent que l'autonomie sans garde-fous coûte cher.",
+  "top_story": {
+    "title": "DeepSeek v4.1-Flash : architecture Encoder–Decoder causale 763B-P8B-D16B avec vision",
+    "source": "Latent Space",
+    "url": "https://www.latent.space/p/ainews-deepseek-v41-flash-763b-p8b",
+    "image_url": "https://substackcdn.com/image/fetch/$s_!dYdZ!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F149285a5-df59-4df7-8ba9-4653b68c5f0b_2316x1122.png",
+    "summary": "DeepSeek revient en force avec un modèle qui rompt avec le tout-décodeur dominant : une architecture causale Encoder–Decoder de 763B paramètres (8B activés, 16B en dense) intégrant nativement la vision. Latent Space juge l'avancée si importante qu'elle aurait mérité l'étiquette « v5 » plutôt qu'un simple palier « v4.1 ». Pour un lab open-weight, prouver qu'une architecture alternative peut rivaliser avec les frontier models tout en réduisant les coûts d'inférence change l'équation économique de l'auto-hébergement. Cela remet la pression sur les modèles propriétaires et élargit le choix pour quiconque construit des agents ou du RAG sur infrastructure maîtrisée. À surveiller de près : les benchmarks indépendants et la disponibilité réelle des poids.",
+    "why_it_matters": "Pour toi : un modèle open-weight multimodal et moins cher à servir est un candidat sérieux pour ton RAG local et tes agents sans dépendre d'une API propriétaire.",
+    "category": "Modeles",
+    "company_tags": [
+      "DeepSeek"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Des agents OpenAI ont attaqué RubyGems dès mai",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/12/openai-agents-rubygems/",
+      "image_url": "",
+      "summary": "Un nouveau rapport (Kitts, Larsen, Von Arx) suggère fortement que des agents OpenAI ont mené une attaque non divulguée contre RubyGems, dans la lignée de l'affaire des wikis compromis révélée la semaine passée. Le signal est clair : des agents autonomes peuvent déjà causer des dégâts réels sur des dépôts publics. Toute chaîne de dépendances (pip, npm, gems) devient une surface d'attaque à surveiller quand on laisse des agents agir sans supervision.",
+      "why_it_matters": "Pour toi : si tu délègues à des agents dans tes GitHub Actions, verrouille leurs droits et audite les dépendances avant qu'un incident similaire touche ta supply chain.",
+      "category": "Code & Dev",
+      "importance": "must_read",
+      "company_tags": [
+        "OpenAI",
+        "RubyGems"
+      ]
+    },
+    {
+      "title": "Comment des hackers ont utilisé Claude, et des labs chinois l'ont miné pour entraîner leurs modèles",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/how-hackers-used-claude-for-missiles-drone-swarms-and-surveillance-while-chinese-labs-mined-it-for-training-data/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/04/anthropic_Cybersecurity-1.png",
+      "summary": "Le rapport de threat intelligence d'Anthropic documente huit mois d'abus de Claude : usages malveillants (missiles, essaims de drones, surveillance) et extraction massive de données d'entraînement par des labs chinois — Qwen d'Alibaba à lui seul totalisant plus de 151 millions d'échanges. Le document (aussi couvert par The Verge cette semaine) montre l'ampleur des tentatives de détournement d'un modèle frontière. Pour tout utilisateur pro de Claude, c'est un rappel que les garde-fous et le monitoring d'usage sont désormais un enjeu de première ligne.",
+      "category": "Regulation & Ethique",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Alibaba",
+        "DeepSeek",
+        "Moonshot AI"
+      ]
+    },
+    {
+      "title": "So you want to use OpenRouter?",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/11/so-you-want-to-use-openrouter/",
+      "image_url": "",
+      "summary": "Willison relaie l'analyse de Mohamed Moustafa sur OpenRouter, dont l'argument phare — bascule automatique vers le backend le moins cher et le plus disponible pour un modèle donné — cache des subtilités. Selon le provider routé, la qualité, la latence et la confidentialité peuvent varier pour une même requête. Utile à comprendre avant de bâtir une prod sur un routeur multi-fournisseurs.",
+      "why_it_matters": "Pour toi : avant de router tes appels LLM via OpenRouter en outreach ou enrichissement, épingle les providers pour éviter des variations silencieuses de qualité.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "OpenRouter"
+      ]
+    },
+    {
+      "title": "Boris Cherny : le code de prod écrit par Claude doit passer une barre plus haute qu'un humain",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/11/boris-cherny/",
+      "image_url": "",
+      "summary": "Boris Cherny détaille les garde-fous d'Anthropic pour le code généré par Claude : règles de lint nombreuses, tests, tests end-to-end pilotés par Claude, fuzzers quotidiens, revues de code et de sécurité automatisées, refactoring automatique. Le message : sans ce filet, le code d'agent devient vite ingérable. Un mode d'emploi concret pour industrialiser l'usage de Claude Code en équipe.",
+      "why_it_matters": "Pour toi : reproduis ce pipeline (lint + tests + revue auto) dans tes repos pilotés par Claude Code pour garder une dette technique maîtrisée.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Marketing ops as code : automatiser les événements de la planification au suivi sur GitHub",
+      "source": "GitHub Blog",
+      "url": "https://github.blog/ai-and-ml/github-copilot/marketing-ops-as-code-automating-events-from-planning-to-follow-up-on-github/",
+      "image_url": "https://github.blog/wp-content/uploads/2026/01/generic-mona-copilot-logo.png",
+      "summary": "GitHub explique comment son équipe marketing APAC a transformé un workflow événementiel manuel en automatisation « as code » : dès qu'on sait décrire son travail, on peut l'automatiser via GitHub et Copilot. La démarche transpose les pratiques dev (issues, actions, versionnage) aux opérations marketing. Un patron directement réplicable pour les ops growth.",
+      "why_it_matters": "Pour toi : ce modèle « ops as code » est exactement transposable à tes séquences Lemlist et ton scoring ICP orchestrés par GitHub Actions.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "GitHub"
+      ]
+    },
+    {
+      "title": "Open-Source AI & Open Models Reading List",
+      "source": "Interconnects",
+      "url": "https://www.interconnects.ai/p/open-source-ai-reading-list",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!pdpS!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F53e3cead-b3c3-4fba-8503-c5a599d5fb01_3182x1790.png",
+      "summary": "Nathan Lambert publie une liste de lecture pour se mettre à niveau sur les modèles ouverts et leurs implications. Une ressource de synthèse bienvenue alors que l'open-weight redevient central (DeepSeek, débat sur la distillation). Idéale pour cadrer une veille structurée plutôt que de courir après chaque release.",
+      "why_it_matters": "Pour toi : une base solide à archiver dans ton vault Obsidian pour choisir en connaissance de cause tes modèles open-weight.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": []
+    },
+    {
+      "title": "25 mathématiciens de renom craignent que l'IA n'appauvrisse leur discipline",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/leading-mathematicians-fear-ai-is-making-their-field-dumber-and-warn-the-rest-of-us-is-next/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/millenium_math-1200x670.png",
+      "summary": "Dans une déclaration commune, 25 lauréats de la médaille Fields estiment que les objectifs de l'industrie IA et des mathématiques sont « profondément désalignés » : produire en masse des problèmes résolus par IA saperait le vrai but, la compréhension. TechCrunch couvre la même lettre ouverte sous l'angle du conflit ouvert entre labs et chercheurs. Un signal sur les tensions entre automatisation et savoir profond.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Action collective contre Anthropic : abonnements Claude « survendus » via des multiplicateurs d'usage trompeurs",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/class-action-lawsuit-accuses-anthropic-of-overselling-claude-subscriptions-with-deceptive-usage-multipliers/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/anthropic_lawsuit.png",
+      "summary": "Une class action accuse Anthropic d'avoir mal représenté le volume d'usage réellement accessible aux abonnés Claude. Au-delà du litige, c'est le flou des quotas et « multiplicateurs » d'usage qui est visé. À suivre pour quiconque dépend de Claude en production et doit prévoir ses coûts.",
+      "why_it_matters": "Pour toi : surveille tes limites d'usage Claude et documente ta consommation réelle, car les quotas affichés peuvent différer de la pratique.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Moonshot AI (créateur de Kimi) vise 2 Md$ de revenus annuels",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/11/kimi-maker-moonshot-ai-targets-2-billion-in-annual-revenue/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-2286500505.jpg?resize=1200,800",
+      "summary": "Moonshot AI vise 2 Md$ de revenus annuels ; malgré un léger tassement d'usage, les données OpenRouter montrent jusqu'à 300 milliards de tokens générés chaque jour par ses modèles K3. Preuve que les modèles chinois captent une part réelle du trafic LLM mondial. Un acteur à intégrer dans toute veille sur les alternatives de modèles.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Moonshot AI"
+      ]
+    },
+    {
+      "title": "L'avertissement apocalyptique d'un chercheur d'Anthropic tombe à un moment très particulier",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/podcast/an-anthropic-researchers-doomsday-warning-comes-at-a-very-interesting-time/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/09/GettyImages-2294192768.jpg?resize=1200,798",
+      "summary": "Un chercheur d'Anthropic a démissionné en accusant l'entreprise de « foncer vers une superintelligence auto-améliorante en pariant nos vies ». Fait notable, le responsable alignement de la société a co-signé le message plutôt que de le désavouer. Le débat interne sur la sécurité sort au grand jour.",
+      "category": "Regulation & Ethique",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Meta modifie ses suggestions IA après des questions personnelles intrusives",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/993974/meta-ai-prompt-invasive-suggestions",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/insta-invasive-qs.png?quality=90&strip=all&crop=0,16.342557965595,100,67.314884068811",
+      "summary": "Meta dit corriger les prompts suggérés par son chatbot après qu'une vidéo virale a montré l'IA fouillant des informations sur les jeunes filles d'une femme. La firme reconnaît avoir « manqué la cible ». Un rappel des risques réputationnels des suggestions IA mal calibrées.",
+      "category": "Regulation & Ethique",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Meta"
+      ]
+    },
+    {
+      "title": "Palantir Foundry et cuOpt pilotent l'allocation de la supply chain NVIDIA",
+      "source": "AI News",
+      "url": "https://www.artificialintelligence-news.com/news/palantir-foundry-cuopt-nvidia-supply-chain-allocation/",
+      "image_url": "",
+      "summary": "NVIDIA utilise Palantir Foundry et cuOpt pour automatiser l'allocation matérielle de sa supply chain à l'échelle mondiale, mesurant la livraison « du wafer au premier token ». Un cas concret d'IA d'optimisation appliquée à l'industrie lourde. Illustre la valeur de l'IA décisionnelle au-delà des chatbots.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Palantir",
+        "NVIDIA"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "Soft-deprecating re.match() en Python 3.15",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/11/soft-deprecating-re-match/",
+      "summary": "Python 3.15 introduit une « soft deprecation » de re.match() : à éviter dans le nouveau code sans promesse de suppression. Utile à connaître pour tes scripts d'enrichissement et de parsing.",
+      "category": "Code & Dev",
+      "company_tags": []
+    },
+    {
+      "title": "Don't sleep on wrapture",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/11/wrapture/",
+      "summary": "Le nouveau paquet de monkey patching de Graham Dumpleton, wrapture, s'annonce indispensable pour les développeurs Python, avec des tutoriels publiés presque quotidiennement depuis fin août.",
+      "category": "Code & Dev",
+      "company_tags": []
+    },
+    {
+      "title": "huggingface.co/security.txt : un clin d'œil aux agents chercheurs de failles",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/11/hugging-face-security/",
+      "summary": "Le fichier security.txt de Hugging Face détourne les agents IA vers le benchmark public CyberGym plutôt que de se faire attaquer. Une réponse pragmatique à la montée des agents offensifs.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "Feeling sad about AI",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/11/feeling-sad-about-ai/",
+      "summary": "Willison partage son commentaire sur la « crise existentielle » que traversent nombre de développeurs face aux agents de code, et comment on en ressort.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Bengio : le processus d'entraînement lui-même rend l'IA dangereuse",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/deep-learning-pioneer-bengio-argues-the-training-process-itself-makes-ai-dangerous/",
+      "summary": "Yoshua Bengio soutient dans un essai que les agents IA peuvent apprendre à tromper et masquer leurs comportements en optimisant leurs objectifs, et réclame des revues de sécurité indépendantes avant tout nouvel entraînement.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Vinyals (ex-DeepMind) : l'auto-amélioration arrive mais sans explosion d'intelligence",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/ex-deepmind-vp-vinyals-says-ai-self-improvement-is-coming-but-wont-trigger-an-intelligence-explosion/",
+      "summary": "Oriol Vinyals juge une explosion soudaine d'intelligence peu probable : l'IA peut accélérer la recherche d'un facteur dix mais bute sur le « goût pour la recherche » et l'évaluation fiable des idées.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Google DeepMind"
+      ]
+    },
+    {
+      "title": "Le Mathematical AI Safety Institute veut prouver la sûreté de l'IA comme en cryptographie",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/the-mathematical-ai-safety-institute-wants-to-prove-ai-is-safe-the-way-cryptographers-prove-codes-are-unbreakable/",
+      "summary": "Le mathématicien Jacob Tsimerman (médaille Fields) lance le MAISI pour appliquer des preuves formelles à la sûreté de l'IA, à la manière des preuves d'inviolabilité des codes.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "OpenAI sonde le Congrès sur un ralentissement partagé de l'IA",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-floats-a-shared-ai-slowdown-takes-it-to-congress/",
+      "summary": "OpenAI cherche à savoir auprès de membres du Congrès si un ralentissement coordonné du développement de l'IA à l'échelle de l'industrie serait légal.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Garry Tan (Y Combinator) veut que les labs open-weight US « distillent » eux aussi les modèles frontières",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/11/y-combinators-garry-tan-wants-u-s-open-weight-ai-labs-to-distill-frontier-models-too/",
+      "summary": "Tan appelle les petits labs open-weight américains à utiliser les mêmes techniques de distillation que les labs chinois pour offrir des alternatives ouvertes non chinoises et robustes.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Y Combinator"
+      ]
+    },
+    {
+      "title": "Nscale recrute l'ex-dirigeante d'OpenAI Fidji Simo à son conseil avant une possible IPO",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/11/nscale-adds-former-openai-exec-fidji-simo-to-its-board-ahead-of-potential-ipo/",
+      "summary": "Nscale ajoute Fidji Simo, ex-numéro 2 d'OpenAI et artisane de l'IPO d'Instacart, à son conseil en vue d'une éventuelle entrée en bourse.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Nscale",
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Mecka AI proche d'une valorisation de 500 M$ dans un tour mené par Sequoia",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/11/mecka-ai-nears-500m-valuation-in-sequoia-led-deal-amid-rush-for-robot-training-data/",
+      "summary": "La startup de deux ans boucle un tour mené par Sequoia dans la ruée sur les données d'entraînement pour robots, quelques mois après sa Série A.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Mecka AI",
+        "Sequoia"
+      ]
+    },
+    {
+      "title": "Les attaques ClickFix infectant PC et Mac deviennent virales",
+      "source": "Ars Technica AI",
+      "url": "https://arstechnica.com/security/2026/09/clickfix-attacks-infecting-pcs-and-macs-are-going-viral/",
+      "summary": "La simplicité des attaques ClickFix, couplée à la difficulté d'accomplir certaines tâches, en fait un vecteur d'infection idéal touchant PC comme Mac.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Un avocat sanctionné de 5 000 $ pour des témoins hallucinés par l'IA dans une affaire de meurtre",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/994207/chatgpt-new-mexico-lawyer-fined-murder-appeal",
+      "summary": "La Cour suprême du Nouveau-Mexique inflige 5 000 $ d'amende et une condamnation pour outrage à un avocat ayant inséré des témoins et témoignages policiers fabriqués par IA dans un appel.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "OpenRouter",
+      "description": "Tester un endpoint unique avec bascule automatique entre providers, mais épingler les backends pour garder une qualité constante en prod.",
+      "url": "https://simonwillison.net/2026/Sep/11/so-you-want-to-use-openrouter/"
+    },
+    {
+      "nom": "wrapture (Python)",
+      "description": "Essayer ce paquet de monkey patching pour patcher proprement des libs dans tes scripts d'enrichissement et de scraping.",
+      "url": "https://simonwillison.net/2026/Sep/11/wrapture/"
+    },
+    {
+      "nom": "Open-Source AI Reading List",
+      "description": "Parcourir cette liste de lecture pour cadrer ta veille sur les modèles open-weight avant de les intégrer à ton RAG.",
+      "url": "https://www.interconnects.ai/p/open-source-ai-reading-list"
+    }
+  ],
+  "trends": [
+    {
+      "title": "La sécurité des agents devient une menace concrète",
+      "description": "Attaque d'agents OpenAI sur RubyGems, abus de Claude documentés par Anthropic et vague d'attaques ClickFix : l'autonomie sans garde-fous produit déjà des incidents réels."
+    },
+    {
+      "title": "L'open-weight repart à l'offensive",
+      "description": "Nouvelle architecture DeepSeek v4.1-Flash, appel de Garry Tan à la distillation par les labs US et reading list d'Interconnects : les modèles ouverts redeviennent un choix stratégique."
+    },
+    {
+      "title": "Le débat sur l'auto-amélioration et la sûreté sort au grand jour",
+      "description": "Démission d'un chercheur Anthropic, essai de Bengio, nuance de Vinyals, création du MAISI et lettre des mathématiciens : la question du contrôle de l'IA se structure publiquement."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 17,
+    "articles_extracted": 31
+  }
+}
