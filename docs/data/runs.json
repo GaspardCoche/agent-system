@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "30198689068",
-    "workflow": "sage",
-    "title": "Sage Weekly 2026-07-26",
-    "status": "failed",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-07-26T10:43:23.242083+00:00",
-    "agents": [],
-    "report_file": "reports/2026-07-26-sage-sage-weekly-2026-07-26.md"
-  },
-  {
     "run_id": "30247354764",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-07-27",
@@ -1648,5 +1634,28 @@
     "timestamp": "2026-09-14T14:33:02.201428+00:00",
     "agents": [],
     "report_file": "reports/2026-09-14-nexus-nexus-weekly-audit-2026-09-14.md"
+  },
+  {
+    "run_id": "34857370633",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "34857370633",
+    "summary": "Task misconfiguration detected. Received Forge (coding) task but Lumen is analysis agent. Task JSON references Forge agent with 'See task in context'  · Task routing error: task JSON indicates agents=[{role:'forge'}] but researcher agent was invoked.",
+    "next_actions": [],
+    "timestamp": "2026-09-14T14:52:43.558782+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "failed"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-09-14-orchestrator-scheduled-run.md"
   }
 ]
