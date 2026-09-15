@@ -1,29 +1,5 @@
 [
   {
-    "run_id": "30260172297",
-    "workflow": "nexus",
-    "title": "Nexus weekly_audit 2026-07-27",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "TEMPLATE MODE — credentials_ok=false. 14e run consécutif bloqué (125 jours depuis 2026-03-24). Aucun appel API tenté. Score estimé 26/100 (dégradation",
-    "next_actions": [
-      "Configurer les 4 secrets GOOGLE_ADS_* dans GitHub Secrets pour débloquer l'audit réel",
-      "Forge : ajouter un step needs:[check-credentials] dans nexus.yml pour skip le job complet si credentials_ok=false",
-      "Une fois les secrets configurés, relancer Nexus en dry_run=true pour un premier audit réel avant toute application de changements",
-      "Suivre l'issue #185 pour les prochains runs template au lieu de dupliquer l'escalade"
-    ],
-    "timestamp": "2026-07-27T11:01:45.429686+00:00",
-    "agents": [
-      {
-        "name": "nexus",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-07-27-nexus-nexus-weekly-audit-2026-07-27.md"
-  },
-  {
     "run_id": "30261355190",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1657,5 +1633,24 @@
     "timestamp": "2026-09-15T09:29:12.561563+00:00",
     "agents": [],
     "report_file": "reports/2026-09-15-email-agent-daily-digest-2026-09-15.md"
+  },
+  {
+    "run_id": "34972987998",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "partial",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "34972987998",
+    "summary": "Scheduled routine maintenance verification completed. Detected 10 recent workflow failures (2026-09-06 to 2026-09-13) affecting Sage, Email Digest, an",
+    "next_actions": [],
+    "timestamp": "2026-09-15T13:12:04.041420+00:00",
+    "agents": [
+      {
+        "name": "researcher",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-09-15-orchestrator-scheduled-run.md"
   }
 ]
