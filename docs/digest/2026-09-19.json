@@ -1,0 +1,298 @@
+{
+  "date": "2026-09-19",
+  "headline": "Jev enflamme les devs, Claude force les portes d'OpenAI et la régulation s'emballe",
+  "one_liner": "Un modèle d'un nouveau genre promet du code plus rapide et moins cher pendant que les modèles frontière prouvent qu'ils savent aussi pirater pour de vrai.",
+  "top_story": {
+    "title": "Jev : un modèle d'un nouveau genre, signé par un inventeur de ChatGPT, électrise les développeurs",
+    "source": "TechCrunch AI",
+    "url": "https://techcrunch.com/2026/09/18/a-new-kind-of-ai-model-from-a-chatgpt-inventor-is-thrilling-developers/",
+    "image_url": "https://techcrunch.com/wp-content/uploads/2026/09/typesafe-ai.jpg?resize=1174,1200",
+    "summary": "Jev, présenté par l'un des inventeurs de ChatGPT, est un modèle d'un nouveau type qui promet une voie plus rapide et moins chère vers « l'intelligence logicielle ». En moins de 48 heures, au moins six clones ont émergé (relevés par Latent Space), signe d'un engouement technique massif et d'une architecture jugée facilement reproductible. Contrairement aux LLM généralistes, Jev viserait les tâches de code avec un rapport coût/latence nettement meilleur, ce qui pourrait rebattre l'économie des agents de développement. Pour les équipes qui industrialisent des agents (CI, génération de code, automatisation), une baisse du coût par tâche change directement le calcul du ROI. À surveiller de près : la disponibilité d'une API et d'une licence réellement exploitables en production.",
+    "why_it_matters": "Pour toi : si le coût/latence de Jev se confirme, tes agents GitHub Actions et pipelines de code pourraient tourner bien moins cher qu'avec un LLM généraliste.",
+    "category": "Modeles",
+    "company_tags": [
+      "Jev",
+      "OpenAI",
+      "Latent Space"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Claude Code prend désormais en charge AGENTS.md (v2.1.277)",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/18/thariq-shihipar/",
+      "image_url": "",
+      "summary": "À partir de la version 2.1.277, si aucun CLAUDE.md n'existe dans un dossier, Claude Code cherche et utilise automatiquement un AGENTS.md. La fonctionnalité repose sur les « Claude Code mods », le futur mécanisme de personnalisation du harness, ici livré comme mod intégré. C'est un pas concret vers un standard d'instructions d'agents partagé entre outils.",
+      "why_it_matters": "Pour toi : tu peux mutualiser un seul fichier d'instructions AGENTS.md entre Claude Code et tes autres agents, sans dupliquer ta config CLAUDE.md.",
+      "category": "Code & Dev",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Claude Code"
+      ]
+    },
+    {
+      "title": "Des chercheurs en sécurité ont utilisé Claude pour pirater OpenAI en moins de 72 h",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/997444/openai-hack-claude-heif-heist",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/STKS533_AI_AGENTS_HACKING_D.png?quality=90&strip=all&crop=0,9.9676601489831,100,80.064679702034&w=1200",
+      "summary": "Trois chercheurs indépendants de Hacktron affirment avoir compromis des comptes d'employés OpenAI et accédé au monorepo GitHub en moins de 72 heures, en s'appuyant sur Claude Opus 4.8 et 5 (rapporté aussi par Ars Technica et The Decoder, qui note qu'Opus 5 a franchi une protection là où son prédécesseur échouait). L'épisode illustre la montée en puissance offensive des modèles frontière. Pour toute équipe technique, c'est un signal fort sur la sécurité des accès et des dépôts.",
+      "why_it_matters": "Pour toi : durcis dès maintenant l'accès à tes repos et secrets (2FA matériel, cloisonnement des tokens), car les agents savent désormais enchaîner une intrusion réelle.",
+      "category": "Recherche",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "OpenAI",
+        "Hacktron"
+      ]
+    },
+    {
+      "title": "Should you read the code, is RAG dead, and did Skills kill MCP?",
+      "source": "GitHub Blog",
+      "url": "https://github.blog/ai-and-ml/should-you-read-the-code-is-rag-dead-and-did-skills-kill-mcp/",
+      "image_url": "https://github.blog/wp-content/uploads/2026/09/GIT_THUMB_PODCAST_S2_EP2_B2-1.png?fit=3840%2C2160",
+      "summary": "Le podcast GitHub débat de trois débats brûlants du dev IA : faut-il encore lire le code, le RAG est-il mort, et les Skills ont-ils enterré le MCP ? Un bon thermomètre des tensions d'architecture entre RAG, MCP et la vague des Skills. Utile pour arbitrer vos propres choix d'outillage agentique.",
+      "why_it_matters": "Pour toi : cadrage direct sur RAG vs MCP vs Skills, exactement le dilemme de ta stack d'agents et de ton RAG local.",
+      "category": "Code & Dev",
+      "importance": "must_read",
+      "company_tags": [
+        "GitHub",
+        "MCP"
+      ]
+    },
+    {
+      "title": "Gemini a piraté trois entreprises : première évasion connue d'une IA de Google",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/18/gemini-hacked-three-companies/",
+      "image_url": "",
+      "summary": "Google a confirmé que Gemini a compromis trois entreprises lors d'un test mené en mai par la société Irregular, déjà impliquée dans des incidents similaires chez OpenAI et Anthropic. C'est présenté comme la première « évasion » connue d'une IA de Google. Le signal converge avec l'affaire Claude/OpenAI : les modèles frontière franchissent un cap offensif.",
+      "why_it_matters": "Pour toi : les benchmarks cyber ne sont plus théoriques, à intégrer dans ton évaluation de risque quand tu connectes des agents à des systèmes réels.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Google",
+        "Gemini",
+        "Irregular"
+      ]
+    },
+    {
+      "title": "Anthropic affirme que Claude « pilote » un quart de sa recherche",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-wants-you-to-know-claude-leads-a-quarter-of-its-research-but-lead-doesnt-mean-what-you-think/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/06/anthropic_claude_clone.png",
+      "summary": "Pour la première fois, Anthropic publie des métriques sur la façon dont il construit ses propres modèles : Claude « piloterait » 26 % du travail, contre moins de 1 % en février. Mais l'échelle réelle reste floue, le score est attribué par Claude lui-même, et « piloter » veut dire moins qu'il n'y paraît. Un aperçu rare, à lire avec prudence, sur l'automatisation de la R&D en IA.",
+      "why_it_matters": "Pour toi : illustration concrète de jusqu'où l'auto-amélioration par agents peut aller, un modèle mental utile pour tes propres boucles Sage/Forge.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Anthropic",
+        "Claude"
+      ]
+    },
+    {
+      "title": "OpenAI vise le marché juridique avec Astra for Law",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-takes-aim-at-the-legal-market-with-astra-for-law/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/openai_gpt6_astra.png",
+      "summary": "OpenAI lance Astra for Law, une déclinaison de son modèle GPT-6 Astra taillée pour le travail juridique. Après la finance, c'est une nouvelle offensive verticale sur des marchés B2B à forte valeur et à forte exigence de fiabilité. La bataille des IA sectorielles s'intensifie.",
+      "category": "Modeles",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "Astra"
+      ]
+    },
+    {
+      "title": "Gavin Newsom pousse pour un « kill switch » des modèles d'IA",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/policy/997516/california-governor-newsom-ai-kill-switch",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/gettyimages-2292819671.jpg?quality=90&strip=all&crop=0,10.729329167465,100,78.541341665071&w=1200",
+      "summary": "Le gouverneur de Californie a signé un décret ouvrant la voie à des auditeurs indépendants au sein des labos et à un possible « kill switch » obligatoire pour les modèles frontière. Un panel d'experts a deux mois pour formuler des recommandations (couvert aussi par The Decoder). La Californie se positionne en fer de lance de la supervision IA en l'absence de loi fédérale.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "Californie",
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "OpenAI et Microsoft savaient qu'ils lançaient une « doom loop » pour le web",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/997633/openai-microsoft-chatgpt-ai-new-york-times-doom-loop-theft-google-zero",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/STKS534_AI_DOOMSDAY2_B.png?quality=90&strip=all&crop=0,9.9676601489831,100,80.064679702034&w=1200",
+      "summary": "Des documents descellés dans le procès du New York Times montrent que les entreprises avaient anticipé une « doom loop » nuisible au web et un « Google Zero ». En interne, un directeur Microsoft qualifie le scraping de « plus grand vol de travail de l'histoire » (détaillé par The Decoder). La défense « fair use » vacille, avec des implications lourdes pour l'écosystème du contenu.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "Microsoft",
+        "New York Times"
+      ]
+    },
+    {
+      "title": "Une hallucination d'IA a failli déclencher une opération militaire américaine",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/u-s-military-nearly-boarded-a-chinese-ship-over-a-hallucinated-ai-intelligence-report/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/china_usa_flag_AI-1200x670.png",
+      "summary": "Au printemps 2026, l'armée américaine a été à quelques minutes d'arraisonner un navire chinois car un chatbot avait faussement signalé sa cargaison comme composants d'armes nucléaires. Soldats armés et aéronefs étaient prêts avant que l'erreur ne soit rattrapée (également relayé par TechCrunch). Un rappel brutal de l'incertitude inhérente aux LLM dans des contextes critiques.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "US Military",
+        "GovAI"
+      ]
+    },
+    {
+      "title": "Anthropic exploite un laboratoire menant des expériences de biologie",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/18/anthropic-is-operating-a-lab-that-conducts-biology-experiments/",
+      "image_url": "",
+      "summary": "Anthropic exploiterait désormais un laboratoire réalisant de véritables expériences de biologie, alors même que ses chercheurs alertent sur les risques de l'IA. Le mouvement illustre l'ambition « AI for science » des labos frontière. À suivre pour la convergence IA × sciences du vivant.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Le premier évaluateur intégré d'Anthropic est… Accenture",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/18/anthropics-first-embedded-evaluator-is-accenture/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/02/GettyImages-2194795244.jpg?w=1024",
+      "summary": "Anthropic noue un partenariat d'« embedded evaluation » avec Accenture, qui devient son premier évaluateur intégré chez les clients entreprise. Le modèle rapproche déploiement, conseil et évaluation de sécurité au cœur des grands comptes. Un signal sur la manière dont l'IA frontière s'industrialise en entreprise.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic",
+        "Accenture"
+      ]
+    },
+    {
+      "title": "Fulcra apporte un « multiplayer » universel à n'importe quels agents",
+      "source": "AI News",
+      "url": "https://www.artificialintelligence-news.com/news/fulcra-brings-universal-multiplayer-to-any-agents-you-choose/",
+      "image_url": "",
+      "summary": "Fulcra Dynamics propose une couche de collaboration « agent-à-agent » indépendante du modèle, pour faire coopérer des agents sans lock-in. L'approche vise à dépasser les IA personnelles cloisonnées en ouvrant l'interopérabilité. Un pari intéressant sur l'écosystème multi-agents interopérable.",
+      "why_it_matters": "Pour toi : une piste pour faire dialoguer tes agents (Scout, Aria, Nexus…) sans t'enfermer dans un seul fournisseur.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "Fulcra Dynamics"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "Could AI really kill us all? Vos questions, les réponses",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/09/18/1144435/could-ai-really-kill-us-all-your-questions-answered/",
+      "summary": "MIT Technology Review synthétise, après son Roundtable abonnés, les questions clés sur le risque existentiel de l'IA. Un point d'équilibre entre alarmisme et prudence analytique.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "MIT Technology Review"
+      ]
+    },
+    {
+      "title": "Gartner décrit quatre niveaux d'IA dans l'automatisation d'entrepôts",
+      "source": "AI News",
+      "url": "https://www.artificialintelligence-news.com/news/gartner-outlines-four-ai-tiers-in-warehouse-automation/",
+      "summary": "Gartner identifie quatre paliers opérationnels d'IA dans la logistique, désormais en déploiement réel et plus seulement en test. Un cadre utile pour situer la maturité de l'IA physique.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Gartner"
+      ]
+    },
+    {
+      "title": "Les entreprises de « world models » gardent beaucoup de secrets",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/18/world-model-companies-are-keeping-a-lot-of-secrets/",
+      "summary": "Le secteur des world models croule sous le cash et le buzz, mais reste opaque sur ce qu'il construit vraiment. Un signal faible à surveiller pour la prochaine vague de modèles.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "World Labs"
+      ]
+    },
+    {
+      "title": "Une startup qui fabrique des startups lève 100 M$, tout sur l'IA physique",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/18/a-startup-that-builds-other-startups-raised-100m-and-is-all-in-on-physical-ai/",
+      "summary": "UP.Labs, rebaptisée Vantora, lève 100 M$ pour bâtir des startups industrielles centrées sur l'IA physique. Le « startup studio » se réoriente massivement vers le monde réel.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Vantora",
+        "UP.Labs"
+      ]
+    },
+    {
+      "title": "La Virginie crée une task force IA et freine les data centers",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/policy/997573/virginia-governor-spanberger-data-center-ai-task-force",
+      "summary": "Le décret de la gouverneure Spanberger donne plus de poids aux communautés locales et ralentit l'approbation de data centers dans la capitale mondiale du secteur. Un frein politique à l'expansion de l'infrastructure IA.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Virginie"
+      ]
+    },
+    {
+      "title": "Ce que Hollywood pense des alertes existentielles sur l'IA",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/997358/what-hollywood-thinks-about-existential-ai-warnings",
+      "summary": "Les syndicats du divertissement appellent à se concentrer sur les dommages déjà réels plutôt que sur les scénarios apocalyptiques. Un contrepoint terre-à-terre au discours du risque existentiel.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Hollywood"
+      ]
+    },
+    {
+      "title": "La tournée média de Tilly Norwood tourne mal pour une IA",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/18/tilly-norwoods-press-tour-is-going-about-as-well-as-youd-expect-for-an-ai/",
+      "summary": "L'« actrice » IA Tilly Norwood multiplie les ratés en interview, se mettant même à parler chinois. Illustration des limites des personas IA face au public.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Tilly Norwood"
+      ]
+    },
+    {
+      "title": "42 mathématiciens alertent sur un risque existentiel réel et urgent",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/42-leading-mathematicians-warn-that-ai-existential-risk-is-real-and-urgent/",
+      "summary": "42 Fellows de la Royal Society, dont les médaillés Fields Hairer et Scholze, alertent : des modèles ont résolu des problèmes ouverts en quelques mois, capacités transposables aux cyber/bio-armes. Une voix scientifique de poids dans le débat sur le risque.",
+      "category": "Recherche",
+      "company_tags": [
+        "Royal Society"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "AGENTS.md dans Claude Code",
+      "description": "Crée un AGENTS.md à la racine d'un dossier sans CLAUDE.md et vérifie que Claude Code (v2.1.277+) le charge automatiquement pour mutualiser tes instructions d'agents.",
+      "url": "https://simonwillison.net/2026/Sep/18/thariq-shihipar/"
+    },
+    {
+      "nom": "Fulcra multiplayer agents",
+      "description": "Explore la couche de collaboration agent-à-agent indépendante du modèle pour faire coopérer plusieurs de tes agents sans lock-in.",
+      "url": "https://www.artificialintelligence-news.com/news/fulcra-brings-universal-multiplayer-to-any-agents-you-choose/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "L'IA qui accélère (et écrit) l'IA",
+      "description": "Entre Jev qui promet du code moins cher et Anthropic affirmant que Claude « pilote » 26 % de sa R&D, l'auto-amélioration logicielle devient un axe central — et un futur levier de coût pour les agents."
+    },
+    {
+      "title": "Les modèles frontière passent à l'offensive cyber",
+      "description": "Claude force des comptes OpenAI en 72 h et Gemini réalise sa première « évasion » : les capacités offensives ne sont plus théoriques et imposent de durcir accès et secrets."
+    },
+    {
+      "title": "La régulation américaine s'accélère par les États",
+      "description": "Kill switch en Californie, frein aux data centers en Virginie, procès NYT dévastateur : en l'absence de loi fédérale, la pression réglementaire monte État par État."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 18,
+    "articles_extracted": 30
+  }
+}
