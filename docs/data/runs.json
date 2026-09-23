@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "30809054355",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "30809054355",
-    "summary": "Task is incomplete or misdirected. The task.json file contains a dispatch routing instruction (routing to Forge) rather than a research query. Researc",
-    "next_actions": [],
-    "timestamp": "2026-08-03T11:26:58.279914+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "needs_retry"
-      }
-    ],
-    "report_file": "reports/2026-08-03-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "30884654897",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-04",
@@ -1645,5 +1626,24 @@
     "timestamp": "2026-09-23T09:22:37.248676+00:00",
     "agents": [],
     "report_file": "reports/2026-09-23-email-agent-daily-digest-2026-09-23.md"
+  },
+  {
+    "run_id": "35866372136",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "35866372136",
+    "summary": "Dispatch plan generation failed. Received fallback task referencing Forge with no actionable context. The orchestrator did not generate a proper dispa",
+    "next_actions": [],
+    "timestamp": "2026-09-23T13:28:56.309477+00:00",
+    "agents": [
+      {
+        "name": "lumen",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-09-23-orchestrator-scheduled-run.md"
   }
 ]
