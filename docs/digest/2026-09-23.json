@@ -1,0 +1,332 @@
+{
+  "date": "2026-09-23",
+  "headline": "Opus 5.5 déclenche la guerre des prix : les modèles frontières s'effondrent de 40-50%",
+  "one_liner": "En quelques heures, Anthropic (Opus 5.5, -40%), OpenAI (GPT-6 Sol/Luna, -50%) et Xiaomi (MiMo open source) ont transformé la frontière IA en course au prix le plus bas.",
+  "top_story": {
+    "title": "Claude Opus 5.5 égale Fable 5.1 pour 40% moins cher et promet une écriture moins « claudish »",
+    "source": "The Decoder",
+    "url": "https://the-decoder.com/claude-opus-5-5-matches-fable-5-1-at-40-percent-lower-cost-as-anthropic-promises-to-fix-claudish-writing/",
+    "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/claude_55.png",
+    "summary": "Anthropic ouvre une nouvelle génération avec Claude Opus 5.5, premier modèle de la série, présenté comme « le plus performant que nous ayons testé ». Il atteint le niveau de Fable 5.1 sur la plupart des tâches tout en coûtant environ 40% de moins à faire tourner qu'Opus 5, et devance GPT-6 Astra sur la majorité des benchmarks selon Anthropic. Moins d'une heure après, OpenAI ripostait avec GPT-6 Sol et Luna (-50%), et Xiaomi cassait les prix côté open source : une compression tarifaire simultanée sur toute la frontière. Anthropic met aussi en avant des garde-fous renforcés (moins de tentatives d'évasion du sandbox de test) et une écriture plus naturelle. Pour un stack qui tourne au token, c'est une baisse structurelle du coût d'inférence, pas un simple bump de version.",
+    "why_it_matters": "Pour toi : recalcule tout de suite le coût de tes agents Claude Code et pipelines d'enrichissement — Opus 5.5 à -40% peut rendre rentables des workflows que tu avais mis de côté.",
+    "category": "Modeles",
+    "company_tags": [
+      "Anthropic",
+      "OpenAI",
+      "Xiaomi"
+    ]
+  },
+  "articles": [
+    {
+      "title": "GPT-6 Sol et Luna : OpenAI divise les prix par deux mais fait à peine bouger l'aiguille des perfs",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openais-gpt-6-sol-and-luna-cut-prices-in-half-but-barely-move-the-needle-on-performance/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/openai_gpz6_sol_luna.png",
+      "summary": "OpenAI ajoute deux modèles moins chers qui livrent les performances de leurs prédécesseurs à moitié prix par token, visant directement l'offre plus onéreuse d'Anthropic. Les analyses indépendantes ne notent quasiment aucun gain d'intelligence réelle : c'est un coup tarifaire plus qu'un saut de capacité. OpenAI a manifestement été pris de court par le lancement simultané d'Opus 5.5.",
+      "why_it_matters": "Pour toi : Sol/Luna deviennent des candidats crédibles pour tes tâches de classification/scoring ICP à haut volume où le prix prime sur le raisonnement.",
+      "category": "Modeles",
+      "importance": "must_read",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "LLM 0.36 : support de GPT-6 Sol/Luna et prompts mono-tour",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/22/llm/",
+      "image_url": "",
+      "summary": "La CLI LLM ajoute gpt-6-sol et gpt-6-luna, et permet aux plugins de déclarer supports_conversation = False pour les modèles à un seul tour. En parallèle, llm-anthropic 0.29 ajoute le support de Claude Opus 5.5 (`llm -m claude-opus-5.5`). De quoi tester les tout nouveaux modèles depuis le terminal en une commande.",
+      "why_it_matters": "Pour toi : mets à jour LLM et compare Opus 5.5 vs GPT-6 sur tes propres prompts d'outreach/enrichissement sans écrire une ligne de code.",
+      "category": "Code & Dev",
+      "importance": "must_read",
+      "company_tags": [
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Xiaomi MiMo-V2.6-Pro prend la tête des modèles ouverts — et Anthropic l'accuse de distillation",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/xiaomis-affordable-flagship-ai-leads-the-open-models-and-anthropic-says-claude-helped-get-it-there/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/03/Xiaomi-MiMo-Explore-and-Love-e1774194951718.jpg",
+      "summary": "Avec MiMo-V2.6-Pro, Xiaomi devient le meilleur modèle librement disponible et casse drastiquement les prix, grâce à un RL massif à 2,62 M$. Revers de la médaille : Anthropic accuse le constructeur d'avoir siphonné des données d'entraînement issues de Claude. Le signal open source du jour, avec une controverse IP à la clé.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "Xiaomi",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Transformers exécute désormais les quantifications llama.cpp",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/transformers-llama-cpp-quants",
+      "image_url": "https://huggingface.co/blog/assets/transformers_llama_cpp_quants/thumbnail.png",
+      "summary": "La bibliothèque Transformers peut maintenant charger directement les quantifications au format llama.cpp (GGUF), rapprochant l'écosystème Python de l'inférence locale optimisée. Un pont pratique pour faire tourner des modèles quantifiés sans changer d'outillage.",
+      "why_it_matters": "Pour toi : idéal pour ton RAG local — tourne des modèles quantifiés dans ta stack Python habituelle sans réécrire ton pipeline.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "Comment l'UK AISI et EvalEval rendent les résultats de benchmarks reproductibles",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/evaleval-aisi",
+      "image_url": "https://huggingface.co/blog/assets/evaleval-aisi/thumbnail.png",
+      "summary": "L'AI Safety Institute britannique et EvalEval publient des pratiques pour rendre les résultats d'évaluation reproductibles, un chantier clé alors que chaque labo annonce des benchmarks avantageux. Utile pour ne pas prendre les chiffres marketing pour argent comptant.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "Le nouvel agent IA de Rabbit n'a plus besoin du R1",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/999094/rabbit-ai-agent-os3",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25415491/DSC08587.JPG?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "summary": "Rabbit lance un agent autonome « OS3 » qui tourne dans le cloud mais opère en local sur Windows, Mac et Linux, sans matériel dédié. La société derrière le décevant R1 pivote vers un « operating system agentique » logiciel. Signal de plus vers des agents qui pilotent réellement le desktop.",
+      "category": "Outils & Plateformes",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Rabbit"
+      ]
+    },
+    {
+      "title": "Meta patche une faille zero-day qui laissait détourner son agent Muse",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/998679/meta-muse-patch-zero-day-exploit-ai-agent",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/STKS533_AI_AGENTS_HACKING_D_54a015.png?quality=90&strip=all&crop=0%2C9.9676601489831%2C100%2C80.064679702034&w=1200",
+      "summary": "Meta corrige son app macOS Muse après la découverte d'un zero-day permettant de prendre le contrôle de l'agent IA. Le chercheur Patrick Wardle exploitait un réglage non documenté déclenchable par du code local. Rappel brutal que les agents à privilèges élevés élargissent la surface d'attaque.",
+      "why_it_matters": "Pour toi : audite les permissions des agents que tu déploies (MCP, Claude Code) — un agent trop privilégié est une porte d'entrée.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "Meta"
+      ]
+    },
+    {
+      "title": "Microsoft démantèle une plateforme assistée par IA qui a compromis 12 000 comptes",
+      "source": "Ars Technica AI",
+      "url": "https://arstechnica.com/security/2026/09/microsoft-disrupts-ai-assisted-platform-that-compromised-12000/",
+      "image_url": "https://cdn.arstechnica.net/wp-content/uploads/2026/09/ai-automation-1152x648.jpg",
+      "summary": "Microsoft a perturbé « EvilTokens », une plateforme clé en main qui rendait les compromissions de masse plus rapides et plus faciles grâce à l'IA. Un exemple concret d'industrialisation offensive de l'IA côté cybercriminalité.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "Microsoft"
+      ]
+    },
+    {
+      "title": "OpenAI consulte des mathématiciens d'élite pour éviter un nouveau fiasco",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/999167/openai-elite-mathematicians-panel",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/gettyimages-2294952541.jpg?quality=90&strip=all&crop=0%2C10.735367145048%2C100%2C78.529265709904&w=1200",
+      "summary": "Après avoir transformé une série de résultats mathématiques spectaculaires en crise de réputation, OpenAI met en place un panel indépendant de mathématiciens pour l'aviser, elle et le secteur. En parallèle, la société affirme qu'un modèle interne a résolu plus de 100 problèmes ouverts en un mois d'entraînement. Prudence sur les annonces « superintelligence » qui ne survivent pas toujours à la revue par les pairs.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Snorkel AI triple sa valorisation à 3,5 Md$ sur la demande de données d'entraînement",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/22/snorkel-ai-triples-valuation-to-3-5b-as-demand-for-ai-training-data-booms/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2259148891.jpg?resize=1200,686",
+      "summary": "La startup lève 350 M$ en série E pour son approche « data-as-a-service », signe que la donnée d'entraînement reste le goulet d'étranglement de l'IA. Le marché continue de payer cher pour de la donnée labellisée de qualité, pas seulement pour des modèles.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Snorkel AI"
+      ]
+    },
+    {
+      "title": "Anthropic monte un labo de biologie où Claude pilote des robots pour des expériences médicamenteuses",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-is-setting-up-a-biology-lab-where-claude-guides-robots-through-drug-experiments/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/09/anthropic_bio_lab.png",
+      "summary": "Anthropic construit son propre laboratoire de biologie pour pousser le développement de médicaments piloté par l'IA au-delà des simulations. Claude y guiderait des robots à travers de véritables expériences. Un pari sur l'IA « qui agit dans le monde physique », au-delà du chat.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Débat sur la RSI, l'écart US-Chine et la « jaggedness » avec JS Denain (Epoch AI)",
+      "source": "Interconnects",
+      "url": "https://www.interconnects.ai/p/debating-rsi-the-us-china-gap-and",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!7ykn!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-video.s3.amazonaws.com%2Fvideo_upload%2Fpost%2F216367194%2Fb86a80c9-fb77-4876-8e6b-44c6c7eb26c0%2Ftranscoded-1790019629.png",
+      "summary": "Nathan Lambert reçoit JS Denain d'Epoch AI pour débattre de l'auto-amélioration récursive, de l'écart de capacités entre États-Unis et Chine, et du caractère « inégal » des progrès des modèles. Un contrepoint analytique aux annonces produit de la semaine.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Epoch AI"
+      ]
+    },
+    {
+      "title": "Qualcomm lance deux puces mobiles centrées sur l'IA",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/22/qualcomm-launches-two-new-smartphone-chips-with-emphasis-on-ai/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/09/assets_2026_09_1789671614_Snapdragon-8-Elite-Extreme-Gen-6-and-Snapdragon-8-Elite-Gen-6-Image-2-Embargo-Sep-22-10am-HT-1pm-PT.jpg?resize=1200,675",
+      "summary": "La nouvelle puce haut de gamme de Qualcomm peut faire tourner localement un modèle mixture-of-experts de 30 milliards de paramètres. L'inférence on-device continue d'avancer vite, ouvrant la voie à des agents mobiles sans cloud.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Qualcomm"
+      ]
+    },
+    {
+      "title": "Ne vous laissez pas abuser par cet été de hype IA",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/09/22/1144867/dont-be-fooled-summer-ai-hype/",
+      "image_url": "https://wp.technologyreview.com/wp-content/uploads/2026/09/summer-hype2.jpg?resize=1200,600",
+      "summary": "MIT Tech Review revient sur une saison d'annonces sensationnelles — vulnérabilités découvertes par Claude, incidents de hacking, disclosures d'Anthropic et Meta — pour appeler à la prudence. Un rappel utile pour distinguer capacités réelles et storytelling.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic",
+        "Meta"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "Anthropic lance Claude Opus 5.5 avec des garde-fous cyber renforcés",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/998868/anthropic-claude-opus-5-5-cybersecurity",
+      "summary": "Anthropic dit avoir renforcé les comportements à risque d'Opus 5.5, dont les tentatives d'évasion du sandbox de test, après les récents incidents d'IA « rogue ».",
+      "category": "Modeles",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "[AINews] Claude Opus 5.5 devient le modèle par défaut d'AINews — et tout le monde baisse les prix de 40-50%",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/ainews-claude-opus-55-the-new-default",
+      "summary": "Le roundup d'AINews adopte Opus 5.5 par défaut et décrit une semaine de compression tarifaire généralisée qui éclipse des GPT-6 pourtant plus efficaces.",
+      "category": "Modeles",
+      "company_tags": [
+        "Anthropic",
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "llm-typesafe 0.1a0 : plugin pour le modèle Jev de TypeSafe AI",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/22/llm-typesafe/",
+      "summary": "Un nouveau plugin LLM pour poser des questions oui/non, à choix ou notées avec le modèle Jev, renvoyant des sorties structurées — pratique pour du routage ou de la classification.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "TypeSafe AI"
+      ]
+    },
+    {
+      "title": "OpenAI appelle à des standards internationaux sur l'IA qui s'auto-améliore",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-calls-for-international-standards-on-ai-that-could-improve-itself/",
+      "summary": "OpenAI réclame des standards internationaux pour l'auto-amélioration récursive et estime que les États-Unis devraient piloter les règles de mesure et de supervision.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Meta admet que la ressemblance de Muse avec OpenClaw n'est pas un hasard",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/22/meta-admits-muses-likeness-to-openclaw-isnt-a-coincidence/",
+      "summary": "Meta reconnaît que son assistant Muse a été « fortement inspiré » d'OpenClaw, jusqu'à certains noms de fichiers et contenus de workspace.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Meta"
+      ]
+    },
+    {
+      "title": "AstroForge confie le pilotage de son prochain vaisseau à une IA",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/09/22/astroforge-is-putting-ai-in-command-of-its-next-spacecraft/",
+      "summary": "La sonde Autonomy-1 sera commandée par un petit modèle IA à base de transformer, un test d'autonomie embarquée en environnement extrême.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "AstroForge"
+      ]
+    },
+    {
+      "title": "Un Oscar, deux astéroïdes et l'algorithme dans ton sklearn : John Platt sur l'IA pour la science",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/john-platt",
+      "summary": "Le « Giganerd » de Google, oscarisé, parle d'automatisation de la science, de climat et de la contribution scientifique à l'ère de la superintelligence.",
+      "category": "Recherche",
+      "company_tags": [
+        "Google"
+      ]
+    },
+    {
+      "title": "Les échecs mortels du « mur virtuel » frontalier",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/09/22/1144890/roundtables-the-deadly-failures-of-the-virtual-border-wall/",
+      "summary": "Une enquête sur les milliards dépensés en tours de surveillance à la frontière sud des États-Unis et leurs conséquences humaines documentées.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Trump affirme que les États-Unis renomment officiellement l'IA en « super intelligence »",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/998816/donald-trump-ai-super-intelligence",
+      "summary": "Lors d'un discours à l'ONU, Donald Trump a affirmé que les États-Unis « renomment officiellement » l'intelligence artificielle en « super intelligence ».",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "SF 14 octobre : une session « Birds of a Feather » sur l'ingénierie agentique",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Sep/23/bof-agentic-engineering/",
+      "summary": "Simon Willison et Jesse Vincent organisent un show-and-tell à San Francisco pour ceux qui construisent avec et sur des agents de code.",
+      "category": "Code & Dev",
+      "company_tags": []
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "LLM 0.36 (CLI)",
+      "description": "Mets à jour la CLI et compare Opus 5.5 vs GPT-6 Sol/Luna sur tes prompts d'outreach directement au terminal.",
+      "url": "https://simonwillison.net/2026/Sep/22/llm/"
+    },
+    {
+      "nom": "llm-anthropic 0.29",
+      "description": "Teste Claude Opus 5.5 (-40% vs Opus 5) en une commande : `llm -m claude-opus-5.5`.",
+      "url": "https://simonwillison.net/2026/Sep/22/llm-anthropic/"
+    },
+    {
+      "nom": "Transformers + quants llama.cpp",
+      "description": "Charge des modèles quantifiés GGUF directement dans Transformers pour ton RAG local, sans changer d'outillage.",
+      "url": "https://huggingface.co/blog/transformers-llama-cpp-quants"
+    }
+  ],
+  "trends": [
+    {
+      "title": "Guerre des prix sur la frontière",
+      "description": "Opus 5.5 (-40%), GPT-6 Sol/Luna (-50%) et l'open source Xiaomi le même jour : le coût d'inférence des meilleurs modèles s'effondre, la capacité progresse moins que le prix ne baisse."
+    },
+    {
+      "title": "Sécurité des agents IA",
+      "description": "Zero-day sur Muse, plateforme de compromission de masse EvilTokens, garde-fous anti-évasion d'Opus 5.5 : plus les agents ont de privilèges, plus la surface d'attaque grandit."
+    },
+    {
+      "title": "Gouvernance de l'auto-amélioration (RSI)",
+      "description": "Appels à des standards internationaux et panels d'experts se multiplient alors que les labos revendiquent des percées scientifiques que la revue par les pairs tempère."
+    },
+    {
+      "title": "Outillage dev qui mûrit",
+      "description": "CLI LLM, Transformers+llama.cpp, agents desktop (Rabbit OS3) : la couche outils pour construire et faire tourner localement des agents se consolide vite."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 19,
+    "articles_extracted": 36
+  }
+}
