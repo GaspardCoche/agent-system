@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "30997738069",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "30997738069",
-    "summary": "Task routing mismatch detected. Task file specifies forge agent but researcher role was assigned. The task instruction 'See task in context' lacks suf",
-    "next_actions": [],
-    "timestamp": "2026-08-05T10:38:36.670073+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "needs_retry"
-      }
-    ],
-    "report_file": "reports/2026-08-05-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "31078156488",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-06",
@@ -1641,5 +1622,32 @@
     "timestamp": "2026-09-25T09:41:31.719603+00:00",
     "agents": [],
     "report_file": "reports/2026-09-25-email-agent-daily-digest-2026-09-25.md"
+  },
+  {
+    "run_id": "36139679589",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "36139679589",
+    "summary": "No concrete implementation task was ever defined. This is the scheduled orchestrator run 36139679589 (trigger: schedule, description: 'Scheduled maint · Task received but incomplete. The task.json contains routing instruction to 'forge' agent but lac",
+    "next_actions": [
+      "If this recurs (check next few scheduled runs), consider raising orchestrate max-turns above 8 or trimming its mandatory vault-read steps",
+      "Consider making the dispatch_plan.json fallback role-aware (skip/no-op researcher & analyzer instead of feeding them a forge-shaped task) so a partial orchestrator failure doesn't cascade into two extra false failures",
+      "No PR/commit needed for this run; re-run orchestrator normally next scheduled cycle"
+    ],
+    "timestamp": "2026-09-25T13:22:04.492251+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "needs_retry"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-09-25-orchestrator-scheduled-run.md"
   }
 ]
