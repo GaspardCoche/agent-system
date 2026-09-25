@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google donne un visage à son IA, les coûts d&#x27;inférence s&#x27;effondrent et l&#x27;open-weight passe à la robotique — AI Briefing 2026-09-25</title>
+  <meta name="description" content="Le vrai bouleversement du jour n&#x27;est pas un modèle mais un prix : atteindre un niveau de performance donné coûte environ 13× moins cher chaque année (Epoch AI).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Vendredi 25 septembre 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">38 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+13 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Google donne un visage à son IA, les coûts d&#x27;inférence s&#x27;effondrent et l&#x27;open-weight passe à la robotique</h2>
+      <p>Le vrai bouleversement du jour n&#x27;est pas un modèle mais un prix : atteindre un niveau de performance donné coûte environ 13× moins cher chaque année (Epoch AI).</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+13)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/" class="card-img-link"><img src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Slide_16_9_-_37.width-1300.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/">Introducing Gemini 3.8 Live with Live Avatar</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="14" height="14" />
+          <span>Google DeepMind</span>
+        </div>
+        <p class="summary">Google DeepMind lance Gemini 3.8 Live avec « Live Avatar », un persona animé qui parle, synchronise les lèvres et affiche des expressions faciales en temps réel pendant la conversation. La fonctionnalité, pour l&#x27;instant réservée aux clients Gemini Enterprise (d&#x27;après The Verge), transforme l&#x27;assistant vocal en interlocuteur visuel et brouille la frontière entre chatbot et agent front-office. Pour les équipes qui vendent, cela ouvre la voie à des démos, du support et de la qualification de leads incarnés par un visage IA disponible en continu. Combiné aux nouveaux modèles TTS et à la capacité de Gemini à passer des appels sortants, Google assemble une pile « voix + visage + action » de bout en bout. Le signal : l&#x27;interface conversationnelle devient multimodale et temps réel, et ce sont les usages sales et onboarding qui seront touchés en premier.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">DeepMind</span><span class="tag">Gemini</span></div>
+        <a href="https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>1 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/ai-performance-costs-are-falling-faster-than-those-of-any-previous-technology/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/09/epoch_ai_plunging_price.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/ai-performance-costs-are-falling-faster-than-those-of-any-previous-technology/">AI performance costs are falling faster than those of any previous technology</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Selon Epoch AI, le coût pour atteindre un niveau de performance fixé chute d&#x27;environ 13× par an — plus vite que n&#x27;importe quelle technologie précédente. En retirant les gains matériels et l&#x27;effet de la concurrence, le MIT estime le progrès algorithmique pur à ~3× par an. Nuance importante : les meilleurs modèles du moment ne sont pas moins chers, car le raisonnement consomme beaucoup plus de tokens.</p>
+        <div class="card-tags"><span class="tag">Epoch AI</span><span class="tag">MIT</span></div>
+        <a href="https://the-decoder.com/ai-performance-costs-are-falling-faster-than-those-of-any-previous-technology/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/black-forest-labs-launches-flux-3-action-an-open-robotics-ai-model/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/09/bfl_black_orest_labs_logo-2.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/black-forest-labs-launches-flux-3-action-an-open-robotics-ai-model/">Black Forest Labs launches FLUX 3 Action, an open robotics AI model</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Black Forest Labs entre dans la robotique avec FLUX 3 Action, un modèle « open-world-action » qui prédit la prochaine action d&#x27;un robot à partir de flux caméra. Avec seulement 7 milliards de paramètres, il établit un record sur le benchmark RoboLab-120 tout en tournant jusqu&#x27;à 3,95× plus vite que le précédent leader. Un signal fort pour l&#x27;IA open-weight appliquée à l&#x27;embodied AI.</p>
+        <div class="card-tags"><span class="tag">Black Forest Labs</span><span class="tag">FLUX</span></div>
+        <a href="https://the-decoder.com/black-forest-labs-launches-flux-3-action-an-open-robotics-ai-model/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/white-house-tells-openai-and-anthropic-to-let-u-s-review-new-models-before-sharing-them-with-british-testers/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/09/usa_aisi.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/white-house-tells-openai-and-anthropic-to-let-u-s-review-new-models-before-sharing-them-with-british-testers/">White House tells OpenAI and Anthropic to let U.S. review new models before sharing them with British testers</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">La Maison-Blanche demande à OpenAI et Anthropic de retenir leurs nouveaux modèles jusqu&#x27;à ce que les agences américaines les examinent, avant tout partage avec l&#x27;AI Safety Institute britannique. La mesure politise l&#x27;accès aux modèles frontière et pourrait retarder les évaluations tierces hors des États-Unis.</p>
+        <div class="card-tags"><span class="tag">White House</span><span class="tag">OpenAI</span><span class="tag">Anthropic</span></div>
+        <a href="https://the-decoder.com/white-house-tells-openai-and-anthropic-to-let-u-s-review-new-models-before-sharing-them-with-british-testers/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/" class="card-img-link"><img src="https://github.blog/wp-content/uploads/2026/01/generic-github-copilot-logo-1-e1767926300906.png?fit=1082%2C1080" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/">When chat is the wrong UI</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">GitHub s&#x27;attaque aux limites du chatbot pour le développement et introduit les « canvases » : une surface plus tangible qu&#x27;une boîte de dialogue pour manipuler code et artefacts avec Copilot. Un rappel utile que l&#x27;UX agentique dépasse largement le simple prompt textuel.</p>
+        <div class="card-tags"><span class="tag">GitHub</span><span class="tag">Copilot</span></div>
+        <a href="https://github.blog/ai-and-ml/github-copilot/when-chat-is-the-wrong-ui/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/644249b08443bce4c9890a0f/WgfT8N8Xyb6lBxSif7XLO.gif" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark">Accelerating vision-language models with LFM2.5-VL-DSpark</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Liquid AI publie LFM2.5-VL-DSpark, une approche pour accélérer les modèles vision-langage. Un ajout notable à l&#x27;écosystème open-weight multimodal, pensé pour l&#x27;efficacité à l&#x27;inférence.</p>
+        <div class="card-tags"><span class="tag">Liquid AI</span><span class="tag">HuggingFace</span></div>
+        <a href="https://huggingface.co/blog/LiquidAI/lfm2-5-vl-dspark" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://arstechnica.com/security/2026/09/theres-a-new-way-to-break-rsa-thats-faster-than-anything-weve-seen-before/" class="card-img-link"><img src="https://cdn.arstechnica.net/wp-content/uploads/2026/09/breaking-digital-chain-1152x648.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://arstechnica.com/security/2026/09/theres-a-new-way-to-break-rsa-thats-faster-than-anything-weve-seen-before/">There&#x27;s a new way to break RSA that&#x27;s faster than anything we&#x27;ve seen before</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=arstechnica.com&sz=32" width="14" height="14" />
+          <span>Ars Technica AI</span>
+        </div>
+        <p class="summary">Des cryptographes décrivent une nouvelle méthode pour casser RSA, plus rapide que tout ce qu&#x27;on connaissait, sans passer par la factorisation classique. Si confirmé, cela accroît l&#x27;urgence de migrer vers la cryptographie post-quantique.</p>
+        <div class="card-tags"><span class="tag">RSA</span></div>
+        <a href="https://arstechnica.com/security/2026/09/theres-a-new-way-to-break-rsa-thats-faster-than-anything-weve-seen-before/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>8 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent/">AI-powered fuzzing with the GitHub Security Lab Taskflow Agent</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">Le GitHub Security Lab détaille un nouveau « taskflow » de fuzzing bâti sur son framework Taskflow Agent, pour automatiser la découverte de vulnérabilités via IA. Pratique pour intégrer des tests de sécurité pilotés par agents dans un pipeline CI.</p>
+        <div class="card-tags"><span class="tag">GitHub</span></div>
+        <a href="https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Sep/24/commit-rewriter/">commit-rewriter 0.2</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison publie commit-rewriter 0.2, qui gère désormais des branches autres que la branche par défaut via `uvx commit-rewriter --branch other`. Un petit outil CLI pratique pour réécrire proprement l&#x27;historique git.</p>
+        <div class="card-tags"><span class="tag">Simon Willison</span></div>
+        <a href="https://simonwillison.net/2026/Sep/24/commit-rewriter/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Sep/24/datasette/">datasette 1.0a41</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Datasette 1.0a41 ajoute le support d&#x27;OpenTelemetry (contribution d&#x27;Alec Garcia) et refactorise les dialogues modaux en un unique Web Component réutilisable par les plugins. Bon signal d&#x27;observabilité pour tes outils data en Python.</p>
+        <div class="card-tags"><span class="tag">Datasette</span><span class="tag">Simon Willison</span></div>
+        <a href="https://simonwillison.net/2026/Sep/24/datasette/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/09/24/prismml-brings-its-tiny-llms-to-qualcomm-powered-smart-glasses/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/09/PrismML-Snapdragon-smartglasses.png?w=612" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/09/24/prismml-brings-its-tiny-llms-to-qualcomm-powered-smart-glasses/">PrismML brings its tiny LLMs to Qualcomm-powered smart glasses</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">PrismML porte ses tout petits LLM sur des lunettes connectées équipées de puces Qualcomm, avec l&#x27;objectif d&#x27;une IA open-weight exécutée directement sur l&#x27;appareil. La tendance edge / on-device s&#x27;accélère.</p>
+        <div class="card-tags"><span class="tag">PrismML</span><span class="tag">Qualcomm</span></div>
+        <a href="https://techcrunch.com/2026/09/24/prismml-brings-its-tiny-llms-to-qualcomm-powered-smart-glasses/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/09/24/twenty-minutes-with-the-ceo-of-elevenlabs-now-reportedly-valued-at-22-billion/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2025/07/Mati-Staniszewski_SXSW.jpg?resize=1200,799" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/09/24/twenty-minutes-with-the-ceo-of-elevenlabs-now-reportedly-valued-at-22-billion/">ElevenLabs&#x27; CEO on margins, IPO timing, and telling customers they&#x27;re talking to a bot</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le CEO d&#x27;ElevenLabs (valorisée ~22 Md$ selon les rapports) évoque marges, calendrier d&#x27;IPO et l&#x27;idée d&#x27;informer les clients qu&#x27;ils parlent à un bot. La voix IA s&#x27;industrialise dans le service client.</p>
+        <div class="card-tags"><span class="tag">ElevenLabs</span></div>
+        <a href="https://techcrunch.com/2026/09/24/twenty-minutes-with-the-ceo-of-elevenlabs-now-reportedly-valued-at-22-billion/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/09/24/lightspeed-targets-250m-for-new-india-fund-focusing-on-early-stage-ai/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2024/06/india-ai.jpg?w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/09/24/lightspeed-targets-250m-for-new-india-fund-focusing-on-early-stage-ai/">Lightspeed targets $250M for new India fund, focusing on early-stage AI</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Lightspeed vise 250 M$ pour un nouveau fonds Inde centré sur l&#x27;IA early-stage, alignant pour la première fois son cycle indien sur ses fonds globaux. Le capital IA continue de se déployer hors des hubs habituels.</p>
+        <div class="card-tags"><span class="tag">Lightspeed</span></div>
+        <a href="https://techcrunch.com/2026/09/24/lightspeed-targets-250m-for-new-india-fund-focusing-on-early-stage-ai/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/1000116/google-gemini-business-phone-calls" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/Google-Pixel-11-Pro-Photos-of-Phone-Using-On-Ear.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.735179330127%2C100%2C78.529641339745&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/1000116/google-gemini-business-phone-calls">Gemini can now call businesses for you so you don&#x27;t have to wait on hold</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Google déploie une « expérience » sur Pixel 11 où Gemini appelle les commerces à ta place (réservation, vérification de stock, prise de rendez-vous), sans même que tu aies à lancer l&#x27;appel. Un pas de plus vers des agents qui exécutent des tâches téléphoniques réelles.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Gemini</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1000116/google-gemini-business-phone-calls" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#7C3AED18,#7C3AED08);"><img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.artificialintelligence-news.com/news/google-gemini-3-8-flash-tts-voice-models/">Google launches Gemini 3.8 Flash TTS voice models</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.artificialintelligence-news.com&sz=32" width="14" height="14" />
+          <span>AI News</span>
+        </div>
+        <p class="summary">Google lance deux modèles TTS Gemini 3.8 Flash dédiés à la génération vocale, séparant direction créative et infrastructure à coût maîtrisé, avec filigrane SynthID. La gamme propose plus de 2 000 voix et le clonage à partir d&#x27;un échantillon de 30 secondes.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">Gemini</span></div>
+        <a href="https://www.artificialintelligence-news.com/news/google-gemini-3-8-flash-tts-voice-models/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;effondrement des coûts d&#x27;inférence</strong><p>Epoch AI mesure une baisse de ~13× par an du coût pour un niveau de performance fixé, le MIT estime le progrès algorithmique pur à ~3×/an — le prix devient le vrai levier stratégique.</p></div><div class="trend-item"><strong>IA multimodale temps réel</strong><p>Gemini 3.8 Live Avatar, les nouveaux TTS Gemini et les world models de Runway poussent la conversation vers la voix, le visage et la vidéo générés en direct.</p></div><div class="trend-item"><strong>La renaissance des agents IA</strong><p>Muse, OpenClaw, Instinct et les Taskflow Agents de GitHub illustrent une vague d&#x27;agents autonomes — avec ses ratés de sécurité (Muse partageant son filesystem).</p></div><div class="trend-item"><strong>Durcissement réglementaire</strong><p>Revue américaine préalable des modèles avant l&#x27;AI Safety Institute britannique et projet de loi bannissant la superintelligence : l&#x27;accès aux modèles frontière se politise.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 13 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.latent.space/p/foundries-vs-navigators-lowering" class="ext-title">Foundries vs Navigators: Lowering the Cost of Science</a>
+        <span class="ext-source">Latent Space</span>
+        <p class="ext-summary">En science, penser est devenu bon marché mais faire reste cher ; cette asymétrie redessine discrètement le fonctionnement des entreprises de recherche.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.latent.space/p/runway" class="ext-title">Runway&#x27;s WorldPrompt and the Engineering of Real-Time Worlds</a>
+        <span class="ext-source">Latent Space</span>
+        <p class="ext-summary">GWM Worlds 2 utilise un contexte persistant et des actions temporisées pour piloter un world model générant vidéo et audio en temps réel.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/anthropic-says-claude-discovered-a-new-enzyme-system-but-crispr-researchers-call-it-routine-genome-mining/" class="ext-title">Anthropic says Claude discovered a new enzyme system, but CRISPR researchers call it routine genome mining</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Anthropic affirme que Claude a découvert un nouveau système enzymatique dans les bases ADN de façon largement autonome, mais des chercheurs CRISPR jugent qu&#x27;il s&#x27;agit de minage de génome routinier.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/sakana-ai-hires-jurgen-schmidhuber-inventor-of-deep-learning-world-models-and-your-next-chatgpt-update/" class="ext-title">Sakana AI hires Jürgen Schmidhuber to lead its RSI Lab</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Sakana AI recrute Jürgen Schmidhuber comme conseiller scientifique en chef pour diriger son nouveau RSI Lab dédié à l&#x27;auto-amélioration récursive.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/09/24/oracle-sends-force-majeure-notice-on-its-new-mexico-stargate-data-center/" class="ext-title">Oracle sends force majeure notice on its New Mexico Stargate data center</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Oracle envoie une notice de force majeure sur son data center Stargate au Nouveau-Mexique, s&#x27;autorisant à retarder les paiements si le site rate sa mise en service prévue en 2028.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/googles-suncatcher-project-aims-to-put-ai-data-centers-in-orbit-powered-by-solar-energy/" class="ext-title">Google&#x27;s Suncatcher project aims to put AI data centers in orbit powered by solar energy</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Le projet « Suncatcher » de Google veut mettre des data centers IA en orbite alimentés au solaire ; un satellite de test décolle le 1er octobre sur un Falcon 9, malgré des défis d&#x27;échelle considérables.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/u-s-bill-proposes-permanent-ban-on-artificial-superintelligence-and-creation-of-new-federal-ai-agency/" class="ext-title">U.S. bill proposes permanent ban on artificial superintelligence and creation of new federal AI agency</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Bernie Sanders et Greg Casar déposent un texte bannissant durablement le développement de la superintelligence artificielle et créant une nouvelle agence fédérale de l&#x27;IA.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1000222/meta-muse-ai-filesystem" class="ext-title">Muse will apparently let you download its entire filesystem</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Des développeurs affirment avoir amené l&#x27;agent Muse de Meta à zipper et partager tout le contenu de son système de fichiers racine avec très peu de prompting.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/games/999972/meta-horizon-create-studio-ai-games" class="ext-title">Meta is going to let you build games with AI right on your phone</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Meta lance Horizon Create (application mobile) et Horizon Studio (application navigateur) pour créer des jeux par prompts IA sur sa plateforme sociale Horizon.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#0284C7;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/09/24/google-photos-clueless-inspired-virtual-closet-is-now-available-on-android-and-ios/" class="ext-title">Google Photos &#x27;Clueless&#x27;-inspired virtual closet is now available on Android and iOS</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Le placard virtuel inspiré de « Clueless » de Google Photos, qui bâtit une garde-robe à partir de tes photos, est désormais disponible sur Android et iOS.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/1000140/jensen-huang-nvidia-ai-energy-climate-change-supervillain" class="ext-title">Jensen Huang talks about AI and climate change like a supervillain</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Le CEO de Nvidia soutient que l&#x27;IA peut combattre le changement climatique, mais seulement après « énormément de douleur et de souffrance », dans l&#x27;émission d&#x27;Ezra Klein.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.artificialintelligence-news.com/news/the-gpu-shortage-inside-your-own-infrastructure-why-ai-workloads-queue-while-capacity-sits-idle/" class="ext-title">The GPU Shortage Inside Your Own Infrastructure: Why AI Workloads Queue While Capacity Sits Idle</a>
+        <span class="ext-source">AI News</span>
+        <p class="ext-summary">L&#x27;utilisation GPU mesure l&#x27;activité, pas la disponibilité réelle : des workloads font la queue à côté de GPU « inactifs » à cause de problèmes d&#x27;allocation, de mémoire et de placement.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://www.artificialintelligence-news.com/news/how-to-add-ai-to-legacy-software-without-rebuilding-it/" class="ext-title">How to Add AI to Legacy Software Without Rebuilding It</a>
+        <span class="ext-source">AI News</span>
+        <p class="ext-summary">Ajouter de l&#x27;IA à un logiciel legacy ne nécessite généralement pas de tout reconstruire ; dans la plupart des cas, l&#x27;IA peut se greffer par-dessus l&#x27;existant.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
