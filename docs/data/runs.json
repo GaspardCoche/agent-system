@@ -1,32 +1,5 @@
 [
   {
-    "run_id": "31475063846",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "31475063846",
-    "summary": "Aucune tâche d'implémentation concrète n'était fournie dans /tmp/agent_task.json (input: 'See task in context', prior researcher déjà en needs_retry p · Task file incomplete. No research query provided. The task JSON references 'See task in context' ",
-    "next_actions": [
-      "Dispatch/Sage : augmenter --max-turns du step dispatch dans orchestrator.yml (8 → ~12-15)",
-      "Dispatch : ajouter un garde-fou pour que researcher/analyzer/coder skip proprement (status: skipped) si /tmp/dispatch_plan.json est absent, au lieu de consommer un run complet",
-      "Ne pas relancer Forge tant qu'un dispatch_plan.json valide n'a pas été produit"
-    ],
-    "timestamp": "2026-08-11T08:58:43.208060+00:00",
-    "agents": [
-      {
-        "name": "forge",
-        "status": "needs_retry"
-      },
-      {
-        "name": "researcher",
-        "status": "needs_retry"
-      }
-    ],
-    "report_file": "reports/2026-08-11-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "31567495106",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-12",
@@ -1640,5 +1613,28 @@
     "timestamp": "2026-10-01T10:59:51.307581+00:00",
     "agents": [],
     "report_file": "reports/2026-10-01-email-agent-daily-digest-2026-10-01.md"
+  },
+  {
+    "run_id": "36881389928",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "36881389928",
+    "summary": "DRY_RUN=true: no code changed. Lumen's diagnostic /tmp/lumen_analysis.md is missing, so the 3 claimed patches (_reusable-claude.yml, email-agent.yml,  · Analysis complete: retrospective pipeline broken for 11+ weeks due to 3 unfixed root causes (grep",
+    "next_actions": [],
+    "timestamp": "2026-10-01T15:10:37.703731+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "lumen",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-10-01-orchestrator-scheduled-run.md"
   }
 ]
