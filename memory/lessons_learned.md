@@ -441,7 +441,9 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 
 **Cause racine :** compter sur les agents LLM pour écrire `retrospective` + modifications Sage jamais mergées.
 
-**Solution (PR, pas commit direct) :** `_reusable-claude.yml` — prompt explicite + step `Ensure retrospective field` (always()) qui injecte un `retrospective` auto-généré si absent. Le collecteur voit désormais tous les `agent-result-*`.
+**BLOQUÉ :** le push du workflow est refusé (`GitHub App ... without workflows permission`) — c'est très probablement pourquoi les fixes de juin n'ont jamais atterri. Patch prêt : `docs/vault/agents/pending-patch-reusable-claude-retrospective.patch` (`git apply` par un humain avec droits workflow).
+
+**Solution proposée :** `_reusable-claude.yml` — prompt explicite + step `Ensure retrospective field` (always()) qui injecte un `retrospective` auto-généré si absent. Le collecteur voit désormais tous les `agent-result-*`.
 
 **Règle :** un fix n'existe que s'il est dans une PR mergée sur main. Vérifier avec `git log main -- <fichier>` avant de l'écrire ici.
 
