@@ -159,3 +159,5 @@ Des qu'un pattern depasse 3 occurrences, creer le skill correspondant.
 ---
 
 *Sage met a jour ce fichier apres chaque analyse hebdomadaire.*
+
+| 2026-10-04 | weekly | pipeline broken; fixes de juin absents de main (vérifié). Post-processing `retrospective` ajouté via PR. 0 rétros → pas de nouveaux skills. | 37209740389 |

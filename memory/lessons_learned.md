@@ -428,3 +428,21 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 **Agents concernes :** Tous
 
 ---
+
+---
+
+## 2026-10-04 — Pipeline rétrospectives cassée : ~28ème semaine — changement d'architecture (post-processing)
+
+**Problème :** 50 runs, 6 artifacts non expirés, 0 rétrospectives. `pipeline_status: broken`.
+
+**Constat (vérifié par grep/gh api ce jour, pas supposé) :**
+- Les fixes "appliqués" le 2026-06-21 ne sont PAS sur `main` : `grep agent-result-iris .github/workflows/` → rien ; le prompt de `_reusable-claude.yml` n'avait pas de mention de `retrospective`. Les entrées précédentes de ce fichier sont donc fausses (ou ces commits n'ont jamais été mergés — les runs Sage modifient le working tree mais aucune PR/merge ne suit).
+- Des artifacts `agent-result-*` existent bien (coder, lumen, researcher) mais sans champ `retrospective`; les artifacts email (`raw-emails`, `ai-digest`, …) ne matchent pas le filtre.
+
+**Cause racine :** compter sur les agents LLM pour écrire `retrospective` + modifications Sage jamais mergées.
+
+**Solution (PR, pas commit direct) :** `_reusable-claude.yml` — prompt explicite + step `Ensure retrospective field` (always()) qui injecte un `retrospective` auto-généré si absent. Le collecteur voit désormais tous les `agent-result-*`.
+
+**Règle :** un fix n'existe que s'il est dans une PR mergée sur main. Vérifier avec `git log main -- <fichier>` avant de l'écrire ici.
+
+**Agents concernés :** Tous via reusable workflow ; Sage.
