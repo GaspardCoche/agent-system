@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "31773901549",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-08-14",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "12 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-08-14T05:50:02.385567+00:00",
-    "agents": [],
-    "report_file": "reports/2026-08-14-email-agent-daily-digest-2026-08-14.md"
-  },
-  {
     "run_id": "31786510506",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1622,5 +1608,27 @@
     "timestamp": "2026-10-04T10:37:01.080459+00:00",
     "agents": [],
     "report_file": "reports/2026-10-04-email-agent-daily-digest-2026-10-04.md"
+  },
+  {
+    "run_id": "37209740389",
+    "workflow": "sage",
+    "title": "Sage Weekly 2026-10-04",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "Pipeline broken (50 runs, 6 artifacts, 0 retrospectives). Verified fixes claimed in June are absent from main. Root cause for non-landing: GitHub App ",
+    "next_actions": [
+      "Human: git apply docs/vault/agents/pending-patch-reusable-claude-retrospective.patch and merge branch sage/improve-retrospective-20261004 (open PR manually)",
+      "Enable 'Allow GitHub Actions to create pull requests' or use a PAT with workflow scope"
+    ],
+    "timestamp": "2026-10-04T14:35:40.001434+00:00",
+    "agents": [
+      {
+        "name": "sage",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-10-04-sage-sage-weekly-2026-10-04.md"
   }
 ]
