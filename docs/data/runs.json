@@ -1,36 +1,5 @@
 [
   {
-    "run_id": "31786510506",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "31786510506",
-    "summary": "Aucune tâche de code exploitable trouvée dans /tmp/agent_task.json — le champ input pour le rôle forge était le placeholder 'See task in context' sans · 30 points de données analysés. 6 insights identifiés. 1 critique (KPI dashboard), 2 moyens, 2 opp",
-    "next_actions": [
-      "Dispatch/orchestrator doit fournir une description concrète du travail attendu avant de router vers forge",
-      "Si l'origine est une issue GitHub, vérifier que son corps contient bien la demande et que dispatch_agent.py la propage dans task.json",
-      "Si ce run est un test/health-check automatisé du pipeline, envisager de le distinguer des vrais dispatches pour éviter de solliciter forge inutilement"
-    ],
-    "timestamp": "2026-08-14T09:11:29.296251+00:00",
-    "agents": [
-      {
-        "name": "forge",
-        "status": "needs_retry"
-      },
-      {
-        "name": "lumen",
-        "status": "complete"
-      },
-      {
-        "name": "researcher",
-        "status": "needs_input"
-      }
-    ],
-    "report_file": "reports/2026-08-14-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "31865115066",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-15",
@@ -1622,5 +1591,27 @@
     "timestamp": "2026-10-05T11:28:47.054424+00:00",
     "agents": [],
     "report_file": "reports/2026-10-05-email-agent-daily-digest-2026-10-05.md"
+  },
+  {
+    "run_id": "37341335883",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-10-05",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false. 4 secrets Google Ads manquants. Aucun appel API tenté. Rapport template généré. Blocage depuis 195 jours, score ",
+    "next_actions": [
+      "Configurer les 4 secrets GitHub",
+      "Forge: ajouter needs: [check-credentials] dans nexus.yml"
+    ],
+    "timestamp": "2026-10-05T16:31:39.601138+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-10-05-nexus-nexus-weekly-audit-2026-10-05.md"
   }
 ]
