@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "32011373213",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "32011373213",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-08-17T08:47:06.993162+00:00",
-    "agents": [],
-    "report_file": "reports/2026-08-17-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "32100448331",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-18",
@@ -1639,5 +1625,28 @@
     "timestamp": "2026-10-08T11:24:44.546498+00:00",
     "agents": [],
     "report_file": "reports/2026-10-08-email-agent-daily-digest-2026-10-08.md"
+  },
+  {
+    "run_id": "37798709401",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "37798709401",
+    "summary": "Maintenance check, no code changes. The repo has no test suite (unittest ran 0 tests; pytest not installed). All Python scripts compile. skills/regist · Task routing error: this maintenance orchestration task should be routed to Claude Dispatch, not ",
+    "next_actions": [],
+    "timestamp": "2026-10-08T15:16:58.611377+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-10-08-orchestrator-scheduled-run.md"
   }
 ]
