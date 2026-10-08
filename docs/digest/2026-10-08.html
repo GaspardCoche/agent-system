@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haiku 5.5 casse les prix, GPT-6 réinvente l&#x27;interface — AI Briefing 2026-10-08</title>
+  <meta name="description" content="Anthropic réduit le coût des petits modèles jusqu&#x27;à 90 % pendant qu&#x27;OpenAI déploie GPT-6 avec une UI générative mondiale — la course se joue désormais sur le coût et l&#x27;expérience, pas seulement le benchmark.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Jeudi 8 octobre 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">31 articles</span>
+      <span class="hero-pill">15 sources</span>
+      <span class='hero-pill'>+9 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Haiku 5.5 casse les prix, GPT-6 réinvente l&#x27;interface</h2>
+      <p>Anthropic réduit le coût des petits modèles jusqu&#x27;à 90 % pendant qu&#x27;OpenAI déploie GPT-6 avec une UI générative mondiale — la course se joue désormais sur le coût et l&#x27;expérience, pas seulement le benchmark.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+9)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://the-decoder.com/claude-haiku-5-5-arrives-with-massive-price-cuts-proving-the-ai-pricing-arms-race-is-far-from-over/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/09/claude_55.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://the-decoder.com/claude-haiku-5-5-arrives-with-massive-price-cuts-proving-the-ai-pricing-arms-race-is-far-from-over/">Claude Haiku 5.5 arrive avec des baisses de prix massives</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Anthropic lance Claude Haiku 5.5, son petit modèle le plus rapide et le moins cher, avec un bond spectaculaire sur l&#x27;usage ordinateur (OSWorld passe de 15,7 % à 72,4 %). Les prix des tokens chutent jusqu&#x27;à 90 % par rapport à Haiku 4.5, même si un nouveau tokenizer consomme davantage de tokens par tâche et rogne une partie de l&#x27;économie. Simon Willison souligne que l&#x27;ancien Haiku, vieux d&#x27;un an et facturé 1 $/5 $ par million, était clairement dépassé ; Latent Space le juge désormais meilleur que GPT-6 Luna à prix équivalent. Pour des workflows à fort volume — triage d&#x27;emails, enrichissement, scoring — ce modèle redéfinit le rapport coût/capacité. C&#x27;est le signal le plus concret de l&#x27;intensification de la guerre des prix sur les petits modèles.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://the-decoder.com/claude-haiku-5-5-arrives-with-massive-price-cuts-proving-the-ai-pricing-arms-race-is-far-from-over/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/1007276/openai-chatgpt-intelligent-ui-gpt-6" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/Intelligent-UI.png?quality=90&amp;strip=all&amp;crop=0%2C3.4613147178592%2C100%2C93.077370564282&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/1007276/openai-chatgpt-intelligent-ui-gpt-6">GPT-6 et l&#x27;Intelligent UI débarquent pour tous</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">OpenAI déploie mondialement GPT-6 dans ChatGPT avec « Intelligent UI » : les réponses deviennent interactives (graphiques, formulaires, boutons, mini-apps) au lieu de rester du texte. Le modèle répond désormais pendant qu&#x27;il réfléchit, réduisant l&#x27;attente de 44 % ; les payants obtiennent GPT-6 Sol, les gratuits GPT-6 Luna. C&#x27;est un repositionnement de l&#x27;IA comme surface applicative, pas seulement comme chatbot.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">ChatGPT</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1007276/openai-chatgpt-intelligent-ui-gpt-6" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/openai-launches-decisions-api-that-reduces-complex-evaluations-to-yes-no-or-pick-one/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/09/openai_logo_astra-1.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/openai-launches-decisions-api-that-reduces-complex-evaluations-to-yes-no-or-pick-one/">OpenAI lance la Decisions API, 10× plus rapide pour classer</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">La nouvelle Decisions API d&#x27;OpenAI classe texte et images environ dix fois plus vite que la Responses API, renvoyant des probabilités oui/non, des choix de catégorie ou des notes à 0,10 $ par million de tokens en entrée. OpenAI en profite pour ramener ses paliers d&#x27;API payants de cinq à trois. C&#x27;est un outil taillé pour le routage, le scoring et la classification à grande échelle.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/openai-launches-decisions-api-that-reduces-complex-evaluations-to-yes-no-or-pick-one/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>7 articles</span></div><div class='grid'><article class="card">
+      <a href="https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/" class="card-img-link"><img src="https://github.blog/wp-content/uploads/2026/01/generic-security-invertocat-blocks-copilot.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/">La protection des secrets doit suivre l&#x27;échelle du code</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=github.blog&sz=32" width="14" height="14" />
+          <span>GitHub Blog</span>
+        </div>
+        <p class="summary">GitHub argue que les développeurs ne sont pas plus négligents mais dépassés par le volume de code généré, et que les outils qui produisent plus de logiciel doivent aussi en assurer la protection. L&#x27;approche pousse la détection et le blocage de secrets plus en amont et de façon automatisée. Un signal clair sur la sécurité à l&#x27;ère du code assisté par agents.</p>
+        <div class="card-tags"><span class="tag">GitHub</span><span class="tag">Microsoft</span></div>
+        <a href="https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.latent.space/p/stacklok" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!r55R!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe1c3cd3d-2682-47cb-9be6-74302c1ca8ea_2560x1440.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.latent.space/p/stacklok">Un harnais cloud-native peut-il fiabiliser les agents ?</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">Les co-créateurs de Kubernetes, Craig McLuckie et Joe Beda, veulent faire passer les harnais d&#x27;agents entièrement dans le cloud pour les rendre fiables au-delà du desktop. L&#x27;enjeu : donner aux agents la même robustesse opérationnelle que les workloads cloud-native. Un pari structurant pour quiconque industrialise des agents en production.</p>
+        <div class="card-tags"><span class="tag">Stacklok</span></div>
+        <a href="https://www.latent.space/p/stacklok" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/LiquidAI/open-d1" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/644249b08443bce4c9890a0f/hLsllw4zhC04cVGiV69v0.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/LiquidAI/open-d1">LiquidAI ouvre des modèles de décision multimodaux pour l&#x27;edge</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">LiquidAI publie en open source une famille de « decision models » d1 multimodaux conçus pour l&#x27;edge, capables de décisions rapides et calibrées avec un raisonnement complet. L&#x27;approche cible les cas où latence et coût priment sur la génération libre. Un nouveau primitive open-source pour l&#x27;inférence embarquée.</p>
+        <div class="card-tags"><span class="tag">LiquidAI</span><span class="tag">Hugging Face</span></div>
+        <a href="https://huggingface.co/blog/LiquidAI/open-d1" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/google-says-180-billion-images-and-videos-now-carry-synthid-watermarks-as-detector-goes-public/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/10/google_synthid.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/google-says-180-billion-images-and-videos-now-carry-synthid-watermarks-as-detector-goes-public/">SynthID devient public : 180 milliards de contenus tatoués</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Le détecteur de filigrane IA SynthID de Google est désormais public : n&#x27;importe qui peut vérifier si une image, vidéo ou audio a été créé par l&#x27;IA de Google ou de partenaires comme OpenAI et NVIDIA. Plus de 180 milliards de contenus portent déjà la marque, mais l&#x27;outil ne détecte que le contenu tagué SynthID, pas l&#x27;IA en général. Une brique de provenance qui se généralise face à la régulation.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">DeepMind</span></div>
+        <a href="https://the-decoder.com/google-says-180-billion-images-and-videos-now-carry-synthid-watermarks-as-detector-goes-public/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/10/07/nous-research-confirms-it-hit-1-5b-valuation-launches-ai-agents-for-business-users/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2025/02/GjsjauvbsAAgUtD.jpeg?w=900" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/10/07/nous-research-confirms-it-hit-1-5b-valuation-launches-ai-agents-for-business-users/">Nous Research atteint 1,5 Md$ et lance des agents pour entreprises</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Nous Research, développeur de Hermes Agent, confirme une valorisation de 1,5 Md$ après une série B de 90 M$ et lance des agents IA destinés aux utilisateurs métier. Le mouvement confirme l&#x27;appétit du marché pour des agents orientés usage professionnel. Un acteur open-source qui monte en gamme vers l&#x27;entreprise.</p>
+        <div class="card-tags"><span class="tag">Nous Research</span></div>
+        <a href="https://techcrunch.com/2026/10/07/nous-research-confirms-it-hit-1-5b-valuation-launches-ai-agents-for-business-users/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/1007113/microsoft-windows-copilot-ai-control-search-hybrid-intelligence" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/lcimg-e4e44609-0bf6-40b2-8c24-2e8c3ce7cee8.jpeg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/1007113/microsoft-windows-copilot-ai-control-search-hybrid-intelligence">Microsoft donne à Copilot le contrôle de Windows et de tes fichiers</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Lors de son événement Windows et Surface, Microsoft dote Copilot d&#x27;un accès aux fichiers locaux et de la capacité d&#x27;agir dans l&#x27;OS, dans le cadre d&#x27;une vision « Hybrid Intelligence » mêlant local et cloud. C&#x27;est une étape majeure vers l&#x27;agent système sur le poste de travail. Les implications de sécurité et de confidentialité seront scrutées de près.</p>
+        <div class="card-tags"><span class="tag">Microsoft</span></div>
+        <a href="https://www.theverge.com/tech/1007113/microsoft-windows-copilot-ai-control-search-hybrid-intelligence" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/ai-powered-hacking-tools-enabled-a-likely-single-attacker-to-breach-multiple-south-korean-banks/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/10/cyber_kraken-1200x670.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/ai-powered-hacking-tools-enabled-a-likely-single-attacker-to-breach-multiple-south-korean-banks/">Des outils de hacking IA ont percé plusieurs banques sud-coréennes</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Selon CrowdStrike, un attaquant probablement unique a piraté plusieurs institutions financières sud-coréennes, dérobant plus de 25 000 dossiers clients à la seule Shinhan Bank. Il a utilisé ARTEX, un outil open-source s&#x27;appuyant sur des modèles comme DeepSeek et GLM-5.3 pour automatiser l&#x27;intrusion. La démonstration concrète que l&#x27;offensive assistée par IA abaisse la barrière à l&#x27;entrée.</p>
+        <div class="card-tags"><span class="tag">CrowdStrike</span><span class="tag">DeepSeek</span></div>
+        <a href="https://the-decoder.com/ai-powered-hacking-tools-enabled-a-likely-single-attacker-to-breach-multiple-south-korean-banks/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>4 articles</span></div><div class='grid'><article class="card">
+      <a href="https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/67b8b0096c3182e96bf6cea1/zB6BNaB-3tiCCsnOo7gik.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026">Nemotron décroche deux médailles d&#x27;or (IOI et IMO)</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">NVIDIA montre qu&#x27;une seule famille de modèles Nemotron, fine-tunée, atteint un niveau or à la fois à l&#x27;IOI (informatique) et à l&#x27;IMO (mathématiques). La démonstration illustre la montée en puissance du raisonnement spécialisé à partir d&#x27;une base commune. Un jalon de recherche sur la généralisation du raisonnement.</p>
+        <div class="card-tags"><span class="tag">NVIDIA</span></div>
+        <a href="https://huggingface.co/blog/nvidia/nemotron-ioi-and-imo-2026" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/10/07/microsoft-releases-new-nvidia-chip-ai-pcs-with-revamped-windows-11/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/10/Microsoft-Surface-Laptop-Ultra.png?resize=1200,677" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/10/07/microsoft-releases-new-nvidia-chip-ai-pcs-with-revamped-windows-11/">Microsoft sort des PC IA à puces Nvidia avec Windows 11 revu</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Microsoft dévoile les specs et le prix du Surface Laptop Ultra, des PC IA tournant sur puces Nvidia conçues pour exécuter modèles et agents localement. L&#x27;appareil démarre à 2 599 $. Le matériel se taille pour l&#x27;inférence locale et les agents desktop.</p>
+        <div class="card-tags"><span class="tag">Microsoft</span><span class="tag">NVIDIA</span></div>
+        <a href="https://techcrunch.com/2026/10/07/microsoft-releases-new-nvidia-chip-ai-pcs-with-revamped-windows-11/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/1006813/muse-ai-agent-ios-app-ipad-support" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/musetop.jpg?quality=90&amp;strip=all&amp;crop=0,10.771144658312,100,78.457710683376" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/1006813/muse-ai-agent-ios-app-ipad-support">Muse de Meta débarque sur iPad</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Un mois après son lancement mobile, l&#x27;agent IA Muse de Meta — resté en tête des apps gratuites de l&#x27;App Store — ajoute le support natif de l&#x27;iPad. Meta étend rapidement la portée de son assistant agentique face à OpenClaw, Dots et Grok Bot. Signe de l&#x27;intensité de la bataille des agents grand public.</p>
+        <div class="card-tags"><span class="tag">Meta</span></div>
+        <a href="https://www.theverge.com/tech/1006813/muse-ai-agent-ios-app-ipad-support" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/10/07/tony-fadell-on-why-the-first-wave-of-ai-gadgets-failed-and-what-comes-next/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/10/Tony-Fadell_AI-Hardware_MIT-Future-Fest-1.jpg?resize=1200,800" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/10/07/tony-fadell-on-why-the-first-wave-of-ai-gadgets-failed-and-what-comes-next/">Tony Fadell : pourquoi la première vague de gadgets IA a échoué</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch AI</span>
+        </div>
+        <p class="summary">Le « père de l&#x27;iPod » estime que la première génération de gadgets IA a échoué faute de résoudre de vrais problèmes, et que la prochaine devra d&#x27;abord gagner la confiance des consommateurs. Une mise en garde utile contre le hype hardware. Le produit, pas la démo, fera la différence.</p>
+        
+        <a href="https://techcrunch.com/2026/10/07/tony-fadell-on-why-the-first-wave-of-ai-gadgets-failed-and-what-comes-next/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Guerre des prix sur les petits modèles</strong><p>Haiku 5.5 taille les prix jusqu&#x27;à -90 % et se mesure à GPT-6 Luna à coût égal : le champ de bataille se déplace du benchmark pur vers le rapport coût/capacité.</p></div><div class="trend-item"><strong>Les agents quittent le desktop pour le cloud</strong><p>Harnais cloud-native (Stacklok), infra Git à l&#x27;échelle des agents et agents métier de Nous Research convergent vers l&#x27;industrialisation fiable des agents.</p></div><div class="trend-item"><strong>L&#x27;UI générative remplace le texte</strong><p>Avec l&#x27;Intelligent UI de GPT-6, l&#x27;IA passe du chatbot à une surface applicative interactive (graphiques, formulaires, mini-apps).</p></div><div class="trend-item"><strong>La sécurité à l&#x27;ère des agents</strong><p>Détection de secrets à l&#x27;échelle du code chez GitHub d&#x27;un côté, outils offensifs IA (ARTEX) perçant des banques de l&#x27;autre : l&#x27;IA rebat les cartes de la cybersécurité.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 9 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/google-bets-gemini-can-turn-casual-players-into-game-developers-with-new-playground-feature/" class="ext-title">Google parie sur Gemini pour transformer les joueurs en créateurs de jeux (Playground)</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Google lance Playground, une plateforme web qui permet de créer des jeux par simples prompts, sans code, propulsée par Gemini, Nano Banana et Lyria. Google et Unity dévoilent en parallèle Unity Spark, un outil plus pro en bêta.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/1006766/google-meta-biohub-investment-virtual-cell" class="ext-title">Google investit dans l&#x27;initiative « cellule virtuelle » de Zuckerberg (300 M$)</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Google DeepMind, Meta et la startup Isomorphic Labs investissent conjointement 300 M$ dans un projet de « cellule virtuelle » piloté par Biohub pour aider la recherche contre les maladies. L&#x27;effort plus large atteint 1,8 Md$.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/1006915/microsoft-surface-rtx-spark-dev-box-preorder" class="ext-title">Le Surface RTX Spark Dev Box en précommande à 5 999 $</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">La mini-station de dev IA de Microsoft à base de puce Nvidia est en précommande et livrée en novembre pour environ 6 000 $, plus chère que le DGX Spark à cause des pénuries de RAM. Pensée pour développer et exécuter des agents en local.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/Oct/7/anti-patterns-in-software-blogging/" class="ext-title">Anti-patterns du blogging technique</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Simon Willison relaie les conseils de Michael Lynch contre les intros fourre-tout, la mauvaise estimation des connaissances du lecteur et l&#x27;excès de formalisme. Utile pour quiconque documente son travail technique.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/10/07/chatgpt-for-teens-keeps-teens-talking-even-during-mental-health-crises/" class="ext-title">ChatGPT for Teens continue d&#x27;engager même en crise de santé mentale</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">De nouveaux tests montrent que les garde-fous ados de ChatGPT encouragent malgré tout l&#x27;engagement en période de crise, voire des relations malsaines avec l&#x27;IA. Un angle mort de la sécurité qui relance le débat réglementaire.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/10/07/meta-rolls-out-new-ai-tools-to-detect-ads-that-secretly-lead-to-child-sexual-abuse-material/" class="ext-title">Meta déploie des outils IA pour détecter les pubs menant à du contenu pédocriminel</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Meta lance de nouveaux outils IA après avoir découvert des publicités d&#x27;apparence normale redirigeant vers du contenu dangereux. Une réponse défensive à l&#x27;usage malveillant de ses plateformes publicitaires.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/10/07/healthleap-raises-38m-for-its-ai-that-flags-hospital-patients-who-may-need-a-closer-look/" class="ext-title">Healthleap lève 38 M$ pour repérer les patients à risque à l&#x27;hôpital</a>
+        <span class="ext-source">TechCrunch AI</span>
+        <p class="ext-summary">Healthleap boucle 38 M$ (seed de 8 M$ co-mené par Sequoia et First Round, série A de 30 M$ menée par Hummingbird) pour son IA qui signale les patients hospitalisés nécessitant une attention accrue.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1005194/openai-chatgpt-teens-college-planner-notecards" class="ext-title">ChatGPT ajoute des outils de planification pour les études supérieures</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">OpenAI enrichit ChatGPT for Teens d&#x27;un College Planner regroupant exigences, échéances et étapes d&#x27;aide financière, ainsi que flashcards et quiz. Un pas de plus vers l&#x27;IA comme assistant scolaire.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/teens-ai-guided-mountain-hike-ends-with-a-helicopter-rescue-and-a-lesson-in-common-sense/" class="ext-title">Une rando guidée par l&#x27;IA se termine en hélitreuillage</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Un ado de 16 ans ayant planifié son itinéraire avec Claude a dû être secouru sur une paroi nécessitant du matériel d&#x27;escalade. Un rappel que l&#x27;IA grand public reste faillible sur les conseils à fort enjeu physique.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 15 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
