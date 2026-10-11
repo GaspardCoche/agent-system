@@ -159,3 +159,5 @@ Des qu'un pattern depasse 3 occurrences, creer le skill correspondant.
 ---
 
 *Sage met a jour ce fichier apres chaque analyse hebdomadaire.*
+
+| 2026-10-11 | weekly | broken: cause = `gh api --output` inexistant dans sage.yml; fix PR; max-turns 25. Fixes Iris/reusable toujours absents. | 38150667010 |

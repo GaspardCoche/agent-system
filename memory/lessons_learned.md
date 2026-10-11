@@ -4,6 +4,21 @@ Erreurs et solutions documentées par les agents. **Lire au début de chaque tâ
 
 ---
 
+
+## 2026-10-11 — Pipeline rétrospectives : VRAIE cause racine = `gh api --output` inexistant
+
+**Problème :** 50 runs, 9 artifacts, **0 rétrospectives collectées** (semaines consécutives `broken`). Pourtant des artifacts `agent-result-*` non expirés existent et CONTIENNENT bien `retrospective` (vérifié : agent-result-coder-37948031237).
+
+**Cause racine (testée en live) :** `sage.yml` téléchargeait les zips via `gh api .../zip --output FILE`. `gh api` n'a PAS de flag `--output` (`unknown flag`), l'erreur était avalée par `capture_output=True` → aucun zip, aucune rétrospective. Les hypothèses précédentes (retention, prompt sans `retrospective`) étaient des fausses pistes.
+
+**Fix (branche `sage/fix-artifact-download`, PR) :** redirection stdout binaire vers le fichier + log des échecs de téléchargement ; `--max-turns 15` → `25`. Vérifié : `gh api .../zip > a.zip` + `unzip -l` OK.
+
+**Règles :** (1) tester la commande réelle avant de documenter un fix ; (2) ne jamais avaler stderr dans un collecteur ; (3) `grep` confirme que `agent-result-iris` (email-agent.yml) et `retrospective` (_reusable-claude.yml) sont toujours ABSENTS malgré les entrées du 2026-06-21 — ces fixes ne sont pas dans main (peut-être revert). Iris reste non couvert.
+
+**Agents concernés :** Sage, tous.
+
+---
+
 ## 2026-03-20 — GitHub Actions `startup_failure`
 
 **Problème :** Les workflows `workflow_call` (reusables) échouent avec `startup_failure` et 0 jobs exécutés.
