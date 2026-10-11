@@ -1,0 +1,34 @@
+diff --git a/.github/workflows/sage.yml b/.github/workflows/sage.yml
+index 21bd655..c7c5244 100644
+--- a/.github/workflows/sage.yml
++++ b/.github/workflows/sage.yml
+@@ -77,11 +77,15 @@ jobs:
+           retrospectives = []
+           for artifact_id in artifact_ids:
+               try:
+-                  dl = subprocess.run(
+-                      ["gh", "api", f"repos/{repo}/actions/artifacts/{artifact_id}/zip",
+-                       "--output", f"/tmp/artifact_{artifact_id}.zip"],
+-                      capture_output=True, timeout=30
+-                  )
++                  # NB: `gh api` n'a pas de flag --output : rediriger stdout vers le zip
++                  with open(f"/tmp/artifact_{artifact_id}.zip", "wb") as zf:
++                      dl = subprocess.run(
++                          ["gh", "api", f"repos/{repo}/actions/artifacts/{artifact_id}/zip"],
++                          stdout=zf, stderr=subprocess.PIPE, timeout=60
++                      )
++                  if dl.returncode != 0:
++                      print(f"  Warning: download failed for {artifact_id}: {dl.stderr.decode()[:200]}")
++                      continue
+                   subprocess.run(["unzip", "-o", f"/tmp/artifact_{artifact_id}.zip",
+                                   "-d", f"/tmp/artifact_{artifact_id}/"], capture_output=True)
+                   for json_file in glob.glob(f"/tmp/artifact_{artifact_id}/**/*.json", recursive=True):
+@@ -164,7 +168,7 @@ jobs:
+             4. If any skill candidate has usage_count >= 5, write and validate the skill
+             5. Create PRs for prompt improvements if needed
+             Write results to /tmp/agent_result.json
+-          claude_args: --max-turns 15 --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__create_pull_request,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
++          claude_args: --max-turns 25 --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__create_pull_request,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
+           settings: |
+             {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
+ 
