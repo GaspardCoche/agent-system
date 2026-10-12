@@ -1,35 +1,5 @@
 [
   {
-    "run_id": "32349462820",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "32349462820",
-    "summary": "No implementable task found. /tmp/agent_task.json contains only the placeholder input 'See task in context' with no task_spec, issue reference, or dat · Task received routing to Forge agent with instruction 'See task in context'. No explicit data, ta",
-    "next_actions": [
-      "Re-run or fix the orchestrator so it completes within the turn budget and writes a concrete dispatch_plan.json with an explicit task_spec",
-      "If this was meant to be a manual/ad-hoc task, provide the requirements directly (issue number, description, or file reference)"
-    ],
-    "timestamp": "2026-08-20T08:40:41.664502+00:00",
-    "agents": [
-      {
-        "name": "forge",
-        "status": "failed"
-      },
-      {
-        "name": "lumen",
-        "status": "needs_clarification"
-      },
-      {
-        "name": "researcher",
-        "status": "failed"
-      }
-    ],
-    "report_file": "reports/2026-08-20-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "32448345591",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-21",
@@ -1659,5 +1629,28 @@
     "timestamp": "2026-10-12T11:58:26.775544+00:00",
     "agents": [],
     "report_file": "reports/2026-10-12-email-agent-daily-digest-2026-10-12.md"
+  },
+  {
+    "run_id": "38281775222",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-10-12",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false. Aucun appel API. Secrets manquants : GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET,",
+    "next_actions": [
+      "Configurer les 4 secrets Google Ads dans GitHub Secrets",
+      "Forge : ajouter needs: [check-credentials] dans nexus.yml",
+      "Relancer l'audit après configuration"
+    ],
+    "timestamp": "2026-10-12T17:05:37.684942+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-10-12-nexus-nexus-weekly-audit-2026-10-12.md"
   }
 ]
