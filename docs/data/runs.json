@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "32552524250",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-08-22",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "11 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-08-22T04:51:39.400779+00:00",
-    "agents": [],
-    "report_file": "reports/2026-08-22-email-agent-daily-digest-2026-08-22.md"
-  },
-  {
     "run_id": "32618793084",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-23",
@@ -1660,5 +1646,32 @@
     "timestamp": "2026-10-13T11:48:35.461934+00:00",
     "agents": [],
     "report_file": "reports/2026-10-13-email-agent-daily-digest-2026-10-13.md"
+  },
+  {
+    "run_id": "38423013687",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "38423013687",
+    "summary": "Scheduled dry-run maintenance task (cron/workflow health, vault/prompt hygiene). Prior Lumen report: system healthy, 90% workflow success, 4 validated · Maintenance health check completed (dry-run). System healthy: 90% workflow success rate, 418 vaul",
+    "next_actions": [],
+    "timestamp": "2026-10-13T15:38:56.052957+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "lumen",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "task_routing_error"
+      }
+    ],
+    "report_file": "reports/2026-10-13-orchestrator-scheduled-run.md"
   }
 ]
