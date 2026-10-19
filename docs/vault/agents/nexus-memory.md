@@ -4,7 +4,7 @@ id: agents-nexus-memory
 type: agent
 tags: [nexus, google-ads, memory, patterns]
 agents: [nexus]
-updated: 2026-10-12
+updated: 2026-10-19
 ---
 
 # Nexus — Mémoire & Patterns
@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-10-19 | weekly_audit (dry_run) | 8/100 (estimé) | Template — credentials_ok=false (21e run) — BLOCAGE ~209 jours — Score dégradé 11→8 | #39274618808 |
 | 2026-10-12 | weekly_audit (dry_run) | 11/100 (estimé) | Template — credentials_ok=false (19e run) — BLOCAGE ~202 jours — Score dégradé 14→11 | #38281775222 |
 | 2026-10-05 | weekly_audit (dry_run) | 14/100 (estimé) | Template — credentials_ok=false — BLOCAGE 195 jours — Score dégradé 17→14 | #37341335883 |
 | 2026-08-31 | weekly_audit (dry_run) | 17/100 (estimé) | Template — credentials_ok=false (17e run consécutif) — BLOCAGE 160 jours — Score dégradé 20→17 — Comment posté sur issue #185 | #33409211710 |
