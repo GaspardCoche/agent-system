@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "33105351501",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "33105351501",
-    "summary": "Task file malformed or incompletely routed. Task referenced Forge agent but Researcher agent was invoked. No research query provided in /tmp/agent_tas",
-    "next_actions": [],
-    "timestamp": "2026-08-27T18:58:09.510656+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "failed"
-      }
-    ],
-    "report_file": "reports/2026-08-27-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "33190616617",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-28",
@@ -1655,5 +1636,27 @@
     "timestamp": "2026-10-19T09:50:52.681906+00:00",
     "agents": [],
     "report_file": "reports/2026-10-19-email-agent-daily-digest-2026-10-19.md"
+  },
+  {
+    "run_id": "39274618808",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-10-19",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false. Secrets manquants : GOOGLE_ADS_DEVELOPER_TOKEN, GOOGLE_ADS_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET, GOOGLE_ADS_REFRE",
+    "next_actions": [
+      "Configurer les 4 secrets GitHub (issue #185)",
+      "Forge : ajouter needs: [check-credentials] dans nexus.yml"
+    ],
+    "timestamp": "2026-10-19T15:05:34.536659+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-10-19-nexus-nexus-weekly-audit-2026-10-19.md"
   }
 ]
