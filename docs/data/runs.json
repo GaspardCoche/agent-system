@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "33249105285",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-08-29",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "7 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-08-29T11:08:53.001289+00:00",
-    "agents": [],
-    "report_file": "reports/2026-08-29-email-agent-daily-digest-2026-08-29.md"
-  },
-  {
     "run_id": "33305173836",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-08-30",
@@ -1657,5 +1643,28 @@
     "timestamp": "2026-10-20T09:28:29.029423+00:00",
     "agents": [],
     "report_file": "reports/2026-10-20-email-agent-daily-digest-2026-10-20.md"
+  },
+  {
+    "run_id": "39429334035",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "39429334035",
+    "summary": "Task is a Sage-type weekly maintenance review, routed to Forge (dry_run). Validated skills/registry.json: 4 validated skills (firecrawl_scrape, github · Task routing error detected. The loaded task (ID 39429334035) is intended for the 'sage' agent (s",
+    "next_actions": [],
+    "timestamp": "2026-10-20T13:23:48.572591+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "task_mismatch"
+      }
+    ],
+    "report_file": "reports/2026-10-20-orchestrator-scheduled-run.md"
   }
 ]
