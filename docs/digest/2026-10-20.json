@@ -1,0 +1,312 @@
+{
+  "date": "2026-10-20",
+  "headline": "Les agents autonomes passent à l'attaque — et la facture compute explose",
+  "one_liner": "Pendant que les labs enchaînent les méga-deals compute, les agents IA deviennent une surface d'attaque bien réelle : un pirate a compromis plus de 100 sites avec une armée d'agents quasi-autonomes.",
+  "top_story": {
+    "title": "A hacker broke into John Deere and SharkNinja with an army of AI agents",
+    "source": "The Verge AI",
+    "url": "https://www.theverge.com/ai-artificial-intelligence/1013643/ai-agents-hack-john-deere-shark-ninja-cummins",
+    "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/STKS533_AI_AGENTS_HACKING_A-1.png?quality=90&strip=all&crop=0%2C9.9676601489831%2C100%2C80.064679702034&w=1200",
+    "summary": "Selon la firme de sécurité Norforge, un pirate a compromis plus de 100 sites web à l'aide d'une armée d'agents IA opérant en grande partie de façon autonome, touchant notamment John Deere, SharkNinja et Cummins. Ce n'est plus une démonstration de labo : des agents enchaînent reconnaissance, exploitation et pivots avec une intervention humaine minimale. Le même jour, Microsoft compare les agents IA à des 'menaces internes' et Ars rappelle que des modèles OpenAI ont déjà piraté un wallet crypto. Pour toute organisation qui déploie des agents branchés sur des outils réels (MCP, APIs, CRM), la surface d'attaque et le risque d'abus augmentent d'un cran. La gouvernance des agents — permissions, sandboxing, audit — devient un sujet board-level, pas un détail d'implémentation.",
+    "why_it_matters": "Pour toi : tes agents GitHub Actions et serveurs MCP ont les mêmes accès qu'un humain — il est temps de cloisonner permissions et secrets avant qu'un agent ne devienne ton maillon faible.",
+    "category": "Regulation & Ethique",
+    "company_tags": [
+      "Norforge",
+      "John Deere",
+      "SharkNinja",
+      "Cummins"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Amazon is taking its biggest shot at Nvidia yet with new TorchNeuron dev tool",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/10/19/amazon-is-taking-its-biggest-shot-at-nvidia-yet-with-new-torchneuron-dev-tool/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2025/03/GettyImages-2205217071.jpg?resize=1200,800",
+      "summary": "Amazon lance TorchNeuron pour permettre aux développeurs d'exécuter leurs apps PyTorch sur ses propres puces Trainium plutôt que sur du Nvidia. L'objectif est clair : casser le quasi-monopole de Nvidia sur l'écosystème PyTorch et rendre le silicium alternatif indolore à adopter. HuggingFace documente déjà le portage de ses modèles sur Trainium via ce même outil.",
+      "why_it_matters": "Pour toi : si l'inférence sur Trainium devient aussi simple que sur GPU, ton coût au token d'enrichissement et de scoring ICP peut baisser sensiblement.",
+      "category": "Code & Dev",
+      "importance": "must_read",
+      "company_tags": [
+        "Amazon",
+        "Nvidia",
+        "HuggingFace"
+      ]
+    },
+    {
+      "title": "Microsoft says AI agents are like insider threats as 'frontier models can't be trusted'",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/10/19/microsoft-says-ai-agents-are-like-insider-threats-as-frontier-models-cant-be-trusted/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/10/Networked-AI-swarm-with-glowing-nodes.png?resize=1200,600",
+      "summary": "Microsoft recommande aux entreprises de surveiller les agents IA comme des menaces internes, estimant que les modèles frontier 'ne peuvent pas être pleinement dignes de confiance'. Le message vise surtout les agents connectés à des systèmes hors du contrôle des labs comme OpenAI et Anthropic. C'est un signal fort pour cadrer monitoring, moindre privilège et traçabilité des actions.",
+      "why_it_matters": "Pour toi : traite chaque agent HubSpot/Lemlist comme un employé à accès limité — logs, revue des actions et permissions minimales par défaut.",
+      "category": "Outils & Plateformes",
+      "importance": "must_read",
+      "company_tags": [
+        "Microsoft",
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "MiniMax M3.1 Flash shows China's AI price race has no floor in sight",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/minimax-m3-1-flash-shows-chinas-ai-price-race-has-no-floor-in-sight/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/10/minimax.png",
+      "summary": "MiniMax M3.1 Flash gagne 13 points sur son prédécesseur (42 sur l'Artificial Analysis Intelligence Index) pour moitié prix, et atteint 73,7 % au benchmark de code DeepSWE v1.1 pour moins de 0,30 $ par tâche. Il se cale sur DeepSeek V4.1 Flash 1017 en perf et en prix. La course aux modèles 'Flash' chinois tire les coûts de code vers le bas sans plancher visible.",
+      "why_it_matters": "Pour toi : pour des tâches de code à fort volume et faible enjeu, un modèle Flash à 0,30 $/tâche peut remplacer avantageusement un gros modèle sur ton pipeline d'agents.",
+      "category": "Modeles",
+      "importance": "must_read",
+      "company_tags": [
+        "MiniMax",
+        "DeepSeek"
+      ]
+    },
+    {
+      "title": "Hackers hit AI coding tool OpenCode, running up charges on users' AI accounts",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/10/19/hackers-hit-ai-coding-tool-opencode-running-up-charges-on-users-ai-accounts/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/10/cyberatttack.jpg?w=612",
+      "summary": "OpenCode, agent de code open source devenu alternative populaire à Claude Code et Cursor, a vu une partie de sa plateforme en ligne piratée : des clés API d'utilisateurs ont été volées et utilisées pour facturer leurs comptes IA. Détail savoureux : les outils IA sollicités pour aider refusaient d'examiner le code malveillant. Rappel brutal que les outils de dev IA eux-mêmes sont une cible.",
+      "why_it_matters": "Pour toi : fais tourner tes clés API et isole celles confiées à des outils de code tiers — une fuite se transforme vite en facture.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "OpenCode",
+        "Cursor",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Stripe says AI agent purchases are adding up, but it won't share the numbers",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/stripe-says-ai-agent-purchases-are-adding-up-but-it-wont-share-the-numbers/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/08/stripe_logo_wall.png",
+      "summary": "Selon Stripe, les achats effectués par des agents IA via son service de paiement Link montent en volume, même si l'entreprise refuse de livrer des chiffres. Le signal : le commerce initié par des agents sort de l'anecdote. Les rails de paiement s'adaptent déjà à des acheteurs non humains.",
+      "why_it_matters": "Pour toi : l'achat agentique arrive — penser dès maintenant à exposer tes offres/landing pages de façon lisible par des agents sera un avantage B2B.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Stripe"
+      ]
+    },
+    {
+      "title": "\"We were looking at it wrong\": The explosive claim that's upended the AI world",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/10/19/1147149/we-were-looking-at-it-wrong-the-explosive-claim-thats-upended-the-ai-world/",
+      "image_url": "https://wp.technologyreview.com/wp-content/uploads/2026/10/261016_LLMsNotcomplicated_V2.jpg?resize=1200,600",
+      "summary": "Un billet de 26 000 mots de Nick Cammarata (startup Goodfire) affirme avoir une 'bonne nouvelle sur la nature des réseaux de neurones' et secoue la communauté IA, entre enthousiasme et prudence. Le débat porte sur l'interprétabilité et sur ce que les modèles apprennent réellement. À suivre pour ses implications sur la fiabilité et le contrôle des modèles.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Goodfire"
+      ]
+    },
+    {
+      "title": "How to continue a GitHub Copilot app session in VS Code",
+      "source": "GitHub Blog",
+      "url": "https://github.blog/ai-and-ml/github-copilot/how-to-continue-a-github-copilot-app-session-in-vs-code/",
+      "image_url": "https://github.blog/wp-content/uploads/2026/10/Screenshot-2026-10-15-at-3.11.02-PM.png",
+      "summary": "GitHub explique comment déplacer une session d'agent depuis l'app Copilot vers VS Code sans perdre conversation, modifications de code ni contexte de travail. La continuité multi-surfaces devient un critère clé des agents de code. Un pattern d'UX que les workflows d'agents maison gagneraient à copier.",
+      "why_it_matters": "Pour toi : la portabilité du contexte entre surfaces est exactement ce qui manque souvent à tes agents GitHub Actions — bon modèle à répliquer.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "GitHub",
+        "Microsoft"
+      ]
+    },
+    {
+      "title": "New paper: Emerging trends in AI agent evaluation",
+      "source": "AI Snake Oil",
+      "url": "https://www.normaltech.ai/p/new-paper-emerging-trends-in-ai-agent",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!hjZG!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F70ccf295-23ca-4a51-a94b-9b50d3de38ab_2394x1246.jpeg",
+      "summary": "Sayash Kapoor et son équipe publient un papier cartographiant les méthodes, questions ouvertes et l'écosystème de l'évaluation des agents IA. Au-delà des benchmarks jouets, le sujet est : comment mesurer honnêtement ce qu'un agent accomplit réellement. Lecture de fond pour quiconque met des agents en production.",
+      "why_it_matters": "Pour toi : un cadre d'éval sérieux t'aide à décider si Sentinel/Forge sont vraiment fiables avant de leur confier des actions CRM irréversibles.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": []
+    },
+    {
+      "title": "The neocloud shakeout is coming, and Nvidia has the most to lose",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/the-neocloud-shakeout-is-coming-and-nvidia-has-the-most-to-lose/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2025/09/NVIDIA-Vera-Rubin-NVL144-with-Tray.jpg",
+      "summary": "Après des krachs boursiers et l'IPO avortée de Firmus, des dirigeants estiment que seuls sept à dix des centaines de fournisseurs de cloud IA survivront. CoreWeave a perdu un quart de sa valeur et Microsoft s'est retiré d'un accord Nscale pour 23 000 puces Nvidia. Nvidia, très exposé, a beaucoup à perdre dans la consolidation.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Nvidia",
+        "CoreWeave",
+        "Microsoft",
+        "Nscale"
+      ]
+    },
+    {
+      "title": "A visit to Samsung's massive new semiconductor hub",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/10/20/1145916/dispatch-visit-to-samsung-massive-new-semiconductor-hub/",
+      "image_url": "https://wp.technologyreview.com/wp-content/uploads/2026/10/GettyImages-2277893810.jpg?resize=1200,600",
+      "summary": "Pour répondre à l'explosion de la demande de mémoire qui accompagne les GPU, Samsung bâtit un complexe de fabrication géant à Pyeongtaek (Corée du Sud), où trois usines tournent déjà. La mémoire HBM est le goulot d'étranglement silencieux de l'IA générative. Un rappel que la contrainte matérielle reste très physique.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Samsung"
+      ]
+    },
+    {
+      "title": "My obituary for programming",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Oct/19/my-obituary-for-programming/",
+      "image_url": "",
+      "summary": "Simon Willison relaie la réflexion poignante de Jeremy Scheff sur la perte vécue par les programmeurs de carrière qui aimaient résoudre les 'petites énigmes logiques' du code, à l'heure des agents codeurs. Au-delà de la nostalgie, le texte interroge ce que devient le métier quand l'exécution est déléguée. Utile pour penser le repositionnement vers l'intention et l'architecture.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": []
+    },
+    {
+      "title": "Making the internet better for AI agents might make it worse for everyone else",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/10/19/1147186/making-the-internet-better-for-ai-agents-might-make-it-worse-for-everyone-else/",
+      "image_url": "https://wp.technologyreview.com/wp-content/uploads/2026/10/261016_Algo.jpg?resize=1200,600",
+      "summary": "Adapter le web aux agents IA (accès automatisés, formats machine-friendly) pourrait dégrader l'expérience des humains, prévient The Algorithm. La frontière bots/personnes se brouille et les sites doivent arbitrer. Enjeu direct pour quiconque scrape, enrichit ou publie des pages destinées à être lues par des agents.",
+      "why_it_matters": "Pour toi : tes enrichissements Firecrawl et tes landing pages évoluent dans un web de plus en plus pensé pour les agents — autant anticiper ces formats.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": []
+    }
+  ],
+  "extended": [
+    {
+      "title": "Nscale and Anthropic are reportedly in talks for yet another $45B compute deal",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/10/19/nscale-and-anthropic-are-reportedly-in-talks-for-yet-another-45-billion-compute-deal/",
+      "summary": "Anthropic serait en discussion pour un énième méga-accord compute de 45 Md$ avec Nscale. Nouvelle illustration de la course effrénée à la capacité GPU chez les labs.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Anthropic",
+        "Nscale"
+      ]
+    },
+    {
+      "title": "Anthropic plans fund for workers threatened by AI, Musk counters with SpaceX shares for children",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-plans-fund-for-workers-threatened-by-ai-musk-counters-with-spacex-shares-for-children/",
+      "summary": "Anthropic veut placer 5 % de ses actions dans un fonds d'intérêt public, avec possibles paiements directs aux travailleurs menacés par l'IA. Le fonds reste une LLC contrôlée par Anthropic, à l'approche d'une éventuelle IPO.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Anthropic",
+        "SpaceX"
+      ]
+    },
+    {
+      "title": "[AINews] not much happened today",
+      "source": "Latent Space",
+      "url": "https://www.latent.space/p/ainews-not-much-happened-today-f09",
+      "summary": "Journée calme côté modèles, mais arrivée de DeepSeek V4.1 Flash 1017, MiniMax M3.1 Flash et Mercury 3 — pas encore en usage large. Bon panorama hebdo pour les ingénieurs IA.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "DeepSeek",
+        "MiniMax"
+      ]
+    },
+    {
+      "title": "CoreWeave's debt is becoming the whole AI industry's problem",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1014045/coreweave-stock-debt-sector-ai",
+      "summary": "Les obligations de CoreWeave sont passées en territoire 'distressed', ravivant les craintes d'une bulle compute dont les risques déborderaient sur tout le secteur IA.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "CoreWeave"
+      ]
+    },
+    {
+      "title": "Kling AI drops version 4.0 with stereo audio, multilingual lip sync, and a lighter Flash variant",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/kling-ai-drops-version-4-0-with-stereo-audio-multilingual-lip-sync-and-a-lighter-flash-variant/",
+      "summary": "Kling 4.0 génère des clips jusqu'à 30 s, accepte dix keyframes et comprend des prompts jusqu'à 8 000 tokens, avec audio stéréo et lip sync multilingue. Il tient tête à Wan 3.0 et Seedance 2.5 sans dominer.",
+      "category": "Outils & Plateformes",
+      "company_tags": [
+        "Kling AI"
+      ]
+    },
+    {
+      "title": "Replika's founder built the AI assistant she pitched at Disrupt 12 years ago",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/10/19/replikas-founder-built-the-ai-assistant-she-pitched-at-disrupt-12-years-ago/",
+      "summary": "Eugenia Kuyda lance Wabi, un assistant IA personnel gratuit et téléchargeable, concrétisant une idée vieille de plus de dix ans. Signe de maturité des assistants grand public.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Wabi",
+        "Replika"
+      ]
+    },
+    {
+      "title": "ReactOS reaches major milestone with NTFS install support",
+      "source": "Ars Technica AI",
+      "url": "https://arstechnica.com/information-technology/2026/10/reactos-reaches-major-milestone-with-ntfs-install-support/",
+      "summary": "ReactOS, le clone open source de Windows, franchit un cap en supportant l'installation sur NTFS grâce à un nouveau pilote. Belle avancée pour l'écosystème libre bas niveau.",
+      "category": "Open Source",
+      "company_tags": [
+        "ReactOS"
+      ]
+    },
+    {
+      "title": "JB Pritzker on AI, tech, privacy, and Trump",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/podcast/1012839/pritzker-ai-privacy-data-centers-flock-congress-laws",
+      "summary": "Le gouverneur de l'Illinois JB Pritzker livre ses vues sur l'IA, la vie privée et les data centers, sur fond de réalignement politique à l'approche des midterms.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Embedded AI evaluators won't be an easy solution, Hugging Face's policy chief says",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/10/19/embedded-ai-evaluators-wont-be-an-easy-solution-hugging-faces-policy-chief-says/",
+      "summary": "L'idée d'évaluateurs 'neutres' intégrés au sein des labs IA est plus compliquée qu'il n'y paraît, prévient la responsable politique de Hugging Face, alors que les incidents de sécurité se multiplient.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "HuggingFace"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "TorchNeuron (HuggingFace sur AWS Trainium)",
+      "description": "Porter un modèle HF vers Trainium pour comparer coût/perf d'inférence face à tes GPU habituels.",
+      "url": "https://huggingface.co/blog/hf-torchneuron"
+    },
+    {
+      "nom": "GitHub Copilot — continuité de session App → VS Code",
+      "description": "Reprendre une session d'agent Copilot dans VS Code sans perdre le contexte, pour fluidifier tes workflows de code.",
+      "url": "https://github.blog/ai-and-ml/github-copilot/how-to-continue-a-github-copilot-app-session-in-vs-code/"
+    },
+    {
+      "nom": "MiniMax M3.1 Flash",
+      "description": "Tester ce modèle de code low-cost (0,30 $/tâche) sur une tâche à fort volume de ton pipeline d'agents.",
+      "url": "https://the-decoder.com/minimax-m3-1-flash-shows-chinas-ai-price-race-has-no-floor-in-sight/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "Les agents autonomes, nouvelle surface d'attaque",
+      "description": "Piratage de 100+ sites par une armée d'agents, Microsoft qui compare les agents à des menaces internes, et le vol de clés sur OpenCode : la sécurité des agents devient un sujet de premier plan."
+    },
+    {
+      "title": "Guerre des prix des modèles 'Flash'",
+      "description": "MiniMax M3.1 Flash, DeepSeek V4.1 Flash et Mercury 3 tirent le coût du code vers le bas sans plancher visible, au bénéfice des pipelines à fort volume."
+    },
+    {
+      "title": "Course au compute et fragilité financière",
+      "description": "Deals à 45 Md$ (Anthropic/Nscale) d'un côté, dette distressed de CoreWeave et shakeout annoncé des neoclouds de l'autre : l'infrastructure IA avance sur une corde raide."
+    },
+    {
+      "title": "Alternatives au silicium Nvidia",
+      "description": "TorchNeuron pour Trainium côté Amazon et l'expansion mémoire de Samsung montrent une poussée pour desserrer la dépendance au GPU Nvidia."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 18,
+    "articles_extracted": 28
+  }
+}
