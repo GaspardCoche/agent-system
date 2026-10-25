@@ -159,3 +159,7 @@ Des qu'un pattern depasse 3 occurrences, creer le skill correspondant.
 ---
 
 *Sage met a jour ce fichier apres chaque analyse hebdomadaire.*
+
+### 2026-10-25 — weekly
+- Pipeline broken: cause réelle = `gh api --output` n'existe pas (sage.yml). Corrigé; max-turns 25; prompt reusable exige `retrospective`.
+- Reste: upload `agent-result-iris` absent d'email-agent.yml. Aucun candidat skill (0 rétrospective lue; registre inchangé: 4 validés).

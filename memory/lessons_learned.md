@@ -428,3 +428,17 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 **Agents concernes :** Tous
 
 ---
+
+---
+
+## 2026-10-25 — Pipeline rétrospectives : VRAIE cause racine = `gh api --output` inexistant
+
+**Problème :** 12e+ semaine `pipeline_status: broken` (50 runs, 6 artifacts, 0 rétrospectives). Les artifacts `agent-result-*` existent, ne sont pas expirés, et CONTIENNENT bien un champ `retrospective` (vérifié par téléchargement manuel).
+
+**Cause racine :** `sage.yml` appelait `gh api .../zip --output file.zip`. `gh api` n'a PAS de flag `--output` (grep `gh api --help` = 0) → le téléchargement échouait silencieusement (`capture_output`), unzip ne trouvait rien, 0 rétrospectives. Les hypothèses des 11 semaines précédentes (retention, upload manquant) étaient secondaires.
+
+**Fix appliqué (grep-vérifié) :** `sage.yml` écrit maintenant `dl.stdout` en binaire dans le zip ; `--max-turns 15` → `25` (ligne 169) ; `_reusable-claude.yml` prompt étape 4 exige l'objet `retrospective`.
+
+**Toujours NON fait :** aucun upload `agent-result-iris-*` dans `email-agent.yml` (grep = 0, contrairement à l'entrée du 2026-06-21). Iris n'alimente donc pas Sage.
+
+**Règle :** Tester la commande de collecte à la main avant d'émettre une hypothèse ; ne pas documenter un fix sans grep.
