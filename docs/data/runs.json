@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "33735768690",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-09-03",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "7 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-09-03T08:59:31.462482+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-03-email-agent-daily-digest-2026-09-03.md"
-  },
-  {
     "run_id": "33756050671",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1663,5 +1649,28 @@
     "timestamp": "2026-10-26T10:08:41.021395+00:00",
     "agents": [],
     "report_file": "reports/2026-10-26-email-agent-daily-digest-2026-10-26.md"
+  },
+  {
+    "run_id": "40341298393",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-10-26",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false, aucun appel API. 4 secrets Google Ads manquants. 22e run consécutif sans audit réel (~216 jours). Score estimé d",
+    "next_actions": [
+      "Configurer les 4 secrets GitHub",
+      "Forge: ajouter needs: [check-credentials] dans nexus.yml",
+      "Relancer Nexus après configuration"
+    ],
+    "timestamp": "2026-10-26T14:38:31.793052+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-10-26-nexus-nexus-weekly-audit-2026-10-26.md"
   }
 ]
