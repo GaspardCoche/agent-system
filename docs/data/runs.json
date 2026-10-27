@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "33872982147",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "33872982147",
-    "summary": "Task cannot be executed. The Orchestrator workflow failed before creating the dispatch plan, so no research query was provided. Upstream issue: orches",
-    "next_actions": [],
-    "timestamp": "2026-09-04T12:35:59.360963+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "needs_retry"
-      }
-    ],
-    "report_file": "reports/2026-09-04-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "33954909807",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-05",
@@ -1676,5 +1657,28 @@
     "timestamp": "2026-10-27T09:51:49.479004+00:00",
     "agents": [],
     "report_file": "reports/2026-10-27-email-agent-daily-digest-2026-10-27.md"
+  },
+  {
+    "run_id": "40516489215",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "40516489215",
+    "summary": "Health check verified, no changes needed. 20 workflows present (YAML not parsed: pyyaml unavailable), skills registry valid JSON, 4 validated skill fi · System health check completed. All critical components validated: 20 workflows, 4 validated skill",
+    "next_actions": [],
+    "timestamp": "2026-10-27T14:01:43.863592+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-10-27-orchestrator-scheduled-run.md"
   }
 ]
