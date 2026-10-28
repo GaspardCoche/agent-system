@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "34022358024",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-09-06",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "11 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-09-06T08:42:22.205313+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-06-email-agent-daily-digest-2026-09-06.md"
-  },
-  {
     "run_id": "34033461313",
     "workflow": "sage",
     "title": "Sage Weekly 2026-09-06",
@@ -1680,5 +1666,28 @@
     "timestamp": "2026-10-28T10:38:10.147745+00:00",
     "agents": [],
     "report_file": "reports/2026-10-28-email-agent-daily-digest-2026-10-28.md"
+  },
+  {
+    "run_id": "40709837382",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "40709837382",
+    "summary": "Dry-run health validation, no code changes. skills/registry.json: 4 validated skills, all scripts exist and compile. All scripts in skills/validated a · Role mismatch: task assigned to wrong agent. Task requires Sentinel (repo validation, tests) and ",
+    "next_actions": [],
+    "timestamp": "2026-10-28T14:54:57.805750+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-10-28-orchestrator-scheduled-run.md"
   }
 ]
