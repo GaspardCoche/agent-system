@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "34130291338",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "34130291338",
-    "summary": "Task file is incomplete or incorrectly routed. Expected a research query in /tmp/agent_task.json but received a routing directive to a forge agent ins",
-    "next_actions": [],
-    "timestamp": "2026-09-07T14:04:12.712677+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "failed"
-      }
-    ],
-    "report_file": "reports/2026-09-07-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "34206615617",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-08",
@@ -1702,5 +1683,28 @@
     "timestamp": "2026-10-30T10:55:09.849855+00:00",
     "agents": [],
     "report_file": "reports/2026-10-30-email-agent-daily-digest-2026-10-30.md"
+  },
+  {
+    "run_id": "41074902662",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "41074902662",
+    "summary": "Dry-run health check, no code change required. No test suite exists in the repo (no test*.py, pytest not installed). All 4 validated skills in skills/ · Task routed to Researcher agent but designed for Sage + Sentinel multi-agent coordination. This t",
+    "next_actions": [],
+    "timestamp": "2026-10-30T14:53:44.719515+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "routing_error"
+      }
+    ],
+    "report_file": "reports/2026-10-30-orchestrator-scheduled-run.md"
   }
 ]
