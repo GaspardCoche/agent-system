@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "34457732070",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-09-10",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "26 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-09-10T09:02:59.965892+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-10-email-agent-daily-digest-2026-09-10.md"
-  },
-  {
     "run_id": "34478145985",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1701,5 +1687,32 @@
       }
     ],
     "report_file": "reports/2026-11-02-nexus-nexus-weekly-audit-2026-11-02.md"
+  },
+  {
+    "run_id": "41494371848",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "41494371848",
+    "summary": "Aucun changement de code requis (maintenance, dry_run). registry.json : 4 skills validated (firecrawl_scrape, github_create_issue, gemini_analyze, sla · Maintenance audit complet. 4 skills validés présents sur disque (✅). Pipeline rétrospectives cass",
+    "next_actions": [],
+    "timestamp": "2026-11-02T17:55:27.980323+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "lumen",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-11-02-orchestrator-scheduled-run.md"
   }
 ]
