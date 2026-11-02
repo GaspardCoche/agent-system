@@ -57,6 +57,7 @@ Voir [[tech/mcp-servers]] pour la configuration MCP complete.
 
 | Date | Type | Score | Résumé | Run ID |
 |------|------|-------|--------|--------|
+| 2026-11-02 | weekly_audit (dry_run) | 2/100 (estimé) | Template — credentials_ok=false (23e run) — BLOCAGE ~223 jours — Score dégradé 5→2 | #41491718060 |
 | 2026-10-26 | weekly_audit (dry_run) | 5/100 (estimé) | Template — credentials_ok=false (22e run) — BLOCAGE ~216 jours — Score dégradé 8→5 | #40341298393 |
 | 2026-10-19 | weekly_audit (dry_run) | 8/100 (estimé) | Template — credentials_ok=false (21e run) — BLOCAGE ~209 jours — Score dégradé 11→8 | #39274618808 |
 | 2026-10-12 | weekly_audit (dry_run) | 11/100 (estimé) | Template — credentials_ok=false (19e run) — BLOCAGE ~202 jours — Score dégradé 14→11 | #38281775222 |
