@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opus 5.5 rebat les cartes du coding agentique pendant qu&#x27;Anthropic file vers l&#x27;IPO — AI Briefing 2026-11-03</title>
+  <meta name="description" content="Anthropic sort Claude Opus 5.5 — meilleur en coding agentique et 40% moins cher à l&#x27;exécution — au moment même où elle dépose son S-1 et évoque une capacité de RSI imminente.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Mardi 3 novembre 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">30 articles</span>
+      <span class="hero-pill">19 sources</span>
+      <span class='hero-pill'>+12 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Opus 5.5 rebat les cartes du coding agentique pendant qu&#x27;Anthropic file vers l&#x27;IPO</h2>
+      <p>Anthropic sort Claude Opus 5.5 — meilleur en coding agentique et 40% moins cher à l&#x27;exécution — au moment même où elle dépose son S-1 et évoque une capacité de RSI imminente.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+12)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#7C3AED18,#7C3AED08);"><img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://www.anthropic.com/news">Claude Opus 5.5 : nouveau standard du coding agentique, 40% moins cher</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic</span>
+        </div>
+        <p class="summary">Anthropic lance Claude Opus 5.5, présenté comme son modèle le plus performant en coding agentique et en travail de connaissance, pour un coût d&#x27;exploitation 40% inférieur à Opus 5 sur les charges typiques. La sortie complète la famille 5.5 : Sonnet 5.5 (30%+ plus rapide et jusqu&#x27;à 30% moins cher) et Haiku 5.5, pensé pour le haut volume, les subagents et le browser use. Pour quiconque code quotidiennement avec Claude Code, c&#x27;est à la fois un gain de capacité et une baisse directe du coût au token sur les workflows agentiques longs. Le timing — à quelques jours du dépôt de S-1 pour l&#x27;IPO — montre qu&#x27;Anthropic pousse désormais l&#x27;efficacité autant que la performance brute.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://www.anthropic.com/news" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Nov/2/llm/">llm 0.37 : la CLI de Simon Willison ajoute les modèles gpt-6.1 et la commande openai endpoint add</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison publie llm 0.37, deux mois de fonctionnalités accumulées pour son outil CLI et sa librairie Python. Ajout des modèles gpt-6.1-sol et gpt-6.1-terra, plus une commande `llm openai endpoint add` pour brancher facilement des endpoints compatibles OpenAI. Pour un workflow local RAG et des scripts d&#x27;enrichissement, c&#x27;est l&#x27;outil idéal pour piloter plusieurs modèles depuis le terminal.</p>
+        <div class="card-tags"><span class="tag">Simon Willison</span><span class="tag">OpenAI</span></div>
+        <a href="https://simonwillison.net/2026/Nov/2/llm/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/11/02/anthropic-warns-that-its-very-close-to-rsi-capability-aka-self-building-ai/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/11/Recursive-Neural-Spiral-in-Circuitry.png?resize=1200,600" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/11/02/anthropic-warns-that-its-very-close-to-rsi-capability-aka-self-building-ai/">Anthropic affirme être très proche d&#x27;une capacité de RSI (IA qui s&#x27;auto-construit)</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch</span>
+        </div>
+        <p class="summary">Anthropic déclare s&#x27;approcher du RSI (recursive self-improvement), le point où une IA devient assez douée pour s&#x27;entraîner elle-même et déclencher une accélération brutale des capacités. L&#x27;annonce, à la veille de son IPO, est autant un signal de sécurité qu&#x27;un argument de valorisation. À suivre de près, car cela conditionne le rythme des prochaines sorties de modèles.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://techcrunch.com/2026/11/02/anthropic-warns-that-its-very-close-to-rsi-capability-aka-self-building-ai/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>7 articles</span></div><div class='grid'><article class="card">
+      <a href="https://huggingface.co/blog/transformers-mic" class="card-img-link"><img src="https://huggingface.co/blog/assets/transformers-mic/mic-logo.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/transformers-mic">Hugging Face formalise les Model Integration Contracts dans Transformers</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Hugging Face introduit les Model Integration Contracts (MIC) dans la librairie Transformers, un cadre pour standardiser l&#x27;intégration de nouvelles architectures. Objectif : réduire la friction et les ruptures quand un nouveau modèle arrive dans l&#x27;écosystème open source. Utile pour quiconque maintient des pipelines dépendants de Transformers.</p>
+        <div class="card-tags"><span class="tag">Hugging Face</span></div>
+        <a href="https://huggingface.co/blog/transformers-mic" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/goldman-sachs-pulls-ai-coding-tools-from-traders-and-bankers/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/11/goldman_sachs_logo.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/goldman-sachs-pulls-ai-coding-tools-from-traders-and-bankers/">Goldman Sachs retire les outils de coding IA aux traders et banquiers</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Goldman Sachs limite l&#x27;accès à Claude Code et GitHub Copilot aux seuls ingénieurs, retirant ces outils aux traders et banquiers. En juillet encore, le CIO vantait le « vibe coding » du personnel non technique ; la banque invoque désormais « productivité et gestion du risque ». Signal fort sur la gouvernance de l&#x27;IA générative en entreprise régulée.</p>
+        <div class="card-tags"><span class="tag">Goldman Sachs</span><span class="tag">Anthropic</span><span class="tag">GitHub</span></div>
+        <a href="https://the-decoder.com/goldman-sachs-pulls-ai-coding-tools-from-traders-and-bankers/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/anthropic-grows-revenue-twelvefold-but-posts-23-billion-loss/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/08/anthropic_claude.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/anthropic-grows-revenue-twelvefold-but-posts-23-billion-loss/">Anthropic multiplie son revenu par douze mais affiche 23 milliards de pertes</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">À l&#x27;approche de son IPO, Anthropic dévoile une croissance de revenu par douze tout en replongeant dans une perte opérationnelle de 23 milliards de dollars. L&#x27;entreprise a aussi déposé son S-1 à la SEC et créé un Public Benefit Fund. La trajectoire illustre le pari : brûler du cash pour dominer le coding agentique.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://the-decoder.com/anthropic-grows-revenue-twelvefold-but-posts-23-billion-loss/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://latent.space/p/ainews-llms-can-read-write-neural-network-weights-weight-space-programming-cuts-autoresearch-out-of/" class="card-img-link"><img src="https://latent.space/og/card/post/ainews-llms-can-read-write-neural-network-weights-weight-space-programming-cuts-autoresearch-out-of/5aa34d964e38abf8c81931400cd491a277cc01e22318a0ba95414cfb0c56b96c.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://latent.space/p/ainews-llms-can-read-write-neural-network-weights-weight-space-programming-cuts-autoresearch-out-of/">« Weight Space Programming » : des LLM qui lisent et écrivent les poids d&#x27;autres réseaux</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">Latent Space décortique le Weight Space Programming : éditer directement les poids de Qwen pour réduire les boucles de raisonnement, un prototype de super-agent DeepSeek et le benchmark GDPx. L&#x27;idée sort l&#x27;« autoresearch » de la boucle d&#x27;auto-amélioration. Recherche frontière à surveiller pour comprendre où va la self-improvement des modèles.</p>
+        <div class="card-tags"><span class="tag">Latent Space</span><span class="tag">DeepSeek</span><span class="tag">Qwen</span></div>
+        <a href="https://latent.space/p/ainews-llms-can-read-write-neural-network-weights-weight-space-programming-cuts-autoresearch-out-of/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/11/Trajectory_3.jpg?resize=1200,900" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/">Trajectory lève 45 M$ pour rendre l&#x27;entraînement de modèles accessible aux non-techniciens</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch</span>
+        </div>
+        <p class="summary">La startup Trajectory, un an d&#x27;existence, lève 45 M$ à une valorisation de 300 M$ pour permettre à des experts non techniques d&#x27;entraîner des modèles IA. Le pari : démocratiser le fine-tuning au-delà des équipes ML. À surveiller si tu veux spécialiser des modèles sur ta donnée métier.</p>
+        <div class="card-tags"><span class="tag">Trajectory</span></div>
+        <a href="https://techcrunch.com/2026/11/02/trajectory-raises-45m-to-make-ai-model-training-accessible-to-nontechnical-experts/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.technologyreview.com/2026/11/02/1147702/stop-counting-tokens-start-counting-what-ships/" class="card-img-link"><img src="https://wp.technologyreview.com/wp-content/uploads/2026/10/iStock-2297734847.jpg?resize=1200,600" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.technologyreview.com/2026/11/02/1147702/stop-counting-tokens-start-counting-what-ships/">« Arrêtez de compter les tokens, comptez ce qui est livré »</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.technologyreview.com&sz=32" width="14" height="14" />
+          <span>MIT Tech Review</span>
+        </div>
+        <p class="summary">MIT Technology Review défend l&#x27;idée que mesurer un agent IA au token est trompeur : une seule tâche agentique consomme 10 à 50 fois plus de tokens qu&#x27;un prompt de chat, car l&#x27;agent planifie, génère, teste et corrige en boucle. La bonne métrique est la valeur livrée, pas la consommation brute.</p>
+        <div class="card-tags"><span class="tag">MIT Technology Review</span></div>
+        <a href="https://www.technologyreview.com/2026/11/02/1147702/stop-counting-tokens-start-counting-what-ships/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/1024632/anthropic-claude-ai-video-game-clones" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/STK269_ANTHROPIC_2_B.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/1024632/anthropic-claude-ai-video-game-clones">Claude Code bloque désormais le clonage de jeux vidéo existants</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge</span>
+        </div>
+        <p class="summary">Anthropic a modifié le system prompt de Claude Code pour empêcher la recréation de jeux vidéo existants, après une vague de décompilations et de portages générés par IA. L&#x27;usage reste permis pour créer des jeux originaux. Rappel concret que le comportement de Claude Code peut évoluer côté système sans action de ta part.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1024632/anthropic-claude-ai-video-game-clones" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.technologyreview.com/2026/11/03/1147934/reverse-game-theory-mechanism-design-ai-alignment/" class="card-img-link"><img src="https://wp.technologyreview.com/wp-content/uploads/2026/11/cake.jpg?resize=1200,600" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.technologyreview.com/2026/11/03/1147934/reverse-game-theory-mechanism-design-ai-alignment/">La « théorie des jeux inversée » pour garder les agents IA alignés</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.technologyreview.com&sz=32" width="14" height="14" />
+          <span>MIT Tech Review</span>
+        </div>
+        <p class="summary">MIT Technology Review présente le mechanism design appliqué à l&#x27;alignement : créer des incitations qui rendent le respect des règles rationnel pour un modèle puissant. Une piste prometteuse à mesure que les agents gagnent en autonomie.</p>
+        <div class="card-tags"><span class="tag">MIT Technology Review</span></div>
+        <a href="https://www.technologyreview.com/2026/11/03/1147934/reverse-game-theory-mechanism-design-ai-alignment/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/1024588/brave-lawsuit-ai-scraping-new-york-times" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/gettyimages-2289911637.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.232235952618%2C100%2C79.535528094764&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/1024588/brave-lawsuit-ai-scraping-new-york-times">Le New York Times poursuit le navigateur Brave pour scraping destiné à l&#x27;IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge</span>
+        </div>
+        <p class="summary">Le NYT et d&#x27;autres éditeurs attaquent Brave pour scraping illicite de contenus et contournement de paywalls, contenus ensuite distribués à des clients comme Anthropic et Perplexity. Nouvel épisode de la bataille copyright contre IA. À suivre pour ses implications sur l&#x27;accès aux données d&#x27;entraînement.</p>
+        <div class="card-tags"><span class="tag">New York Times</span><span class="tag">Brave</span><span class="tag">Anthropic</span></div>
+        <a href="https://www.theverge.com/tech/1024588/brave-lawsuit-ai-scraping-new-york-times" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/bug-hunters-can-now-earn-up-to-172000-from-openai-as-company-ramps-up-security/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/11/openai_hacking_arms-3.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://the-decoder.com/bug-hunters-can-now-earn-up-to-172000-from-openai-as-company-ramps-up-security/">OpenAI quadruple ses primes de bug bounty, jusqu&#x27;à 172 000 $</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI relève fortement ses récompenses de sécurité (jusqu&#x27;à 172 000 $) et lance un nouveau sprint de sécurité interne avec Cathedral Systems. Signal que les labos durcissent leur posture défensive. Pertinent si tu suis la sécurité des plateformes IA que tu intègres.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://the-decoder.com/bug-hunters-can-now-earn-up-to-172000-from-openai-as-company-ramps-up-security/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://techcrunch.com/2026/11/02/y-combinators-garry-tan-uses-ai-agents-so-much-he-spends-up-to-200k-a-year-on-tokens/" class="card-img-link"><img src="https://techcrunch.com/wp-content/uploads/2026/03/garry-tan-sxsw-getty.jpg?resize=1200,801" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://techcrunch.com/2026/11/02/y-combinators-garry-tan-uses-ai-agents-so-much-he-spends-up-to-200k-a-year-on-tokens/">Garry Tan (Y Combinator) dépense jusqu&#x27;à 200 000 $/an en tokens d&#x27;agents IA</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=techcrunch.com&sz=32" width="14" height="14" />
+          <span>TechCrunch</span>
+        </div>
+        <p class="summary">Le patron de Y Combinator admet utiliser les agents IA au point de dépenser jusqu&#x27;à 200 000 $ par an en tokens. Anecdote qui illustre l&#x27;explosion des coûts d&#x27;inférence chez les power users. Utile pour calibrer tes propres budgets d&#x27;agents.</p>
+        <div class="card-tags"><span class="tag">Y Combinator</span></div>
+        <a href="https://techcrunch.com/2026/11/02/y-combinators-garry-tan-uses-ai-agents-so-much-he-spends-up-to-200k-a-year-on-tokens/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://simonwillison.net/2026/Nov/2/census-bureau-super-intelligence/" class="card-img-link"><img src="https://static.simonwillison.net/static/2026-11-01/5821A414-FAF6-4E61-B037-952C1FD80D39.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Nov/2/census-bureau-super-intelligence/">Le Census Bureau américain et la « Super Intelligence »</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison revient sur les données du Census Bureau servant à mesurer l&#x27;adoption de l&#x27;IA en entreprise et sur la manière dont ces chiffres sont souvent mal interprétés. Rappel de prudence face aux graphiques d&#x27;« adoption en baisse ».</p>
+        <div class="card-tags"><span class="tag">Simon Willison</span></div>
+        <a href="https://simonwillison.net/2026/Nov/2/census-bureau-super-intelligence/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://latent.space/p/building-ai-for-lawyers-jacob-lauritzen-cto-of-legora/" class="card-img-link"><img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/ddf5ae31-7afc-4bdb-90ce-b116c9981792/private-evals.jpg?t=1793682299" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://latent.space/p/building-ai-for-lawyers-jacob-lauritzen-cto-of-legora/">Construire l&#x27;IA pour les avocats : le CTO de Legora sur les évals sans traces</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=latent.space&sz=32" width="14" height="14" />
+          <span>Latent Space</span>
+        </div>
+        <p class="summary">Dans Latent Space, Jacob Lauritzen (CTO de Legora) explique comment évaluer un agent juridique sans pouvoir lire une seule trace — les données appartiennent aux clients des cabinets. Revues tabulaires de millions de cellules et fissures du modèle de l&#x27;heure facturable. Cas d&#x27;usage instructif pour tout agent déployé sur données confidentielles.</p>
+        <div class="card-tags"><span class="tag">Legora</span></div>
+        <a href="https://latent.space/p/building-ai-for-lawyers-jacob-lauritzen-cto-of-legora/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;auto-amélioration passe de théorie à roadmap</strong><p>Anthropic se dit proche du RSI, Latent Space documente l&#x27;édition directe des poids (Weight Space Programming) et les benchmarks d&#x27;agents auto-apprenants se multiplient. La boucle d&#x27;amélioration des modèles s&#x27;accélère.</p></div><div class="trend-item"><strong>La gouvernance et le coût de l&#x27;IA en entreprise se durcissent</strong><p>Goldman Sachs retire Claude Code et Copilot à ses non-ingénieurs, les forfaits (Grok Bot) se resserrent et les coûts d&#x27;inférence explosent (200 K$/an pour Garry Tan) — d&#x27;où l&#x27;appel à mesurer la valeur livrée plutôt que les tokens.</p></div><div class="trend-item"><strong>Anthropic en marche vers l&#x27;IPO</strong><p>Dépôt du S-1, Public Benefit Fund, revenu multiplié par douze malgré 23 Md$ de pertes et sortie d&#x27;Opus 5.5 : Anthropic aligne les signaux financiers et produit avant sa cotation.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 12 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1024604/openai-data-center-grid-protection-program" class="ext-title">OpenAI propose ses centrales de data centers pour protéger le réseau électrique local</a>
+        <span class="ext-source">The Verge</span>
+        <p class="ext-summary">OpenAI pilote son « Grid Protectors Program » sur un data center en Géorgie, promettant de libérer jusqu&#x27;à 1 000 MW en cas d&#x27;urgence météo. Réponse à la pression croissante de l&#x27;IA sur les réseaux électriques.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/11/02/apple-watchs-ai-features-for-rewinding-and-recapping-conversations-begin-beta-testing/" class="ext-title">L&#x27;Apple Watch teste des fonctions IA de rappel et de résumé de conversations</a>
+        <span class="ext-source">TechCrunch</span>
+        <p class="ext-summary">Les nouvelles fonctions Audio Intelligence d&#x27;Apple, en bêta, aident à retrouver ce qui a été dit et à prendre des notes de conversations. Signal de la poussée d&#x27;Apple sur l&#x27;IA embarquée.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/11/02/apple-may-try-to-increase-revenue-by-doing-something-with-third-party-ai-apps/" class="ext-title">Apple évoque de nouveaux revenus via les applis IA tierces</a>
+        <span class="ext-source">TechCrunch</span>
+        <p class="ext-summary">Lors de sa conférence de résultats, Apple a laissé entendre qu&#x27;elle pourrait monétiser des « opportunités » liées aux applications IA tierces. À surveiller pour l&#x27;économie de l&#x27;App Store.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/huawei-tells-customers-to-find-their-own-ai-chip-memory-effectively-outsourcing-procurement-to-the-black-market/" class="ext-title">Huawei pousse ses clients vers le marché noir pour la mémoire de ses puces IA</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Huawei demande à ses clients de sourcer eux-mêmes la mémoire HBM de ses puces IA, les poussant vers des circuits parallèles exploitant une faille des règles d&#x27;export américaines. Illustration des tensions sur la supply chain des semi-conducteurs.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/spacexsi-apparently-cuts-grok-bot-quotas-weeks-after-musk-called-it-his-fastest-growing-product/" class="ext-title">SpaceXSI réduirait les quotas de Grok Bot, trop coûteux</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">SpaceXSI coupe les limites d&#x27;usage de Grok Bot, des coûts d&#x27;exploitation jugés « insoutenables » par Musk. OpenAI et Anthropic resserrent aussi leurs offres forfaitaires face au même problème.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/ai-elites-might-hoard-intelligence-like-mercantilists-hoarded-gold/" class="ext-title">Les élites de l&#x27;IA pourraient thésauriser l&#x27;intelligence comme les mercantilistes l&#x27;or</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">L&#x27;ingénieur Venkatesh Rao compare la peur des pertes d&#x27;emplois liées à l&#x27;IA au mercantilisme : l&#x27;intelligence traitée comme ressource rare à contrôler. Mais l&#x27;IA pourrait au contraire accroître la demande de réflexion humaine.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.technologyreview.com/2026/11/02/1147660/raising-the-quality-of-insights-in-agentic-analytics/" class="ext-title">Améliorer la qualité des insights dans l&#x27;analytique agentique</a>
+        <span class="ext-source">MIT Tech Review</span>
+        <p class="ext-summary">L&#x27;IA agentique promet d&#x27;automatiser des workflows analytiques entiers, mais pose un problème de qualité des insights. Cadre utile pour qui déploie des agents sur de la donnée d&#x27;entreprise.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/Nov/3/a-sound-that-leaks-your-exact-location/" class="ext-title">Un son imperceptible dans les vidéos peut révéler votre position exacte</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Un travail d&#x27;OSINT montre comment le bruit de fond quasi inaudible d&#x27;avions dans une vidéo, croisé avec les données ADS-B, permet de localiser précisément l&#x27;enregistrement. Rappel saisissant sur la fuite de métadonnées.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/11/02/google-takes-dreambeans-to-india-in-bid-to-bring-ai-generated-personal-stories-to-the-masses/" class="ext-title">Google étend Dreambeans à l&#x27;Inde avec 13 langues locales</a>
+        <span class="ext-source">TechCrunch</span>
+        <p class="ext-summary">Dreambeans, l&#x27;expérimentation IA de Google générant des histoires personnelles, prend désormais en charge 13 langues indiennes. Stratégie d&#x27;adoption de masse sur un marché clé.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/11/02/web-host-squarespace-lays-off-19-of-its-employees/" class="ext-title">Squarespace licencie 19% de ses effectifs</a>
+        <span class="ext-source">TechCrunch</span>
+        <p class="ext-summary">Le créateur de sites web supprime 19% de ses postes dans le cadre d&#x27;une restructuration plus large. Nouvelle illustration des réorganisations sous pression de l&#x27;IA.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/one-brutal-minecraft-night-scared-50-ai-agents-into-inventing-chicken-handoff-protocols-a-fertilizer-officer-and-fishing-shifts/" class="ext-title">50 agents IA inventent une bureaucratie absurde pour survivre à une nuit dans Minecraft</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Dans une expérience de Y Combinator Labs et Olam Labs, 50 agents GPT-6.1 Sol chargés de bâtir une civilisation pacifique se figent dans la bureaucratie, mais deviennent redoutables en compétition directe contre Claude Opus 5.5. Fenêtre fascinante sur le comportement émergent des agents.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.technologyreview.com/2026/11/02/1147932/heres-who-is-falling-in-line-for-trumps-super-intelligence-loyalty-test/" class="ext-title">Qui se plie au « test de loyauté Super Intelligence » de Trump</a>
+        <span class="ext-source">MIT Tech Review</span>
+        <p class="ext-summary">Suite à un décret de Trump ordonnant aux agences de rebrander leurs programmes IA, MIT Technology Review recense qui s&#x27;aligne. Enjeu politique autour du cadrage de l&#x27;« IA d&#x27;État ».</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 19 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
