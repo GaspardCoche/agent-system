@@ -1,0 +1,351 @@
+{
+  "date": "2026-11-04",
+  "headline": "Opus 5.5 relance la course au coding agentique, pendant qu'Anthropic rebat les cartes de son API",
+  "one_liner": "Claude Opus 5.5 prend la tête sur le coding agentique à 40% de coût en moins, tandis que les Message Threads de l'API Anthropic coupent de 35% la latence des longues conversations.",
+  "top_story": {
+    "title": "Introducing Claude Opus 5.5",
+    "source": "Anthropic",
+    "url": "https://www.anthropic.com/news",
+    "image_url": "",
+    "summary": "Anthropic lance Claude Opus 5.5, présenté comme le modèle le plus fort en coding agentique et en travail de connaissance, pour un coût d'exécution 40% inférieur à Opus 5 sur des charges typiques. Le lancement s'accompagne d'une famille complète : Sonnet 5.5 (30%+ plus rapide, jusqu'à 30% moins cher) et Haiku 5.5 (le petit modèle le plus rapide, taillé pour le volume, les subagents et le browser use). Pour un praticien qui construit avec Claude Code et des agents GitHub Actions, c'est une double bonne nouvelle : meilleure qualité de raisonnement agentique ET baisse structurelle du coût au token. La hiérarchie Opus/Sonnet/Haiku permet désormais de router chaque tâche vers le bon rapport capacité/prix — Haiku pour les subagents à fort volume, Opus pour l'orchestration complexe. À surveiller : l'impact réel sur les marges de vos pipelines d'enrichissement et de scoring ICP.",
+    "why_it_matters": "Pour toi : tu peux re-router tes agents Claude Code et tes subagents (Scout, Aria, Lumen) vers Haiku 5.5 pour le volume et Opus 5.5 pour l'orchestration, et faire baisser la facture token sans perdre en qualité.",
+    "category": "Modeles",
+    "company_tags": [
+      "Anthropic",
+      "Claude"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Les Message Threads d'Anthropic réduisent de 35% le temps au premier token sur les longues conversations",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropics-message-threads-cut-time-to-first-token-by-35-percent-for-long-conversations/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/08/claude_logo-1.png",
+      "summary": "Anthropic a publié Message Threads pour la Messages API : au lieu de renvoyer toute la conversation à chaque tour, les agents ne transmettent plus que ce qui a changé. Pour des requêtes entre 500 000 et 1 million de tokens, le temps au premier token chute d'environ 35%. C'est un changement d'API concret qui touche directement la latence et le coût des agents à long contexte.",
+      "why_it_matters": "Pour toi : tes agents à long contexte (RAG local, orchestration multi-tours) gagnent en réactivité et en coût sans refonte — à tester dès cette semaine sur tes pipelines Claude Code.",
+      "category": "Outils & Plateformes",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Claude"
+      ]
+    },
+    {
+      "title": "Anthropic développe FlashProve, un système pour prouver l'identité d'un modèle d'IA",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/03/anthropic-is-working-on-a-system-to-prove-ai-models-identity/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/09/GettyImages-2294192768.jpg?resize=1200,798",
+      "summary": "Anthropic travaille sur FlashProve, un mécanisme permettant à quiconque de vérifier qu'une réponse provient réellement du modèle qu'elle prétend être. Dans un monde où les agents prennent des décisions et signent des actions, prouver la provenance d'une sortie devient une brique de confiance. Signal fort pour l'audit et la conformité des systèmes agentiques en production.",
+      "why_it_matters": "Pour toi : une primitive d'auditabilité qui colle à ta logique de preview/approval GitHub avant toute action externe irréversible.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Qwen 3.8 27B tourne sur mon laptop et sait aussi interpréter les poids d'un modèle",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/3/qwen-can-interpret-model-weights/",
+      "image_url": "",
+      "summary": "Suite au papier « Sparks of Weight-Space Programming » (les LLM savent lire et écrire nativement les poids d'un réseau de neurones), Simon Willison reproduit l'expérience avec Qwen 3.8 27B en local sur son laptop. Au-delà de la curiosité, c'est un signal sur ce que les modèles open-weight locaux savent désormais faire — un terrain de jeu accessible sans API cloud.",
+      "why_it_matters": "Pour toi : preuve qu'un modèle open-weight local reste une option crédible pour ton RAG et tes expériences, hors dépendance API.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Qwen",
+        "Alibaba"
+      ]
+    },
+    {
+      "title": "OpenAI affirme que GPT-6 Astra a conçu un appareil hardware de zéro en moins d'une semaine",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-says-gpt-6-astra-designed-a-hardware-device-from-scratch-in-under-a-week/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/11/openai_ai_hardware.png",
+      "summary": "L'équipe hardware d'OpenAI dit avoir utilisé GPT-6 Astra pour concevoir un appareil dédié à l'agent de code Codex en moins d'une semaine — du boîtier au circuit imprimé jusqu'au firmware. Plusieurs cycles de révision ont été nécessaires avant production, le modèle ne tenant pas toujours compte des tolérances de fabrication. Un jalon sur l'IA appliquée à l'ingénierie du monde physique.",
+      "category": "Modeles",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "GPT-6"
+      ]
+    },
+    {
+      "title": "Cheminformatique agentique avec Google Antigravity",
+      "source": "Google DeepMind",
+      "url": "https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/",
+      "image_url": "",
+      "summary": "Google DeepMind montre comment Google Antigravity et ses Cheminformatics Skills accélèrent les workflows de découverte de médicaments : recherche de composés, proposition de nouveaux macrocycles rigidifiés. Au-delà de la chimie, c'est une démonstration concrète d'un environnement agentique équipé de « skills » spécialisés — le même pattern que tes propres skills validés.",
+      "why_it_matters": "Pour toi : illustre la valeur d'un registre de skills spécialisés branchés sur un agent, exactement la logique de ton skills/registry.json.",
+      "category": "Google & Cloud",
+      "importance": "important",
+      "company_tags": [
+        "Google",
+        "DeepMind"
+      ]
+    },
+    {
+      "title": "StateBench : mesurer comment les LLM suivent les changements d'état sur de longs documents",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/allenai/statebench",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/5g9HfQLFFaQE0fslWrxh0.png",
+      "summary": "AllenAI publie StateBench, un benchmark qui teste la capacité des modèles à suivre les changements d'état au fil de longs documents — un angle mort fréquent des évaluations classiques. Utile pour choisir un modèle sur des tâches à mémoire longue comme le suivi de deals ou l'agrégation de notes CRM.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "HuggingFace",
+        "AllenAI"
+      ]
+    },
+    {
+      "title": "Palette : apprendre à un petit modèle à construire des decks dans votre langage de design",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/ibm-research/palette-deck-building",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/63890e3843d8b0797a0ad606/5pHD09UHuAK-6OyKGKimD.png",
+      "summary": "IBM Research détaille Palette, une approche pour fine-tuner un petit modèle afin qu'il génère des présentations respectant une charte de design maison. Cas d'usage net pour le marketing : produire des decks on-brand à grande échelle avec un modèle léger et peu coûteux.",
+      "category": "Open Source",
+      "importance": "worth_noting",
+      "company_tags": [
+        "IBM"
+      ]
+    },
+    {
+      "title": "Arnis transforme n'importe quel lieu de la Terre en monde Minecraft",
+      "source": "GitHub Blog",
+      "url": "https://github.blog/open-source/maintainers/arnis-turns-any-place-on-earth-into-a-minecraft-world/",
+      "image_url": "",
+      "summary": "Louis Erbkamm a lancé Arnis sur son temps libre ; il le maintient désormais seul avec l'aide de GitHub Copilot. Au-delà du projet ludique, c'est un témoignage concret d'un mainteneur open-source solo qui scale grâce à un agent de code — le modèle de productivité que vise tout dev indépendant.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "GitHub",
+        "Copilot"
+      ]
+    },
+    {
+      "title": "Le développement des LLM va plus vite que la recherche censée l'expliquer, selon une étude",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/rapid-llm-development-is-outrunning-the-research-meant-to-explain-it-study-finds/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/11/ai_goalpost_moving-1200x800.png",
+      "summary": "Des chercheurs de Stanford ont confronté 50 affirmations très citées sur les LLM à 20 modèles actuels : 44% des conclusions sont déjà « périmées » et 34% nettement affaiblies, pour une durée de vie moyenne de 15,7 mois. Les affirmations sur ce que les modèles « ne savent pas faire » expirent le plus vite. Rappel utile pour ne pas figer ses hypothèses produit sur des benchmarks datés.",
+      "why_it_matters": "Pour toi : raison de plus pour re-tester tes prompts et tes garde-fous à chaque release plutôt que de t'appuyer sur des limites supposées.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Stanford"
+      ]
+    },
+    {
+      "title": "La startup d'inférence Fal double sa valorisation à 16 Md$ sur fond de demande explosive",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/03/ai-inference-startup-fal-doubles-its-valuation-to-16b-as-demand-surges/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2022/12/GettyImages-1268605503.jpg?resize=1200,420",
+      "summary": "Fal, startup d'inférence de cinq ans, lève 1,3 Md$ (tour mené par Bessemer) et double sa valorisation à 16 Md$. Signal fort que la couche d'inférence — et non seulement l'entraînement — est désormais un marché stratégique où la demande dépasse l'offre.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Fal",
+        "Bessemer"
+      ]
+    },
+    {
+      "title": "Anthropic peine encore avec l'économie du compute",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/03/anthropic-is-still-grappling-with-the-economics-of-compute/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/09/GettyImages-2294935494.jpg?resize=1200,800",
+      "summary": "Alors que les marges de compute d'Anthropic devraient s'améliorer, elles se dégradent. Un éclairage utile sur la tension entre baisse des prix affichés (Opus 5.5 à -40%) et coûts réels d'infrastructure — à garder en tête pour anticiper la stabilité des tarifs API sur lesquels tu bâtis.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "OpenAI affirme que ChatGPT rattrape Google sur la recherche",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1025482/openai-says-chatgpt-is-catching-up-to-google-in-search",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/STK155_OPEN_AI_CVirginia_C-1.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "summary": "Selon OpenAI, le volume de recherches effectuées via ChatGPT équivaut désormais à 20% de celui de Google. « Ask Chat » remplace de plus en plus « Google it » — un basculement des usages de découverte qui redéfinit la visibilité des marques et le SEO traditionnel.",
+      "why_it_matters": "Pour toi : si 20% des recherches passent par ChatGPT, ta stratégie de visibilité B2B doit intégrer le référencement dans les réponses IA, pas seulement le SEO Google.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "Google"
+      ]
+    },
+    {
+      "title": "Google n'a pas encore trouvé comment rentabiliser l'IA comme son moteur de recherche",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1024862/google-search-ai-overviews-alphabet-earnings-q3",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/gettyimages-106058340.jpg?quality=90&strip=all&crop=0%2C9.3445766662078%2C100%2C81.310846667584&w=1200",
+      "summary": "Alphabet affiche la plus forte croissance de requêtes en cinq ans, mais la croissance du revenu Search ralentit à 12% en glissement annuel (contre ~17% au trimestre précédent). Les AI Overviews captent l'attention sans encore monétiser aussi bien que le search classique — un dilemme de modèle économique qui touche tout l'écosystème pub.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Google",
+        "Alphabet"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "Ballistic Ventures vise 490 M$ pour de nouveaux fonds sur fond de boom cyber dopé à l'IA",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/",
+      "summary": "Ballistic Ventures (Ted Schlein) cherche 360 M$ pour un fonds phare et 130 M$ pour un véhicule séparé, portée par la vague cybersécurité dopée à l'IA.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Ballistic Ventures"
+      ]
+    },
+    {
+      "title": "Le nouvel onglet AI Discover de Netflix recommande selon votre humeur",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/03/netflixs-new-ai-discover-tab-helps-you-find-something-to-watch-based-on-your-mood/",
+      "summary": "Netflix teste un onglet Discover qui propose des recommandations selon l'humeur du moment de l'utilisateur, première fonctionnalité expérimentale de la rubrique.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Netflix"
+      ]
+    },
+    {
+      "title": "Apple ouvre Siri AI aux apps tierces",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/1025694/apple-siri-ai-third-party-apps",
+      "summary": "Avec iOS 27.3, Apple permet à Siri AI d'exécuter des actions dans « toutes les apps », en s'appuyant sur le contexte personnel de l'utilisateur. Un pas vers un assistant véritablement agentique côté mobile.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Apple"
+      ]
+    },
+    {
+      "title": "La dernière bêta watchOS d'Apple ajoute l'Audio Intelligence toujours active",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/1025002/apple-watch-audio-intelligence-watchos-beta",
+      "summary": "Siri peut écouter le micro de l'Apple Watch via Siri Recap (résumés de conversations par écoute ambiante) et Live Rewind, dans la bêta développeur watchOS 27.3.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Apple"
+      ]
+    },
+    {
+      "title": "Le plus grand site de mods PC prend position sur l'IA",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/games/1026085/nexus-mods-ai-disclosures",
+      "summary": "Nexus Mods rend obligatoire la déclaration d'usage d'IA pour tout nouveau mod uploadé — un signal sur la montée des obligations de transparence sur le contenu généré.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "Nexus Mods"
+      ]
+    },
+    {
+      "title": "Arrêtez de me demander quand la bulle IA va éclater",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1025826/ai-bubble-pimco-apollo-bonds",
+      "summary": "Chronique sur la fatigue des prédictions d'éclatement de la bulle IA, et les signaux contradictoires venus des marchés obligataires (PIMCO, Apollo).",
+      "category": "Business & Levees",
+      "company_tags": [
+        "PIMCO",
+        "Apollo"
+      ]
+    },
+    {
+      "title": "Les écoles qui coupent l'IA de Google perdront aussi la recherche dès 2027",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/schools-that-turn-off-googles-ai-will-lose-search-too-starting-in-2027/",
+      "summary": "Dès 2027, Google désactivera par défaut l'IA dans ses produits scolaires, mais bloquer totalement l'IA privera aussi de Google Search, les deux systèmes étant trop imbriqués.",
+      "category": "Google & Cloud",
+      "company_tags": [
+        "Google"
+      ]
+    },
+    {
+      "title": "Les data centers se tournent vers de vieux moteurs d'avion faute d'accès au réseau électrique",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/03/data-centers-are-turning-to-old-jet-engines-as-the-wait-for-power-grows/",
+      "summary": "Face aux délais d'accès au réseau et aux turbines neuves, des constructeurs de data centers recyclent d'anciens moteurs d'avion — solution moins efficace et plus polluante.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Derrière le trimestre fulgurant de Palantir se cache un signal inquiétant",
+      "source": "TechCrunch",
+      "url": "https://techcrunch.com/2026/11/03/hiding-inside-palantirs-skyrocketing-quarter-is-a-foreboding-signal/",
+      "summary": "Le revenu commercial US de Palantir dépasse pour la première fois son revenu gouvernemental US — un basculement riche d'enseignements sur la demande entreprise.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Palantir"
+      ]
+    },
+    {
+      "title": "Des agents IA prennent les commandes de l'Allen Telescope Array du SETI",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/ai-agents-take-over-at-setis-allen-telescope-array-scanning-for-extraterrestrial-intelligence/",
+      "summary": "Le SETI Institute et Breakthrough Listen utilisent des agents IA pour piloter le télescope et analyser les signaux radio : des tâches de plusieurs semaines bouclées en heures.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "SETI"
+      ]
+    },
+    {
+      "title": "Nvidia pousse ses clients cloud à réduire leurs affaires avec la Chine",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/nvidia-pushes-cloud-customers-to-cut-back-on-china-business/",
+      "summary": "Nvidia a demandé à certains clients cloud de limiter les contrats avec des entreprises chinoises, nouveau signe des tensions géopolitiques sur le compute.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "Un bootkit UEFI a infecté des machines Windows entièrement à jour",
+      "source": "Ars Technica AI",
+      "url": "https://arstechnica.com/security/2026/11/uefi-bootkit-infected-fully-patched-windows-machines-is-microsoft-to-blame/",
+      "summary": "Le bootkit UEFI BlackX exploite le flou autour des protections Secure Boot de Microsoft pour infecter des machines pourtant à jour.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Microsoft"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "Claude Opus 5.5 / Haiku 5.5",
+      "description": "Re-router tes agents Claude Code vers Opus 5.5 pour l'orchestration et Haiku 5.5 pour les subagents à fort volume, puis comparer coût et qualité.",
+      "url": "https://www.anthropic.com/news"
+    },
+    {
+      "nom": "Message Threads (Messages API)",
+      "description": "Activer les Message Threads sur tes pipelines à long contexte pour n'envoyer que le delta et couper ~35% du temps au premier token.",
+      "url": "https://the-decoder.com/anthropics-message-threads-cut-time-to-first-token-by-35-percent-for-long-conversations/"
+    },
+    {
+      "nom": "Google Antigravity (Skills agentiques)",
+      "description": "Explorer le pattern Skills d'Antigravity pour t'inspirer sur l'organisation de ton propre registre de skills validés.",
+      "url": "https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "La famille de modèles comme levier de coût",
+      "description": "Opus/Sonnet/Haiku 5.5 et la baisse de 40% du coût d'Opus confirment le routage par tâche : réserver les gros modèles à l'orchestration, déléguer le volume aux petits."
+    },
+    {
+      "title": "L'API devient le vrai terrain de bataille agentique",
+      "description": "Message Threads (latence), FlashProve (provenance) : Anthropic optimise la plomberie des agents plutôt que la seule puissance brute du modèle."
+    },
+    {
+      "title": "L'économie de l'inférence et du compute se tend",
+      "description": "Valorisation de Fal à 16 Md$, moteurs d'avion recyclés en data centers, marges compute sous pression : l'infrastructure devient le goulot d'étranglement du secteur."
+    },
+    {
+      "title": "Bascule des usages de recherche vers l'IA",
+      "description": "ChatGPT à 20% du volume de Google et le ralentissement du revenu Search signalent une redéfinition de la visibilité des marques et du SEO."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 18,
+    "articles_extracted": 30
+  }
+}
