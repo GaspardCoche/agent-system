@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "34829840023",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-09-14",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "9 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-09-14T09:52:54.607671+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-14-email-agent-daily-digest-2026-09-14.md"
-  },
-  {
     "run_id": "34856032283",
     "workflow": "nexus",
     "title": "Nexus weekly_audit 2026-09-14",
@@ -1722,5 +1708,28 @@
     "timestamp": "2026-11-05T12:19:08.543791+00:00",
     "agents": [],
     "report_file": "reports/2026-11-05-email-agent-daily-digest-2026-11-05.md"
+  },
+  {
+    "run_id": "42061347746",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "42061347746",
+    "summary": "Task was a Sage-style dry-run maintenance review (misrouted to researcher, then forge). Checked skills/registry.json: 4 validated skills, all scripts  · Task routing error: Task 42061347746 is configured for Sage agent (internal retrospective/registr",
+    "next_actions": [],
+    "timestamp": "2026-11-05T16:12:16.709831+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-05-orchestrator-scheduled-run.md"
   }
 ]
