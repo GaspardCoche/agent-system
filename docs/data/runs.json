@@ -1,28 +1,5 @@
 [
   {
-    "run_id": "34857370633",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "34857370633",
-    "summary": "Task misconfiguration detected. Received Forge (coding) task but Lumen is analysis agent. Task JSON references Forge agent with 'See task in context'  · Task routing error: task JSON indicates agents=[{role:'forge'}] but researcher agent was invoked.",
-    "next_actions": [],
-    "timestamp": "2026-09-14T14:52:43.558782+00:00",
-    "agents": [
-      {
-        "name": "lumen",
-        "status": "failed"
-      },
-      {
-        "name": "researcher",
-        "status": "needs_retry"
-      }
-    ],
-    "report_file": "reports/2026-09-14-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "34952180746",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-15",
@@ -1731,5 +1708,35 @@
     "timestamp": "2026-11-06T12:06:57.118712+00:00",
     "agents": [],
     "report_file": "reports/2026-11-06-email-agent-daily-digest-2026-11-06.md"
+  },
+  {
+    "run_id": "42244903650",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "42244903650",
+    "summary": "Aucune implementation de code requise: la tache est une maintenance Sage (revue des retrospectives + validation des skills), mal routee vers Forge (ap · Task routing error detected and analyzed. Task is configured for Sage but routed to Lumen. System",
+    "next_actions": [
+      "Router la tache vers sage",
+      "Ouvrir une tache Forge dediee pour reparer la collecte des retrospectives"
+    ],
+    "timestamp": "2026-11-06T15:42:57.145811+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "failed"
+      },
+      {
+        "name": "lumen",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "routing_error"
+      }
+    ],
+    "report_file": "reports/2026-11-06-orchestrator-scheduled-run.md"
   }
 ]
