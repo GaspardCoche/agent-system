@@ -159,3 +159,5 @@ Des qu'un pattern depasse 3 occurrences, creer le skill correspondant.
 ---
 
 *Sage met a jour ce fichier apres chaque analyse hebdomadaire.*
+
+| 2026-11-08 | weekly | Cause racine pipeline broken trouvée : `gh api --output` inexistant → fixé dans sage.yml. Mismatch routage dispatcher documenté. | 42496269789 |

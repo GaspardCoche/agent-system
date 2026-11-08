@@ -1,0 +1,25 @@
+diff --git a/.github/workflows/sage.yml b/.github/workflows/sage.yml
+index 21bd655..76be62d 100644
+--- a/.github/workflows/sage.yml
++++ b/.github/workflows/sage.yml
+@@ -77,11 +77,15 @@ jobs:
+           retrospectives = []
+           for artifact_id in artifact_ids:
+               try:
+-                  dl = subprocess.run(
+-                      ["gh", "api", f"repos/{repo}/actions/artifacts/{artifact_id}/zip",
+-                       "--output", f"/tmp/artifact_{artifact_id}.zip"],
+-                      capture_output=True, timeout=30
+-                  )
++                  # NB: `gh api` n'a PAS de flag --output : rediriger stdout vers le fichier
++                  with open(f"/tmp/artifact_{artifact_id}.zip", "wb") as zf:
++                      dl = subprocess.run(
++                          ["gh", "api", f"repos/{repo}/actions/artifacts/{artifact_id}/zip"],
++                          stdout=zf, stderr=subprocess.PIPE, timeout=60
++                      )
++                  if dl.returncode != 0:
++                      print(f"  Warning: download failed for {artifact_id}: {dl.stderr.decode()[:200]}")
++                      continue
+                   subprocess.run(["unzip", "-o", f"/tmp/artifact_{artifact_id}.zip",
+                                   "-d", f"/tmp/artifact_{artifact_id}/"], capture_output=True)
+                   for json_file in glob.glob(f"/tmp/artifact_{artifact_id}/**/*.json", recursive=True):

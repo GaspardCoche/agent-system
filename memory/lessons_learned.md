@@ -428,3 +428,27 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 **Agents concernes :** Tous
 
 ---
+
+---
+
+## 2026-11-08 — VRAIE cause racine du pipeline "broken" : `gh api --output` n'existe pas
+
+**Problème :** `pipeline_status: broken` pendant ~35 semaines (50 runs, 9 artifacts, 0 rétros). Les fixes précédents (prompt `retrospective`, upload Iris, max-turns) étaient réels mais ne résolvaient pas ce blocage.
+
+**Cause racine (reproduite le 2026-11-08) :** le collecteur de `sage.yml` téléchargeait les artifacts avec `gh api .../zip --output FILE`. `gh api` n'a pas de flag `--output` (`unknown flag: --output`). L'erreur était avalée par `capture_output=True` + `except`, donc aucun zip n'était téléchargé. Les artifacts `agent-result-*` (lumen, coder, researcher du 2026-11-06) contenaient bien `retrospective` une fois téléchargés par `gh api ... > file`.
+
+**Solution :** redirection stdout vers un fichier binaire + contrôle du returncode et log d'erreur (corrigé dans `sage.yml`). **À vérifier au prochain run** : `retrospectives_collected > 0`.
+
+**Règle :** Ne jamais avaler stderr d'une commande de collecte ; tester une commande de téléchargement en vrai avant de la documenter comme corrigée.
+
+**Agents concernés :** Sage
+
+---
+
+## 2026-11-08 — Dispatcher : mismatch de routage agent/rôle
+
+**Problème :** Les 3 rétros du run 42244903650 (lumen, forge, researcher) rapportent toutes recevoir la tâche Sage (`role: sage`) alors qu'invoquées sous un autre agent (forge → failed, researcher → routing_error).
+
+**Solution proposée :** valider `agents[].role` contre l'agent invoqué dans le dispatcher et échouer tôt. À implémenter par Forge (non fait ce run).
+
+**Agents concernés :** Claude Dispatch, Lumen, Forge, Researcher
