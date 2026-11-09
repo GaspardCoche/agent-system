@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "35099809100",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "35099809100",
-    "summary": "",
-    "next_actions": [],
-    "timestamp": "2026-09-16T13:09:55.951476+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-16-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "35204875506",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-17",
@@ -1733,5 +1719,27 @@
     "timestamp": "2026-11-09T12:51:14.417671+00:00",
     "agents": [],
     "report_file": "reports/2026-11-09-email-agent-daily-digest-2026-11-09.md"
+  },
+  {
+    "run_id": "42668979672",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-11-09",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE — credentials_ok=false. Aucun appel API. Secrets manquants : GOOGLE_ADS_DEVELOPER_TOKEN, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN. Score ",
+    "next_actions": [
+      "Configurer les 4 secrets GitHub Google Ads (issue #185)",
+      "Forge : ajouter needs: [check-credentials] dans nexus.yml"
+    ],
+    "timestamp": "2026-11-09T17:54:30.008029+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-11-09-nexus-nexus-weekly-audit-2026-11-09.md"
   }
 ]
