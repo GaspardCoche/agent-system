@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "35224534225",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "35224534225",
-    "summary": "Task file received but contains no specific research query. The task appears to be orchestration metadata routing to forge agent rather than a researc",
-    "next_actions": [],
-    "timestamp": "2026-09-17T13:08:14.756897+00:00",
-    "agents": [
-      {
-        "name": "researcher",
-        "status": "pending_clarification"
-      }
-    ],
-    "report_file": "reports/2026-09-17-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "35327049090",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-18",
@@ -1741,5 +1722,31 @@
     "timestamp": "2026-11-10T12:36:57.547899+00:00",
     "agents": [],
     "report_file": "reports/2026-11-10-email-agent-daily-digest-2026-11-10.md"
+  },
+  {
+    "run_id": "42850785618",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "42850785618",
+    "summary": "Aucun changement de code requis (tâche de maintenance, Sage en dry_run). Registry: 4 skills validés, tous compilent (py_compile OK). Aucune suite de t · Task routing error: scheduled maintenance with multi-agent dispatch (sage → sentinel) should be r",
+    "next_actions": [
+      "Router les tâches de maintenance vers Dispatch/Sage/Sentinel",
+      "Ajouter une suite de tests pour skills/validated"
+    ],
+    "timestamp": "2026-11-10T16:07:54.967368+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-10-orchestrator-scheduled-run.md"
   }
 ]
