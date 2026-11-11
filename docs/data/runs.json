@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "35345950830",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "35345950830",
-    "summary": "Task routed to Forge (developer/implementation). No data file provided for Lumen analysis. Task contains minimal context ('See task in context'). Reco",
-    "next_actions": [],
-    "timestamp": "2026-09-18T12:48:40.855341+00:00",
-    "agents": [
-      {
-        "name": "lumen",
-        "status": "pending_handoff"
-      }
-    ],
-    "report_file": "reports/2026-09-18-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "35432864873",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-19",
@@ -1748,5 +1729,28 @@
     "timestamp": "2026-11-11T11:53:48.127689+00:00",
     "agents": [],
     "report_file": "reports/2026-11-11-email-agent-daily-digest-2026-11-11.md"
+  },
+  {
+    "run_id": "43052294295",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "43052294295",
+    "summary": "Dry-run Sage maintenance review. The researcher had failed on a routing error, so no code changes were needed. skills/registry.json is valid: 4 valida · Task routing error: This is a Sage maintenance task (self-improvement review, retrospective analy",
+    "next_actions": [],
+    "timestamp": "2026-11-11T15:54:33.376837+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-11-orchestrator-scheduled-run.md"
   }
 ]
