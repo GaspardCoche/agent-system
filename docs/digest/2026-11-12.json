@@ -1,0 +1,311 @@
+{
+  "date": "2026-11-12",
+  "headline": "Anthropic sort Fable 5.2 et Mythos 5.2 pendant que Google ouvre la guerre des decision models",
+  "one_liner": "Nouvelle generation de modeles Claude pour le code et la science, et une bataille d'API de decision qui redéfinit comment on automatise les jugements à grande échelle.",
+  "top_story": {
+    "title": "Introducing Claude Fable 5.2 and Claude Mythos 5.2",
+    "source": "Anthropic",
+    "url": "https://www.anthropic.com/news",
+    "image_url": "",
+    "summary": "Anthropic annonce Claude Fable 5.2 et Claude Mythos 5.2, présentés comme ses modèles les plus capables pour le travail technique exigeant : code, finance et sciences. L'annonce arrive en pleine séquence intense pour l'entreprise — dépôt du S-1 auprès de la SEC pour une IPO, lancement d'un Public Benefit Fund et sortie récente d'Opus 5.5 et Haiku 5.5. Mythos est aussi le modèle interne qu'Anthropic dit avoir utilisé pour porter Claude sur GPU AMD en trois jours, signe d'une poussée vers l'auto-amélioration et l'indépendance hardware. Pour un builder qui code tous les jours avec Claude Code, c'est un relèvement direct du plafond de qualité sur les tâches agentiques et le raisonnement long. Le vrai test sera le rapport capacité/coût en usage réel, Anthropic ayant déjà promis 40% d'économies sur Opus 5.5 vs Opus 5.",
+    "why_it_matters": "Pour toi : Fable/Mythos 5.2 relèvent directement la barre de tes workflows Claude Code, agents GitHub Actions et RAG — à tester dès cette semaine sur tes pipelines de lead-gen.",
+    "category": "Modeles",
+    "company_tags": [
+      "Anthropic"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Gemini Decisions API : Google rejoint la catégorie des decision models",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/11/gemini-decisions-api/",
+      "image_url": "",
+      "summary": "Google lance Gemini Decision 1, un modèle dédié aux questions fermées (oui/non, choix, scoring par rubrique) qui rejoint Jev et OpenAI sur ce nouveau segment. Prix aligné sur GPT-6 Luna à 10 cents/million de tokens en entrée (sortie gratuite), mais multimodal complet : texte, images, audio, vidéo et PDF, là où Jev reste texte seul. Willison le teste sur de la vidéo et note qu'il renvoie des probabilités nuancées plutôt que des 0/1 tranchés.",
+      "why_it_matters": "Pour toi : un decision model multimodal à bas coût est idéal pour classifier ou scorer en masse des leads, emails et pages enrichies dans tes pipelines HubSpot/Lemlist.",
+      "category": "Modeles",
+      "importance": "must_read",
+      "company_tags": [
+        "Google",
+        "Anthropic",
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Anthropic affirme éroder le moat CUDA de Nvidia : switch vers AMD en trois jours",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-says-ai-is-eroding-nvidias-cuda-lead-cutting-an-amd-chip-switch-from-months-to-three-days/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/11/nvidia_moat-1200x670.png",
+      "summary": "Anthropic dit avoir utilisé son modèle interne Mythos pour porter Claude sur GPU AMD en trois jours, quasiment sans intervention humaine, un travail qui prenait des mois. L'entreprise fait désormais tourner Claude sur quatre familles de puces pour réduire les coûts et la dépendance fournisseur. C'est une démonstration concrète que l'IA accélère sa propre infrastructure et menace le verrou logiciel CUDA.",
+      "why_it_matters": "Pour toi : moins de dépendance hardware chez Anthropic, c'est une pression à la baisse sur le coût des tokens Claude que tu consommes en volume.",
+      "category": "Business & Levees",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Nvidia",
+        "AMD"
+      ]
+    },
+    {
+      "title": "The Jev Revolution : ce que les ingénieurs construisent déjà avec les System One models",
+      "source": "Latent Space",
+      "url": "https://latent.space/p/jev-revolution/",
+      "image_url": "https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/b4181d5a-0460-4828-b350-07feca728023/jevalution-feature.jpg?t=1794458692",
+      "summary": "À l'AI Engineer Code Summit, le créateur de Jev Diogo Almeida a appelé les développeurs à « tout automatiser » avec les modèles de type System One (décision rapide). Glean et d'autres ont montré leurs usages en production. Le récit : ces petits modèles de jugement deviennent la brique de base pour automatiser des décisions à grande échelle dans les apps.",
+      "why_it_matters": "Pour toi : la vague System One légitime l'idée d'intercaler des micro-décisions automatisées partout dans tes séquences d'outreach et de scoring ICP.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "Glean"
+      ]
+    },
+    {
+      "title": "aws-emulator : un émulateur AWS officiel pour tester en local, écrit par un essaim d'agents",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/11/aws-emulator/",
+      "image_url": "",
+      "summary": "AWS publie enfin un émulateur officiel pour lancer des tests contre un clone local de ses services sans provisionner de clés API payantes. Écrit en Rust, le projet a cumulé 29 684 commits en trois semaines, produits en grande partie par un essaim d'agents. C'est à la fois un outil de dev très pratique et une vitrine du développement piloté par agents.",
+      "why_it_matters": "Pour toi : tester tes intégrations cloud en local sans coût API, c'est du temps et du budget gagnés sur tes workflows Python et GitHub Actions.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "AWS"
+      ]
+    },
+    {
+      "title": "AlphaProof Code vérifie le cœur cryptographique de Signal en quatre semaines",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/google-deepminds-alphaproof-code-verified-signals-cryptographic-core-in-four-weeks-instead-of-years/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/11/deepmind_alphaproof.png",
+      "summary": "Google DeepMind a mathématiquement vérifié le cœur cryptographique de Signal en quatre semaines, un processus qui prend normalement des années. Des agents propulsés par Gemini Carbon ont écrit plus de six millions de lignes de preuve, n'en signalant qu'environ 1% pour revue humaine. DeepMind veut étendre la vérification formelle assistée par IA à d'autres logiciels critiques.",
+      "why_it_matters": "Pour toi : la vérification formelle qui passe de « des années » à « des semaines » rend crédible l'audit automatisé du code sensible que tu déploies.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Google",
+        "Signal"
+      ]
+    },
+    {
+      "title": "AlphaGenome 2 : la génomique IA passe du tissu global à la résolution par type cellulaire",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/google-deepmind-shifts-genomics-ai-from-bulk-tissue-predictions-to-single-cell-type-resolution-with-alphagenome-2/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/11/deepmind_alphagenome2.png",
+      "summary": "Google DeepMind dévoile AlphaGenome 2, un modèle qui analyse les variants génétiques par type cellulaire plutôt que sur du tissu global. Entraîné sur plus de 107 millions de profils cellulaires, il identifie près de deux fois plus de changements géniques liés aux maladies que son prédécesseur. Le modèle est mis à disposition des chercheurs.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Google"
+      ]
+    },
+    {
+      "title": "Le conseil de Nvidia se préparerait à évincer Jensen Huang",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/1031652/jensen-huang-rumor",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25824934/2192224191.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "summary": "Le conseil d'administration de Nvidia se préparerait à démettre son CEO Jensen Huang après un rapport du New York Times sur une seconde liaison extraconjugale présumée, quelques jours après l'aveu d'une première avec une femme soupçonnée d'être une espionne chinoise. L'action a chuté et aucune succession n'est planifiée. L'affaire mêle gouvernance, sécurité nationale et la course IA US-Chine.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "United refuse que votre agent IA réserve vos vols",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1031623/united-unauthorized-ai-agents",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23176430/1237621702.jpg?quality=90&strip=all&crop=0%2C10.721800295556%2C100%2C78.556399408888&w=1200",
+      "summary": "United affirme ne pas autoriser les assistants IA personnels à acheter des billets, invoquant la vie privée et des contraintes réglementaires. La compagnie dit n'avoir encore vu que peu d'usages d'agents pour réserver des vols. C'est un signal clair de la friction entre agents autonomes et acteurs établis qui verrouillent leurs canaux.",
+      "why_it_matters": "Pour toi : les blocages d'agents côté marchands annoncent les mêmes frictions d'autorisation que tes agents devront gérer face aux CRM et plateformes tierces.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "United"
+      ]
+    },
+    {
+      "title": "Tabletop : l'expérimentation IA de Google pour bâtir des apps de collaboration sur mesure",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/1031526/google-tabletop-ai-experiment-waitlist-availability",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/Google-Labs-Tabletop.jpg?quality=90&strip=all&crop=0%2C3.4613147178592%2C100%2C93.077370564282&w=1200",
+      "summary": "Google teste Tabletop, un outil IA qui génère des hubs collaboratifs personnalisés pour coordonner famille et proches. Visuellement proche d'Asana ou Monday, il y ajoute une couche IA pour assembler l'app selon tes besoins. Disponible en liste d'attente.",
+      "category": "Outils & Plateformes",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Google"
+      ]
+    },
+    {
+      "title": "Release : llm 0.37.2 corrige une faille de sécurité",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/11/llm/",
+      "image_url": "",
+      "summary": "Nouvelle version de l'outil CLI llm qui corrige un problème de sécurité (GHSA-v9h7-jj4g-f862 et GHSA-r639-rr7r-x72w) autour du mécanisme extra-openai-models.yaml pour les endpoints compatibles OpenAI. Mise à jour recommandée si tu utilises llm avec des endpoints tiers.",
+      "why_it_matters": "Pour toi : si tu scriptes des LLM via la CLI de Willison, c'est un upgrade de sécurité à passer sans tarder.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": []
+    },
+    {
+      "title": "Last Week in AI #347 : l'espion de Nvidia, l'IPO à 1,4 T$ d'Anthropic, la blue wave de l'IA",
+      "source": "Last Week in AI",
+      "url": "https://lastweekin.ai/p/last-week-month-in-ai-347-nvidias",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!N5MW!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F2ea61f46-93d0-4d43-a74b-5751a649daba_1720x980.png",
+      "summary": "Récap de cinq semaines : Huang sous enquête, Anthropic et OpenAI valorisés à 1,4 T$ et 1,25 T$ alors que les dépenses stagnent, Anthropic qui avertit approcher d'une auto-amélioration récursive, et Gemini 4 Carbon. Un bon panorama pour reprendre le fil des grandes manœuvres du secteur.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic",
+        "OpenAI",
+        "Nvidia",
+        "Google"
+      ]
+    },
+    {
+      "title": "CoreWeave multiplie les prépaiements clients et les contrats courts pour financer sa croissance",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/11/11/coreweave-turns-to-customer-prepayments-shorter-contracts-to-fund-ai-growth/",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/11/GettyImages-2304376406.jpg?w=1024",
+      "summary": "CoreWeave demande de plus en plus à ses clients de payer d'avance, emprunte contre des contrats spécifiques et explore des deals courts qui pourraient faire monter les prix, selon ses résultats du T3. Un indicateur de la tension de financement qui traverse l'infrastructure IA et de la « finance circulaire » du secteur.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "CoreWeave"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "L'Australie veut forcer les labos de modèles frontière à s'ouvrir aux tests indépendants",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/australias-proposed-ai-safety-bill-would-force-frontier-model-makers-to-open-up-to-independent-testing/",
+      "summary": "Canberra propose d'inscrire dans la loi des règles de sécurité obligatoires pour les modèles frontière, avec un régulateur habilité à imposer des audits indépendants et de lourdes sanctions.",
+      "category": "Regulation & Ethique",
+      "company_tags": []
+    },
+    {
+      "title": "Les dépenses IA des entreprises US atteignent un record en octobre mais la croissance ralentit à 1,65%",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/us-corporate-ai-spending-hits-a-new-high-in-october-but-growth-slows-to-1-65-percent/",
+      "summary": "Selon le Ramp AI Index, 1% des entreprises génèrent encore 80% des revenus d'OpenAI et Anthropic ; le support client émerge comme nouveau moteur de croissance mais à marges plus faibles.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Helsing dévoile Clarity, un système IA qui prépare des cibles pour les systèmes d'armes",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/helsing-built-an-ai-system-that-prepares-targets-for-weapons-systems-and-says-every-decision-will-carry-a-human-name/",
+      "summary": "La plateforme utilise des agents pour transformer les données capteurs en recommandations de cibles sous supervision humaine et contrôle européen, ravivant le débat sur la vitesse de l'automatisation militaire.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "Helsing"
+      ]
+    },
+    {
+      "title": "Des data brokers US vendraient un demi-milliard de dollars d'environnements RL à des labos chinois",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/us-data-brokers-are-selling-half-a-billion-dollars-in-rl-training-environments-to-chinese-ai-labs/",
+      "summary": "Mercor, Surge AI et AfterQuery vendraient à des labos chinois les mêmes environnements RL conçus pour OpenAI ou Anthropic, selon une enquête ChinaTalk impliquant au moins neuf firmes.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Qui pourrait remplacer Jensen Huang ? Une liste de successeurs possibles",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/11/11/who-could-replace-jensen-huang-a-highly-unscientific-list-of-possible-successors/",
+      "summary": "Nvidia n'ayant aucun plan de succession et un CEO en difficulté, TechCrunch esquisse une shortlist de candidats possibles.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "Meta perd son responsable historique de l'infrastructure",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/2026/11/11/meta-is-losing-its-longtime-head-of-infrastructure/",
+      "summary": "Santosh Janardhan, arrivé en 2009, quitte son poste alors que Meta pousse massivement ses capacités de calcul IA.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Meta"
+      ]
+    },
+    {
+      "title": "Pourquoi le data center que vous redoutez ne sera peut-être jamais construit",
+      "source": "TechCrunch AI",
+      "url": "https://techcrunch.com/video/why-the-data-center-you-dread-might-never-even-be-built/",
+      "summary": "Opposition locale, délais de permis et course à l'électricité ralentissent le boom des data centers — et beaucoup de projets annoncés pourraient ne jamais voir le jour.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Les expériences IA d'Adobe : se promener dans ses photos et interviewer ses personnages",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/1031505/adobe-max-2026-sneaks-experiments-ai",
+      "summary": "Au Max 2026, Adobe montre des prototypes transformant des images en scènes 3D explorables et des personnages IA avec qui l'on dialogue.",
+      "category": "Outils & Plateformes",
+      "company_tags": [
+        "Adobe"
+      ]
+    },
+    {
+      "title": "Parcourir tools.simonwillison.net par tag",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/11/tools-tags/",
+      "summary": "Willison a utilisé Fable 5.2 et tree-sitter pour analyser ses 244 outils « vibe-codés » et générer une navigation par tag selon les APIs et librairies JavaScript employées.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "La vidéo de roadshow IPO d'Anthropic",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/11/anthropic-ipo-roadshow/",
+      "summary": "La vidéo de roadshow d'Anthropic révèle des informations inédites sur son business, notamment son approche du compute détaillée par le cofondateur Tom Brown.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Anthropic"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "aws-emulator",
+      "description": "Lance tes tests d'intégration AWS contre un clone local, sans clés API payantes — idéal pour tes pipelines Python/CI.",
+      "url": "https://simonwillison.net/2026/Nov/11/aws-emulator/"
+    },
+    {
+      "nom": "Gemini Decisions API (Gemini Decision 1)",
+      "description": "Teste un decision model multimodal à bas coût pour classifier/scorer en masse tes leads et contenus enrichis.",
+      "url": "https://simonwillison.net/2026/Nov/11/gemini-decisions-api/"
+    },
+    {
+      "nom": "llm 0.37.2",
+      "description": "Mets à jour la CLI llm pour récupérer le correctif de sécurité sur les endpoints compatibles OpenAI.",
+      "url": "https://simonwillison.net/2026/Nov/11/llm/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "La guerre des decision models",
+      "description": "Avec Gemini Decision 1, Google rejoint Jev et OpenAI : les petits modèles de jugement multimodaux à bas coût deviennent une catégorie à part entière pour automatiser des décisions à l'échelle."
+    },
+    {
+      "title": "L'IA construit et vérifie son propre code",
+      "description": "aws-emulator écrit par un essaim d'agents et AlphaProof Code qui vérifie Signal en semaines : l'IA passe du simple assistant au producteur et auditeur d'infrastructure logicielle."
+    },
+    {
+      "title": "Diversification hardware et finance circulaire",
+      "description": "Anthropic porte Claude sur AMD en trois jours tandis que TSMC investit dans Anthropic/OpenAI et que CoreWeave recourt aux prépaiements : la pression sur le coût et la dépendance Nvidia monte."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 18,
+    "articles_extracted": 29
+  }
+}
