@@ -1,0 +1,58 @@
+diff --git a/.github/workflows/_reusable-claude.yml b/.github/workflows/_reusable-claude.yml
+index d164436..c1f1327 100644
+--- a/.github/workflows/_reusable-claude.yml
++++ b/.github/workflows/_reusable-claude.yml
+@@ -115,7 +115,11 @@ jobs:
+             1. Read your system prompt: cat agent_prompts/${{ inputs.agent_role }}.md
+             2. Read your task: cat /tmp/agent_task.json
+             3. Execute the task following your system prompt instructions.
+-            4. Write your results to /tmp/agent_result.json
++            4. Write your results to /tmp/agent_result.json as JSON with keys:
++               agent, task_id, status, summary, artifacts, next_agent, retry_reason, retrospective.
++               IMPORTANT: "retrospective" is MANDATORY and must be an object with
++               what_worked, what_failed, mcp_patterns (list of "tool:context:count"), improvement_suggestion.
++               Without it, Sage cannot collect your result.
+           claude_args: ${{ env.CLAUDE_ARGS }}
+           settings: |
+             {
+diff --git a/.github/workflows/email-agent.yml b/.github/workflows/email-agent.yml
+index f9bfc0b..94b809d 100644
+--- a/.github/workflows/email-agent.yml
++++ b/.github/workflows/email-agent.yml
+@@ -509,6 +509,23 @@ jobs:
+             gh issue close "$NUM" --repo ${{ github.repository }} 2>/dev/null || true
+           done
+ 
++      - name: Write Iris result artifact
++        if: always()
++        run: |
++          python3 -c "
++          import json
++          json.dump({'agent':'iris','task_id':'${{ github.run_id }}','status':'complete','summary':'Daily digest run','artifacts':[],'next_agent':None,
++            'retrospective':{'what_worked':'digest pipeline executed','what_failed':'','mcp_patterns':[],'improvement_suggestion':''}}, open('/tmp/agent_result.json','w'))
++          "
++
++      - name: Upload Iris result artifact
++        if: always()
++        uses: actions/upload-artifact@v4
++        with:
++          name: agent-result-iris-${{ github.run_id }}
++          path: /tmp/agent_result.json
++          retention-days: 7
++
+       - name: Send Slack notification
+         if: env.SLACK_WEBHOOK_URL != ''
+         env:
+diff --git a/.github/workflows/sage.yml b/.github/workflows/sage.yml
+index 21bd655..2420940 100644
+--- a/.github/workflows/sage.yml
++++ b/.github/workflows/sage.yml
+@@ -164,7 +164,7 @@ jobs:
+             4. If any skill candidate has usage_count >= 5, write and validate the skill
+             5. Create PRs for prompt improvements if needed
+             Write results to /tmp/agent_result.json
+-          claude_args: --max-turns 15 --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__create_pull_request,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
++          claude_args: --max-turns 25 --allowedTools "Bash,Read,Write,Edit,mcp__github__add_issue_comment,mcp__github__create_pull_request,mcp__memory__add_observations,mcp__memory__search_nodes" --mcp-config /tmp/mcp-config.json
+           settings: |
+             {"env": {"GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}", "GITHUB_REPOSITORY": "${{ github.repository }}"}}
+ 

@@ -428,3 +428,17 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 **Agents concernes :** Tous
 
 ---
+
+---
+
+## 2026-11-15 — Pipeline rétrospectives toujours cassée : les fixes de juin avaient DISPARU de main
+
+**Problème :** 50 runs, 7 artifacts, 0 rétrospectives (`pipeline_status: broken`). Le grep du 2026-11-15 sur `main` montre que les 3 fixes "grep-vérifiés" du 2026-06-21 n'y sont PAS : `sage.yml` --max-turns 15, `_reusable-claude.yml` sans `retrospective`, `email-agent.yml` sans `agent-result-iris`. Probablement jamais mergés (branche/PR perdue) ou écrasés.
+
+**Cause racine :** modifs faites sur une branche non mergée ; la vérification a eu lieu sur le working tree, pas sur main. Aussi `retention-days: 7` = exactement l'intervalle hebdo de Sage → artifacts de début de semaine expirés.
+
+**Fix (2026-11-15, grep sur le working tree, à vérifier sur main après merge) :** max-turns 25 ; prompt reusable avec `retrospective` obligatoire ; steps artifact Iris. **Reste à faire :** retention-days 14 pour agent-result-*.
+
+**Règle :** après un fix, vérifier avec `git show origin/main:<fichier> | grep` — pas seulement localement.
+
+**CAUSE RACINE RÉELLE (2026-11-15) :** le push de modifs `.github/workflows/*` est REJETÉ pour le GitHub App (`refusing to allow a GitHub App to create or update workflow ... without workflows permission`). Les agents ne peuvent donc jamais corriger les workflows ; les "fixes" de juin n'ont jamais atteint main. Action humaine requise : appliquer le patch workflows à la main (ou fournir un PAT avec scope `workflow`). Patch sauvegardé : `memory/workflow_fixes.patch`.

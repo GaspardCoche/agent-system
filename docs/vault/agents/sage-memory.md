@@ -19,7 +19,7 @@ updated: 2026-06-21
 ## État du système
 
 ```
-Dernière analyse    : 2026-06-21 (weekly — pipeline_status: broken 11e semaine, 3 fixes appliqués)
+Dernière analyse    : 2026-11-15 (fixes réappliqués, vérifier sur main) ; avant: 2026-06-21 (weekly — pipeline_status: broken 11e semaine, 3 fixes appliqués)
 Skills validés      : 4 (firecrawl_scrape, github_create_issue, gemini_analyze, slack_notify)
 Skills candidats    : 1 (gh_run_artifacts — non encore scripté)
 Prompts améliorés   : 0
@@ -130,7 +130,8 @@ Voir `memory/lessons_learned.md` pour la liste complète.
 | 2026-05-31 | weekly ÉCHEC | max_turns=15 atteint — pipeline broken 7e semaine | 26710641346 |
 | 2026-06-07 | weekly ÉCHEC | max_turns=15 atteint — pipeline broken 8e semaine | 27090737680 |
 | 2026-06-12 | manuel (ce run) | Analyse via git log + reports. 3 nouvelles leçons. 1 skill candidat identifié. | 27413450637 |
-| 2026-06-21 | weekly (ce run) | pipeline_status: broken 11e semaine. 3 fixes appliqués et GREP-VÉRIFIÉS. Leçon documentée. | 27903183395 |
+| 2026-11-15 | weekly | broken; fixes de juin ABSENTS de main, réappliqués (max-turns 25, retrospective, artifact Iris) | 43733067440 |
+| 2026-06-21 | weekly | pipeline_status: broken 11e semaine. 3 fixes appliqués et GREP-VÉRIFIÉS. Leçon documentée. | 27903183395 |
 
 ---
 
