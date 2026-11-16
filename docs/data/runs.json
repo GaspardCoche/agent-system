@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "35866372136",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "35866372136",
-    "summary": "Dispatch plan generation failed. Received fallback task referencing Forge with no actionable context. The orchestrator did not generate a proper dispa",
-    "next_actions": [],
-    "timestamp": "2026-09-23T13:28:56.309477+00:00",
-    "agents": [
-      {
-        "name": "lumen",
-        "status": "failed"
-      }
-    ],
-    "report_file": "reports/2026-09-23-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "35980103372",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-24",
@@ -1773,5 +1754,34 @@
       }
     ],
     "report_file": "reports/2026-11-16-nexus-nexus-weekly-audit-2026-11-16.md"
+  },
+  {
+    "run_id": "43923370059",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "43923370059",
+    "summary": "Routing mismatch: the task is a read-only Ralph cron/trigger health check (dry_run), with no code to implement. Forge made no code changes and ran no  · Task routing mismatch: task specifies Ralph (automation/maintenance) but Lumen (analysis/data) wa",
+    "next_actions": [
+      "Re-route to Ralph for run-status checks via gh"
+    ],
+    "timestamp": "2026-11-16T17:58:57.893589+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "lumen",
+        "status": "failed"
+      },
+      {
+        "name": "researcher",
+        "status": "skipped"
+      }
+    ],
+    "report_file": "reports/2026-11-16-orchestrator-scheduled-run.md"
   }
 ]
