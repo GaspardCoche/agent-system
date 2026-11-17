@@ -1,24 +1,5 @@
 [
   {
-    "run_id": "36003890005",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "36003890005",
-    "summary": "System health analysis completed. Analyzed 38 historical runs (Jul 2026) across 5 systems. All runs succeeded (100%). CRM operations most frequent (13",
-    "next_actions": [],
-    "timestamp": "2026-09-24T13:18:52.837446+00:00",
-    "agents": [
-      {
-        "name": "lumen",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-09-24-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "36119117360",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-09-25",
@@ -1783,5 +1764,28 @@
     "timestamp": "2026-11-17T13:19:06.392362+00:00",
     "agents": [],
     "report_file": "reports/2026-11-17-email-agent-daily-digest-2026-11-17.md"
+  },
+  {
+    "run_id": "44136038689",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "44136038689",
+    "summary": "No code changes required: the task is read-only Sage/Sentinel maintenance (dry_run). Checks: skills/registry.json has 4 skills, all validated, and eac · Task is an orchestration/dispatch task (Sage + Sentinel maintenance), not a research query. This ",
+    "next_actions": [],
+    "timestamp": "2026-11-17T17:26:19.066965+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-17-orchestrator-scheduled-run.md"
   }
 ]
