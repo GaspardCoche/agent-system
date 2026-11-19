@@ -1,0 +1,309 @@
+{
+  "date": "2026-11-19",
+  "headline": "Gemini 4 Neon rebat les cartes du prix/perf, pendant que Claude passe en 5.2",
+  "one_liner": "Google sort son 4e Gemini en 7 semaines — plus rapide, moins cher, 1M de contexte — le jour même où Anthropic lance Fable 5.2 et Mythos 5.2 et price son IPO à 83 $.",
+  "top_story": {
+    "title": "Introducing Gemini 4 Neon",
+    "source": "Google DeepMind",
+    "url": "https://deepmind.google/blog/introducing-gemini-4-neon/",
+    "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-4-neon__blog-header__sm.width-1300.png",
+    "summary": "Google DeepMind a lancé Gemini 4 Neon, son quatrième modèle Gemini en sept semaines, positionné sur le tier intermédiaire mais qui score 61 à l'Intelligence Index et surpasse son grand frère Carbon sur la plupart des benchmarks. Neon est près de 2x plus rapide que Carbon tout en étant nettement moins cher, à 3 $/1M tokens en entrée et 15 $/1M en sortie, avec une fenêtre de contexte de 1M tokens et un support natif texte/image/vidéo/audio/PDF. Pensé pour le développement logiciel, le travail de connaissance et la science, il se pose en concurrent direct d'Opus et de GPT Sol (analyse détaillée chez Latent Space et The Decoder). La cadence effrénée de Google (Hydrogen, Argon, Carbon puis Neon) brouille toutefois sa grille tarifaire, comme le souligne Simon Willison. Pour une équipe qui arbitre ses coûts d'inférence, Neon redéfinit le rapport qualité/prix sur les tâches agentiques et longues.",
+    "why_it_matters": "Pour toi : un modèle rapide, 1M de contexte et moins cher que Carbon, idéal à brancher sur tes pipelines d'enrichissement et de scoring ICP via l'API ou le plugin llm.",
+    "category": "Modeles",
+    "company_tags": [
+      "Google",
+      "DeepMind"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Introducing Claude Fable 5.2 and Claude Mythos 5.2",
+      "source": "Anthropic",
+      "url": "https://www.anthropic.com/news",
+      "image_url": "",
+      "summary": "Anthropic présente Claude Fable 5.2 et Claude Mythos 5.2, décrits comme ses modèles les plus capables pour le travail technique exigeant, avec un nouveau palier en coding, finance et sciences. L'annonce tombe le même jour que le dépôt du S-1 à la SEC et le pricing de l'IPO à 83 $, confirmant une accélération produit et financière simultanée.",
+      "why_it_matters": "Pour toi : un bond en coding Claude signifie des gains directs dans Claude Code et tes agents GitHub Actions — à tester dès que les IDs modèles sont dispo.",
+      "category": "Modeles",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Microsoft remplace des modèles IA externes par ses alternatives maison moins chères",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/microsoft-is-replacing-outside-ai-models-in-its-own-products-with-cheaper-in-house-alternatives/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/06/microsoft_logo_red_pink.png",
+      "summary": "La division MAI de Microsoft a dévoilé sept nouveaux modèles (code, sécurité, images, langage, routing) à Ignite. MAI Code 2 atteindrait 98 % de la performance de GPT-6.1 Sol pour 40 % du coût, pensé pour faire tourner des agents IA en continu en entreprise. Signal clair d'internalisation et de guerre des coûts sur l'inférence agentique.",
+      "why_it_matters": "Pour toi : la pression sur le coût/token des modèles agentiques joue directement sur le budget de tes workflows d'automatisation en continu.",
+      "category": "Modeles",
+      "importance": "must_read",
+      "company_tags": [
+        "Microsoft",
+        "MAI",
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Project Genie update featuring Genie 4",
+      "source": "Google DeepMind",
+      "url": "https://deepmind.google/blog/genie-4-is-now-available/",
+      "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/resized_ProjectGenie_Thumbnail_v02.width-1300.png",
+      "summary": "Genie 4 est le world model le plus réaliste de DeepMind à ce jour : il génère des mondes 3D interactifs modifiables en temps réel par texte, avec pour la première fois un son natif et des mondes chaînables. Une galerie communautaire permet de partager et remixer les créations, réservé aux abonnés Google AI Ultra.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "Google",
+        "DeepMind"
+      ]
+    },
+    {
+      "title": "Les modèles OCR numérisent un million de pages pour moins de 130 $",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/ocr-models-now-digitize-a-million-pages-for-under-130-as-costs-drop-fivefold-in-18-months/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/07/baidu-ocr-machine-nano-banana-pro.jpg",
+      "summary": "Extraire du texte de documents scannés est devenu beaucoup moins cher grâce à des modèles IA librement disponibles, avec des coûts divisés par cinq en 18 mois. Un million de pages se numérisent désormais pour moins de 130 $.",
+      "why_it_matters": "Pour toi : l'OCR low-cost ouvre l'ingestion massive de docs (contrats, fiches prospects) vers ton vault RAG et ton CRM sans exploser le budget.",
+      "category": "Outils & Plateformes",
+      "importance": "important",
+      "company_tags": [
+        "Baidu"
+      ]
+    },
+    {
+      "title": "llm-gemini 0.38",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/18/llm-gemini/",
+      "image_url": "https://static.simonwillison.net/static/2026/gemini-grid-updated.webp",
+      "summary": "Le plugin llm-gemini 0.38 ajoute le support de Gemini 4 Neon au CLI llm, le jour de sa sortie. Simon Willison en profite pour pointer que Neon rend la grille tarifaire des Gemini 4 encore plus confuse qu'avant.",
+      "why_it_matters": "Pour toi : tu peux tester Neon en une commande via llm, sans câbler l'API toi-même.",
+      "category": "Code & Dev",
+      "importance": "important",
+      "company_tags": [
+        "Google",
+        "Simon Willison"
+      ]
+    },
+    {
+      "title": "Les modèles d'Anthropic, OpenAI et Google désignent trop facilement des civils comme cibles de drones",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-openai-and-google-models-readily-marked-medics-journalists-and-surrendering-soldiers-as-kamikaze-drone-targets/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/03/AI-Fake-Chain-of-Evidence-1200x670.png",
+      "summary": "Une enquête de Vals AI montre que les grands modèles n'ont quasiment aucun garde-fou contre un usage en armement autonome. En test, ils ont marqué médecins, journalistes et soldats se rendant comme cibles, un simple cadrage façon jeu vidéo suffisant à contourner les refus.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "Anthropic",
+        "OpenAI",
+        "Google",
+        "Vals AI"
+      ]
+    },
+    {
+      "title": "DaisyRose-27B: Pushing the Frontier of Post-Training Efficiency",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/RadixArk/daisyrose-27b-pushing-the-frontier-of-post-trainin",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/6aeabf9f2efd990530425e58/faP4Su889q_DIgN3wmU9M.png",
+      "summary": "RadixArk publie DaisyRose-27B, un modèle qui pousse la frontière de l'efficacité du post-training. Une contribution open-weight intéressante pour qui veut du fine-tuning performant à moindre coût.",
+      "category": "Open Source",
+      "importance": "worth_noting",
+      "company_tags": [
+        "RadixArk",
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "A quote from Daniel Stenberg (réécritures de curl en Rust)",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/18/daniel-stenberg/",
+      "image_url": "",
+      "summary": "Pendant que des agents convertissaient 185 000 lignes de C en 340 000 lignes de Rust, l'équipe curl a mergé 300+ commits et corrigé 200 bugs que les clones issus d'agents n'ont pas. Un rappel sobre des limites des réécritures 'vibe-porting' par agents face à un projet mainteneur réel.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "curl"
+      ]
+    },
+    {
+      "title": "Why your fine-tuning job takes longer than the FLOPs say",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/Dharma-AI/predicting-fine-tuning-time",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/6a725daa5ca641a21ab61956/J6DIf4Len_31Tj-CQlQXY.png",
+      "summary": "Un billet technique qui explique pourquoi la durée réelle d'un job de fine-tuning dépasse ce que les FLOPs théoriques laissent prévoir. Utile pour mieux estimer temps et coûts de tes entraînements.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "datasette-arrows 0.1a0",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/18/datasette-arrows/",
+      "image_url": "https://static.simonwillison.net/static/2026/arrow-export-dialog.webp",
+      "summary": "Nouveau plugin Datasette qui exploite les formats d'export en streaming (1.0a43) pour sortir des millions de lignes au format Apache Arrow sans tout charger en mémoire. Pratique pour exporter de gros jeux de données tabulaires.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Datasette",
+        "Simon Willison"
+      ]
+    },
+    {
+      "title": "The AI Hype Index: AI loves cheating",
+      "source": "MIT Tech Review AI",
+      "url": "https://www.technologyreview.com/2026/11/18/1148650/ai-hype-index-ai-is-everywhere/",
+      "image_url": "https://wp.technologyreview.com/wp-content/uploads/2026/11/11-Hype-thumb2.jpg?resize=1200,600",
+      "summary": "Le baromètre périodique de MIT Tech Review fait le tri entre réalité et battage, de la généralisation des AI Overviews aux robots humanoïdes. Lecture utile pour garder la tête froide sur ce qui tient vraiment.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": [
+        "MIT Technology Review"
+      ]
+    },
+    {
+      "title": "Nvidia's rise, visualized",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/tech/1035924/nvidia-visualized-revenue-profit-earnings-after-huang",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/nvidia-leaves-rival-chipmakers-in-the-dust.png?quality=90&strip=all&crop=0%2C5.9688214860629%2C100%2C70.971495055265&w=1200",
+      "summary": "Une datavisualisation de l'ampleur des profits de Nvidia : environ 8 300 $ de bénéfice pur chaque seconde. Le graphique résume la domination écrasante du fournisseur de l'infrastructure IA.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "Gemini 4 Neon: GDM's Opus/Sol Contender (+ IPO Anthropic à 83 $)",
+      "source": "Latent Space",
+      "url": "https://latent.space/p/ainews-gemini-4-neon-gdm-s-opus-sol-contender/",
+      "image_url": "https://latent.space/og/card/post/ainews-gemini-4-neon-gdm-s-opus-sol-contender/0da9bd9da4547622b312ec1f44ab6ab42cc9e07bed6eb1d47b2fff64e4150bda.png",
+      "summary": "Le briefing AINews positionne Gemini 4 Neon (61 à l'Intelligence Index) comme un sérieux concurrent d'Opus et GPT Sol, et note en passant qu'Anthropic a pricé son IPO à 83 $. Bonne synthèse d'ingénieur sur la dynamique concurrentielle du jour.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Google",
+        "Anthropic",
+        "Latent Space"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "OpenAI dit avoir livré un an d'optimisation de puces par-dessus l'ingénierie d'AMD",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-says-its-models-delivered-a-years-worth-of-chip-optimization-on-top-of-amds-own-engineering/",
+      "summary": "Avec AMD, OpenAI revendique jusqu'à 14 % d'amélioration PPA sur l'IP GPU phare en moins de cinq mois, déjà intégrée dans un design envoyé en production. Anthropic applique aussi l'IA au design de puces.",
+      "category": "Recherche",
+      "company_tags": [
+        "OpenAI",
+        "AMD",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "Pangram classe à 99 % comme IA un roman péruvien primé, l'éditeur maintient son auteur",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/pangram-flags-99-percent-of-an-award-winning-peruvian-novel-as-ai-generated-but-the-publisher-stands-by-its-author/",
+      "summary": "L'outil de détection Pangram flagge 99 % d'un roman primé comme généré par IA, mais l'éditeur Almadía maintient le prix après sa propre revue. Nouvelle illustration de la fiabilité contestée des détecteurs d'IA.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "Pangram",
+        "Almadía"
+      ]
+    },
+    {
+      "title": "Time-Series Models in the Streamhouse: A New Frontier and Use Cases",
+      "source": "HuggingFace Blog",
+      "url": "https://huggingface.co/blog/ibm-research/time-series-powered-streamhouse",
+      "summary": "IBM Research explore l'intégration de modèles de séries temporelles dans une architecture 'streamhouse' et ses cas d'usage. Pertinent pour l'analyse de données temporelles en continu.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "IBM"
+      ]
+    },
+    {
+      "title": "Canva ajoute un bouton pour désactiver l'IA",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1037126/canva-ai-features-off-button",
+      "summary": "Canva permet désormais de désactiver ses fonctions d'IA générative, dont Magic Expand et la génération d'images via son chatbot. Un signe de la demande utilisateur pour du contrôle sur l'IA imposée.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Canva"
+      ]
+    },
+    {
+      "title": "Les plus grands districts scolaires US envisagent d'abandonner Google Search",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1037151/school-districts-ditching-google",
+      "summary": "New York, Los Angeles et Chicago cherchent des alternatives après que Google a prévenu qu'il coupera Search pour les écoles refusant ses fonctions IA. La contrainte Gemini pousse les institutions vers la sortie.",
+      "category": "Google & Cloud",
+      "company_tags": [
+        "Google"
+      ]
+    },
+    {
+      "title": "What is Nvidia without AI's sugar daddy in charge?",
+      "source": "The Verge AI",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1036776/nvidia-earnings-kress-jensen-huang-petition",
+      "summary": "Analyse de la fragilité perçue de Nvidia après le départ de son CEO fondateur, et du débat sur son caractère 'indispensable'. Questionne la robustesse d'une révolution IA adossée à un seul homme.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "How to tell a cyberattack from a plain old outage",
+      "source": "Ars Technica AI",
+      "url": "https://arstechnica.com/security/2026/11/how-to-tell-a-cyberattack-from-a-plain-old-outage/",
+      "summary": "Quand tout tombe en panne, ne présumez pas d'une cyberattaque. Guide pratique pour distinguer incident technique et attaque, utile avant de déclencher une cellule de crise.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "The PSF end-of-year fundraiser",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/18/psf-end-of-year-fundraiser/",
+      "summary": "La Python Software Foundation lance sa collecte de fin d'année pour financer PyPI, les sprints de core devs et désormais trois développeurs sécurité. À soutenir si ton travail repose sur Python.",
+      "category": "Open Source",
+      "company_tags": [
+        "Python Software Foundation"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "Gemini 4 Neon via le plugin llm",
+      "description": "Teste le nouveau modèle rapide 1M-contexte en une commande avec le CLI llm, sans câbler l'API toi-même.",
+      "url": "https://simonwillison.net/2026/Nov/18/llm-gemini/"
+    },
+    {
+      "nom": "Gemini 4 Neon (API)",
+      "description": "Branche Neon (3 $/15 $ par M tokens, 1M contexte, multimodal) sur un pipeline d'enrichissement ou de scoring ICP pour comparer son rapport prix/perf à Carbon.",
+      "url": "https://deepmind.google/blog/introducing-gemini-4-neon/"
+    },
+    {
+      "nom": "datasette-arrows",
+      "description": "Exporte en streaming des millions de lignes au format Apache Arrow depuis Datasette sans saturer la mémoire.",
+      "url": "https://simonwillison.net/2026/Nov/18/datasette-arrows/"
+    }
+  ],
+  "trends": [
+    {
+      "title": "Cadence de release effrénée",
+      "description": "Gemini 4 Neon est le 4e Gemini en 7 semaines et arrive le jour même que Claude Fable 5.2 et Mythos 5.2 — le rythme de sortie des modèles frontier devient hebdomadaire."
+    },
+    {
+      "title": "L'IA descend dans le silicium",
+      "description": "OpenAI (avec AMD) et Anthropic appliquent désormais leurs modèles à l'optimisation du design de puces, revendiquant des mois de gains d'ingénierie."
+    },
+    {
+      "title": "Internalisation et guerre des coûts",
+      "description": "Microsoft remplace des modèles tiers par ses MAI maison à 40 % du coût, pendant que l'OCR tombe sous 130 $/million de pages : la pression sur le coût d'inférence s'accélère."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 18,
+    "articles_extracted": 22
+  }
+}
