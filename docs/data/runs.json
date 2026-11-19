@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "36311008173",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-09-27",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "1 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-09-27T10:03:08.917951+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-27-email-agent-daily-digest-2026-09-27.md"
-  },
-  {
     "run_id": "36326192061",
     "workflow": "sage",
     "title": "Sage Weekly 2026-09-27",
@@ -1787,5 +1773,28 @@
     "timestamp": "2026-11-19T13:00:29.958697+00:00",
     "agents": [],
     "report_file": "reports/2026-11-19-email-agent-daily-digest-2026-11-19.md"
+  },
+  {
+    "run_id": "44572591461",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "44572591461",
+    "summary": "Task is Sage-domain maintenance (misrouted; earlier researcher run failed for the same reason). No code changes required. Checked skills/registry.json · Configuration error: task role mismatch. Task requires 'sage' agent but was routed to 'researcher",
+    "next_actions": [],
+    "timestamp": "2026-11-19T17:05:24.018479+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-19-orchestrator-scheduled-run.md"
   }
 ]
