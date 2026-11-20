@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "36411951002",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-09-28",
-    "status": "failed",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "8 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-09-28T10:56:01.918735+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-28-email-agent-daily-digest-2026-09-28.md"
-  },
-  {
     "run_id": "36448906618",
     "workflow": "nexus",
     "title": "Nexus weekly_audit 2026-09-28",
@@ -1796,5 +1782,32 @@
     "timestamp": "2026-11-20T12:52:13.690327+00:00",
     "agents": [],
     "report_file": "reports/2026-11-20-email-agent-daily-digest-2026-11-20.md"
+  },
+  {
+    "run_id": "44775812109",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "44775812109",
+    "summary": "Routing mismatch: the task (Sage scheduled maintenance: review retrospectives, validate skills registry, propose prompt improvements, dry_run) was inv · Task routing mismatch: assigned to Sage, invoked as Lumen. This task (review retrospectives, vali",
+    "next_actions": [],
+    "timestamp": "2026-11-20T16:44:56.564107+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "failed"
+      },
+      {
+        "name": "lumen",
+        "status": "failed"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-20-orchestrator-scheduled-run.md"
   }
 ]
