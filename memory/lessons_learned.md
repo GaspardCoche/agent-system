@@ -428,3 +428,16 @@ Egalement : simplifie la notification Slack, ajoute un concurrency group.
 **Agents concernes :** Tous
 
 ---
+
+---
+
+## 2026-11-22 — Pipeline rétrospectives toujours cassée (12e semaine) : fixes ABSENTS du code
+
+**Problème :** 50 runs, 9 artifacts, 0 rétrospectives. `grep retrospective _reusable-claude.yml` = 0 résultat, `agent-result-iris` absent d'email-agent.yml, sage.yml `--max-turns 15` : les "fixes" des entrées précédentes n'étaient pas dans `main`. Aussi, seuls lumen/coder/researcher produisent des `agent-result-*` ; les autres artifacts (ai-digest, email-triage...) ne matchent pas le collecteur.
+
+**Fix appliqué (vérifié par grep, à merger) :**
+- `_reusable-claude.yml` : prompt exige `retrospective` + step `Ensure retrospective field` (post-processing, `if: always()`) qui injecte le champ si absent — plus de dépendance au bon vouloir de l'agent.
+- `email-agent.yml` : steps `Write/Upload Iris result artifact` (agent-result-iris-{run_id}).
+- `sage.yml` : `--max-turns 25`.
+
+**Règle :** Ne jamais écrire "corrigé" sans `grep` du fichier sur la branche mergée. Vérifier la semaine prochaine que `retrospectives_collected > 0`.

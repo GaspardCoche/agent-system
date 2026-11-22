@@ -159,3 +159,6 @@ Des qu'un pattern depasse 3 occurrences, creer le skill correspondant.
 ---
 
 *Sage met a jour ce fichier apres chaque analyse hebdomadaire.*
+
+## 2026-11-22 — Run hebdo
+- pipeline_status: broken (50 runs, 9 artifacts, 0 retros). Fixes précédents absents du code ; réappliqués (post-processing retrospective dans _reusable-claude.yml, artifact Iris, max-turns 25). Aucun candidat skill >= 5 usages (pas de données). Vérifier semaine prochaine.
