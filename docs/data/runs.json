@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "36702408980",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-09-30",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "10 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-09-30T10:32:14.169620+00:00",
-    "agents": [],
-    "report_file": "reports/2026-09-30-email-agent-daily-digest-2026-09-30.md"
-  },
-  {
     "run_id": "36730304062",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1805,5 +1791,28 @@
     "timestamp": "2026-11-23T14:36:06.349553+00:00",
     "agents": [],
     "report_file": "reports/2026-11-23-email-agent-daily-digest-2026-11-23.md"
+  },
+  {
+    "run_id": "45250331302",
+    "workflow": "nexus",
+    "title": "Nexus weekly_audit 2026-11-23",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "",
+    "summary": "TEMPLATE MODE: credentials_ok=false, aucun appel API. Rapport template généré. 26e run consécutif bloqué (~244 jours). Secrets manquants: GOOGLE_ADS_D",
+    "next_actions": [
+      "Configurer les 4 secrets Google Ads dans GitHub Secrets",
+      "Forge: ajouter needs: [check-credentials] à nexus.yml",
+      "Renseigner account_id (7251903503) dans la tâche"
+    ],
+    "timestamp": "2026-11-23T19:35:45.102271+00:00",
+    "agents": [
+      {
+        "name": "nexus",
+        "status": "complete"
+      }
+    ],
+    "report_file": "reports/2026-11-23-nexus-nexus-weekly-audit-2026-11-23.md"
   }
 ]
