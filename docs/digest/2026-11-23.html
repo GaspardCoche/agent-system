@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Fable 5.2 &amp; Mythos 5.2 : Anthropic repousse la frontière, le jour de son S-1 — AI Briefing 2026-11-23</title>
+  <meta name="description" content="Anthropic dégaine Fable 5.2 et Mythos 5.2 — ses modèles les plus costauds pour le code, la finance et les sciences — pendant que Google (Gemini 4 Neon) et OpenAI (GPT-6.2 Astra) ripostent dans la même fenêtre.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Lundi 23 novembre 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">21 articles</span>
+      <span class="hero-pill">20 sources</span>
+      <span class='hero-pill'>+8 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Claude Fable 5.2 &amp; Mythos 5.2 : Anthropic repousse la frontière, le jour de son S-1</h2>
+      <p>Anthropic dégaine Fable 5.2 et Mythos 5.2 — ses modèles les plus costauds pour le code, la finance et les sciences — pendant que Google (Gemini 4 Neon) et OpenAI (GPT-6.2 Astra) ripostent dans la même fenêtre.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+8)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://www.anthropic.com/claude-fable-and-mythos-5-2" class="card-img-link"><img src="https://assets.claude.com/3897bb01a63f2f5c37325d6fe22af6746f1964f4.jpg?w=3840&amp;q=75&amp;fm=webp&amp;fit=max" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://www.anthropic.com/claude-fable-and-mythos-5-2">Introducing Claude Fable 5.2 and Claude Mythos 5.2</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic</span>
+        </div>
+        <p class="summary">Anthropic lance Claude Fable 5.2 et Claude Mythos 5.2, présentés comme ses modèles les plus capables pour le travail technique exigeant : code, finance et sciences. L&#x27;annonce tombe le même jour que le dépôt du S-1 en vue de l&#x27;IPO et que les ripostes de Google (Gemini 4 Neon) et OpenAI (GPT-6.2 Astra), signe d&#x27;un cycle produit ultra-compressé. Pour un atelier bâti sur Claude Code, c&#x27;est une montée en gamme immédiate sur les tâches agentiques longues et le raisonnement multi-étapes. Fable 5.2 est déjà utilisé en conditions réelles — Simon Willison l&#x27;a employé pour générer une page de démo CSS — preuve que le modèle est disponible et pas seulement annoncé. À arbitrer cette semaine sur tes pipelines d&#x27;enrichissement et de scoring ICP, avant de trancher le coût/perf face à Opus 5.5.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://www.anthropic.com/claude-fable-and-mythos-5-2" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/?utm_source=deepmind.google&amp;utm_medium=referral&amp;utm_campaign=gdm&amp;utm_content=" class="card-img-link"><img src="https://lh3.googleusercontent.com/2Za-dQQBnlE1tUVsI70tY7WINqgsa_eE0Cq2MPe5G0P9qyyfDG8SZqdICCVw8eN-cTbKLTM4tT8GuHAQkmuWS1VQ01yWU6t3VszeTvVfNEgz2smJ=w2464-h2464-n-nu" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/?utm_source=deepmind.google&amp;utm_medium=referral&amp;utm_campaign=gdm&amp;utm_content=">Introducing Gemini 4 Neon</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=blog.google&sz=32" width="14" height="14" />
+          <span>Google DeepMind</span>
+        </div>
+        <p class="summary">Google DeepMind dévoile Gemini 4 Neon, nouveau cran de sa famille Gemini 4 (aux côtés de Hydrogen, Carbon et du modèle de mondes Genie 4), quasi le même jour que Claude Fable/Mythos 5.2. La guerre des modèles de frontière se joue désormais en salves rapprochées, ce qui raccourcit la durée de vie de tout choix de modèle par défaut.</p>
+        <div class="card-tags"><span class="tag">Google</span><span class="tag">DeepMind</span></div>
+        <a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/?utm_source=deepmind.google&amp;utm_medium=referral&amp;utm_campaign=gdm&amp;utm_content=" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/perplexitys-new-monitor-api-turns-web-search-from-a-one-off-query-into-a-nonstop-watchdog/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/06/Perplexity-Logo-Silhouette-Nano-Banana-Pro.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://the-decoder.com/perplexitys-new-monitor-api-turns-web-search-from-a-one-off-query-into-a-nonstop-watchdog/">Perplexity&#x27;s new Monitor API turns web search from a one-off query into a nonstop watchdog</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Perplexity lance une Monitor API qui interroge le web selon un calendrier et n&#x27;alerte tes agents par webhook que lorsqu&#x27;un changement pertinent survient, un modèle de décision filtrant le bruit. C&#x27;est la bascule d&#x27;une recherche ponctuelle vers une veille continue pilotée par agent.</p>
+        <div class="card-tags"><span class="tag">Perplexity</span></div>
+        <a href="https://the-decoder.com/perplexitys-new-monitor-api-turns-web-search-from-a-one-off-query-into-a-nonstop-watchdog/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <a href="https://the-decoder.com/gpt-6-2-astra-solved-a-math-theorem-no-other-ai-could-crack-then-invented-its-own-proof-strategy/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/11/gpt_lean_proof.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/gpt-6-2-astra-solved-a-math-theorem-no-other-ai-could-crack-then-invented-its-own-proof-strategy/">GPT-6.2 Astra solved a math theorem no other AI could crack, then invented its own proof strategy</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">GPT-6.2 Astra d&#x27;OpenAI a produit une preuve Lean vérifiable par machine du théorème du gap de Smoktunowicz, une première selon Vals AI, en inventant sa propre stratégie faute de fondations dans Mathlib. Le modèle prend la tête du leaderboard Autoform-Hard (49/56), et Alexandr Wang (Meta) y voit un signe que la superintelligence approche.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Meta</span></div>
+        <a href="https://the-decoder.com/gpt-6-2-astra-solved-a-math-theorem-no-other-ai-could-crack-then-invented-its-own-proof-strategy/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/agentic-evals" class="card-img-link"><img src="https://huggingface.co/blog/assets/agentic-evals/thumbnail.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/agentic-evals">How to build and maintain an agentic evaluation</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace Blog</span>
+        </div>
+        <p class="summary">Guide pratique de HuggingFace pour construire et maintenir une évaluation d&#x27;agents dans la durée, au-delà des benchmarks ponctuels. Méthodo utile quand tes agents évoluent et que tu dois détecter les régressions avant qu&#x27;elles n&#x27;atteignent la prod.</p>
+        <div class="card-tags"><span class="tag">HuggingFace</span></div>
+        <a href="https://huggingface.co/blog/agentic-evals" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/1039874/walmart-agent-gateway-meta-muse-black-friday" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/Walmart-Meta-Muse-Agent-Gateway.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/1039874/walmart-agent-gateway-meta-muse-black-friday">Meta Muse can do your Black Friday shopping at Walmart</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge AI</span>
+        </div>
+        <p class="summary">Walmart laissera l&#x27;agent IA Muse de Meta naviguer et acheter sur son site à ta place, via une implémentation live de l&#x27;Agent Gateway dès le 24 novembre. C&#x27;est un cas concret d&#x27;« agentic commerce » où l&#x27;agent franchit le dernier kilomètre jusqu&#x27;à l&#x27;achat.</p>
+        <div class="card-tags"><span class="tag">Meta</span><span class="tag">Walmart</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1039874/walmart-agent-gateway-meta-muse-black-friday" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/ai-coding-agents-ace-isolated-tests-but-complete-fewer-than-one-in-ten-tasks-in-a-simulated-workplace/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/11/cowork-benchmark-chatgpt-5-6.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/ai-coding-agents-ace-isolated-tests-but-complete-fewer-than-one-in-ten-tasks-in-a-simulated-workplace/">AI coding agents ace isolated tests but complete fewer than one in ten tasks in a simulated workplace</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Un nouveau benchmark place les agents de code dans un vrai poste de dev simulé (collègues, boards, handoffs incomplets) où ils doivent clôturer des tickets dans un flux désordonné. Même Opus 5.5 et GPT-6 Astra résolvent moins d&#x27;une tâche sur dix, confirmant l&#x27;écart béant entre tests isolés et travail réel.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Anthropic</span></div>
+        <a href="https://the-decoder.com/ai-coding-agents-ace-isolated-tests-but-complete-fewer-than-one-in-ten-tasks-in-a-simulated-workplace/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.anthropic.com/news/s1-sec">Anthropic files S-1 with the SEC for proposed initial public offering</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic</span>
+        </div>
+        <p class="summary">Anthropic a déposé un formulaire S-1 auprès de la SEC en vue de son introduction en bourse (actions de classe A). Couplée au nouveau Public Benefit Fund, l&#x27;opération structure la gouvernance et le financement du labo pour les prochaines années.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://www.anthropic.com/news/s1-sec" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>5 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Nov/22/select-styling/">Select Styling Specimens</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Simon Willison a fait générer par Claude Fable 5.2 une page recensant toutes les manières de styliser un `&lt;select&gt;` HTML, et en tire un CSS propre et cohérent entre navigateurs. Petit, mais révélateur de l&#x27;usage quotidien des nouveaux modèles pour du front-end jetable.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://simonwillison.net/2026/Nov/22/select-styling/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.wired.com/story/goodbye-world-the-end-of-programmers/" class="card-img-link"><img src="https://media.wired.com/photos/6afb501c3f280c58f990fcf3/191:100/w_1280,c_limit/WIRED-MREnglish-AaronFernandez-01.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/goodbye-world-the-end-of-programmers/">Goodbye, World: The End of Programmers</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">Essai de WIRED sur « la fin des programmeurs » et ce que devient le métier de coder à l&#x27;ère des agents. Provocateur, mais utile pour cadrer sa propre stratégie d&#x27;outillage et d&#x27;orchestration.</p>
+        
+        <a href="https://www.wired.com/story/goodbye-world-the-end-of-programmers/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.wired.com/story/states-sue-spacex-over-grok-deepfakes/" class="card-img-link"><img src="https://media.wired.com/photos/6b00c213fb286bb31d23bec0/191:100/w_1280,c_limit/Security_Virginia%20and%20Oregon%20Sue%20Grok%20Over%20Nonconsensual%20Intimate%20Imagery_v1.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/states-sue-spacex-over-grok-deepfakes/">States Sue SpaceX Over Grok Deepfakes</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">Les procureurs de l&#x27;Oregon et de la Virginie poursuivent plusieurs sociétés d&#x27;Elon Musk, leur reprochant des garde-fous insuffisants contre les images sexualisées de personnes réelles, y compris des mineurs, générées via Grok. Signal réglementaire fort sur la responsabilité des fournisseurs d&#x27;IA générative.</p>
+        <div class="card-tags"><span class="tag">xAI</span><span class="tag">SpaceX</span></div>
+        <a href="https://www.wired.com/story/states-sue-spacex-over-grok-deepfakes/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.wired.com/story/nvidia-is-powering-brain-computer-interfaces-now/" class="card-img-link"><img src="https://media.wired.com/photos/6b00bf3096143f394c42fff6/191:100/w_1280,c_limit/Nvidia-Powering%20Brain-Computer-Interfaces-mary-connexus-control-unit-Science.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.wired.com/story/nvidia-is-powering-brain-computer-interfaces-now/">Nvidia Is Powering Brain-Computer Interfaces Now</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.wired.com&sz=32" width="14" height="14" />
+          <span>Wired AI</span>
+        </div>
+        <p class="summary">La société d&#x27;interfaces cerveau-machine Paradromics utilise le matériel et le logiciel Nvidia pour traiter les données cérébrales. Nvidia étend ainsi sa pile au-delà du datacenter, jusqu&#x27;au signal neuronal.</p>
+        <div class="card-tags"><span class="tag">Nvidia</span><span class="tag">Paradromics</span></div>
+        <a href="https://www.wired.com/story/nvidia-is-powering-brain-computer-interfaces-now/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://openai.com/index/perplexity-and-intelligence/" class="card-img-link"><img src="https://images.ctfassets.net/kftzwdyauwt9/59nry7GNOkiMyCfrmaFJw6/3dc84144a23b0d65fa06805ae13e6a53/perplexity-and-intelligence-cover.png?w=3840&amp;q=90&amp;fm=webp" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://openai.com/index/perplexity-and-intelligence/">Perplexity and Intelligence</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI</span>
+        </div>
+        <p class="summary">OpenAI publie une note de recherche sur la perplexité et ce qu&#x27;elle dit — ou non — de l&#x27;intelligence réelle des modèles. Lecture de fond pour mieux interpréter les métriques d&#x27;évaluation.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span></div>
+        <a href="https://openai.com/index/perplexity-and-intelligence/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>Salves de modèles de frontière</strong><p>Claude Fable/Mythos 5.2, Gemini 4 Neon et GPT-6.2 Astra sortent dans la même fenêtre : le cycle produit se compte désormais en jours, pas en mois.</p></div><div class="trend-item"><strong>L&#x27;IA s&#x27;attaque aux maths de recherche</strong><p>Preuves Lean vérifiables par machine (Astra sur le théorème de Smoktunowicz, sketch autour de Riemann) : les modèles inventent leurs propres stratégies de démonstration.</p></div><div class="trend-item"><strong>L&#x27;agentic commerce passe à l&#x27;achat réel</strong><p>Meta Muse × Walmart Agent Gateway montre des agents qui vont jusqu&#x27;au paiement, pendant que des APIs comme Perplexity Monitor industrialisent la veille continue.</p></div><div class="trend-item"><strong>Benchmarks brillants, travail réel décevant</strong><p>Les agents de code excellent en tests isolés mais clôturent moins d&#x27;une tâche sur dix dans un poste de dev simulé — l&#x27;humain reste indispensable dans la boucle.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 8 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://www.anthropic.com/news/public-benefit-fund" class="ext-title">Investing in the public benefit</a>
+        <span class="ext-source">Anthropic</span>
+        <p class="ext-summary">Anthropic engage une part de ses actions dans un nouveau Anthropic Public Benefit Fund, dont la participation croît à mesure que la société grandit.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/11/22/how-notable-capital-gic-and-baillie-gifford-bet-big-on-anthropic-before-its-ipo/" class="ext-title">How Notable Capital, GIC, and Baillie Gifford bet big on Anthropic before its IPO</a>
+        <span class="ext-source">TechCrunch</span>
+        <p class="ext-summary">Comment Notable Capital, GIC et Baillie Gifford ont massivement parié sur Anthropic avant son introduction en bourse.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://techcrunch.com/2026/11/22/why-data-centers-are-at-the-center-of-the-big-tech-backlash/" class="ext-title">Why data centers are at the center of the Big Tech backlash</a>
+        <span class="ext-source">TechCrunch</span>
+        <p class="ext-summary">Pourquoi les datacenters cristallisent le ressac anti-Big Tech, entre consommation d&#x27;énergie et contestations locales.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/tech/1039851/major-tech-outages" class="ext-title">We haven&#x27;t seen the last of the major tech outages</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">FAA, Outlook, JPMorgan : après une série de pannes majeures, Microsoft et le renseignement US préviennent qu&#x27;il y en aura d&#x27;autres.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/games/1039770/binding-of-isaac-ai-music" class="ext-title">Binding of Isaac developer removes AI music from Repentance Plus</a>
+        <span class="ext-source">The Verge AI</span>
+        <p class="ext-summary">Le studio de The Binding of Isaac retire une musique générée par IA de Repentance Plus après un review-bombing sur Steam.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://github.blog/ai-and-ml/github-copilot/build-once-run-on-any-agent-a-practical-guide-to-agent-skills/" class="ext-title">Build once, run on any agent: A practical guide to agent skills</a>
+        <span class="ext-source">GitHub Blog</span>
+        <p class="ext-summary">Guide GitHub pour écrire des « agent skills » réutilisables, décrits une fois et exécutables sur n&#x27;importe quel hôte d&#x27;agent, outils et permissions restant propres à l&#x27;hôte.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://github.blog/open-source/maintainers/maintainers-dont-need-more-ai-bug-reports-they-need-fixes/" class="ext-title">Maintainers don&#x27;t need more AI bug reports. They need fixes.</a>
+        <span class="ext-source">GitHub Blog</span>
+        <p class="ext-summary">Dans le pilote Codename MDASH, GitHub et Microsoft ont transformé des milliers de signalements IA bruts en 99 rapports vérifiés avec correctifs ; les mainteneurs en ont déjà corrigé plus de la moitié.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#0891B2;">☁️ Google &amp; Cloud</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#0891B2;"></div>
+      <div class="ext-body">
+        <a href="https://blog.google/innovation-and-ai/models-and-research/google-deepmind/genie-4-now-available-project-genie/" class="ext-title">Genie 4 is now available</a>
+        <span class="ext-source">Google DeepMind</span>
+        <p class="ext-summary">Genie 4, le modèle de mondes interactifs de Google DeepMind, est désormais accessible via Project Genie.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 20 sources scannées
+  </p>
+</div>
+
+</body>
+</html>
