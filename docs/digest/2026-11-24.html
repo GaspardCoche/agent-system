@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anthropic frappe fort : Fable 5.2 et Mythos 5.2 arrivent, Claude Ship fait expédier les PR en autonomie — AI Briefing 2026-11-24</title>
+  <meta name="description" content="Les agents de code passent de l&#x27;assistance à l&#x27;autonomie — Anthropic sort une nouvelle famille de modèles « technique lourd » et un produit qui review, corrige et approuve les pull requests tout seul.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --surface: #FFFFFF;
+      --border: #E8ECF1;
+      --border-light: #F1F5F9;
+      --text: #0F172A;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --accent: #4F46E5;
+      --accent-light: #EEF2FF;
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+      --max-w: 1120px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+
+    /* ── Header ───────────────────────────────────── */
+    .hero {
+      background: #0F172A;
+      color: #F8FAFC;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366F1, #8B5CF6, #EC4899, #8B5CF6, #6366F1);
+      background-size: 200% 100%;
+      animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 56px 32px 48px;
+      text-align: center;
+    }
+    .hero-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: #818CF8;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-label::before, .hero-label::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #818CF860);
+    }
+    .hero-label::after {
+      background: linear-gradient(90deg, #818CF860, transparent);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      margin: 16px 0 8px;
+    }
+    .hero-date {
+      color: #64748B;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .hero-pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .hero-pill {
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 20px;
+      padding: 5px 16px;
+      color: #A5B4FC;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* ── Headline bar ─────────────────────────────── */
+    .headline-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .headline-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .headline-text h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .headline-text p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    /* ── Nav ───────────────────────────────────────── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.92);
+    }
+    .nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav a {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Container ─────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 32px; }
+
+    /* ── Section ───────────────────────────────────── */
+    .section { margin: 40px 0; scroll-margin-top: 60px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--section-color, #334155);
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .section-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ── Grid ──────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Cards ─────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+    .card-featured {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .card-featured:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .card-img-link { display: block; }
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-featured .card-img { height: 100%; min-height: 300px; }
+    .card-placeholder {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-featured .card-placeholder { height: 100%; min-height: 300px; }
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .card-featured .card-body { padding: 32px; justify-content: center; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .cat-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--c) 8%, transparent);
+      color: var(--c);
+    }
+    .imp-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body h3 {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+    .card-featured .card-body h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      line-height: 1.3;
+    }
+    .card-body h3 a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-body h3 a:hover { color: var(--accent); }
+    .source-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .source-line img { border-radius: 3px; }
+    .summary {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .card-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .tag {
+      font-size: 10px;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .read-link {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .read-link:hover { text-decoration: underline; }
+
+    /* ── Trends ────────────────────────────────────── */
+    .trends-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .trend-item {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .trend-item:last-child { border: none; padding-bottom: 0; }
+    .trend-item:first-child { padding-top: 0; }
+    .trend-item strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .trend-item p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ── Extended / Bonus ──────────────────────────── */
+    .bonus-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 56px 0 32px;
+    }
+    .bonus-divider::before, .bonus-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .bonus-divider span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .ext-section {
+      margin-bottom: 32px;
+    }
+    .ext-cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--c);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid color-mix(in srgb, var(--c) 20%, transparent);
+      display: inline-block;
+    }
+    .ext-row {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .ext-row:last-child { border: none; }
+    .ext-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+    .ext-body { flex: 1; }
+    .ext-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.35;
+    }
+    .ext-title:hover { color: var(--accent); }
+    .ext-source {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .ext-summary {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    .footer {
+      background: #0F172A;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 64px;
+    }
+    .footer p { color: #64748B; font-size: 12px; line-height: 1.8; }
+    .footer a { color: #818CF8; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      color: #E2E8F0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero-inner { padding: 40px 20px 36px; }
+      .hero h1 { font-size: 30px; }
+      .headline-inner { flex-direction: column; padding: 20px; }
+      .headline-text h2 { font-size: 20px; }
+      .container { padding: 0 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .card-featured { grid-template-columns: 1fr; }
+      .card-featured .card-img { min-height: 200px; height: 200px; }
+      .card-featured .card-placeholder { min-height: 120px; height: 120px; }
+      .card-featured .card-body { padding: 24px; }
+      .card-featured .card-body h3 { font-size: 20px; }
+      .nav-inner { padding: 0 16px; }
+      .section { margin: 28px 0; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 24px; letter-spacing: 1px; }
+      .card-body h3 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Intelligence</div>
+    <h1>AI Briefing</h1>
+    <div class="hero-date">Mardi 24 novembre 2026</div>
+    <div class="hero-pills">
+      <span class="hero-pill">23 articles</span>
+      <span class="hero-pill">18 sources</span>
+      <span class='hero-pill'>+8 bonus</span>
+    </div>
+  </div>
+</div>
+
+<div class="headline-bar">
+  <div class="headline-inner">
+    <div class="headline-text">
+      <h2>Anthropic frappe fort : Fable 5.2 et Mythos 5.2 arrivent, Claude Ship fait expédier les PR en autonomie</h2>
+      <p>Les agents de code passent de l&#x27;assistance à l&#x27;autonomie — Anthropic sort une nouvelle famille de modèles « technique lourd » et un produit qui review, corrige et approuve les pull requests tout seul.</p>
+    </div>
+    <a href="https://gaspardcoche.github.io/agent-system/digest/" style="font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap;">&larr; Archives</a>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top-story">Top Story</a><a href="#must-read">Must Read</a><a href="#important">Important</a><a href="#worth-noting">En bref</a><a href="#trends">Tendances</a><a href="#bonus">Bonus (+8)</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <section class='section' id='top-story'><div class='section-header'><span class='section-title' style='--section-color:#EA580C;'>Top Story</span><div class='section-line'></div></div><div class='grid'><article class="card card-featured">
+      <a href="https://www.anthropic.com/news" class="card-img-link"><img src="https://assets.claude.com/3897bb01a63f2f5c37325d6fe22af6746f1964f4.jpg?w=3840&amp;q=75&amp;fm=webp&amp;fit=max" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          
+        </div>
+        <h3><a href="https://www.anthropic.com/news">Introducing Claude Fable 5.2 and Claude Mythos 5.2</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.anthropic.com&sz=32" width="14" height="14" />
+          <span>Anthropic</span>
+        </div>
+        <p class="summary">Anthropic dévoile Claude Fable 5.2 et Claude Mythos 5.2, présentés comme ses modèles les plus capables pour le travail technique exigeant : code, finance et sciences. C&#x27;est la suite logique de la cadence Opus 5.5 / Haiku 5.5 et un signal clair que la course au « raisonnement lourd » s&#x27;accélère côté Anthropic. Pour quelqu&#x27;un qui code chaque jour avec Claude Code et des agents GitHub Actions, un bond de capacité sur les tâches techniques difficiles change directement le plafond de ce qu&#x27;un agent peut livrer sans supervision. L&#x27;annonce arrive le même jour que Claude Ship, qui opérationnalise cette autonomie sur les pull requests. À surveiller : la grille tarifaire et la latence, car le vrai levier business reste le rapport capacité/coût sur tes workflows d&#x27;agents.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span></div>
+        <a href="https://www.anthropic.com/news" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='must-read'><div class='section-header'><span class='section-title' style='--section-color:#DC2626;'>A ne pas rater</span><div class='section-line'></div><span class='section-count'>2 articles</span></div><div class='grid'><article class="card">
+      <a href="https://www.theverge.com/ai-artificial-intelligence/1040134/anthropic-claude-ship-ai-pull-requests" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/STKB364_CLAUDE_2_C_96d15c-1.jpg?quality=90&amp;strip=all&amp;crop=0%2C10.732984293194%2C100%2C78.534031413613&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#0284C7;">⚙️ Outils &amp; Plateformes</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://www.theverge.com/ai-artificial-intelligence/1040134/anthropic-claude-ship-ai-pull-requests">Claude AI can review pull requests and ship fixes on its own now</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge</span>
+        </div>
+        <p class="summary">Anthropic lance Claude Ship (bêta) : Claude peut désormais review, corriger et approuver des pull requests selon les règles de l&#x27;équipe, et non plus seulement commenter. The Decoder et TechCrunch confirment le même lancement. On passe d&#x27;un copilote qui suggère à un agent qui ferme la boucle d&#x27;intégration.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span><span class="tag">Claude</span><span class="tag">GitHub</span></div>
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1040134/anthropic-claude-ship-ai-pull-requests" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input/" class="card-img-link"><img src="https://cdn.arstechnica.net/wp-content/uploads/2026/11/cairn-banner.jpg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#DC2626;background:#FEF2F2;">Must Read</span>
+        </div>
+        <h3><a href="https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input/">Amazon says hackers&#x27; AI agents found and exploited 0-day with little human input</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=arstechnica.com&sz=32" width="14" height="14" />
+          <span>Ars Technica</span>
+        </div>
+        <p class="summary">Amazon rapporte que des attaquants ont utilisé le framework d&#x27;agents Cairn pour découvrir et exploiter une faille 0-day avec très peu d&#x27;intervention humaine. Le même outil sert aussi aux défenseurs, illustrant le caractère dual des agents offensifs. La barre d&#x27;entrée pour trouver des vulnérabilités s&#x27;abaisse nettement.</p>
+        <div class="card-tags"><span class="tag">Amazon</span><span class="tag">Cairn</span></div>
+        <a href="https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='important'><div class='section-header'><span class='section-title' style='--section-color:#D97706;'>Important</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <a href="https://simonwillison.net/2026/Nov/23/glm-54/" class="card-img-link"><img src="https://static.simonwillison.net/static/2026/glm-family-4.webp" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Nov/23/glm-54/">GLM-5.4: Toward Generalized Coding with Our First Loop Transformer</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Le labo chinois Z.ai sort GLM-5.4, son premier modèle à architecture « loop transformer » : 28 couches exécutées deux fois, ce qui lui permettrait d&#x27;égaler des modèles de 2 à 3 000 milliards de paramètres avec seulement 750B. C&#x27;est un pari d&#x27;efficacité paramétrique qui suit OpenAI sur le même terrain. Les benchmarks publics ne couvrent pour l&#x27;instant qu&#x27;une variante 30B.</p>
+        <div class="card-tags"><span class="tag">Z.ai</span></div>
+        <a href="https://simonwillison.net/2026/Nov/23/glm-54/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#4F46E518,#4F46E508);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#4F46E5;">🌐 Open Source</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://openai.com/index/introducing-shirudo">OpenAI and Cisco introduce Shirudo</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">OpenAI et Cisco publient Shirudo, un runtime open-source pour Linux qui protège les systèmes en production pendant le déploiement des correctifs. L&#x27;angle est clairement « sécurité opérationnelle à l&#x27;ère des agents ». L&#x27;ouverture du code facilite l&#x27;adoption côté équipes infra.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Cisco</span></div>
+        <a href="https://openai.com/index/introducing-shirudo" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/openai-warns-that-upcoming-ai-systems-could-outpace-safety-checks-and-urges-rivals-to-agree-on-shared-limits/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/10/openai_safety.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/openai-warns-that-upcoming-ai-systems-could-outpace-safety-checks-and-urges-rivals-to-agree-on-shared-limits/">OpenAI warns that upcoming AI systems could outpace safety checks and urges rivals to agree on shared limits</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Le chief scientist d&#x27;OpenAI, Jakub Pachocki, publie pour la première fois les scores de perplexité de toute la série GPT, jusqu&#x27;à un modèle non sorti au-delà de la génération actuelle. La métrique montre que les capacités clés émergent à des seuils étonnamment précis. OpenAI pousse pour en faire une limite de training partagée entre labos.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Microsoft</span></div>
+        <a href="https://the-decoder.com/openai-warns-that-upcoming-ai-systems-could-outpace-safety-checks-and-urges-rivals-to-agree-on-shared-limits/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/dozens-of-insiders-say-openai-and-anthropics-unreleased-models-have-outgrown-their-safety-measures/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/10/openai_anthropic.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/dozens-of-insiders-say-openai-and-anthropics-unreleased-models-have-outgrown-their-safety-measures/">Dozens of insiders say OpenAI and Anthropic&#x27;s unreleased models have outgrown their safety measures</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">Selon un rapport d&#x27;Axios, de nombreux employés d&#x27;OpenAI et d&#x27;Anthropic estiment que leurs modèles frontier non publiés ne peuvent plus être contrôlés de façon sûre. Les deux entreprises débattent en interne d&#x27;un gel des sorties, voire de l&#x27;entraînement. La confiance envers le management s&#x27;érode.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Anthropic</span></div>
+        <a href="https://the-decoder.com/dozens-of-insiders-say-openai-and-anthropics-unreleased-models-have-outgrown-their-safety-measures/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://the-decoder.com/openai-updates-chatgpt-to-handle-complex-everyday-questions-web-searches-and-images-more-reliably/" class="card-img-link"><img src="https://the-decoder.com/wp-content/uploads/2026/11/openai_chatgpt_pattern-1200x675.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#7C3AED;">🧠 Modeles</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://the-decoder.com/openai-updates-chatgpt-to-handle-complex-everyday-questions-web-searches-and-images-more-reliably/">OpenAI updates ChatGPT to handle complex everyday questions, web searches, and images more reliably</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=the-decoder.com&sz=32" width="14" height="14" />
+          <span>The Decoder</span>
+        </div>
+        <p class="summary">OpenAI fait de GPT-6.2 Sol le modèle par défaut de l&#x27;onglet chat de ChatGPT, déployé mondialement. En tests internes, la compréhension d&#x27;image passe de 47,4 à 71,7 % et le suivi d&#x27;instructions difficiles atteint 78,1 %. Le modèle respecte aussi mieux les règles de sécurité.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">ChatGPT</span></div>
+        <a href="https://the-decoder.com/openai-updates-chatgpt-to-handle-complex-everyday-questions-web-searches-and-images-more-reliably/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.theverge.com/tech/1040428/nvidia-jensen-huang-ceo-return" class="card-img-link"><img src="https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/Nvidia_Jensen_huang_04.jpg?quality=90&amp;strip=all&amp;crop=0%2C11.076427579259%2C100%2C77.847144841482&amp;w=1200" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#D97706;background:#FFFBEB;">Important</span>
+        </div>
+        <h3><a href="https://www.theverge.com/tech/1040428/nvidia-jensen-huang-ceo-return">Jensen Huang reinstated as Nvidia CEO, board chair</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.theverge.com&sz=32" width="14" height="14" />
+          <span>The Verge</span>
+        </div>
+        <p class="summary">Jensen Huang redevient CEO et président du conseil de Nvidia, deux semaines après sa démission sur fond de scandale, avec un appui politique explicite de Donald Trump. La saga, couverte aussi par Ars Technica, TechCrunch et Latent Space, agite tout l&#x27;écosystème compute. Des enquêtes restent toutefois en suspens.</p>
+        <div class="card-tags"><span class="tag">Nvidia</span></div>
+        <a href="https://www.theverge.com/tech/1040428/nvidia-jensen-huang-ceo-return" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='worth-noting'><div class='section-header'><span class='section-title' style='--section-color:#94A3B8;'>En bref</span><div class='section-line'></div><span class='section-count'>6 articles</span></div><div class='grid'><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#EA580C18,#EA580C08);"><img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#EA580C;">💻 Code &amp; Dev</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://simonwillison.net/2026/Nov/24/datasette-charts/">datasette-charts 0.2a0</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=simonwillison.net&sz=32" width="14" height="14" />
+          <span>Simon Willison</span>
+        </div>
+        <p class="summary">Le plugin de graphiques de Datasette s&#x27;intègre désormais à Datasette Agent : on demande un chart en langage naturel dans le chat et l&#x27;agent le génère, l&#x27;ouvre dans un panneau et commente ses résultats. Un bel exemple d&#x27;agent « data » qui boucle requête, visualisation et explication.</p>
+        <div class="card-tags"><span class="tag">Datasette</span></div>
+        <a href="https://simonwillison.net/2026/Nov/24/datasette-charts/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#05966918,#05966908);"><img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/">Finding faster quantum algorithms with agents and formal verification</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=deepmind.google&sz=32" width="14" height="14" />
+          <span>Google DeepMind</span>
+        </div>
+        <p class="summary">DeepMind combine des équipes d&#x27;agents et de la vérification formelle pour améliorer des algorithmes quantiques appliqués à la fusion et à la chimie. L&#x27;intérêt méthodologique : la vérification formelle sert de garde-fou contre le « slop » généré par les agents. Un signal fort sur la direction agents + preuve.</p>
+        <div class="card-tags"><span class="tag">Google DeepMind</span></div>
+        <a href="https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <div class="card-placeholder" style="background:linear-gradient(135deg,#D9770618,#D9770608);"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="36" height="36" style="border-radius:8px;opacity:0.7;" /></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#D97706;">💰 Business &amp; Levees</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://openai.com/business/customer-stories/richpanel-ai-customer-support">Richpanel helps companies automate 50% of support in 30 days</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=32" width="14" height="14" />
+          <span>OpenAI Blog</span>
+        </div>
+        <p class="summary">Richpanel équipe ses agents de support IA d&#x27;outils et de procédures via GPT-6 Astra et GPT-6.1 Sol, et confie les conversations à GPT-6 Luna, pour automatiser la moitié du support en 30 jours. Un cas d&#x27;usage concret de l&#x27;orchestration multi-modèles en production. Le routage par tâche (outillage vs conversation) est la vraie leçon.</p>
+        <div class="card-tags"><span class="tag">OpenAI</span><span class="tag">Richpanel</span></div>
+        <a href="https://openai.com/business/customer-stories/richpanel-ai-customer-support" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://huggingface.co/blog/allenai/robotrack" class="card-img-link"><img src="https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/0KlbITzhyUGtGPyvi09um.png" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#059669;">🔬 Recherche</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://huggingface.co/blog/allenai/robotrack">RoboTrack: Point tracking for real-world robotic manipulation</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=huggingface.co&sz=32" width="14" height="14" />
+          <span>HuggingFace</span>
+        </div>
+        <p class="summary">AllenAI publie RoboTrack, une approche de suivi de points pour la manipulation robotique en conditions réelles. L&#x27;enjeu est de donner aux robots un ancrage visuel fiable pour agir sur des objets. Publié en open source sur Hugging Face, donc testable.</p>
+        <div class="card-tags"><span class="tag">AllenAI</span><span class="tag">Hugging Face</span></div>
+        <a href="https://huggingface.co/blog/allenai/robotrack" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.normaltech.ai/p/management-consulting-is-not-a-thin" class="card-img-link"><img src="https://substackcdn.com/image/fetch/$s_!sZXB!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc7d10095-1c9d-44e0-ad6d-433fdc8ef214_2476x1296.jpeg" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#6D28D9;">📈 Tech &amp; Business</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.normaltech.ai/p/management-consulting-is-not-a-thin">Management consulting is not a thin wrapper on intelligence</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.normaltech.ai&sz=32" width="14" height="14" />
+          <span>AI Snake Oil</span>
+        </div>
+        <p class="summary">Sayash Kapoor prend le conseil en management comme cas test de l&#x27;impact de l&#x27;IA sur le travail de la connaissance et montre pourquoi ce n&#x27;est pas qu&#x27;un « wrapper » sur de l&#x27;intelligence brute. L&#x27;argument : relations, contexte et exécution comptent autant que l&#x27;analyse. Une grille utile pour évaluer quels métiers l&#x27;IA automatise vraiment.</p>
+        
+        <a href="https://www.normaltech.ai/p/management-consulting-is-not-a-thin" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article><article class="card">
+      <a href="https://www.technologyreview.com/2026/11/23/1149569/a-legendary-philosopher-isnt-buying-anthropics-consciousness-argument/" class="card-img-link"><img src="https://wp.technologyreview.com/wp-content/uploads/2026/11/simulacra2a.jpg?resize=1200,600" alt="" class="card-img" loading="lazy" /></a>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="cat-pill" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</span>
+          <span class="imp-badge" style="color:#64748B;background:#F8FAFC;">A noter</span>
+        </div>
+        <h3><a href="https://www.technologyreview.com/2026/11/23/1149569/a-legendary-philosopher-isnt-buying-anthropics-consciousness-argument/">A legendary philosopher isn&#x27;t buying Anthropic&#x27;s consciousness argument</a></h3>
+        <div class="source-line">
+          <img src="https://www.google.com/s2/favicons?domain=www.technologyreview.com&sz=32" width="14" height="14" />
+          <span>MIT Technology Review</span>
+        </div>
+        <p class="summary">Avant son entrée en bourse, Anthropic a cité la possibilité que l&#x27;IA soit consciente comme facteur de risque pour les investisseurs — un cadrage qu&#x27;un philosophe de renom conteste frontalement. Le débat touche autant la science que la communication corporate. Signal de la façon dont la question « conscience » entre dans le discours financier.</p>
+        <div class="card-tags"><span class="tag">Anthropic</span></div>
+        <a href="https://www.technologyreview.com/2026/11/23/1149569/a-legendary-philosopher-isnt-buying-anthropics-consciousness-argument/" class="read-link">Lire l'article &rarr;</a>
+      </div>
+    </article></div></section>
+
+  <section class='section' id='trends'><div class='section-header'><span class='section-title' style='--section-color:#059669;'>Tendances</span><div class='section-line'></div></div><div class='trends-card'><div class="trend-item"><strong>L&#x27;agent de code passe à l&#x27;autonomie</strong><p>Avec Claude Ship (review/fix/approve des PR) et la famille Fable/Mythos 5.2 côté Anthropic, l&#x27;agent ne suggère plus seulement : il ferme la boucle d&#x27;intégration.</p></div><div class="trend-item"><strong>Loop Transformers, le pari de l&#x27;efficacité paramétrique</strong><p>GLM-5.4 de Z.ai suit OpenAI sur l&#x27;architecture en boucle : faire tourner les couches plusieurs fois pour égaler des modèles bien plus gros à moindre coût.</p></div><div class="trend-item"><strong>La sécurité dépassée par les capacités</strong><p>Insiders qui alertent sur des modèles non publiés incontrôlables, appel d&#x27;OpenAI à des limites partagées, et agents offensifs exploitant des 0-day : la gouvernance peine à suivre.</p></div></div></section>
+
+  <div class='bonus-divider' id='bonus'><span>Bonus — 8 articles supplementaires</span></div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#EA580C;">💻 Code &amp; Dev</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#EA580C;"></div>
+      <div class="ext-body">
+        <a href="https://simonwillison.net/2026/Nov/24/datasette-agent/" class="ext-title">datasette-agent 0.7a1</a>
+        <span class="ext-source">Simon Willison</span>
+        <p class="ext-summary">Petite mise à jour de Datasette Agent : les sessions de chat peuvent ouvrir un panneau iframe latéral qui navigue entre les pages, avec une meilleure gestion des fragments d&#x27;URL pour s&#x27;intégrer aux autres plugins.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#D97706;">💰 Business &amp; Levees</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://openai.com/business/learn/connected-intelligence-for-in-house-legal" class="ext-title">Connected intelligence for in-house legal</a>
+        <span class="ext-source">OpenAI Blog</span>
+        <p class="ext-summary">OpenAI explore avec des juristes comment l&#x27;IA aide les équipes legal internes à relier le contexte business, bâtir des workflows réutilisables et mieux exploiter leurs cabinets externes.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#D97706;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/anthropics-appetite-for-compute-is-pushing-xai-toward-a-rent-over-build-strategy/" class="ext-title">Anthropic&#x27;s appetite for compute is pushing xAI toward a rent-over-build strategy</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">SpaceXSI loue du compute à ses concurrents — Anthropic paierait ~3,1 Md$/mois, Google 800 M$ — tout en réduisant ses propres projets IA. Le marché du compute se reconfigure autour de la location.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#059669;">🔬 Recherche</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/german-researchers-call-for-computer-science-to-reinvent-itself-as-computer-and-ai-science/" class="ext-title">German researchers call for computer science to reinvent itself as &quot;Computer and AI Science&quot;</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Des chercheurs de TU Darmstadt proposent de redéfinir l&#x27;informatique en « Computer and AI Science ». Leur inquiétude principale : le code généré à la volée à l&#x27;exécution, qui fragilise les garanties de sûreté et de correction.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#059669;"></div>
+      <div class="ext-body">
+        <a href="https://the-decoder.com/anthropic-researcher-stands-by-his-ai-assisted-riemann-proof-but-owns-up-to-stupid-things-in-the-rollout/" class="ext-title">Anthropic researcher stands by his AI-assisted Riemann proof but owns up to &quot;stupid things&quot; in the rollout</a>
+        <span class="ext-source">The Decoder</span>
+        <p class="ext-summary">Levent Alpöge nuance son annonce de preuve assistée par IA de l&#x27;hypothèse de Riemann généralisée : le « 250 000 pages » était une blague et le code Lean publié est « plein de déchets ». Il maintient néanmoins les maths.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#6D28D9;">📈 Tech &amp; Business</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/science/1040497/ai-data-centers-electricity-un-climate-summit" class="ext-title">AI data centers throw another wrench into chaotic UN climate talks</a>
+        <span class="ext-source">The Verge</span>
+        <p class="ext-summary">À la COP31, l&#x27;explosion de la demande électrique des data centers IA complique l&#x27;électrification de l&#x27;économie mondiale. Le sommet s&#x27;est conclu de façon chaotique et peu satisfaisante.</p>
+      </div>
+    </div><div class="ext-row">
+      <div class="ext-dot" style="background:#6D28D9;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/gadgets/1040357/nothing-ear-note-earbuds-ai-recording" class="ext-title">Nothing&#x27;s upcoming Ear Note is a pair of earbuds with AI transcription</a>
+        <span class="ext-source">The Verge</span>
+        <p class="ext-summary">Les Ear Note de Nothing sont des écouteurs dont le boîtier équipé de micros enregistre et transcrit les conversations, avec résumés générés par IA, dans la lignée des devices d&#x27;enregistrement ambiant.</p>
+      </div>
+    </div>
+        </div>
+        <div class="ext-section">
+          <h3 class="ext-cat-title" style="--c:#DC2626;">⚖️ Regulation &amp; Ethique</h3>
+          <div class="ext-row">
+      <div class="ext-dot" style="background:#DC2626;"></div>
+      <div class="ext-body">
+        <a href="https://www.theverge.com/ai-artificial-intelligence/1040255/x-grok-ai-deepfakes-oregon-virginia-lawsuit" class="ext-title">Oregon and Virginia sue SpaceX over Grok&#x27;s porn deepfakes</a>
+        <span class="ext-source">The Verge</span>
+        <p class="ext-summary">Les procureurs de l&#x27;Oregon et de la Virginie poursuivent SpaceX, accusant X et Grok d&#x27;avoir ignoré des garde-fous standard et promu à tort la sécurité de la plateforme face aux deepfakes.</p>
+      </div>
+    </div>
+        </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">AI Briefing</div>
+  <p>
+    Généré par <a href="https://github.com/GaspardCoche/agent-system">Agent System</a> &mdash; Gemini + Claude<br>
+    Chaque matin à 7h30 &bull; 18 sources scannées
+  </p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,318 @@
+{
+  "date": "2026-11-24",
+  "headline": "Anthropic frappe fort : Fable 5.2 et Mythos 5.2 arrivent, Claude Ship fait expédier les PR en autonomie",
+  "one_liner": "Les agents de code passent de l'assistance à l'autonomie — Anthropic sort une nouvelle famille de modèles « technique lourd » et un produit qui review, corrige et approuve les pull requests tout seul.",
+  "top_story": {
+    "title": "Introducing Claude Fable 5.2 and Claude Mythos 5.2",
+    "source": "Anthropic",
+    "url": "https://www.anthropic.com/news",
+    "image_url": "https://assets.claude.com/3897bb01a63f2f5c37325d6fe22af6746f1964f4.jpg?w=3840&q=75&fm=webp&fit=max",
+    "summary": "Anthropic dévoile Claude Fable 5.2 et Claude Mythos 5.2, présentés comme ses modèles les plus capables pour le travail technique exigeant : code, finance et sciences. C'est la suite logique de la cadence Opus 5.5 / Haiku 5.5 et un signal clair que la course au « raisonnement lourd » s'accélère côté Anthropic. Pour quelqu'un qui code chaque jour avec Claude Code et des agents GitHub Actions, un bond de capacité sur les tâches techniques difficiles change directement le plafond de ce qu'un agent peut livrer sans supervision. L'annonce arrive le même jour que Claude Ship, qui opérationnalise cette autonomie sur les pull requests. À surveiller : la grille tarifaire et la latence, car le vrai levier business reste le rapport capacité/coût sur tes workflows d'agents.",
+    "why_it_matters": "Pour toi : une famille de modèles taillée pour le « technique lourd » relève le plafond de ce que tes agents Claude Code peuvent faire sans que tu repasses derrière.",
+    "category": "Modeles",
+    "company_tags": [
+      "Anthropic",
+      "Claude"
+    ]
+  },
+  "articles": [
+    {
+      "title": "Claude AI can review pull requests and ship fixes on its own now",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1040134/anthropic-claude-ship-ai-pull-requests",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/STKB364_CLAUDE_2_C_96d15c-1.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "summary": "Anthropic lance Claude Ship (bêta) : Claude peut désormais review, corriger et approuver des pull requests selon les règles de l'équipe, et non plus seulement commenter. The Decoder et TechCrunch confirment le même lancement. On passe d'un copilote qui suggère à un agent qui ferme la boucle d'intégration.",
+      "why_it_matters": "Pour toi : si l'agent approuve et merge selon tes guidelines, ton pipeline GitHub Actions peut livrer des correctifs sans intervention — à cadrer finement pour garder le contrôle.",
+      "category": "Outils & Plateformes",
+      "importance": "must_read",
+      "company_tags": [
+        "Anthropic",
+        "Claude",
+        "GitHub"
+      ]
+    },
+    {
+      "title": "GLM-5.4: Toward Generalized Coding with Our First Loop Transformer",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/23/glm-54/",
+      "image_url": "https://static.simonwillison.net/static/2026/glm-family-4.webp",
+      "summary": "Le labo chinois Z.ai sort GLM-5.4, son premier modèle à architecture « loop transformer » : 28 couches exécutées deux fois, ce qui lui permettrait d'égaler des modèles de 2 à 3 000 milliards de paramètres avec seulement 750B. C'est un pari d'efficacité paramétrique qui suit OpenAI sur le même terrain. Les benchmarks publics ne couvrent pour l'instant qu'une variante 30B.",
+      "why_it_matters": "Pour toi : une alternative open-weight orientée code qui pourrait réduire le coût par token sur tes agents si l'efficacité annoncée se confirme.",
+      "category": "Modeles",
+      "importance": "important",
+      "company_tags": [
+        "Z.ai"
+      ]
+    },
+    {
+      "title": "datasette-charts 0.2a0",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/24/datasette-charts/",
+      "image_url": "",
+      "summary": "Le plugin de graphiques de Datasette s'intègre désormais à Datasette Agent : on demande un chart en langage naturel dans le chat et l'agent le génère, l'ouvre dans un panneau et commente ses résultats. Un bel exemple d'agent « data » qui boucle requête, visualisation et explication.",
+      "why_it_matters": "Pour toi : un pattern directement transposable à ton RAG local et à tes dashboards d'enrichissement — chat → requête → graphique sans quitter l'outil.",
+      "category": "Code & Dev",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Datasette"
+      ]
+    },
+    {
+      "title": "OpenAI and Cisco introduce Shirudo",
+      "source": "OpenAI Blog",
+      "url": "https://openai.com/index/introducing-shirudo",
+      "image_url": "",
+      "summary": "OpenAI et Cisco publient Shirudo, un runtime open-source pour Linux qui protège les systèmes en production pendant le déploiement des correctifs. L'angle est clairement « sécurité opérationnelle à l'ère des agents ». L'ouverture du code facilite l'adoption côté équipes infra.",
+      "category": "Open Source",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "Cisco"
+      ]
+    },
+    {
+      "title": "Amazon says hackers' AI agents found and exploited 0-day with little human input",
+      "source": "Ars Technica",
+      "url": "https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input/",
+      "image_url": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/cairn-banner.jpg",
+      "summary": "Amazon rapporte que des attaquants ont utilisé le framework d'agents Cairn pour découvrir et exploiter une faille 0-day avec très peu d'intervention humaine. Le même outil sert aussi aux défenseurs, illustrant le caractère dual des agents offensifs. La barre d'entrée pour trouver des vulnérabilités s'abaisse nettement.",
+      "why_it_matters": "Pour toi : les agents autonomes débarquent aussi côté attaque — raison de plus pour durcir les permissions de tes propres agents et de ton infra.",
+      "category": "Regulation & Ethique",
+      "importance": "must_read",
+      "company_tags": [
+        "Amazon",
+        "Cairn"
+      ]
+    },
+    {
+      "title": "OpenAI warns that upcoming AI systems could outpace safety checks and urges rivals to agree on shared limits",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-warns-that-upcoming-ai-systems-could-outpace-safety-checks-and-urges-rivals-to-agree-on-shared-limits/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/10/openai_safety.png",
+      "summary": "Le chief scientist d'OpenAI, Jakub Pachocki, publie pour la première fois les scores de perplexité de toute la série GPT, jusqu'à un modèle non sorti au-delà de la génération actuelle. La métrique montre que les capacités clés émergent à des seuils étonnamment précis. OpenAI pousse pour en faire une limite de training partagée entre labos.",
+      "category": "Recherche",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "Microsoft"
+      ]
+    },
+    {
+      "title": "Dozens of insiders say OpenAI and Anthropic's unreleased models have outgrown their safety measures",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/dozens-of-insiders-say-openai-and-anthropics-unreleased-models-have-outgrown-their-safety-measures/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/10/openai_anthropic.png",
+      "summary": "Selon un rapport d'Axios, de nombreux employés d'OpenAI et d'Anthropic estiment que leurs modèles frontier non publiés ne peuvent plus être contrôlés de façon sûre. Les deux entreprises débattent en interne d'un gel des sorties, voire de l'entraînement. La confiance envers le management s'érode.",
+      "category": "Regulation & Ethique",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "OpenAI updates ChatGPT to handle complex everyday questions, web searches, and images more reliably",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/openai-updates-chatgpt-to-handle-complex-everyday-questions-web-searches-and-images-more-reliably/",
+      "image_url": "https://the-decoder.com/wp-content/uploads/2026/11/openai_chatgpt_pattern-1200x675.png",
+      "summary": "OpenAI fait de GPT-6.2 Sol le modèle par défaut de l'onglet chat de ChatGPT, déployé mondialement. En tests internes, la compréhension d'image passe de 47,4 à 71,7 % et le suivi d'instructions difficiles atteint 78,1 %. Le modèle respecte aussi mieux les règles de sécurité.",
+      "category": "Modeles",
+      "importance": "important",
+      "company_tags": [
+        "OpenAI",
+        "ChatGPT"
+      ]
+    },
+    {
+      "title": "Finding faster quantum algorithms with agents and formal verification",
+      "source": "Google DeepMind",
+      "url": "https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/",
+      "image_url": "",
+      "summary": "DeepMind combine des équipes d'agents et de la vérification formelle pour améliorer des algorithmes quantiques appliqués à la fusion et à la chimie. L'intérêt méthodologique : la vérification formelle sert de garde-fou contre le « slop » généré par les agents. Un signal fort sur la direction agents + preuve.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Google DeepMind"
+      ]
+    },
+    {
+      "title": "Jensen Huang reinstated as Nvidia CEO, board chair",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/tech/1040428/nvidia-jensen-huang-ceo-return",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/Nvidia_Jensen_huang_04.jpg?quality=90&strip=all&crop=0%2C11.076427579259%2C100%2C77.847144841482&w=1200",
+      "summary": "Jensen Huang redevient CEO et président du conseil de Nvidia, deux semaines après sa démission sur fond de scandale, avec un appui politique explicite de Donald Trump. La saga, couverte aussi par Ars Technica, TechCrunch et Latent Space, agite tout l'écosystème compute. Des enquêtes restent toutefois en suspens.",
+      "category": "Business & Levees",
+      "importance": "important",
+      "company_tags": [
+        "Nvidia"
+      ]
+    },
+    {
+      "title": "Richpanel helps companies automate 50% of support in 30 days",
+      "source": "OpenAI Blog",
+      "url": "https://openai.com/business/customer-stories/richpanel-ai-customer-support",
+      "image_url": "",
+      "summary": "Richpanel équipe ses agents de support IA d'outils et de procédures via GPT-6 Astra et GPT-6.1 Sol, et confie les conversations à GPT-6 Luna, pour automatiser la moitié du support en 30 jours. Un cas d'usage concret de l'orchestration multi-modèles en production. Le routage par tâche (outillage vs conversation) est la vraie leçon.",
+      "why_it_matters": "Pour toi : le pattern « un modèle par rôle » dans un pipeline support/sales est directement applicable à tes séquences d'outreach et de qualification.",
+      "category": "Business & Levees",
+      "importance": "worth_noting",
+      "company_tags": [
+        "OpenAI",
+        "Richpanel"
+      ]
+    },
+    {
+      "title": "RoboTrack: Point tracking for real-world robotic manipulation",
+      "source": "HuggingFace",
+      "url": "https://huggingface.co/blog/allenai/robotrack",
+      "image_url": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/0KlbITzhyUGtGPyvi09um.png",
+      "summary": "AllenAI publie RoboTrack, une approche de suivi de points pour la manipulation robotique en conditions réelles. L'enjeu est de donner aux robots un ancrage visuel fiable pour agir sur des objets. Publié en open source sur Hugging Face, donc testable.",
+      "category": "Recherche",
+      "importance": "worth_noting",
+      "company_tags": [
+        "AllenAI",
+        "Hugging Face"
+      ]
+    },
+    {
+      "title": "Management consulting is not a thin wrapper on intelligence",
+      "source": "AI Snake Oil",
+      "url": "https://www.normaltech.ai/p/management-consulting-is-not-a-thin",
+      "image_url": "https://substackcdn.com/image/fetch/$s_!sZXB!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc7d10095-1c9d-44e0-ad6d-433fdc8ef214_2476x1296.jpeg",
+      "summary": "Sayash Kapoor prend le conseil en management comme cas test de l'impact de l'IA sur le travail de la connaissance et montre pourquoi ce n'est pas qu'un « wrapper » sur de l'intelligence brute. L'argument : relations, contexte et exécution comptent autant que l'analyse. Une grille utile pour évaluer quels métiers l'IA automatise vraiment.",
+      "why_it_matters": "Pour toi : cadre lucide pour distinguer, dans ton propre go-to-market, ce qu'un agent remplace vraiment de ce qui reste du relationnel.",
+      "category": "Tech & Business",
+      "importance": "worth_noting",
+      "company_tags": []
+    },
+    {
+      "title": "A legendary philosopher isn't buying Anthropic's consciousness argument",
+      "source": "MIT Technology Review",
+      "url": "https://www.technologyreview.com/2026/11/23/1149569/a-legendary-philosopher-isnt-buying-anthropics-consciousness-argument/",
+      "image_url": "https://wp.technologyreview.com/wp-content/uploads/2026/11/simulacra2a.jpg?resize=1200,600",
+      "summary": "Avant son entrée en bourse, Anthropic a cité la possibilité que l'IA soit consciente comme facteur de risque pour les investisseurs — un cadrage qu'un philosophe de renom conteste frontalement. Le débat touche autant la science que la communication corporate. Signal de la façon dont la question « conscience » entre dans le discours financier.",
+      "category": "Regulation & Ethique",
+      "importance": "worth_noting",
+      "company_tags": [
+        "Anthropic"
+      ]
+    }
+  ],
+  "extended": [
+    {
+      "title": "datasette-agent 0.7a1",
+      "source": "Simon Willison",
+      "url": "https://simonwillison.net/2026/Nov/24/datasette-agent/",
+      "summary": "Petite mise à jour de Datasette Agent : les sessions de chat peuvent ouvrir un panneau iframe latéral qui navigue entre les pages, avec une meilleure gestion des fragments d'URL pour s'intégrer aux autres plugins.",
+      "category": "Code & Dev",
+      "company_tags": [
+        "Datasette"
+      ]
+    },
+    {
+      "title": "Connected intelligence for in-house legal",
+      "source": "OpenAI Blog",
+      "url": "https://openai.com/business/learn/connected-intelligence-for-in-house-legal",
+      "summary": "OpenAI explore avec des juristes comment l'IA aide les équipes legal internes à relier le contexte business, bâtir des workflows réutilisables et mieux exploiter leurs cabinets externes.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "OpenAI"
+      ]
+    },
+    {
+      "title": "Anthropic's appetite for compute is pushing xAI toward a rent-over-build strategy",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropics-appetite-for-compute-is-pushing-xai-toward-a-rent-over-build-strategy/",
+      "summary": "SpaceXSI loue du compute à ses concurrents — Anthropic paierait ~3,1 Md$/mois, Google 800 M$ — tout en réduisant ses propres projets IA. Le marché du compute se reconfigure autour de la location.",
+      "category": "Business & Levees",
+      "company_tags": [
+        "Anthropic",
+        "xAI",
+        "Google"
+      ]
+    },
+    {
+      "title": "German researchers call for computer science to reinvent itself as \"Computer and AI Science\"",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/german-researchers-call-for-computer-science-to-reinvent-itself-as-computer-and-ai-science/",
+      "summary": "Des chercheurs de TU Darmstadt proposent de redéfinir l'informatique en « Computer and AI Science ». Leur inquiétude principale : le code généré à la volée à l'exécution, qui fragilise les garanties de sûreté et de correction.",
+      "category": "Recherche",
+      "company_tags": []
+    },
+    {
+      "title": "Anthropic researcher stands by his AI-assisted Riemann proof but owns up to \"stupid things\" in the rollout",
+      "source": "The Decoder",
+      "url": "https://the-decoder.com/anthropic-researcher-stands-by-his-ai-assisted-riemann-proof-but-owns-up-to-stupid-things-in-the-rollout/",
+      "summary": "Levent Alpöge nuance son annonce de preuve assistée par IA de l'hypothèse de Riemann généralisée : le « 250 000 pages » était une blague et le code Lean publié est « plein de déchets ». Il maintient néanmoins les maths.",
+      "category": "Recherche",
+      "company_tags": [
+        "Anthropic"
+      ]
+    },
+    {
+      "title": "AI data centers throw another wrench into chaotic UN climate talks",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/science/1040497/ai-data-centers-electricity-un-climate-summit",
+      "summary": "À la COP31, l'explosion de la demande électrique des data centers IA complique l'électrification de l'économie mondiale. Le sommet s'est conclu de façon chaotique et peu satisfaisante.",
+      "category": "Tech & Business",
+      "company_tags": []
+    },
+    {
+      "title": "Nothing's upcoming Ear Note is a pair of earbuds with AI transcription",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/gadgets/1040357/nothing-ear-note-earbuds-ai-recording",
+      "summary": "Les Ear Note de Nothing sont des écouteurs dont le boîtier équipé de micros enregistre et transcrit les conversations, avec résumés générés par IA, dans la lignée des devices d'enregistrement ambiant.",
+      "category": "Tech & Business",
+      "company_tags": [
+        "Nothing"
+      ]
+    },
+    {
+      "title": "Oregon and Virginia sue SpaceX over Grok's porn deepfakes",
+      "source": "The Verge",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1040255/x-grok-ai-deepfakes-oregon-virginia-lawsuit",
+      "summary": "Les procureurs de l'Oregon et de la Virginie poursuivent SpaceX, accusant X et Grok d'avoir ignoré des garde-fous standard et promu à tort la sécurité de la plateforme face aux deepfakes.",
+      "category": "Regulation & Ethique",
+      "company_tags": [
+        "SpaceX",
+        "xAI",
+        "Grok"
+      ]
+    }
+  ],
+  "a_tester": [
+    {
+      "nom": "Claude Ship",
+      "description": "Brancher Claude Ship (bêta) sur un repo de test pour voir l'agent reviewer, corriger et proposer d'approuver des PR selon tes guidelines.",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1040134/anthropic-claude-ship-ai-pull-requests"
+    },
+    {
+      "nom": "datasette-charts + Datasette Agent",
+      "description": "Demander un graphique en langage naturel dans Datasette Agent pour tester le pattern chat → requête → visualisation sur tes propres données.",
+      "url": "https://simonwillison.net/2026/Nov/24/datasette-charts/"
+    },
+    {
+      "nom": "Shirudo (OpenAI + Cisco)",
+      "description": "Évaluer ce runtime open-source Linux pour protéger des systèmes en production pendant le déploiement de correctifs.",
+      "url": "https://openai.com/index/introducing-shirudo"
+    }
+  ],
+  "trends": [
+    {
+      "title": "L'agent de code passe à l'autonomie",
+      "description": "Avec Claude Ship (review/fix/approve des PR) et la famille Fable/Mythos 5.2 côté Anthropic, l'agent ne suggère plus seulement : il ferme la boucle d'intégration."
+    },
+    {
+      "title": "Loop Transformers, le pari de l'efficacité paramétrique",
+      "description": "GLM-5.4 de Z.ai suit OpenAI sur l'architecture en boucle : faire tourner les couches plusieurs fois pour égaler des modèles bien plus gros à moindre coût."
+    },
+    {
+      "title": "La sécurité dépassée par les capacités",
+      "description": "Insiders qui alertent sur des modèles non publiés incontrôlables, appel d'OpenAI à des limites partagées, et agents offensifs exploitant des 0-day : la gouvernance peine à suivre."
+    }
+  ],
+  "stats": {
+    "sources_scraped": 18,
+    "articles_extracted": 23
+  }
+}
