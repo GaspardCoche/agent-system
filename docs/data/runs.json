@@ -1,28 +1,5 @@
 [
   {
-    "run_id": "36881389928",
-    "workflow": "orchestrator",
-    "title": "Scheduled run",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "36881389928",
-    "summary": "DRY_RUN=true: no code changed. Lumen's diagnostic /tmp/lumen_analysis.md is missing, so the 3 claimed patches (_reusable-claude.yml, email-agent.yml,  · Analysis complete: retrospective pipeline broken for 11+ weeks due to 3 unfixed root causes (grep",
-    "next_actions": [],
-    "timestamp": "2026-10-01T15:10:37.703731+00:00",
-    "agents": [
-      {
-        "name": "forge",
-        "status": "complete"
-      },
-      {
-        "name": "lumen",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-10-01-orchestrator-scheduled-run.md"
-  },
-  {
     "run_id": "36995551005",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-10-02",
@@ -1814,5 +1791,28 @@
     "timestamp": "2026-11-24T14:52:10.467591+00:00",
     "agents": [],
     "report_file": "reports/2026-11-24-email-agent-daily-digest-2026-11-24.md"
+  },
+  {
+    "run_id": "45468834612",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "45468834612",
+    "summary": "Health check lecture seule, aucune modification. Workflows: aucun `default: \"\"` trouvé. Registry: 4 skills validated, tous les scripts existent. Vault · Task routing error: This maintenance health check requires Sentinel (QA & tests validation) and L",
+    "next_actions": [],
+    "timestamp": "2026-11-24T19:23:15.172633+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-24-orchestrator-scheduled-run.md"
   }
 ]
