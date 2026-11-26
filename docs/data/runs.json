@@ -1,19 +1,5 @@
 [
   {
-    "run_id": "37195670517",
-    "workflow": "email-agent",
-    "title": "Daily Digest 2026-10-04",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "0 emails traités",
-    "next_actions": [],
-    "timestamp": "2026-10-04T10:37:01.080459+00:00",
-    "agents": [],
-    "report_file": "reports/2026-10-04-email-agent-daily-digest-2026-10-04.md"
-  },
-  {
     "run_id": "37302623409",
     "workflow": "email-agent",
     "title": "Daily Digest 2026-10-05",
@@ -1823,5 +1809,32 @@
     "timestamp": "2026-11-26T13:55:04.287167+00:00",
     "agents": [],
     "report_file": "reports/2026-11-26-email-agent-daily-digest-2026-11-26.md"
+  },
+  {
+    "run_id": "45873228052",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "45873228052",
+    "summary": "Lumen's finding confirmed by grep: fixes were absent on main. Applied: retrospective requirement + 'Ensure retrospective field' post-step in _reusable · Dry-run analysis completed. Analyzed 12 consecutive weeks of retrospectives pipeline failures. Fi",
+    "next_actions": [],
+    "timestamp": "2026-11-26T18:11:39.958208+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "lumen",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "failed"
+      }
+    ],
+    "report_file": "reports/2026-11-26-orchestrator-scheduled-run.md"
   }
 ]
