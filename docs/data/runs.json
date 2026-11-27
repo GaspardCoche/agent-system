@@ -1,27 +1,5 @@
 [
   {
-    "run_id": "37341335883",
-    "workflow": "nexus",
-    "title": "Nexus weekly_audit 2026-10-05",
-    "status": "success",
-    "event": "schedule",
-    "repo": "GaspardCoche/agent-system",
-    "task_id": "",
-    "summary": "TEMPLATE MODE — credentials_ok=false. 4 secrets Google Ads manquants. Aucun appel API tenté. Rapport template généré. Blocage depuis 195 jours, score ",
-    "next_actions": [
-      "Configurer les 4 secrets GitHub",
-      "Forge: ajouter needs: [check-credentials] dans nexus.yml"
-    ],
-    "timestamp": "2026-10-05T16:31:39.601138+00:00",
-    "agents": [
-      {
-        "name": "nexus",
-        "status": "complete"
-      }
-    ],
-    "report_file": "reports/2026-10-05-nexus-nexus-weekly-audit-2026-10-05.md"
-  },
-  {
     "run_id": "37343407194",
     "workflow": "orchestrator",
     "title": "Scheduled run",
@@ -1836,5 +1814,28 @@
     "timestamp": "2026-11-27T13:51:19.817981+00:00",
     "agents": [],
     "report_file": "reports/2026-11-27-email-agent-daily-digest-2026-11-27.md"
+  },
+  {
+    "run_id": "46044829145",
+    "workflow": "orchestrator",
+    "title": "Scheduled run",
+    "status": "success",
+    "event": "schedule",
+    "repo": "GaspardCoche/agent-system",
+    "task_id": "46044829145",
+    "summary": "Task is a dry-run Sage maintenance review, with no code changes required. Checked skills/registry.json: 4 validated skills (firecrawl_scrape, gemini_a · Task routing mismatch detected. Task specifies Sage agent (maintenance: review retrospectives/ski",
+    "next_actions": [],
+    "timestamp": "2026-11-27T17:53:43.270332+00:00",
+    "agents": [
+      {
+        "name": "forge",
+        "status": "complete"
+      },
+      {
+        "name": "researcher",
+        "status": "needs_retry"
+      }
+    ],
+    "report_file": "reports/2026-11-27-orchestrator-scheduled-run.md"
   }
 ]
